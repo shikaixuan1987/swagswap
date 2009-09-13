@@ -8,16 +8,32 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/displaytag-1.2.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/log4j-1.2.15.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.asm-3.0.0.M4.jar"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/appengine-java-sdk-1.2.5"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/user/orm/jdo2-api-2.3-eb.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/user/orm/datanucleus-appengine-1.0.3.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/user/orm/datanucleus-core-1.1.5.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/user/orm/datanucleus-jpa-1.1.5.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/user/orm/geronimo-jpa_3.0_spec-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/user/orm/geronimo-jta_1.1_spec-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/user/appengine-api-1.0-sdk-1.2.5.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/user/appengine-api-labs-1.2.5.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/shared/geronimo-servlet_2.5_spec-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/shared/appengine-local-runtime-shared.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/shared/geronimo-el_1.0_spec-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/shared/geronimo-jsp_2.1_spec-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/shared/jsp/repackaged-appengine-jasper-runtime-5.0.28.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/shared/jsp/repackaged-appengine-ant-1.6.5.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/shared/jsp/repackaged-appengine-ant-launcher-1.6.5.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/shared/jsp/repackaged-appengine-commons-el-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/shared/jsp/repackaged-appengine-commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/downloads/appengine-java-sdk-1.2.5/lib/shared/jsp/repackaged-appengine-jasper-compiler-5.0.28.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.beans-3.0.0.M4.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.context-3.0.0.M4.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.core-3.0.0.M4.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.expression-3.0.0.M4.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.jdbc-3.0.0.M4.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.orm-3.0.0.M4.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.transaction-3.0.0.M4.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.web-3.0.0.M4.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.web.servlet-3.0.0.M4.jar"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/appengine-java-sdk-1.2.5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

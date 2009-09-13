@@ -105,7 +105,7 @@
 		<property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
 	</bean>
 	<!-- 
-	<bean id="entityManagerFactory" class="com.itcommand.EMF" factory-method="get" />
+	<bean id="entityManagerFactory" class="com.itcommand.PMF" factory-method="get" />
 	 -->
 </beans>
 

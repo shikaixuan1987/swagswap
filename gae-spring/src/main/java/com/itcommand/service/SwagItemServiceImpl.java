@@ -11,8 +11,7 @@ import javax.jdo.Query;
 import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
+import com.itcommand.PMF;
 import com.itcommand.domain.SwagItem;
 
 public class SwagItemServiceImpl extends JdoDaoSupport implements SwagItemService {
@@ -120,8 +119,8 @@ public class SwagItemServiceImpl extends JdoDaoSupport implements SwagItemServic
 			swagItem.setCreated(now);
 			swagItem.setLastUpdated(now);
 			//TODO DI me
-			UserService userService = UserServiceFactory.getUserService();
-			swagItem.setOwner(userService.getCurrentUser().getEmail());
+			//UserService userService = UserServiceFactory.getUserService();
+			//swagItem.setOwner(userService.getCurrentUser().getEmail());
 			swagItem.setNumberOfRatings(0);
 			pm.makePersistent(swagItem);
 

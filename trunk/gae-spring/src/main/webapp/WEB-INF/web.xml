@@ -95,13 +95,12 @@
 		<url-pattern>/helloappengine</url-pattern>
 	</servlet-mapping>
 
+<!-- 
 	<error-page>
 		<exception-type>java.lang.Exception</exception-type>
-		<!-- Displays a stack trace -->
 		<location>/WEB-INF/jsp/uncaughtException.jsp</location>
 	</error-page>
 
-<!-- 
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>all</web-resource-name>

@@ -8,8 +8,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomBooleanEditor;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -84,6 +86,7 @@ public class SwagItemController {
     return "swagItems";
   }
  
+  //TODO is this needed?
   @InitBinder
   protected void initBinder(HttpServletRequest request,
                             ServletRequestDataBinder binder) throws Exception {
@@ -97,10 +100,16 @@ public class SwagItemController {
         new CustomDateEditor(dateFormat, false)
     );
  
-//    binder.registerCustomEditor(com.google.appengine.swagItem.datastore.Key.class,
-//        new GoogleDatastoreKeyEditor()
-//    );
  
     binder.registerCustomEditor(List.class, new CustomCollectionEditor(List.class));
+    
+    //for spring in gae?
+    binder.registerCustomEditor(String.class,new StringTrimmerEditor(false));
+  
+    binder.registerCustomEditor(String.class, new StringTrimmerEditor(false));
+    binder.registerCustomEditor(Boolean.class, new CustomBooleanEditor(false));
+    binder.registerCustomEditor(Long.class, new CustomNumberEditor(Long.class, true)); 
+  
   }
+
 }

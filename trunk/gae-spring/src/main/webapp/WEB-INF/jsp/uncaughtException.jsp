@@ -20,8 +20,12 @@ try {
 			rootCause.printStackTrace(new java.io.PrintWriter(out)); 
 		}
 		else {
-			// It's not a ServletException, so we'll just show it
-			exception.printStackTrace(new java.io.PrintWriter(out)); 
+			// It's not a ServletException
+			Throwable rootCause = exception.getCause();
+			if (rootCause == null)
+				rootCause = exception;
+			out.println("** Root cause is: "+ rootCause.getMessage());
+			rootCause.printStackTrace(new java.io.PrintWriter(out)); 
 		}
 	} 
 	else  {

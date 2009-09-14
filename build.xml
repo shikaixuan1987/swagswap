@@ -1,6 +1,6 @@
 <!-- This is inspired by http://googleappengine.googlecode.com/svn/trunk/java/demos/new_project_template/build.xml -->
 
-<project name="spring-test" default="war">
+<project name="swagswap" default="war">
 
 	<!-- For war file naming -->
 	<property name="version" value="0.1"/>

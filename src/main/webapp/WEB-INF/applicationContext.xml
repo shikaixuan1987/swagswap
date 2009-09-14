@@ -9,6 +9,8 @@
 				http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.0.xsd">
 
 
+	<context:annotation-config/>
+
 	<!--
 		- This bean resolves specific types of exceptions to corresponding
 		logical - view names for error views. The default behaviour of
@@ -82,9 +84,12 @@
 		class="org.springframework.context.support.ResourceBundleMessageSource"
 		p:basename="messages"/>
 	-->
-	<!-- PMF Bean -->
+	
+	
 	<bean id="persistenceManagerFactory"
 		class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean">
+		<!-- <property name="configLocation" value="classpath:kodo.properties"/>  -->
+		
 		<property name="jdoProperties">
 			<props>
 				<prop key="javax.jdo.PersistenceManagerFactoryClass">
@@ -96,16 +101,27 @@
 				<prop key="javax.jdo.option.NontransactionalWrite">true</prop>
 				<prop key="javax.jdo.option.RetainValues">true</prop>
 				<prop key="datanucleus.appengine.autoCreateDatastoreTxns">true</prop>
-					<prop key="datanucleus.DetachOnClose">true</prop>
 			</props>
 		</property>
 	</bean>
 
-	<bean id="swagItemService" class="com.itcommand.service.SwagItemServiceImpl" >
+	<bean id="myTxManager" class="org.springframework.orm.jdo.JdoTransactionManager">
+		<property name="persistenceManagerFactory" ref="persistenceManagerFactory" />
+	</bean>
+
+
+	<!-- See http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/ch13s04.html 
+	not working when deployed to gae
+	<bean id="pmfProxy"
+		class="org.springframework.orm.jdo.TransactionAwarePersistenceManagerFactoryProxy">
+		<property name="targetPersistenceManagerFactory" ref="persistenceManagerFactory" />
+	</bean>
+    -->
+	<bean id="swagItemDao" class="com.itcommand.dao.SwagItemDaoImpl" >
 		<property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
 	</bean>
-	<!-- 
-	<bean id="entityManagerFactory" class="com.itcommand.PMF" factory-method="get" />
-	 -->
+	
+	<bean id="swagItemService" class="com.itcommand.service.SwagItemServiceImpl" />
+
 </beans>
 

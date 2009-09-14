@@ -22,12 +22,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.itcommand.dao.SwagItemDao;
 import com.itcommand.domain.DataFormat;
 import com.itcommand.domain.Protocol;
 import com.itcommand.domain.SwagItem;
 import com.itcommand.service.SwagItemService;
-
-
 
 @Controller
 public class SwagItemController {
@@ -46,9 +45,8 @@ public class SwagItemController {
     return Protocol.values();
   }
  
- 
   @RequestMapping(value = "/swagItems", method = RequestMethod.GET)
-  public String getAllandler(Model model) {
+  public String getAllHandler(Model model) {
     model.addAttribute("swagItem", new SwagItem());
     model.addAttribute("swagItems", swagItemService.getAll());
     return "swagItems";
@@ -112,4 +110,8 @@ public class SwagItemController {
   
   }
 
+	public void setSwagItemService(SwagItemService swagItemService) {
+		this.swagItemService = swagItemService;
+	}
+  
 }

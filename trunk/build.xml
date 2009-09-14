@@ -69,7 +69,7 @@
           description="Compile the application servlet code">
 		<mkdir dir="${war.dir}/WEB-INF/classes"/>
 		<mkdir dir="${war.dir}/WEB-INF/lib"/>
-		<javac srcdir="src" destdir="${war.dir}/WEB-INF/classes" >
+		<javac srcdir="src" destdir="${war.dir}/WEB-INF/classes" debug="true" >
 			<compilerarg value="-Xlint"/> 
 			<classpath>
 				<fileset dir="${appengine.sdk}/lib/user">

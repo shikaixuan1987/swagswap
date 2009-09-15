@@ -3,11 +3,16 @@ package com.itcommand.domain;
 import java.util.Date;
 import java.util.List;
 
+import javax.jdo.annotations.Embedded;
+import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.api.datastore.Blob;
 
 /**
  * Represents one piece of swag
@@ -26,7 +31,24 @@ public class SwagItem {
 	private String description;
 
 	@Persistent
-	private byte[] image;
+	@Embedded
+	private SwagImage image;
+	
+	@PersistenceCapable
+	@EmbeddedOnly
+	public static class SwagImage {
+		public Blob image;
+		public String filename;
+		public String mimeType;
+
+		public SwagImage(byte[] image) {
+			this.image = new Blob(image);
+		}
+	}
+	
+	//just used to store imageBytes from the HTML form
+	@NotPersistent
+	private byte[] imageBytes;
 
 	@Persistent
 	private String owner;
@@ -49,6 +71,9 @@ public class SwagItem {
 	@Persistent(defaultFetchGroup = "true")
 	private List<String> comments;
 
+	
+	
+	
 	public boolean isNew() {
 		return getKey() == null;
 	}
@@ -77,12 +102,20 @@ public class SwagItem {
 		this.description = description;
 	}
 
-	public byte[] getImage() {
+	public SwagImage getImage() {
 		return image;
 	}
 
-	public void setImage(byte[] image) {
+	public void setImage(SwagImage image) {
 		this.image = image;
+	}
+
+	public byte[] getImageBytes() {
+		return imageBytes;
+	}
+
+	public void setImageBytes(byte[] imageBytes) {
+		this.imageBytes = imageBytes;
 	}
 
 	public String getOwner() {

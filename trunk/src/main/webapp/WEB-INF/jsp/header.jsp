@@ -12,3 +12,6 @@
 </head>
 
 <body>
+<center>
+<img src="<spring:url value="/images/trading-floor-banner.jpg" htmlEscape="true" />" alt="Swag Swap"/>
+</center>

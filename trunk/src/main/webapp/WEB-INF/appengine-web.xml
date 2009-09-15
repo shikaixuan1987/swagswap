@@ -3,5 +3,5 @@
   <application>samsdemos</application>
   <version>swagswap</version>
 
-<sessions-enabled>true</sessions-enabled>
+	<sessions-enabled>true</sessions-enabled>
 </appengine-web-app>

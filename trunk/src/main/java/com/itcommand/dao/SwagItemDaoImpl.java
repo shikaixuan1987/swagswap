@@ -13,6 +13,11 @@ import org.springframework.orm.jdo.support.JdoDaoSupport;
 
 import com.itcommand.domain.SwagItem;
 
+/**
+ * (from spring docs): JdoTemplate will ensure that PersistenceManagers are properly opened
+ * and closed, and automatically participate in transactions. 
+ *
+ */
 public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 
 	private static final Logger log = Logger.getLogger(SwagItemDaoImpl.class);
@@ -46,6 +51,21 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 				.execute(queryString, queryString + "\ufffd"));
 
 		return swagItems;
+		
+		
+//TODO change to something like 
+//	    public Collection loadProductsByCategory(final String category) throws DataAccessException {
+//	        return (Collection) this.jdoTemplate.execute(new JdoCallback() {
+//	            public Object doInJdo(PersistenceManager pm) throws JDOException {
+//	                Query query = pm.newQuery(Product.class, "category = pCategory");
+//	                query.declareParameters("String pCategory"); 
+//	                List result = query.execute(category);
+//	                // do some further stuff with the result list
+//	                return result;
+//	            }
+//	        });
+//	    }
+
 	}
 
 	@SuppressWarnings("unchecked")

@@ -9,7 +9,7 @@
 	<h2>Add</h2>
 </c:if>
 
-<form:form action="/swag/swagItem/save" commandName="swagItem" method="post">
+<form:form action="/swag/swagItem/save" enctype="multipart/form-data" commandName="swagItem" method="post">
 	<form:hidden path="key" />
 
 	<table>
@@ -42,6 +42,10 @@
 			<td><%--@elvariable id="availableProtocols" type="java.lang.Array"--%>
 			<form:checkboxes path="comments" items="${availableProtocols}" /></td>
 		</tr>
+		<tr>
+			<td>Image:</td>
+			<td><input type="file" name="imageBytes"/></td>
+		</tr>
 
 	</table>
 	<input type="submit" value="save" />
@@ -50,7 +54,7 @@
 	<c:if test="${not empty swagItems}">
 
 		<display:table name="swagItems" id="currentObject" requestURI="/swag/swagItems">
-			<display:column href="/swag/swagItem/edit/${currentObject.key}" sortable="true" property="name" />
+			<display:column href="<c:url value='/swag/swagItem/edit/${currentObject.key}'/>" sortable="true" property="name" />
 
 			<display:column title="Action">
 				<a href="<c:url value='/swag/swagItem/edit/${currentObject.key}'/>"> 

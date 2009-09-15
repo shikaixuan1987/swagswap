@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.itcommand.dao.SwagItemDao;
 import com.itcommand.domain.SwagItem;
@@ -28,8 +30,12 @@ public class SwagItemServiceImpl implements SwagItemService {
 		return swagItemDao.getAll();
 	}
 
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void save(SwagItem swagItem) {
 		swagItemDao.save(swagItem);
+		//to test transactions, uncomment the throw exception line below
+		//and try this method with and without the annotation
+		//throw new RuntimeException("see if it rolls back");
 	}
 
 	public void delete(Long id) {

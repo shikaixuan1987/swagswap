@@ -86,7 +86,10 @@ public class SwagItemController {
 			log.debug("No image uploaded");
 		}
 		else {
+			SwagImage swagImage = new SwagImage(swagItem.getImageBytes());
+			swagImage.filename="foo";
 			swagItem.setImage(new SwagImage(swagItem.getImageBytes()));
+		
 		}
 	}
 

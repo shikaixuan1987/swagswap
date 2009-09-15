@@ -37,8 +37,11 @@ public class SwagItem {
 	@PersistenceCapable
 	@EmbeddedOnly
 	public static class SwagImage {
+		@Persistent
 		public Blob image;
+		@Persistent
 		public String filename;
+		@Persistent
 		public String mimeType;
 
 		public SwagImage(byte[] image) {
@@ -72,7 +75,23 @@ public class SwagItem {
 	private List<String> comments;
 
 	
+	public SwagItem() {
+		super();
+	}
 	
+	public SwagItem(String name, String description, byte[] imageBytes,
+			String owner, Float rating, Integer numberOfRatings,
+			List<String> tags, List<String> comments) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.imageBytes = imageBytes;
+		this.owner = owner;
+		this.rating = rating;
+		this.numberOfRatings = numberOfRatings;
+		this.tags = tags;
+		this.comments = comments;
+	}
 	
 	public boolean isNew() {
 		return getKey() == null;

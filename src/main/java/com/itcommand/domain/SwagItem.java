@@ -47,6 +47,43 @@ public class SwagItem {
 		public SwagImage(byte[] image) {
 			this.image = new Blob(image);
 		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((filename == null) ? 0 : filename.hashCode());
+			result = prime * result + ((image == null) ? 0 : image.hashCode());
+			result = prime * result + ((mimeType == null) ? 0 : mimeType.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			SwagImage other = (SwagImage) obj;
+			if (filename == null) {
+				if (other.filename != null)
+					return false;
+			} else if (!filename.equals(other.filename))
+				return false;
+			if (image == null) {
+				if (other.image != null)
+					return false;
+			} else if (!image.equals(other.image))
+				return false;
+			if (mimeType == null) {
+				if (other.mimeType != null)
+					return false;
+			} else if (!mimeType.equals(other.mimeType))
+				return false;
+			return true;
+		}
 	}
 	
 	//just used to store imageBytes from the HTML form
@@ -193,4 +230,78 @@ public class SwagItem {
 		this.comments = comments;
 	}
 
+	/**
+	 * Exclude key and timestamps for unittests
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((image == null) ? 0 : image.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((numberOfRatings == null) ? 0 : numberOfRatings.hashCode());
+		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
+		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
+		return result;
+	}
+
+	/**
+	 * Exclude key and timestamps for unittests
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SwagItem other = (SwagItem) obj;
+		if (comments == null) {
+			if (other.comments != null)
+				return false;
+		} else if (!comments.equals(other.comments))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (image == null) {
+			if (other.image != null)
+				return false;
+		} else if (!image.equals(other.image))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (numberOfRatings == null) {
+			if (other.numberOfRatings != null)
+				return false;
+		} else if (!numberOfRatings.equals(other.numberOfRatings))
+			return false;
+		if (owner == null) {
+			if (other.owner != null)
+				return false;
+		} else if (!owner.equals(other.owner))
+			return false;
+		if (rating == null) {
+			if (other.rating != null)
+				return false;
+		} else if (!rating.equals(other.rating))
+			return false;
+		if (tags == null) {
+			if (other.tags != null)
+				return false;
+		} else if (!tags.equals(other.tags))
+			return false;
+		return true;
+	}
+
+	
 }

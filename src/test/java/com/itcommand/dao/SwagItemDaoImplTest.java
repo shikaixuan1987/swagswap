@@ -10,16 +10,21 @@ import com.itcommand.test.LocalDatastoreTestCase;
 public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
 
     public void testSave() {
-        SwagItemDao swagItemDao = new SwagItemDaoImpl();
-        SwagItem swagItem = Fixture.createSwagItem();
-        swagItemDao.save(swagItem);
+    	SwagItemDaoImpl swagItemDao = new SwagItemDaoImpl();
+        swagItemDao.setPersistenceManagerFactory(PMF);
+        
+        SwagItem originalSwagItem = Fixture.createSwagItem();
+        swagItemDao.save(originalSwagItem);
 
         Query query = new Query(SwagItem.class.getSimpleName());
-        assertEquals(2, DatastoreServiceFactory.getDatastoreService().prepare(query).countEntities());
+        assertEquals(1, DatastoreServiceFactory.getDatastoreService().prepare(query).countEntities());
+//        assertEquals(originalSwagItem,savedItem);
     }
 
     public void testDelete() {
-    	SwagItemDao swagItemDao = new SwagItemDaoImpl();
+    	SwagItemDaoImpl swagItemDao = new SwagItemDaoImpl();
+        swagItemDao.setPersistenceManagerFactory(PMF);
+        
         SwagItem swagItem = Fixture.createSwagItem();
         swagItemDao.save(swagItem);
 

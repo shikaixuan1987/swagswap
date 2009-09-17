@@ -26,9 +26,8 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import com.itcommand.domain.DataFormat;
 import com.itcommand.domain.Protocol;
-import com.itcommand.domain.SwagImageHold;
+import com.itcommand.domain.SwagImage;
 import com.itcommand.domain.SwagItem;
-import com.itcommand.domain.SwagItem.SwagImage;
 import com.itcommand.service.SwagItemService;
 
 @Controller
@@ -69,29 +68,30 @@ public class SwagItemController {
 
 	@RequestMapping(value = "/swagItem/edit/{key}", method = RequestMethod.GET)
 	public String editHandler(@PathVariable("key") Long key, Model model) {
+		SwagItem swagItem = swagItemService.get(key);
 		model.addAttribute("swagItem", swagItemService.get(key));
-		SwagImage s = swagItemService.get(key).getImage();
 		return "swagItems";
 	}
 
 	@RequestMapping(value = "/swagItem/save", method = RequestMethod.POST)
 	public String saveHandler(@ModelAttribute SwagItem swagItem) {
-		handleImageUpload(swagItem);
+//		handleImageUpload(swagItem);
+		swagItem.setImage(new SwagImage(swagItem.getImageBytes()));
 		swagItemService.save(swagItem);
 		return "redirect:/swag/swagItems";
 	}
 
-	private void handleImageUpload(SwagItem swagItem) {
-		if (swagItem.getImageBytes()==null) {
-			log.debug("No image uploaded");
-		}
-		else {
-			SwagImage swagImage = new SwagImage(swagItem.getImageBytes());
-			swagImage.filename="foo";
-			swagItem.setImage(new SwagImage(swagItem.getImageBytes()));
-		
-		}
-	}
+//	private void handleImageUpload(SwagItem swagItem) {
+//		if (swagItem.getImageBytes()==null) {
+//			log.debug("No image uploaded");
+//		}
+//		else {
+//			SwagImage swagImage = new SwagImage(swagItem.getImageBytes());
+//			swagImage.filename="foo";
+////			swagItem.setImage(new SwagImage(swagItem.getImageBytes()));
+//		
+//		}
+//	}
 
 	@RequestMapping(value = "/swagItem/search", method = RequestMethod.POST)
 	public String searchHandler(Model model, @ModelAttribute SwagItem swagItem) {

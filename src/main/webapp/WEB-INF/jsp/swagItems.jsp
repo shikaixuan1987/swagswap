@@ -44,7 +44,11 @@
 		</tr>
 		<tr>
 			<td>Image:</td>
-			<td><input type="file" name="imageBytes"/></td>
+			<td>
+			<c:if test="${not empty swagItem.imageKey}">
+			<img border="0" src="<c:url value='/swag/showImage/${swagItem.imageKey}'/>"/>
+			</c:if>
+			<input type="file" name="imageBytes" value="Change Image"/></td>
 		</tr>
 
 	</table>
@@ -54,7 +58,7 @@
 	<c:if test="${not empty swagItems}">
 
 		<display:table name="swagItems" id="currentObject" requestURI="/swag/swagItems">
-			<display:column href="<c:url value='/swag/swagItem/edit/${currentObject.key}'/>" sortable="true" property="name" />
+			<display:column sortable="true" property="name" />
 
 			<display:column title="Action">
 				<a href="<c:url value='/swag/swagItem/edit/${currentObject.key}'/>"> 
@@ -65,6 +69,9 @@
 					border="0" alt="Delete"
 					src="<%=request.getContextPath()%>/images/delete.gif"/>
 				</a>
+			</display:column>
+			<display:column title="Image">
+				<img border="0" alt="Image" src="<c:url value='/swag/showImage/${currentObject.imageKey}'/>"/>
 			</display:column>
 
 		</display:table>

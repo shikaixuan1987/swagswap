@@ -3,16 +3,12 @@ package com.itcommand.domain;
 import java.util.Date;
 import java.util.List;
 
-import javax.jdo.annotations.Embedded;
-import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-
-import com.google.appengine.api.datastore.Blob;
 
 /**
  * Represents one piece of swag
@@ -30,61 +26,17 @@ public class SwagItem {
 	@Persistent
 	private String description;
 
+	/**
+	 * Owned One-to-One Relationship (lazy loaded)
+	 * see http://code.google.com/appengine/docs/java/datastore/relationships.html
+	 */
 	@Persistent
-	@Embedded
 	private SwagImage image;
 	
-	@PersistenceCapable
-	@EmbeddedOnly
-	public static class SwagImage {
-		@Persistent
-		public Blob image;
-		@Persistent
-		public String filename;
-		@Persistent
-		public String mimeType;
-
-		public SwagImage(byte[] image) {
-			this.image = new Blob(image);
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((filename == null) ? 0 : filename.hashCode());
-			result = prime * result + ((image == null) ? 0 : image.hashCode());
-			result = prime * result + ((mimeType == null) ? 0 : mimeType.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			SwagImage other = (SwagImage) obj;
-			if (filename == null) {
-				if (other.filename != null)
-					return false;
-			} else if (!filename.equals(other.filename))
-				return false;
-			if (image == null) {
-				if (other.image != null)
-					return false;
-			} else if (!image.equals(other.image))
-				return false;
-			if (mimeType == null) {
-				if (other.mimeType != null)
-					return false;
-			} else if (!mimeType.equals(other.mimeType))
-				return false;
-			return true;
-		}
-	}
+	// Store this so we can get the images separately with an image servlet
+	// to show them with an image tag but not have to load them twice
+	// (once when retrieving it from SwagItem, and once when looking it up with the servlet)
+	private String imageKey;
 	
 	//just used to store imageBytes from the HTML form
 	@NotPersistent
@@ -116,13 +68,13 @@ public class SwagItem {
 		super();
 	}
 	
-	public SwagItem(String name, String description, byte[] imageBytes,
+	public SwagItem(String name, String description, SwagImage image,
 			String owner, Float rating, Integer numberOfRatings,
 			List<String> tags, List<String> comments) {
 		super();
 		this.name = name;
 		this.description = description;
-		this.imageBytes = imageBytes;
+		this.image = image;
 		this.owner = owner;
 		this.rating = rating;
 		this.numberOfRatings = numberOfRatings;
@@ -172,6 +124,14 @@ public class SwagItem {
 
 	public void setImageBytes(byte[] imageBytes) {
 		this.imageBytes = imageBytes;
+	}
+	
+	public String getImageKey() {
+		return imageKey;
+	}
+
+	public void setImageKey(String imageKey) {
+		this.imageKey = imageKey;
 	}
 
 	public String getOwner() {
@@ -239,7 +199,6 @@ public class SwagItem {
 		int result = 1;
 		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((image == null) ? 0 : image.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((numberOfRatings == null) ? 0 : numberOfRatings.hashCode());
 		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
@@ -249,7 +208,7 @@ public class SwagItem {
 	}
 
 	/**
-	 * Exclude key and timestamps for unittests
+	 * Exclude key and timestamps, and image for unittests
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -269,11 +228,6 @@ public class SwagItem {
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
-			return false;
-		if (image == null) {
-			if (other.image != null)
-				return false;
-		} else if (!image.equals(other.image))
 			return false;
 		if (name == null) {
 			if (other.name != null)

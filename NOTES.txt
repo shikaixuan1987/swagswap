@@ -1,0 +1,13 @@
+Things to note:
+
+Owned One-to-One Relationships
+http://code.google.com/appengine/docs/java/datastore/relationships.html#Owned_One_to_One_Relationships
+child item is lazy loaded
+child item is not deleted when parent is
+child key includes parent key
+Parent and child are in the same entity group so can be updated in the same transaction
+
+See SwagItem (parent) to SwagImage
+
+
+Image upload - byte[] limited, have to use Blob

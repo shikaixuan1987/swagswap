@@ -10,6 +10,7 @@ import javax.jdo.Query;
 import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
+import com.itcommand.domain.SwagImage;
 import com.itcommand.domain.SwagItem;
 
 /**
@@ -82,26 +83,36 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		}
 	}
 
+	/**
+	 * Swag images (children) of SwagItems are not automatically deleted
+	 * So you have to do that yourself
+	 * see http://code.google.com/appengine/docs/python/datastore/keysandentitygroups.html#Entity_Groups_Ancestors_and_Paths
+	 */
 	public void delete(Long id) {
 		PersistenceManager pm = getPersistenceManager();
 		SwagItem swagItem = pm.getObjectById(SwagItem.class, id);
+		SwagImage swagImage = swagItem.getImage();
+		pm.deletePersistent(swagImage);
 		pm.deletePersistent(swagItem);
 	}
 
 	/**
-	 * @param swagItem
+	 * @param updatedItem
+	 * TODO take care of image here
 	 */
-	private void update(SwagItem swagItem) {
-		PersistenceManager pm = getPersistenceManager();
-		SwagItem orig = pm.getObjectById(SwagItem.class, swagItem.getKey());
-		orig.setName(swagItem.getName());
-		orig.setDescription(swagItem.getDescription());
-		orig.setImage(swagItem.getImage());
-		orig.setOwner(swagItem.getOwner());
-		orig.setRating(swagItem.getRating());
+	private void update(SwagItem updatedItem) {
+		//TODO delete old image if it's changed
+		
+		SwagItem orig = getPersistenceManager().getObjectById(SwagItem.class, updatedItem.getKey());
+		orig.setName(updatedItem.getName());
+		orig.setDescription(updatedItem.getDescription());
+		orig.setImageKey(updatedItem.getImageKey());
+		orig.setImage(updatedItem.getImage());
+		orig.setOwner(updatedItem.getOwner());
+		orig.setRating(updatedItem.getRating());
 		orig.setLastUpdated(new Date());
-		orig.setTags(swagItem.getTags());
-		orig.setComments(swagItem.getComments());
+		orig.setTags(updatedItem.getTags());
+		orig.setComments(updatedItem.getComments());
 	}
 
 	/**
@@ -109,7 +120,6 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 	 * @param swagItem
 	 */
 	private void insert(SwagItem swagItem) {
-		PersistenceManager pm = getPersistenceManager();
 		Date now = new Date();
 		swagItem.setCreated(now);
 		swagItem.setLastUpdated(now);
@@ -117,7 +127,13 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		// UserService userService = UserServiceFactory.getUserService();
 		// swagItem.setOwner(userService.getCurrentUser().getEmail());
 		swagItem.setNumberOfRatings(0);
-		SwagItem insertedItem = pm.makePersistent(swagItem);
+		
+		getPersistenceManager().makePersistent(swagItem);
+		// Save image key here in the parent 
+		// See comment in SwagItem above the field imageKey
+		if (swagItem.getImage()!=null) {
+			swagItem.setImageKey(swagItem.getImage().getEncodedKey());
+		}
 	}
 
 }

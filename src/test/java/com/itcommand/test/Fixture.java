@@ -3,12 +3,13 @@ package com.itcommand.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.itcommand.domain.SwagImage;
 import com.itcommand.domain.SwagItem;
 
 public class Fixture {
 
 	public static SwagItem createSwagItem() {
-		byte[] imageBytes = new byte[]{0,1,2,3,4,5,6,7,8};
+		SwagImage image = new SwagImage(new byte[]{0,1,2,3,4,5,6,7,8});
 		
 		List<String> tags = new ArrayList<String>();
 		tags.add("orange");
@@ -23,7 +24,7 @@ public class Fixture {
 		SwagItem swagItem = new SwagItem(
 				"name", 
 				"description",
-				imageBytes, 
+				image, 
 				"owner", 
 				5F,
 				1,

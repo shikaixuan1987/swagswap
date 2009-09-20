@@ -1,4 +1,4 @@
-package com.itcommand.domain;
+package com.swagswap.domain;
 
 import java.io.Serializable;
 

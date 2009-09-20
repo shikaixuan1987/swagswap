@@ -1,4 +1,4 @@
-package com.itcommand.web.controller;
+package com.swagswap.web.springmvc.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.itcommand.dao.SwagImageDao;
+import com.swagswap.dao.SwagImageDao;
 
 @Controller
 public class SwagImageController {

@@ -1,10 +1,10 @@
-package com.itcommand.test;
+package com.swagswap.common;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.itcommand.domain.SwagImage;
-import com.itcommand.domain.SwagItem;
+import com.swagswap.domain.SwagImage;
+import com.swagswap.domain.SwagItem;
 
 public class Fixture {
 

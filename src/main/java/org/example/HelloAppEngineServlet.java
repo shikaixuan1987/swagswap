@@ -5,7 +5,7 @@ import javax.servlet.http.*;
 
 import org.apache.log4j.Logger;
 
-import com.itcommand.dao.SwagItemDaoImpl;
+import com.swagswap.dao.SwagItemDaoImpl;
 
 public class HelloAppEngineServlet extends HttpServlet {
 

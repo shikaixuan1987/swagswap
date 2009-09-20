@@ -126,15 +126,15 @@
 		<property name="targetPersistenceManagerFactory" ref="persistenceManagerFactory" />
 	</bean>
     -->
-	<bean id="swagItemDao" class="com.itcommand.dao.SwagItemDaoImpl" >
+	<bean id="swagItemDao" class="com.swagswap.dao.SwagItemDaoImpl" >
 		<property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
 	</bean>
 	
-	<bean id="swagImageDao" class="com.itcommand.dao.SwagImageDaoImpl" >
+	<bean id="swagImageDao" class="com.swagswap.dao.SwagImageDaoImpl" >
 		<property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
 	</bean>
 	
-	<bean id="swagItemService" class="com.itcommand.service.SwagItemServiceImpl" />
+	<bean id="swagItemService" class="com.swagswap.service.SwagItemServiceImpl" />
 
 	
 </beans>

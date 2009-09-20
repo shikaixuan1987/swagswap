@@ -1,4 +1,4 @@
-package com.itcommand.service;
+package com.swagswap.service;
 
 import java.util.Collection;
 import java.util.List;
@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.itcommand.dao.SwagItemDao;
-import com.itcommand.domain.SwagItem;
+import com.swagswap.dao.SwagItemDao;
+import com.swagswap.domain.SwagItem;
 
 public class SwagItemServiceImpl implements SwagItemService {
 

@@ -1,11 +1,11 @@
-package com.itcommand.dao;
+package com.swagswap.dao;
 
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
-import com.itcommand.domain.SwagImage;
-import com.itcommand.domain.SwagItem;
-import com.itcommand.test.Fixture;
-import com.itcommand.test.LocalDatastoreTestCase;
+import com.swagswap.common.Fixture;
+import com.swagswap.common.LocalDatastoreTestCase;
+import com.swagswap.domain.SwagImage;
+import com.swagswap.domain.SwagItem;
 
 
 public class SwagImageDaoImplTest extends LocalDatastoreTestCase  {

@@ -1,4 +1,4 @@
-package com.itcommand.web.editor;
+package com.swagswap.web.springmvc.editor;
 
 import java.io.IOException;
 

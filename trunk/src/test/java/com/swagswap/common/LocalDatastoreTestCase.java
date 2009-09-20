@@ -1,4 +1,4 @@
-package com.itcommand.test;
+package com.swagswap.common;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;

@@ -1,4 +1,4 @@
-package com.itcommand.web.controller;
+package com.swagswap.web.springmvc.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -24,11 +24,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
-import com.itcommand.domain.DataFormat;
-import com.itcommand.domain.Protocol;
-import com.itcommand.domain.SwagImage;
-import com.itcommand.domain.SwagItem;
-import com.itcommand.service.SwagItemService;
+import com.swagswap.domain.DataFormat;
+import com.swagswap.domain.Protocol;
+import com.swagswap.domain.SwagImage;
+import com.swagswap.domain.SwagItem;
+import com.swagswap.service.SwagItemService;
 
 @Controller
 public class SwagItemController {

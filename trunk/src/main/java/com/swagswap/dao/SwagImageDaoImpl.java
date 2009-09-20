@@ -1,4 +1,4 @@
-package com.itcommand.dao;
+package com.swagswap.dao;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,7 +11,7 @@ import org.springframework.orm.jdo.support.JdoDaoSupport;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.itcommand.domain.SwagImage;
+import com.swagswap.domain.SwagImage;
 
 /**
  * Inspired by Spring Image Database sample application

@@ -1,4 +1,4 @@
-package com.itcommand.dao;
+package com.swagswap.dao;
 
 import java.util.Collection;
 import java.util.Date;
@@ -10,8 +10,8 @@ import javax.jdo.Query;
 import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
-import com.itcommand.domain.SwagImage;
-import com.itcommand.domain.SwagItem;
+import com.swagswap.domain.SwagImage;
+import com.swagswap.domain.SwagItem;
 
 /**
  * (from spring docs): JdoTemplate will ensure that PersistenceManagers are

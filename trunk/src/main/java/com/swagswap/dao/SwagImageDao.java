@@ -1,9 +1,9 @@
-package com.itcommand.dao;
+package com.swagswap.dao;
 
 import java.io.OutputStream;
 import java.util.List;
 
-import com.itcommand.domain.SwagImage;
+import com.swagswap.domain.SwagImage;
 
 public interface SwagImageDao {
 

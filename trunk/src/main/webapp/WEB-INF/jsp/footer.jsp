@@ -5,6 +5,7 @@
     </tr>
   </table>
 
+</div> <!-- end mainContent div -->
 </body>
 
 </html>

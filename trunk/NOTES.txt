@@ -11,3 +11,6 @@ See SwagItem (parent) to SwagImage
 
 
 Image upload - byte[] limited, have to use Blob
+
+TextAreas have to be stored in com.google.appengine.api.datastore.Text or you'll get:
+** Root cause is: description: String properties must be 500 characters or less. Instead, use com.google.appengine.api.datastore.Text, which can store strings of any length. java.lang.IllegalArgumentException: description: String properties must be 500 characters or less. Instead, use com.google.appengine.api.datastore.Text, which can store strings of any length.

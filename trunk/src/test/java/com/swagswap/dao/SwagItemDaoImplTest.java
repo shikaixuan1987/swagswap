@@ -1,5 +1,7 @@
 package com.swagswap.dao;
 
+import org.apache.commons.lang.RandomStringUtils;
+
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.dev.LocalDatastoreService;
@@ -34,6 +36,23 @@ public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
         assertNumberOfItemsAndImages(1,1);    
     }
     
+    // Strings over 500 chars have to be stored in a 
+    // com.google.appengine.api.datastore.Text
+    public void testLargeDescription() {
+    	
+    	SwagItem originalItem = Fixture.createSwagItem();
+    	String randomDescription = Fixture.get510Chars();
+    	originalItem.setDescription(randomDescription);
+    	swagItemDao.save(originalItem);
+    	assertNumberOfItemsAndImages(1,1);  
+    	
+        SwagItem retrievedItem = swagItemDao.get(originalItem.getKey());
+        
+    	assertEquals(randomDescription, retrievedItem.getDescription());
+    }
+    
+    
+    
     /**
      * Make sure if they're no image, that no image is created
      */
@@ -44,7 +63,6 @@ public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
     	swagItemDao.save(swagItem);
     	
     	assertNumberOfItemsAndImages(1,0);
-//        assertEquals(originalSwagItem,savedItem);
     }
 
     /**

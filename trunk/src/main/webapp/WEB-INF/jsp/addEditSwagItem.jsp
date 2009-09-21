@@ -32,16 +32,20 @@
 		</tr>
 		<tr>
 			<td>Tags:</td>
-			<td><%--@elvariable id="availableDataFormats" type="java.lang.Array"--%>
-			<form:checkboxes path="tags" items="${availableDataFormats}" />
+			<td>
+			<form:input path="tags[0]" />
+			<form:input path="tags[1]" />
+			<form:input path="tags[2]" />
+			<form:input path="tags[3]" />
 			</td>
 		</tr>
-
+		<%-- 
 		<tr>
-			<td>Protocols:</td>
-			<td><%--@elvariable id="availableProtocols" type="java.lang.Array"--%>
-			<form:checkboxes path="comments" items="${availableProtocols}" /></td>
+			<td>Comments:</td>
+			<td>
+			<form:checkboxes path="comments" /></td>
 		</tr>
+		 --%>
 		<tr>
 			<td>Image:</td>
 			<td>
@@ -53,28 +57,7 @@
 
 	</table>
 	<input type="submit" value="save" />
-	<input type="submit" value="cancel" onclick="document.location.href='<c:url value='/swag/swagItems'/>';return false;" />
+	<input type="submit" value="cancel" onclick="document.location.href='<c:url value='/swag/listSwagItems'/>';return false;" />
 
-	<c:if test="${not empty swagItems}">
-
-		<display:table name="swagItems" id="currentObject" requestURI="/swag/swagItems">
-			<display:column sortable="true" property="name" />
-
-			<display:column title="Action">
-				<a href="<c:url value='/swag/swagItem/edit/${currentObject.key}'/>"> 
-				<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/></a>
-                &nbsp;&nbsp;
-                <a href="<c:url value='/swag/swagItem/delete/${currentObject.key}'/>"> 
-                <img
-					border="0" alt="Delete"
-					src="<%=request.getContextPath()%>/images/delete.gif"/>
-				</a>
-			</display:column>
-			<display:column title="Image">
-				<img border="0" alt="Image" src="<c:url value='/swag/showImage/${currentObject.imageKey}'/>"/>
-			</display:column>
-
-		</display:table>
-	</c:if>
 </form:form>
 <%@ include file="/WEB-INF/jsp/footer.jsp" %>

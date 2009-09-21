@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
-import com.swagswap.domain.DataFormat;
-import com.swagswap.domain.Protocol;
 import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.service.SwagItemService;
@@ -37,40 +35,30 @@ public class SwagItemController {
 	@Autowired
 	private SwagItemService swagItemService;
 
-	@ModelAttribute("availableDataFormats")
-	public DataFormat[] populateDataFormats() {
-		return DataFormat.values();
-	}
-
-	@ModelAttribute("availableProtocols")
-	public Protocol[] populateProtocols() {
-		return Protocol.values();
-	}
-
-	@RequestMapping(value = "/swagItems", method = RequestMethod.GET)
+	@RequestMapping(value = "/listSwagItems", method = RequestMethod.GET)
 	public String getAllHandler(Model model) {
 		model.addAttribute("swagItem", new SwagItem());
 		model.addAttribute("swagItems", swagItemService.getAll());
-		return "swagItems";
+		return "listSwagItems";
 	}
 
 	@RequestMapping(value = "/swagItem/add", method = RequestMethod.GET)
 	public String addHandler(Model model) {
 		model.addAttribute("swagItem", new SwagItem());
-		return "swagItems";
+		return "addEditSwagItem";
 	}
 
 	@RequestMapping(value = "/swagItem/delete/{key}", method = RequestMethod.GET)
 	public String deleteHandler(@PathVariable("key") Long key) {
 		swagItemService.delete(key);
-		return "redirect:/swag/swagItems";
+		return "redirect:/swag/listSwagItems";
 	}
 
 	@RequestMapping(value = "/swagItem/edit/{key}", method = RequestMethod.GET)
 	public String editHandler(@PathVariable("key") Long key, Model model) {
 		SwagItem swagItem = swagItemService.get(key);
 		model.addAttribute("swagItem", swagItemService.get(key));
-		return "swagItems";
+		return "addEditSwagItem";
 	}
 
 	@RequestMapping(value = "/swagItem/save", method = RequestMethod.POST)
@@ -78,7 +66,7 @@ public class SwagItemController {
 //		handleImageUpload(swagItem);
 		swagItem.setImage(new SwagImage(swagItem.getImageBytes()));
 		swagItemService.save(swagItem);
-		return "redirect:/swag/swagItems";
+		return "redirect:/swag/listSwagItems";
 	}
 
 //	private void handleImageUpload(SwagItem swagItem) {
@@ -97,7 +85,7 @@ public class SwagItemController {
 	public String searchHandler(Model model, @ModelAttribute SwagItem swagItem) {
 		Collection<SwagItem> swagItems = swagItemService.search(swagItem.getName());
 		model.addAttribute("swagItems", swagItems);
-		return "swagItems";
+		return "listSwagItems";
 	}
 
 	// TODO is this needed?

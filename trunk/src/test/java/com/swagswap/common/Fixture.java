@@ -33,4 +33,14 @@ public class Fixture {
 				);
 		return swagItem;
 	}
+	
+	public static String get510Chars() {
+		return "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis scelerisque facilisis " +
+				"tortor. Aliquam semper gravida ligula. Vestibulum sodales lacinia leo. In turpis justo," +
+				" placerat eu, ultrices vel, auctor a, tortor. Aliquam lorem justo, tepor at, vehicula ac," +
+				" porttitor id, felis. Ut eget orci at odio congue nonummy. Aliquam wisi. Vivamus suscipit" +
+				" nonummy eros. Praesent bibendum consectetuer neque. Donec vitae eros ut mi adipiscing" +
+				" mollis. Vestibulum eleifend. Maecenas ultrice. Ut vitae velit. 1 2 3 4 5";
+	}
+
 }

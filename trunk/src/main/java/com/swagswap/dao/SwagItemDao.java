@@ -10,7 +10,7 @@ public interface SwagItemDao {
 	public abstract SwagItem get(Long id);
 
 	@SuppressWarnings("unchecked")
-	public abstract Collection<SwagItem> search(String queryString);
+	public abstract List<SwagItem> search(String searchString);
 
 	@SuppressWarnings("unchecked")
 	public abstract List<SwagItem> getAll();

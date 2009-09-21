@@ -14,3 +14,7 @@ Image upload - byte[] limited, have to use Blob
 
 TextAreas have to be stored in com.google.appengine.api.datastore.Text or you'll get:
 ** Root cause is: description: String properties must be 500 characters or less. Instead, use com.google.appengine.api.datastore.Text, which can store strings of any length. java.lang.IllegalArgumentException: description: String properties must be 500 characters or less. Instead, use com.google.appengine.api.datastore.Text, which can store strings of any length.
+
+
+org.datanucleus.store.appengine.query.DatastoreQuery$UnsupportedDatastoreOperatorException: Problem with query <SELECT FROM com.swagswap.domain.SwagItem WHERE name=='name' || tags=='name' PARAMETERS String searchString>: App Engine datastore does not support operator  OR 
+

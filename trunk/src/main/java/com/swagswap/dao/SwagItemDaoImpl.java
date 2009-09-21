@@ -1,12 +1,14 @@
 package com.swagswap.dao;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import org.apache.commons.collections.list.SetUniqueList;
 import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
@@ -20,6 +22,7 @@ import com.swagswap.domain.SwagItem;
  * No need for finally blocks that close the persistenceManager!
  * 
  */
+@SuppressWarnings("unchecked")
 public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 
 	private static final Logger log = Logger.getLogger(SwagItemDaoImpl.class);
@@ -30,6 +33,7 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		return swagItem;
 	}
 
+	/*
 	@SuppressWarnings("unchecked")
 	public Collection<SwagItem> search(String queryString) {
 		PersistenceManager pm = getPersistenceManager();
@@ -42,24 +46,40 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 				+ "\ufffd"));
 
 		return swagItems;
-
-		// TODO change to something like
-		// public Collection loadProductsByCategory(final String category)
-		// throws DataAccessException {
-		// return (Collection) this.jdoTemplate.execute(new JdoCallback() {
-		// public Object doInJdo(PersistenceManager pm) throws JDOException {
-		// Query query = pm.newQuery(Product.class, "category = pCategory");
-		// query.declareParameters("String pCategory");
-		// List result = query.execute(category);
-		// // do some further stuff with the result list
-		// return result;
-		// }
-		// });
-		// }
-
 	}
+*/
+	
+	/**
+	 * Search by tag and by name
+	 * @param searchString
+	 */
+    public List<SwagItem> search(String searchString) {
+        List<SwagItem> tagResults = findByTag(searchString);
+        List<SwagItem> nameResults = findByName(searchString);
+        //trick to ensure uniqueness in a list
+        List<SwagItem> allResults = SetUniqueList.decorate(new ArrayList<SwagItem>());
+        allResults.addAll(tagResults);
+        allResults.addAll(nameResults);
+        return allResults;
+    }
 
-	@SuppressWarnings("unchecked")
+
+    // Figured these out from this page:
+    // http://code.google.com/p/datanucleus-appengine/source/browse/trunk/tests/org/datanucleus/store/appengine/query/JDOQLQueryTest.java#2178
+	protected List<SwagItem> findByTag(String searchString) {
+		Query query = getPersistenceManager().newQuery(
+                "select from " + SwagItem.class.getName()
+                + " where tags.contains(p1) parameters String p1");
+        return (List<SwagItem>) query.execute(searchString); 
+	}
+	
+	protected List<SwagItem> findByName(String searchString) {
+		Query query = getPersistenceManager().newQuery(
+				"select from " + SwagItem.class.getName()
+				+ " where name==p1 parameters String p1");
+		return (List<SwagItem>) query.execute(searchString); 
+	}
+	
 	public List<SwagItem> getAll() {
 		PersistenceManager pm = getPersistenceManager();
 		String query = "select from " + SwagItem.class.getName() + " order by name";

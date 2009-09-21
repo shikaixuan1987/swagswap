@@ -2,9 +2,29 @@
 <%@ include file="/WEB-INF/jsp/includes.jsp" %>
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
 
-<h2>All Swag Items</h2>
 
-<a href="/swag/swagItem/add"><img src="/images/newAdd.png" title="Add SwagItem" border="0"/></a>
+
+<form:form action="/swag/swagItem/search" commandName="searchCriteria" name="searchForm" method="GET">
+
+<c:if test="${not empty searchCriteria.searchString}">
+	<h2>Swag Item Search: ${searchCriteria.searchString}</h2>
+</c:if>
+<c:if test="${empty searchCriteria.searchString}">
+	<h2>All Swag Items</h2>
+</c:if>
+	<table>
+		<tr>
+			<td><form:input path="searchString" /></td>
+			<td>
+				<INPUT TYPE="image" SRC="/images/icon_flashlight.gif"
+				       BORDER="0" ALT="Search Swag"/>
+				<a href="#" onclick="document.searchForm.submit()">Search Swag</a>
+			</td>
+		</tr>
+	</table>
+</form:form>
+
+<a href="/swag/swagItem/add"><img src="/images/newAdd.png" title="Add SwagItem" border="0"/>Add Swag</a>
 <br/>
 
 	<display:table name="swagItems" id="currentObject" requestURI="/swag/listSwagItems">
@@ -27,4 +47,9 @@
 		</c:if>
 
 </display:table>
+
+<script language="JavaScript">
+    document.forms[0].searchString.focus();
+    document.forms[0].searchString.select();
+</script>
 <%@ include file="/WEB-INF/jsp/footer.jsp" %>

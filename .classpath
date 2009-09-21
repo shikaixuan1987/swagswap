@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" output="target/swagswap-0.1/WEB-INF/classes" path="src/main/java"/>
 	<classpathentry kind="src" output="target/test" path="src/test/java"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_16"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_07"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-beanutils-1.8.0.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-collections-3.2.1.jar"/>

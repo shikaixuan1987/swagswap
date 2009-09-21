@@ -1,5 +1,6 @@
 package com.swagswap.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,9 +11,15 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import org.apache.commons.collections.FactoryUtils;
+import org.apache.commons.collections.list.LazyList;
+
+import com.google.appengine.api.datastore.Text;
+
 /**
  * Represents one piece of swag
  */
+@SuppressWarnings("unchecked")
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class SwagItem {
 
@@ -23,8 +30,9 @@ public class SwagItem {
 	@Persistent
 	private String name;
 
+	//Text and Blob are not part of the default fetch group
 	@Persistent
-	private String description;
+	private Text description;
 
 	/**
 	 * Owned One-to-One Relationship (lazy loaded)
@@ -58,10 +66,10 @@ public class SwagItem {
 	private Date lastUpdated;
 
 	@Persistent(defaultFetchGroup = "true")
-	private List<String> tags;
+	private List<String> tags  = LazyList.decorate(new ArrayList(),FactoryUtils.instantiateFactory(String.class));
 
 	@Persistent(defaultFetchGroup = "true")
-	private List<String> comments;
+	private List<String> comments = new ArrayList<String>();
 
 	
 	public SwagItem() {
@@ -73,7 +81,7 @@ public class SwagItem {
 			List<String> tags, List<String> comments) {
 		super();
 		this.name = name;
-		this.description = description;
+		this.description = new Text(description);
 		this.image = image;
 		this.owner = owner;
 		this.rating = rating;
@@ -103,11 +111,11 @@ public class SwagItem {
 	}
 
 	public String getDescription() {
-		return description;
+		return (description==null)?"":description.getValue();
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
+		this.description = new Text(description);
 	}
 
 	public SwagImage getImage() {

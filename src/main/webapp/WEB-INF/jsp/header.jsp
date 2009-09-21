@@ -2,6 +2,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" href="<spring:url value="/css/swagswap.css" htmlEscape="true" />" type="text/css"/>
   <link rel="stylesheet" href="<spring:url value="/css/maven-base.css" htmlEscape="true" />" type="text/css"/>
   <link rel="stylesheet" href="<spring:url value="/css/maven-theme.css" htmlEscape="true" />" type="text/css"/>
   <link rel="stylesheet" href="<spring:url value="/css/site.css" htmlEscape="true" />" type="text/css"/>
@@ -12,6 +13,5 @@
 </head>
 
 <body>
-<center>
+<div id="mainContent">
 <img src="<spring:url value="/images/trading-floor-banner.jpg" htmlEscape="true" />" alt="Swag Swap"/>
-</center>

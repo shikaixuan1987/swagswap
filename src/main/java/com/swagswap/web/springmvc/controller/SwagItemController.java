@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
+import com.swagswap.domain.SearchCriteria;
 import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.service.SwagItemService;
@@ -37,6 +39,8 @@ public class SwagItemController {
 
 	@RequestMapping(value = "/listSwagItems", method = RequestMethod.GET)
 	public String getAllHandler(Model model) {
+		//expected on the jsp page
+		model.addAttribute("searchCriteria", new SearchCriteria());
 		model.addAttribute("swagItem", new SwagItem());
 		model.addAttribute("swagItems", swagItemService.getAll());
 		return "listSwagItems";
@@ -81,9 +85,10 @@ public class SwagItemController {
 //		}
 //	}
 
-	@RequestMapping(value = "/swagItem/search", method = RequestMethod.POST)
-	public String searchHandler(Model model, @ModelAttribute SwagItem swagItem) {
-		Collection<SwagItem> swagItems = swagItemService.search(swagItem.getName());
+	
+	@RequestMapping(value = "/swagItem/search", method = RequestMethod.GET)
+	public String searchHandler(@ModelAttribute SearchCriteria searchCriteria, Model model) {
+		Collection<SwagItem> swagItems = swagItemService.search(searchCriteria.getSearchString());
 		model.addAttribute("swagItems", swagItems);
 		return "listSwagItems";
 	}

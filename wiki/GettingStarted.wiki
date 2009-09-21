@@ -1,5 +1,3 @@
-#Getting Started
-
 = Setup =
 
 atic links to other wiki pages

@@ -33,22 +33,6 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		return swagItem;
 	}
 
-	/*
-	@SuppressWarnings("unchecked")
-	public Collection<SwagItem> search(String queryString) {
-		PersistenceManager pm = getPersistenceManager();
-		Query query = pm.newQuery(SwagItem.class);
-		query.setOrdering("name");
-		query.setFilter("name >= id && name < id2");
-		query.declareParameters("String id, String id2");
-
-		Collection<SwagItem> swagItems = pm.detachCopyAll((Collection<SwagItem>) query.execute(queryString, queryString
-				+ "\ufffd"));
-
-		return swagItems;
-	}
-*/
-	
 	/**
 	 * Search by tag and by name
 	 * @param searchString
@@ -56,7 +40,7 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
     public List<SwagItem> search(String searchString) {
         List<SwagItem> tagResults = findByTag(searchString);
         List<SwagItem> nameResults = findByName(searchString);
-        //trick to ensure uniqueness in a list
+        //commons-lang trickery to ensure uniqueness in a list
         List<SwagItem> allResults = SetUniqueList.decorate(new ArrayList<SwagItem>());
         allResults.addAll(tagResults);
         allResults.addAll(nameResults);

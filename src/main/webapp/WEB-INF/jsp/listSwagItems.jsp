@@ -14,37 +14,36 @@
 </c:if>
 	<table>
 		<tr>
-			<td><form:input path="searchString" /></td>
-			<td>
-				<INPUT TYPE="image" SRC="/images/icon_flashlight.gif"
-				       BORDER="0" ALT="Search Swag"/>
-				<a href="#" onclick="document.searchForm.submit()">Search Swag</a>
+			<td><form:input path="searchString" />
+				<a href="#" onclick="document.searchForm.submit()">
+				<img src="/images/icon_flashlight.gif" border="0"/>Search Swag</a>
+				&nbsp; 
+				<a href="/swag/swagItem/add"><img src="/images/newAdd.png" 
+				   title="Add SwagItem" border="0"/>Add Swag</a>
 			</td>
 		</tr>
 	</table>
 </form:form>
 
-<a href="/swag/swagItem/add"><img src="/images/newAdd.png" title="Add SwagItem" border="0"/>Add Swag</a>
-<br/>
+<display:table name="swagItems" uid="swagItemsList" id="currentObject" 
+               requestURI="/swag/listSwagItems" keepStatus="true">
+	<display:column sortable="true" property="name" />
 
-	<display:table name="swagItems" id="currentObject" requestURI="/swag/listSwagItems">
-		<display:column sortable="true" property="name" />
-
-		<display:column title="Action">
-			<a href="<c:url value='/swag/swagItem/edit/${currentObject.key}'/>"> 
-			<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/></a>
-               &nbsp;&nbsp;
-               <a href="<c:url value='/swag/swagItem/delete/${currentObject.key}'/>"> 
-               <img
-				border="0" alt="Delete"
-				src="<%=request.getContextPath()%>/images/delete.gif"/>
-			</a>
+	<display:column title="Action" style="width: 74px;">
+		<a href="<c:url value='/swag/swagItem/edit/${currentObject.key}'/>"> 
+		<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/></a>
+              &nbsp;&nbsp;
+              <a href="<c:url value='/swag/swagItem/delete/${currentObject.key}'/>"> 
+              <img
+			border="0" alt="Delete"
+			src="<%=request.getContextPath()%>/images/delete.gif"/>
+		</a>
+	</display:column>
+	<c:if test="${not empty currentObject.imageKey}">
+		<display:column title="Image">
+			<img border="0" alt="Image" src="<c:url value='/swag/showImage/${currentObject.imageKey}'/>"/>
 		</display:column>
-		<c:if test="${not empty currentObject.imageKey}">
-			<display:column title="Image">
-				<img border="0" alt="Image" src="<c:url value='/swag/showImage/${currentObject.imageKey}'/>"/>
-			</display:column>
-		</c:if>
+	</c:if>
 
 </display:table>
 

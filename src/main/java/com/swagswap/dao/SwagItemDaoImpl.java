@@ -9,6 +9,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import org.apache.commons.collections.list.SetUniqueList;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
@@ -38,6 +39,9 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 	 * @param searchString
 	 */
     public List<SwagItem> search(String searchString) {
+    	if (StringUtils.isEmpty(searchString)) {
+    		return getAll();
+    	}
         List<SwagItem> tagResults = findByTag(searchString);
         List<SwagItem> nameResults = findByName(searchString);
         //commons-lang trickery to ensure uniqueness in a list

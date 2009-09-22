@@ -39,6 +39,9 @@
 			src="<%=request.getContextPath()%>/images/delete.gif"/>
 		</a>
 	</display:column>
+
+	<display:column sortable="true" property="tags" decorator="com.swagswap.web.springmvc.displaytag.TagsDecorator"/>
+
 	<c:if test="${not empty currentObject.imageKey}">
 		<display:column title="Image">
 			<img border="0" alt="Image" src="<c:url value='/swag/showImage/${currentObject.imageKey}'/>"/>

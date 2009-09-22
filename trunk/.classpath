@@ -30,5 +30,6 @@
 	<classpathentry kind="var" path="GAE_HOME/lib/user/orm/datanucleus-jpa-1.1.5.jar"/>
 	<classpathentry kind="var" path="GAE_HOME/lib/shared/geronimo-servlet_2.5_spec-1.2.jar"/>
 	<classpathentry kind="var" path="GAE_HOME"/>
+	<classpathentry kind="var" path="GAE_HOME/lib/shared/geronimo-jsp_2.1_spec-1.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -73,6 +73,51 @@ public class SwagImage implements Serializable {
 	public void setMimeType(String mimeType) {
 		this.mimeType = mimeType;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((encodedKey == null) ? 0 : encodedKey.hashCode());
+		result = prime * result + ((filename == null) ? 0 : filename.hashCode());
+		result = prime * result + ((image == null) ? 0 : image.hashCode());
+		result = prime * result + ((mimeType == null) ? 0 : mimeType.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SwagImage other = (SwagImage) obj;
+		if (encodedKey == null) {
+			if (other.encodedKey != null)
+				return false;
+		} else if (!encodedKey.equals(other.encodedKey))
+			return false;
+		if (filename == null) {
+			if (other.filename != null)
+				return false;
+		} else if (!filename.equals(other.filename))
+			return false;
+		if (image == null) {
+			if (other.image != null)
+				return false;
+		} else if (!image.equals(other.image))
+			return false;
+		if (mimeType == null) {
+			if (other.mimeType != null)
+				return false;
+		} else if (!mimeType.equals(other.mimeType))
+			return false;
+		return true;
+	}
+	
+	
     
     
 

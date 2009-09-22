@@ -52,7 +52,7 @@
 			<c:if test="${not empty swagItem.imageKey}">
 			<img border="0" src="<c:url value='/swag/showImage/${swagItem.imageKey}'/>"/>
 			</c:if>
-			<input type="file" name="imageBytes" value="Change Image"/></td>
+			<input type="file" name="imageBytes" value="Change Image"/> (Upload New Image)</td>
 		</tr>
 
 	</table>
@@ -60,4 +60,5 @@
 	<input type="submit" value="cancel" onclick="document.location.href='<c:url value='/swag/listSwagItems'/>';return false;" />
 
 </form:form>
+
 <%@ include file="/WEB-INF/jsp/footer.jsp" %>

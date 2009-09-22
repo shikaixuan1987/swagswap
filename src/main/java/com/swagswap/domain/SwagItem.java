@@ -13,6 +13,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.commons.collections.FactoryUtils;
 import org.apache.commons.collections.list.LazyList;
+import org.apache.commons.lang.StringUtils;
 
 import com.google.appengine.api.datastore.Text;
 
@@ -41,9 +42,12 @@ public class SwagItem {
 	@Persistent
 	private SwagImage image;
 	
-	// Store this so we can get the images separately with an image servlet
-	// to show them with an image tag but not have to load them twice
-	// (once when retrieving it from SwagItem, and once when looking it up with the servlet)
+	/**
+	 * Store this so we can get the images separately with an image servlet
+	 * to show them with an image tag but not have to load them twice
+	 * (once when retrieving it from SwagItem, and once when looking it up with the servlet)
+	 */
+	@Persistent
 	private String imageKey;
 	
 	//just used to store imageBytes from the HTML form
@@ -93,6 +97,11 @@ public class SwagItem {
 	public boolean isNew() {
 		return getKey() == null;
 	}
+	
+	// SwagItem has a new image if imageBytes is filled from file upload
+	public boolean hasNewImage() {
+		return (imageBytes != null && imageBytes.length !=0);
+	}
 
 	public Long getKey() {
 		return key;
@@ -134,6 +143,7 @@ public class SwagItem {
 		this.imageBytes = imageBytes;
 	}
 	
+	//Lazily populate this
 	public String getImageKey() {
 		return imageKey;
 	}

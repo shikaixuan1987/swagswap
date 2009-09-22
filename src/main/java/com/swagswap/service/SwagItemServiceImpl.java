@@ -18,8 +18,22 @@ public class SwagItemServiceImpl implements SwagItemService {
 	@Autowired
 	private SwagItemDao swagItemDao;
 
+	/**
+	 * Load swagItem, but not associated swagImage
+	 */
 	public SwagItem get(Long id) {
-		return swagItemDao.get(id);
+		return get(id, false);
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @param loadSwagImage whether to load swagImage (it is lazy loaded by JDO)
+	 * @return SwagItem if found
+	 * @throws Exception if item not found
+	 */
+	public SwagItem get(Long id, boolean loadSwagImage) {
+		return swagItemDao.get(id, loadSwagImage);
 	}
 
 	public Collection<SwagItem> search(String queryString) {

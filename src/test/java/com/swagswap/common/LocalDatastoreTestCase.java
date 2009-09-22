@@ -26,4 +26,9 @@ public class LocalDatastoreTestCase extends LocalServiceTestCase {
         super.tearDown();
     }
 
+    public void assertNotEquals(Object first, Object second)
+    {
+    assertEquals(first,second);
+    fail("objects are equal: first [" + first + "] second [" + second + "]");
+    }
 }

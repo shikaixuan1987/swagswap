@@ -122,7 +122,7 @@ public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
     	assertEquals(2, swagItems.size());
     }
     
-    public void testSearch_ensure_unque_items_only_returned_once() {
+    public void testSearch_ensure_no_duplicates() {
     	//make item with a tag that matches name
     	SwagItem swagItem = Fixture.createSwagItem();
     	swagItem.getTags().add(swagItem.getName());
@@ -130,6 +130,16 @@ public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
     	
     	List<SwagItem> swagItems = swagItemDao.search(swagItem.getName());
     	assertEquals(1, swagItems.size());
+    }
+    
+    // If all tags were filled then empty search String 
+    // didn't include item
+    public void testEmptySearchString() {
+    	SwagItem swagItem = Fixture.createSwagItem();
+    	swagItem.getTags().add("another tag");
+    	swagItemDao.save(swagItem);
+    	
+    	assertEquals(1, swagItemDao.search("").size());
     }
 
 

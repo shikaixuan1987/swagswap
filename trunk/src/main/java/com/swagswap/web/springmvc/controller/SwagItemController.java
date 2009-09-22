@@ -22,11 +22,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import com.swagswap.domain.SearchCriteria;
-import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.service.SwagItemService;
 
@@ -39,7 +37,7 @@ public class SwagItemController {
 
 	@RequestMapping(value = "/listSwagItems", method = RequestMethod.GET)
 	public String getAllHandler(Model model) {
-		//expected on the jsp page
+		//expected model attributes on the jsp page
 		model.addAttribute("searchCriteria", new SearchCriteria());
 		model.addAttribute("swagItem", new SwagItem());
 		model.addAttribute("swagItems", swagItemService.getAll());
@@ -52,40 +50,25 @@ public class SwagItemController {
 		return "addEditSwagItem";
 	}
 
+	@RequestMapping(value = "/swagItem/edit/{key}", method = RequestMethod.GET)
+	public String editHandler(@PathVariable("key") Long key, Model model) {
+		SwagItem swagItem = swagItemService.get(key, true);
+		model.addAttribute("swagItem", swagItem);
+		return "addEditSwagItem";
+	}
+	
+	@RequestMapping(value = "/swagItem/save", method = RequestMethod.POST)
+	public String saveHandler(@ModelAttribute SwagItem swagItem) {
+		swagItemService.save(swagItem);
+		return "redirect:/swag/listSwagItems";
+	}
+	
 	@RequestMapping(value = "/swagItem/delete/{key}", method = RequestMethod.GET)
 	public String deleteHandler(@PathVariable("key") Long key) {
 		swagItemService.delete(key);
 		return "redirect:/swag/listSwagItems";
 	}
 
-	@RequestMapping(value = "/swagItem/edit/{key}", method = RequestMethod.GET)
-	public String editHandler(@PathVariable("key") Long key, Model model) {
-		SwagItem swagItem = swagItemService.get(key);
-		model.addAttribute("swagItem", swagItemService.get(key));
-		return "addEditSwagItem";
-	}
-
-	@RequestMapping(value = "/swagItem/save", method = RequestMethod.POST)
-	public String saveHandler(@ModelAttribute SwagItem swagItem) {
-//		handleImageUpload(swagItem);
-		swagItem.setImage(new SwagImage(swagItem.getImageBytes()));
-		swagItemService.save(swagItem);
-		return "redirect:/swag/listSwagItems";
-	}
-
-//	private void handleImageUpload(SwagItem swagItem) {
-//		if (swagItem.getImageBytes()==null) {
-//			log.debug("No image uploaded");
-//		}
-//		else {
-//			SwagImage swagImage = new SwagImage(swagItem.getImageBytes());
-//			swagImage.filename="foo";
-////			swagItem.setImage(new SwagImage(swagItem.getImageBytes()));
-//		
-//		}
-//	}
-
-	
 	@RequestMapping(value = "/swagItem/search", method = RequestMethod.GET)
 	public String searchHandler(@ModelAttribute SearchCriteria searchCriteria, Model model) {
 		Collection<SwagItem> swagItems = swagItemService.search(searchCriteria.getSearchString());

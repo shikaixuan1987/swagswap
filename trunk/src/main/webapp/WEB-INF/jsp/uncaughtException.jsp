@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/jsp/includes.jsp" %>
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
 
-<h2/>Internal error</h2>
+<h2/>Error</h2>
 <p/>
 
 <% 
@@ -19,6 +19,9 @@ try {
 			out.println("** Root cause is: "+ rootCause.getMessage());
 			rootCause.printStackTrace(new java.io.PrintWriter(out)); 
 		}
+		else if (exception instanceof org.springframework.web.multipart.MultipartException) {
+			out.println("File upload is too large.  <a href=\"\" onclick=\"history.go(-1);return false;\">Try again</a>");
+		}
 		else {
 			// It's not a ServletException
 			Throwable rootCause = exception.getCause();
@@ -32,14 +35,6 @@ try {
     	out.println("No error information available");
 	} 
 
-	// Display cookies
-	out.println("\nCookies:\n");
-	Cookie[] cookies = request.getCookies();
-	if (cookies != null) {
-    	for (int i = 0; i < cookies.length; i++) {
-      		out.println(cookies[i].getName() + "=[" + cookies[i].getValue() + "]");
-		}
-	}
 	    
 } catch (Exception ex) { 
 	ex.printStackTrace(new java.io.PrintWriter(out));

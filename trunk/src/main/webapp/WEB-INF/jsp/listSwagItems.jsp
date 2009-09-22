@@ -40,7 +40,7 @@
 		</a>
 	</display:column>
 
-	<display:column sortable="true" property="tags" decorator="com.swagswap.web.springmvc.displaytag.TagsDecorator"/>
+	<display:column property="tags" decorator="com.swagswap.web.springmvc.displaytag.TagsDecorator"/>
 
 	<c:if test="${not empty currentObject.imageKey}">
 		<display:column title="Image">

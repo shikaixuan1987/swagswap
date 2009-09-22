@@ -32,6 +32,38 @@ public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
         assertNumberOfItemsAndImages(1,1);    
     }
     
+    
+    /**
+     * Make sure if they're no image, that no image is created
+     */
+    public void testSaveNoImage() {
+    	
+    	SwagItem swagItem = Fixture.createSwagItem();
+    	swagItem.setImage(null);
+    	swagItemDao.save(swagItem);
+    	
+    	assertNumberOfItemsAndImages(1,0);
+    }
+    
+    //Why is this failing?
+    public void testSaveReplaceImage() {
+    	
+    	SwagItem swagItem1 = Fixture.createSwagItem();
+    	swagItemDao.save(swagItem1);
+    	SwagImage oldImage=swagItem1.getImage();
+    	
+    	//Make a new SwagItem so the images reference aren't pointing to the same thing
+    	SwagItem swagItem2 = swagItemDao.get(swagItem1.getKey());
+    	//This is how we indicate a new image is coming in
+    	swagItem2.setImageBytes(new byte[]{8,7,6,5,4,3,2,1});
+    	swagItemDao.save(swagItem2);
+    	swagItem2 = swagItemDao.get(swagItem1.getKey());
+    	SwagImage newImage = swagItem2.getImage();
+    	
+    	assertNotEquals(oldImage, newImage);
+    	
+    }
+    
     // Strings over 500 chars have to be stored in a 
     // com.google.appengine.api.datastore.Text
     public void testLargeDescription() {
@@ -48,18 +80,7 @@ public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
     }
     
     
-    
-    /**
-     * Make sure if they're no image, that no image is created
-     */
-    public void testSaveNoImage() {
-    	
-    	SwagItem swagItem = Fixture.createSwagItem();
-    	swagItem.setImage(null);
-    	swagItemDao.save(swagItem);
-    	
-    	assertNumberOfItemsAndImages(1,0);
-    }
+
 
     /**
      * Make sure all fields are saved and that (owned one-to-many relationship)

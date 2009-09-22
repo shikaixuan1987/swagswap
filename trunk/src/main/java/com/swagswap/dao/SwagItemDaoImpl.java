@@ -2,7 +2,6 @@ package com.swagswap.dao;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -13,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
+import com.google.appengine.api.datastore.Blob;
 import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
 
@@ -28,11 +28,30 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 
 	private static final Logger log = Logger.getLogger(SwagItemDaoImpl.class);
 
+	/**
+	 * Load swagItem, but not associated swagImage
+	 */
 	public SwagItem get(Long id) {
+		return get(id, false);
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @param loadSwagImage whether to load swagImage (it is lazy loaded by JDO)
+	 * @return SwagItem if found
+	 * @throws Exception if item not found
+	 */
+	public SwagItem get(Long id, boolean loadSwagImage) {
 		PersistenceManager pm = getPersistenceManager();
 		SwagItem swagItem = pm.getObjectById(SwagItem.class, id);
+		if (loadSwagImage) {
+			swagItem.getImage();
+		}
 		return swagItem;
 	}
+	
+	
 
 	/**
 	 * Search by tag and by name
@@ -111,18 +130,29 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 	private void update(SwagItem updatedItem) {
 		//TODO delete old image if it's changed
 		
-		SwagItem orig = getPersistenceManager().getObjectById(SwagItem.class, updatedItem.getKey());
+		SwagItem orig = get(updatedItem.getKey(),true);
 		orig.setName(updatedItem.getName());
 		orig.setDescription(updatedItem.getDescription());
-		orig.setImageKey(updatedItem.getImageKey());
-		orig.setImage(updatedItem.getImage());
 		orig.setOwner(updatedItem.getOwner());
 		orig.setRating(updatedItem.getRating());
 		orig.setLastUpdated(new Date());
 		orig.setTags(updatedItem.getTags());
 		orig.setComments(updatedItem.getComments());
+		if (updatedItem.hasNewImage()) {
+			//The following line doesn't work! You have to operate on the stored SwagImage
+			//orig.setImage(updatedItem.getImage());
+			SwagImage swagImage = orig.getImage();
+			if (swagImage==null) { //no image originally, add one
+				//orig.setImage(new SwagImage(updatedItem.getImageBytes()));
+				//TODO this doesn't work.  
+				// fix me (perhaps insert blank image if they don't upload one
+			}
+			else { //replace existing image
+				orig.getImage().setImage(new Blob(updatedItem.getImageBytes()));
+			}
+		}
 	}
-
+	
 	/**
 	 * Note: swagItem ref passed in is updated 
 	 * @param swagItem
@@ -135,11 +165,13 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		// UserService userService = UserServiceFactory.getUserService();
 		// swagItem.setOwner(userService.getCurrentUser().getEmail());
 		swagItem.setNumberOfRatings(0);
-		
+		if (swagItem.hasNewImage()) {
+			swagItem.setImage(new SwagImage(swagItem.getImageBytes()));
+		}
 		getPersistenceManager().makePersistent(swagItem);
 		// Save image key here in the parent 
 		// See comment in SwagItem above the field imageKey
-		if (swagItem.getImage()!=null) {
+		if (swagItem.hasNewImage()) {
 			swagItem.setImageKey(swagItem.getImage().getEncodedKey());
 		}
 	}

@@ -168,12 +168,15 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		if (swagItem.hasNewImage()) {
 			swagItem.setImage(new SwagImage(swagItem.getImageBytes()));
 		}
+		else {
+			//add empty image, otherwise JDO won't allow you to add one
+			//a child later
+			swagItem.setImage(new SwagImage());
+		}
 		getPersistenceManager().makePersistent(swagItem);
 		// Save image key here in the parent 
 		// See comment in SwagItem above the field imageKey
-		if (swagItem.hasNewImage()) {
-			swagItem.setImageKey(swagItem.getImage().getEncodedKey());
-		}
+		swagItem.setImageKey(swagItem.getImage().getEncodedKey());
 	}
 
 }

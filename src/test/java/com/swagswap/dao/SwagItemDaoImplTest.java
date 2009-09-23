@@ -34,7 +34,9 @@ public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
     
     
     /**
-     * Make sure if they're no image, that no image is created
+     * Make sure if there's no image, that an empty one is created
+     * Otherwise with JDO 1-to-1 owned relationships you can't
+     * add one later.  TODO ask about this on mailing list
      */
     public void testSaveNoImage() {
     	
@@ -42,7 +44,7 @@ public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
     	swagItem.setImage(null);
     	swagItemDao.save(swagItem);
     	
-    	assertNumberOfItemsAndImages(1,0);
+    	assertNumberOfItemsAndImages(1,1);
     }
     
     //Why is this failing?

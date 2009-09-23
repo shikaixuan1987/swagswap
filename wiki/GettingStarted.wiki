@@ -1,3 +1,33 @@
-= Setup =
+== Checkout the code ==
 
-  # [http://code.google.com/p/swagswap/source/checkout Checkout the code] using Subversion
+[http://code.google.com/p/swagswap/source/checkout Checkout the code] using Subversion
+
+or
+
+Set up new SVN repository in Eclipse
+ 
+location: https:/swagswap.googlecode.com/svn/
+
+Username ?
+Password ?
+
+Use custom label: https://swagswap.googlecode.com/svn/trunk/
+
+
+== Download Google App Engine SDK for Java ==
+http://googleappengine.googlecode.com/files/appengine-java-sdk-1.2.5.zip
+
+Unpack it to a directory of your choice.
+
+
+== Add Environment Variable ==
+
+name={{{GAE_HOME}}}
+
+value=directory where GAE is installed e.g {{{/Users/scott/Work/appengine-java-sdk-1.2.5}}}
+
+
+== Run ==
+
+Execute {{{runserver}}} Ant task
+

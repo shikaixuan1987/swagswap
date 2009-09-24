@@ -4,8 +4,9 @@ This will help you take in swagswap quickly:
 =Installing and Running=
 
   * When you [http://code.google.com/p/swagswap/source/checkout check out swagswap in eclipse], eclipse the project settings should be recognized.  
-  * You'll have to set an environment variable on your system called `GAE_HOME` to point to your appengine installation (1.2.5) and restart eclipse.  
-You might have to adjust the referenced JDK.  
+  * In eclipse go to project properties, Libraries, Add Variable, Configure Variables, New and add GAE_HOME with the value pointing to your appengine (1.2.5) installation
+  * You'll also have to set an environment variable on your system called `GAE_HOME` to point to your appengine installation and restart eclipse.  
+  * You might have to adjust the referenced JDK (point to JDK6).  
   * Start the app with 
     * `ant runserver` (and see the app at http://localhost:8080), 
     * `ant stopserver` to stop it on windows with .  On mac you still may have to kill the process (working on that) :(  

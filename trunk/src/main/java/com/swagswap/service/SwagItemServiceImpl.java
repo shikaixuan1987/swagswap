@@ -45,9 +45,6 @@ public class SwagItemServiceImpl implements SwagItemService {
 	}
 
 
-	/**
-	 * @return key of saved item
-	 */
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void save(SwagItem swagItem) {
 		swagItemDao.save(swagItem);

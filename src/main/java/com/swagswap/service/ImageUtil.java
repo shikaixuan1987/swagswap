@@ -19,10 +19,8 @@ package com.swagswap.service;
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.  
  */
 
-import java.awt.AlphaComposite;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -38,6 +36,8 @@ import javax.imageio.ImageIO;
 /**
  * Borrowed from http://sourceforge.net/projects/corendalfm/
  * com.corendal.netapps.framework.core.utils.ImageUtil
+ * Not used yet. I have to strip out all ImageIO calls first since
+ * it's blacklisted
  */
 public final class ImageUtil {
     /**
@@ -267,76 +267,6 @@ public final class ImageUtil {
         }
     }
 
-    /**
-     * Adds a watermark to a photo. Returns null if the conversion could not be
-     * done.
-     */
-    public static final byte[] getWatermarkedPhoto(byte[] photo,
-            InputStream watermark) throws IOException {
-        /*
-         * initialize the result
-         */
-        byte[] result = null;
-
-        /*
-         * initialize the input streams
-         */
-        ByteArrayInputStream is = null;
-        ByteArrayOutputStream os = null;
-
-        try {
-            /*
-             * get the streams
-             */
-            is = new ByteArrayInputStream(photo);
-            os = new ByteArrayOutputStream();
-
-            /*
-             * build the 2 images
-             */
-            BufferedImage im = ImageIO.read(is);
-            BufferedImage im2 = ImageIO.read(watermark);
-
-            /*
-             * get the graphics associated with the image
-             */
-            Graphics2D g = im.createGraphics();
-
-            /*
-             * do the overlay
-             */
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                    0.4f));
-            g.drawImage(im2, (im.getWidth() - im2.getWidth()) / 2, (im
-                    .getHeight() - im2.getHeight()) / 2, null);
-
-            /*
-             * dispose the graphics object
-             */
-            g.dispose();
-
-            /*
-             * write out the image
-             */
-            ImageIO.write(im, "jpeg", os);
-
-            /*
-             * recreate the array of bytes
-             */
-            result = os.toByteArray();
-        } finally {
-            /*
-             * close the streams
-             */
-            close(is);
-            close(os);
-        }
-
-        /*
-         * return
-         */
-        return result;
-    }
     
 	private static void close(ByteArrayInputStream is) {
 		/*

@@ -38,9 +38,9 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 	/**
 	 * 
 	 * @param id
-	 * @param loadSwagImage whether to load swagImage (it is lazy loaded by JDO)
+	 * @param loadSwagImage whether to load swagImage (it is lazy loaded by GAE)
 	 * @return SwagItem if found
-	 * @throws Exception if item not found
+	 * @throws JDOObjectNotFoundException (RuntimeException) if item not found
 	 */
 	public SwagItem get(Long id, boolean loadSwagImage) {
 		PersistenceManager pm = getPersistenceManager();
@@ -51,10 +51,10 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		return swagItem;
 	}
 	
-	
-
 	/**
 	 * Search by tag and by name
+	 * NOTE: only supports case sensitive queries
+	 * This implementation searches for exact SwagItem.name or tag match
 	 * @param searchString
 	 */
     public List<SwagItem> search(String searchString) {
@@ -89,13 +89,13 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 	
 	public List<SwagItem> getAll() {
 		PersistenceManager pm = getPersistenceManager();
-		String query = "select from " + SwagItem.class.getName() + " order by name";
+		String query = "select from " + SwagItem.class.getName() + " order by lastUpdated desc";
 		List<SwagItem> swagItems = (List<SwagItem>) pm.newQuery(query).execute();
 
 		if (log.isInfoEnabled()) {
 			log.info("returning " + swagItems.size() + " swag items");
 			for (SwagItem swagItem : swagItems) {
-				log.info(swagItem.getName());
+				log.info(swagItem.getName() + " key: " + swagItem.getKey() + " Time: " + swagItem.getLastUpdated());
 			}
 		}
 		return swagItems;

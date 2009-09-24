@@ -208,15 +208,17 @@ public class SwagItem {
 		this.comments = comments;
 	}
 
-	/**
-	 * Exclude key and timestamps for unittests
-	 */
+	//Leave out created field
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((image == null) ? 0 : image.hashCode());
+		result = prime * result + ((imageKey == null) ? 0 : imageKey.hashCode());
+		result = prime * result + ((key == null) ? 0 : key.hashCode());
+		result = prime * result + ((lastUpdated == null) ? 0 : lastUpdated.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((numberOfRatings == null) ? 0 : numberOfRatings.hashCode());
 		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
@@ -226,7 +228,9 @@ public class SwagItem {
 	}
 
 	/**
-	 * Exclude key and timestamps, and image for unittests
+	 * Note, Blobs and children are lazy loaded. You can't just compare
+	 * description fields for example, you have to actually call the
+	 * getDescription() method to have it loaded.  Same with image (since it's a child object).
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -245,7 +249,28 @@ public class SwagItem {
 		if (description == null) {
 			if (other.description != null)
 				return false;
-		} else if (!description.equals(other.description))
+		} else if (!getDescription().equals(other.getDescription()))
+			return false;
+		if (image == null) {
+			if (other.image != null)
+				return false;
+		} else if (!getImage().equals(other.getImage()))
+			return false;
+	    //TODO why is imageKey sometimes null from getAll ?
+//		if (imageKey == null) {
+//			if (other.imageKey != null)
+//				return false;
+//		} else if (!imageKey.equals(other.imageKey))
+//			return false;
+		if (key == null) {
+			if (other.key != null)
+				return false;
+		} else if (!key.equals(other.key))
+			return false;
+		if (lastUpdated == null) {
+			if (other.lastUpdated != null)
+				return false;
+		} else if (!lastUpdated.equals(other.lastUpdated))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -275,5 +300,5 @@ public class SwagItem {
 		return true;
 	}
 
-	
+
 }

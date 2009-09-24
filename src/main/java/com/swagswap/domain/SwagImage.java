@@ -85,6 +85,7 @@ public class SwagImage implements Serializable {
 		return result;
 	}
 
+	// Here we had to use the getImage() method to force image loading
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -94,11 +95,12 @@ public class SwagImage implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		SwagImage other = (SwagImage) obj;
-		if (encodedKey == null) {
-			if (other.encodedKey != null)
-				return false;
-		} else if (!encodedKey.equals(other.encodedKey))
-			return false;
+		//TODO For some reason encodedKey is null when you fetch a list of SwagItems
+//		if (encodedKey == null) {
+//			if (other.encodedKey != null)
+//				return false;
+//		} else if (!encodedKey.equals(other.encodedKey))
+//			return false;
 		if (filename == null) {
 			if (other.filename != null)
 				return false;
@@ -107,7 +109,7 @@ public class SwagImage implements Serializable {
 		if (image == null) {
 			if (other.image != null)
 				return false;
-		} else if (!image.equals(other.image))
+		} else if (!getImage().equals(other.getImage()))
 			return false;
 		if (mimeType == null) {
 			if (other.mimeType != null)

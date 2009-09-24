@@ -22,7 +22,7 @@ You might have to adjust the referenced JDK.
 
   * The best place to start is in [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/web/springmvc/controller/SwagItemController.java SwagItemController].  That is the RESTful Spring MVC annotated controller which defines REST endpoints (urls) and does the controlling with a minimum of code and no config file.  
 
-  * The SwagItemController uses [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/service/SwagItemServiceImpl.java SwagItemServiceImpl] which for the most part simply delegates to SwagItemDaoImpl.  The reason SwagItemServiceImpl is  there can be seen in the save() method which is marked @Transactional for the atomic insertion of Items their child Images.  This is also the layer I'll do caching from.  
+  * The !SwagItemController uses [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/service/SwagItemServiceImpl.java SwagItemServiceImpl] which for the most part simply delegates to !SwagItemDaoImpl.  The reason !SwagItemServiceImpl is  there can be seen in the save() method which is marked @Transactional for the atomic insertion of Items their child Images.  This is also the layer I'll do caching from.  
 
   * [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/dao/SwagItemDaoImpl.java SwagItemDaoImpl] does the interaction with the DB.  It's straightforward but takes care of some rather messy things in it's last two methods.  
 

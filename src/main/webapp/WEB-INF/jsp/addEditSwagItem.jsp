@@ -48,7 +48,7 @@
 		 --%>
 		<tr>
 			<td>Image:</td>
-			<td>
+			<td nowrap="true">
 			<c:if test="${not empty swagItem.imageKey}">
 			<img border="0" src="<c:url value='/swag/showImage/${swagItem.imageKey}'/>"/>
 			</c:if>

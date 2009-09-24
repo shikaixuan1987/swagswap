@@ -1,12 +1,12 @@
 package com.swagswap.web.springmvc.controller;
 
-import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Enumeration;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -67,39 +67,47 @@ public class SwagImageController {
 	 * @return
 	 */
 	protected String constructDefaultImageURL(String requestURL) {
-		String baseURL = requestURL.substring(0,requestURL.indexOf("/swag"));
+		String baseURL = requestURL.substring(0,requestURL.lastIndexOf("/swag"));
 		return baseURL + "/" + PATH_TO_DEFAULT_IMAGE;
 	}
 
 	/**
 	 * Lazy load default image for use if SwagItem isn't created with an image
+	 * ImageIO had a nice way to do it but it is blacklisted on appengine :(
 	 * @param requestURL to construct the full image URL 
 	 */
 	private byte[] getDefaultImage(String requestURL) {
-		if (defaultImage!=null && defaultImage.length!=0) {
+		if (defaultImage != null && defaultImage.length != 0) {
 			return defaultImage;
 		}
-		String defaultImageURL = constructDefaultImageURL(requestURL);
-		BufferedImage img = null;
+		String defaultImageURLString = constructDefaultImageURL(requestURL);
 		ByteArrayOutputStream bas = null;
+
+		//create defaultImage byte[] from URL
+		//ouch this would have been easier with ImageIO!
 		try {
-			img = ImageIO.read(new URL(defaultImageURL));
-			bas = new ByteArrayOutputStream();
-			ImageIO.write(img, "jpg", bas);
-			defaultImage = bas.toByteArray();
+			URL defaultImageURL = new URL(defaultImageURLString);
+			BufferedInputStream bis = new BufferedInputStream(defaultImageURL.openStream());
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			int i;
+			while ((i = bis.read()) != -1) {
+				baos.write(i);
+			}
+			defaultImage = baos.toByteArray();
 			return defaultImage;
-		}
-		catch (IOException e) {
-			log.info("couldn't load defaultImage at " + img);
+		} catch (IOException e) {
+			log.error("couldn't load defaultImage at " + defaultImageURLString, e);
 			return null;
-		}
-		finally {
+		} finally {
 			try {
-				if (bas!=null) bas.close();
+				if (bas != null)
+					bas.close();
 			} catch (IOException e) {
-				//ignore
+				// ignore
 			}
 		}
 	}
+	
+
 
 }

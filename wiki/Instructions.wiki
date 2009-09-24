@@ -36,6 +36,7 @@ You might have to adjust the referenced JDK.
   * Bug reports are welcome at http://code.google.com/p/swagswap/issues/list.
 
   * If you didn't already know about the [http://code.google.com/p/support/wiki/IssueTracker#Integration_with_version_control Google Code Issue Tracker and Subversion comment integration]
+
   * Check out the links to the diffs on two commits in, for example [http://code.google.com/p/swagswap/issues/detail?id=10&can=1 issue 10]:
 
 

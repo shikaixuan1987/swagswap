@@ -27,6 +27,7 @@ You might have to adjust the referenced JDK.
   * [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/dao/SwagItemDaoImpl.java SwagItemDaoImpl] does the interaction with the DB.  It's straightforward but takes care of some rather messy things in it's last two methods.  
 
   * The other interesting thing is how images are streamed from the DB.  That can be seen in the [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/web/springmvc/controller/SwagImageController.java SwagImageController] in the streamImageContent() method.  
+
   * It is called from JSP tags that trick the browser into thinking the dynamic calls are HTML img tags.  Look on [http://code.google.com/p/swagswap/source/browse/trunk/src/main/webapp/WEB-INF/jsp/listSwagItems.jsp listSwagItems.jsp] and search for showImage to see it called.
 
 

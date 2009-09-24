@@ -12,6 +12,8 @@
 <c:if test="${empty searchCriteria.searchString}">
 	<h2>All Swag Items</h2>
 </c:if>
+
+Note: Search is case sensitive, full word, and only on Name and Tags in this implementation
 	<table>
 		<tr>
 			<td><form:input path="searchString" />
@@ -31,12 +33,10 @@
 
 	<display:column title="Action" style="width: 74px;">
 		<a href="<c:url value='/swag/swagItem/edit/${currentObject.key}'/>"> 
-		<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/></a>
-              &nbsp;&nbsp;
-              <a href="<c:url value='/swag/swagItem/delete/${currentObject.key}'/>"> 
-              <img
-			border="0" alt="Delete"
-			src="<%=request.getContextPath()%>/images/delete.gif"/>
+			<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/></a>
+	        &nbsp;&nbsp;
+            <a href="<c:url value='/swag/swagItem/delete/${currentObject.key}'/>"> 
+            <img border="0" alt="Delete" src="<%=request.getContextPath()%>/images/delete.gif"/>
 		</a>
 	</display:column>
 
@@ -48,6 +48,8 @@
 		</display:column>
 	</c:if>
 
+	<display:column property="lastUpdated" title="Last Updated" format="{0,date,dd-MM-yyyy HH:mm:ss}" sortable="true"/>
+	
 </display:table>
 
 <script language="JavaScript">

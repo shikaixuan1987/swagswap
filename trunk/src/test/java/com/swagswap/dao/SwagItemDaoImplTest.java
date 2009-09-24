@@ -47,7 +47,7 @@ public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
     	assertNumberOfItemsAndImages(1,1);
     }
     
-    //Why is this failing?
+    //TODO Why is this failing?
     public void testSaveReplaceImage() {
     	
     	SwagItem swagItem1 = Fixture.createSwagItem();
@@ -81,9 +81,6 @@ public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
     	assertEquals(randomDescription, retrievedItem.getDescription());
     }
     
-    
-
-
     /**
      * Make sure all fields are saved and that (owned one-to-many relationship)
      * SwagItem is lazy loaded
@@ -100,6 +97,41 @@ public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
         SwagImage image = retrievedItem.getImage();
         assertNotNull(image);
     }
+    
+    /**
+     * Should be ordered by lastUpdated timestamp
+     * @throws Exception 
+     */
+    public void testGetAllOrdering() throws Exception {
+    	
+        SwagItem item0 = Fixture.createSwagItem();
+        item0.setName("b");
+        swagItemDao.save(item0);
+        
+        Thread.currentThread().sleep(1000); //make it wait so they have different timestamps
+        SwagItem item1 = Fixture.createSwagItem();
+        item1.setName("a");
+        swagItemDao.save(item1);
+        
+        Thread.currentThread().sleep(1000); //make it wait so they have different timestamps
+        SwagItem item2 = Fixture.createSwagItem();
+        item2.setName("c");
+        swagItemDao.save(item2);
+        
+        List<SwagItem> items = swagItemDao.getAll();
+        
+        assertEquals(item2, items.get(0));
+        assertEquals(item1, items.get(1));
+        assertEquals(item0, items.get(2));
+        
+        //TODO why is this not working?
+//        //now save the middle one and hope that it comes out first
+//        swagItemDao.save(item1);
+//        items = swagItemDao.getAll();
+//        
+//        assertEquals(item1, items.get(0));
+        
+    }  
 
     /**
      * Make sure SwagImages are deleted too!
@@ -164,7 +196,6 @@ public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
     	
     	assertEquals(1, swagItemDao.search("").size());
     }
-
 
     /**
      * Database count assertions

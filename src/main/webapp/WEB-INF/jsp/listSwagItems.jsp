@@ -4,7 +4,7 @@
 
 
 
-<form:form action="/swag/swagItem/search" commandName="searchCriteria" name="searchForm" method="GET">
+<form:form action="/swag/search" commandName="searchCriteria" name="searchForm" method="GET">
 
 <c:if test="${not empty searchCriteria.searchString}">
 	<h2>Swag Item Search: ${searchCriteria.searchString}</h2>
@@ -20,7 +20,7 @@ Note: Search is case sensitive, full word, and only on Name and Tags in this imp
 				<a href="#" onclick="document.searchForm.submit()">
 				<img src="/images/icon_flashlight.gif" border="0"/>Search Swag</a>
 				&nbsp; 
-				<a href="/swag/swagItem/add"><img src="/images/newAdd.png" 
+				<a href="/swag/add"><img src="/images/newAdd.png" 
 				   title="Add SwagItem" border="0"/>Add Swag</a>
 			</td>
 		</tr>
@@ -28,14 +28,14 @@ Note: Search is case sensitive, full word, and only on Name and Tags in this imp
 </form:form>
 
 <display:table name="swagItems" uid="swagItemsList" id="currentObject" 
-               requestURI="/swag/listSwagItems" keepStatus="true">
+               requestURI="/swag/search" keepStatus="true">
 	<display:column sortable="true" property="name" />
 
 	<display:column title="Action" style="width: 74px;">
-		<a href="<c:url value='/swag/swagItem/edit/${currentObject.key}'/>"> 
+		<a href="<c:url value='/swag/edit/${currentObject.key}'/>"> 
 			<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/></a>
 	        &nbsp;&nbsp;
-            <a href="<c:url value='/swag/swagItem/delete/${currentObject.key}'/>"> 
+            <a href="<c:url value='/swag/delete/${currentObject.key}'/>"> 
             <img border="0" alt="Delete" src="<%=request.getContextPath()%>/images/delete.gif"/>
 		</a>
 	</display:column>

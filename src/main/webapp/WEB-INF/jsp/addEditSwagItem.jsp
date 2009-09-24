@@ -9,7 +9,7 @@
 	<h2>Add</h2>
 </c:if>
 
-<form:form action="/swag/swagItem/save" enctype="multipart/form-data" commandName="swagItem" method="post">
+<form:form action="/swag/save" enctype="multipart/form-data" commandName="swagItem" method="post">
 	<form:hidden path="key" />
 
 	<table>
@@ -57,7 +57,7 @@
 
 	</table>
 	<input type="submit" value="save" />
-	<input type="submit" value="cancel" onclick="document.location.href='<c:url value='/swag/listSwagItems'/>';return false;" />
+	<input type="submit" value="cancel" onclick="document.location.href='<c:url value='/swag/search'/>';return false;" />
 
 </form:form>
 

@@ -2,17 +2,6 @@
 
 [http://code.google.com/p/swagswap/source/checkout Checkout the code] using Subversion
 
-or
-
-Set up new SVN repository in Eclipse
- 
-location: https:/swagswap.googlecode.com/svn/
-
-Username ?
-Password ?
-
-Use custom label: https://swagswap.googlecode.com/svn/trunk/
-
 
 == Download Google App Engine SDK for Java ==
 http://googleappengine.googlecode.com/files/appengine-java-sdk-1.2.5.zip
@@ -30,4 +19,3 @@ value=directory where GAE is installed e.g {{{/Users/scott/Work/appengine-java-s
 == Run ==
 
 Execute {{{runserver}}} Ant task
-

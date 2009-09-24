@@ -34,43 +34,43 @@ public class SwagItemController {
 
 	@Autowired
 	private SwagItemService swagItemService;
-
-	@RequestMapping(value = "/listSwagItems", method = RequestMethod.GET)
-	public String getAllHandler(Model model) {
-		//expected model attributes on the jsp page
-		model.addAttribute("searchCriteria", new SearchCriteria());
-		model.addAttribute("swagItem", new SwagItem());
-		model.addAttribute("swagItems", swagItemService.getAll());
-		return "listSwagItems";
-	}
-
-	@RequestMapping(value = "/swagItem/add", method = RequestMethod.GET)
+	
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String addHandler(Model model) {
 		model.addAttribute("swagItem", new SwagItem());
 		return "addEditSwagItem";
 	}
 
-	@RequestMapping(value = "/swagItem/edit/{key}", method = RequestMethod.GET)
+	@RequestMapping(value = "/edit/{key}", method = RequestMethod.GET)
 	public String editHandler(@PathVariable("key") Long key, Model model) {
 		SwagItem swagItem = swagItemService.get(key, true);
 		model.addAttribute("swagItem", swagItem);
 		return "addEditSwagItem";
 	}
 	
-	@RequestMapping(value = "/swagItem/save", method = RequestMethod.POST)
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String saveHandler(@ModelAttribute SwagItem swagItem) {
 		swagItemService.save(swagItem);
-		return "redirect:/swag/listSwagItems";
+		return "redirect:/swag/search";
 	}
 	
-	@RequestMapping(value = "/swagItem/delete/{key}", method = RequestMethod.GET)
+	@RequestMapping(value = "/delete/{key}", method = RequestMethod.GET)
 	public String deleteHandler(@PathVariable("key") Long key) {
 		swagItemService.delete(key);
-		return "redirect:/swag/listSwagItems";
+		return "redirect:/swag/search";
 	}
 
-	@RequestMapping(value = "/swagItem/search", method = RequestMethod.GET)
+	/**
+	 * Searching with no searchString does a listAll
+	 * @param searchCriteria
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String searchHandler(@ModelAttribute SearchCriteria searchCriteria, Model model) {
+		if (searchCriteria==null) {
+			model.addAttribute("searchCriteria", new SearchCriteria());
+		}
 		Collection<SwagItem> swagItems = swagItemService.search(searchCriteria.getSearchString());
 		model.addAttribute("swagItems", swagItems);
 		return "listSwagItems";

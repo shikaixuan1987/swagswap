@@ -1,4 +1,4 @@
 
 <%
-response.sendRedirect(request.getContextPath()+"/swag/listSwagItems");
+response.sendRedirect(request.getContextPath()+"/swag/search");
 %>

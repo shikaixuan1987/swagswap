@@ -1,0 +1,28 @@
+This will help you take in swagswap quickly:
+
+
+=Installing and Running=
+
+When you check it out in eclipse (http://code.google.com/p/swagswap/source/checkout), eclipse should recognize it's project settings.  You'll have to set an environment variable on your system called GAE_HOME to point to your appengine installation (1.2.5) and restart eclipse.  You might have to adjust the referenced JDK.  Start the appengine with runserver (and see the app at http://localhost:8080), stop it on windows with stopserver.  On mac you still may have to kill the process (working on that) :(  Run server in debug mode so you can attatch remotely in eclipse.  
+
+
+=Running the Tests=
+
+Run the unit tests with runtests.
+You can run (or debug!) the tests from eclipse (right click on a test and Run as JUnit test) but you have to make sure you run ant compile-tests first (and every time you make any code changes).
+
+
+=Navigating the Code=
+
+The best place to start is in SwagItemController.  That is the RESTful Spring MVC annotated controller which defines REST endpoints (urls) and does the controlling with a minimum of code and no config file.  It uses SwagItemServiceImpl which for the most part simply delegates to SwagItemDaoImpl.  The reason SwagItemServiceImpl is  there can be seen in the save() method which is marked @Transactional for the atomic insertion of Items their child Images.  This is also the layer I'll do caching from.  SwagItemDaoImpl does the interaction with the DB.  It's straightforward but takes care of some rather messy things in it's last two methods.  The other interesting thing is how images are streamed from the DB.  That can be seen in the SwagImageController in the streamImageContent() method.  It's lower level than I like to go but had to be done.  It is called from JSP tags that trick the browser into thinking the dynamic calls are HTML img tags.  Look on listSwagItems.jsp and search for showImage to see it called.
+
+
+=Reporting Bugs and Issue Tracking=
+
+Bug reports are welcome at http://code.google.com/p/swagswap/issues/list.
+
+If you didn't already know about the [Google Code Issue Tracker and Subversion comment integration | http://code.google.com/p/support/wiki/IssueTracker#Integration_with_version_control] check out the links to the diffs on two commits in, for example, this issue:
+
+http://code.google.com/p/swagswap/issues/detail?id=10&can=1
+
+Enjoy.

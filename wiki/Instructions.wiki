@@ -19,21 +19,21 @@ You can run (or debug!) the tests from eclipse (right click on a test and Run as
 
 =Navigating the Code=
 
-The best place to start is in SwagItemController.  That is the RESTful Spring MVC annotated controller which defines REST endpoints (urls) and does the controlling with a minimum of code and no config file.  
+The best place to start is in [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/web/springmvc/controller/SwagItemController.java SwagItemController].  That is the RESTful Spring MVC annotated controller which defines REST endpoints (urls) and does the controlling with a minimum of code and no config file.  
 
-It uses SwagItemServiceImpl which for the most part simply delegates to SwagItemDaoImpl.  The reason SwagItemServiceImpl is  there can be seen in the save() method which is marked @Transactional for the atomic insertion of Items their child Images.  This is also the layer I'll do caching from.  
+It uses [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/service/SwagItemServiceImpl.java SwagItemServiceImpl] which for the most part simply delegates to SwagItemDaoImpl.  The reason SwagItemServiceImpl is  there can be seen in the save() method which is marked @Transactional for the atomic insertion of Items their child Images.  This is also the layer I'll do caching from.  
 
-SwagItemDaoImpl does the interaction with the DB.  It's straightforward but takes care of some rather messy things in it's last two methods.  
+[http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/dao/SwagItemDaoImpl.java SwagItemDaoImpl] does the interaction with the DB.  It's straightforward but takes care of some rather messy things in it's last two methods.  
 
-The other interesting thing is how images are streamed from the DB.  That can be seen in the [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/web/springmvc/controller/SwagImageController.java SwagImageController] in the streamImageContent() method.  It is called from JSP tags that trick the browser into thinking the dynamic calls are HTML img tags.  Look on listSwagItems.jsp and search for showImage to see it called.
+The other interesting thing is how images are streamed from the DB.  That can be seen in the [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/web/springmvc/controller/SwagImageController.java SwagImageController] in the streamImageContent() method.  It is called from JSP tags that trick the browser into thinking the dynamic calls are HTML img tags.  Look on [http://code.google.com/p/swagswap/source/browse/trunk/src/main/webapp/WEB-INF/jsp/listSwagItems.jsp listSwagItems.jsp] and search for showImage to see it called.
 
 
 =Reporting Bugs and Issue Tracking=
 
 Bug reports are welcome at http://code.google.com/p/swagswap/issues/list.
 
-If you didn't already know about the [Google Code Issue Tracker and Subversion comment integration | http://code.google.com/p/support/wiki/IssueTracker#Integration_with_version_control] check out the links to the diffs on two commits in, for example, this issue:
+If you didn't already know about the [http://code.google.com/p/support/wiki/IssueTracker#Integration_with_version_control Google Code Issue Tracker and Subversion comment integration] check out the links to the diffs on two commits in, for example [http://code.google.com/p/swagswap/issues/detail?id=10&can=1 issue 10]:
 
-http://code.google.com/p/swagswap/issues/detail?id=10&can=1
+
 
 Enjoy.

@@ -178,5 +178,5 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		// See comment in SwagItem above the field imageKey
 		swagItem.setImageKey(swagItem.getImage().getEncodedKey());
 	}
-
+	
 }

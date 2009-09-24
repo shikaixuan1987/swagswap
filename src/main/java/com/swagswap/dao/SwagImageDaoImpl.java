@@ -1,16 +1,20 @@
 package com.swagswap.dao;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.jdo.PersistenceManager;
 
 import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Blob;
 import com.swagswap.domain.SwagImage;
 
 /**
@@ -20,7 +24,6 @@ public class SwagImageDaoImpl extends JdoDaoSupport implements SwagImageDao {
 
 	private static final Logger log = Logger.getLogger(SwagImageDaoImpl.class);
 
-	
 	@SuppressWarnings("unchecked")
 	public List<SwagImage> getAll() {
 		PersistenceManager pm = getPersistenceManager();
@@ -39,32 +42,5 @@ public class SwagImageDaoImpl extends JdoDaoSupport implements SwagImageDao {
 		return swagImage;
 	}
 	
-	public void streamImage(final String key, final OutputStream contentStream) {
-		byte[] imageBytes = get(key).getImage().getBytes();
-		try {
-			contentStream.write(imageBytes, 0, imageBytes.length);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		
-	}
-
-
-//	public void storeImage(
-//	    final String name, final InputStream contentStream, final int contentLength, final String description)
-//	    throws DataAccessException {
-//
-//		getJdbcTemplate().execute(
-//				"INSERT INTO imagedb (image_name, content, description) VALUES (?, ?, ?)",
-//				new AbstractLobCreatingPreparedStatementCallback(this.lobHandler) {
-//					protected void setValues(PreparedStatement ps, LobCreator lobCreator) throws SQLException {
-//						ps.setString(1, name);
-//						lobCreator.setBlobAsBinaryStream(ps, 2, contentStream, contentLength);
-//						lobCreator.setClobAsString(ps, 3, description);
-//					}
-//				}
-//		);
-//	}
-
 
 }

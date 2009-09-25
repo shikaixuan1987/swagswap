@@ -21,4 +21,4 @@ org.datanucleus.store.appengine.query.DatastoreQuery$UnsupportedDatastoreOperato
 No way to do case insensitive queries
 http://groups.google.com/group/google-appengine-java/browse_thread/thread/8f3b9bf6ac7ebe47/b1210eca3ca54a57?lnk=gst&q=case+insensitive#b1210eca3ca54a57
 
-
+If appcfg.cmd can't find your java edit it and change java.home to point to the full path of your java exe

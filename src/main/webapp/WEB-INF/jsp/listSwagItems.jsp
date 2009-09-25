@@ -2,18 +2,18 @@
 <%@ include file="/WEB-INF/jsp/includes.jsp" %>
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
 
-
+<%--Shows a search box and a list of SwagItems using the old but good displaytag library --%>
 
 <form:form action="/swag/search" commandName="searchCriteria" name="searchForm" method="GET">
 
-<c:if test="${not empty searchCriteria.searchString}">
-	<h2>Swag Item Search: ${searchCriteria.searchString}</h2>
-</c:if>
-<c:if test="${empty searchCriteria.searchString}">
-	<h2>All Swag Items</h2>
-</c:if>
+	<c:if test="${not empty searchCriteria.searchString}">
+		<h2>Swag Item Search: ${searchCriteria.searchString}</h2>
+	</c:if>
+	<c:if test="${empty searchCriteria.searchString}">
+		<h2>All Swag Items</h2>
+	</c:if>
 
-Note: Search is case sensitive, full word, and only on Name and Tags in this implementation
+	Note: Search is case sensitive, full word, and only on Name and Tags in this implementation
 	<table>
 		<tr>
 			<td><form:input path="searchString" />

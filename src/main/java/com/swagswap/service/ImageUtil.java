@@ -37,7 +37,7 @@ import javax.imageio.ImageIO;
  * Borrowed from http://sourceforge.net/projects/corendalfm/
  * com.corendal.netapps.framework.core.utils.ImageUtil
  * Not used yet. I have to strip out all ImageIO calls first since
- * it's blacklisted
+ * it's blacklisted. Eventually can be used to crop images.
  */
 public final class ImageUtil {
     /**
@@ -206,7 +206,7 @@ public final class ImageUtil {
                 /*
                  * find the new height
                  */
-                int maxHeight = (int) ((currentHeight * maxWidth) / currentWidth);
+                int maxHeight = ((currentHeight * maxWidth) / currentWidth);
 
                 /*
                  * get the content of the image

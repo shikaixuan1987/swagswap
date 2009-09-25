@@ -18,7 +18,4 @@ public interface SwagItemDao {
 
 	void delete(Long id);
 
-//	void updateImageKey(Long swagItemKey);
-
-
 }

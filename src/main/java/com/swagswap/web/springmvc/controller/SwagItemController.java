@@ -76,7 +76,6 @@ public class SwagItemController {
 		return "listSwagItems";
 	}
 
-	// TODO is this needed?
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
 		binder.registerCustomEditor(String.class, new StringTrimmerEditor(false));
@@ -96,8 +95,6 @@ public class SwagItemController {
 		
 		//for image upload
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
-
-
 	}
 
 	public void setSwagItemService(SwagItemService swagItemService) {

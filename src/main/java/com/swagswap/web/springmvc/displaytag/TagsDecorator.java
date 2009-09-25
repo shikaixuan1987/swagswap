@@ -8,6 +8,9 @@ import org.apache.commons.lang.StringUtils;
 import org.displaytag.decorator.DisplaytagColumnDecorator;
 import org.displaytag.properties.MediaTypeEnum;
 
+/**
+ * For showing a list of swagitem tags on the JSP (using the displaytag library)
+ */
 @SuppressWarnings("unchecked")
 public class TagsDecorator implements DisplaytagColumnDecorator {
 
@@ -16,7 +19,9 @@ public class TagsDecorator implements DisplaytagColumnDecorator {
 	 *      PageContext, MediaTypeEnum)
 	 */
 	public Object decorate(Object columnValue, PageContext pageContext, MediaTypeEnum media) {
-
+		if (columnValue==null) {
+			return null;
+		}
 		StringBuilder s = new StringBuilder();
 		List<String> tags = (List<String>)columnValue;
 		for (String tag : tags) {

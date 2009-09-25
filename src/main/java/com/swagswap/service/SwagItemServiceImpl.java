@@ -11,6 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.swagswap.dao.SwagItemDao;
 import com.swagswap.domain.SwagItem;
 
+/**
+ * For transactionality and will be used for caching.
+ * @author sam
+ *
+ */
 public class SwagItemServiceImpl implements SwagItemService {
 
 	private static final Logger log = Logger.getLogger(SwagItemServiceImpl.class);

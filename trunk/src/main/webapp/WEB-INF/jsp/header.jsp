@@ -12,6 +12,17 @@
   <title>Swag Swap</title>	
 </head>
 
+<%--Google Analytics (only for swagswap, you can put your own here if deploying yourself --%>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-7317033-11");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
 <body>
 <div id="mainContent">
 <img src="<spring:url value="/images/trading-floor-banner.jpg" htmlEscape="true" />" alt="Swag Swap"/>

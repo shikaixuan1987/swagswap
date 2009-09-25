@@ -35,7 +35,7 @@
 		<a href="<c:url value='/swag/edit/${currentObject.key}'/>"> 
 			<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/></a>
 	        &nbsp;&nbsp;
-            <a href="<c:url value='/swag/delete/${currentObject.key}'/>"> 
+            <a href="<c:url value='/swag/delete/${currentObject.key}'/>" onclick="return confirmSubmit()"> 
             <img border="0" alt="Delete" src="<%=request.getContextPath()%>/images/delete.gif"/>
 		</a>
 	</display:column>
@@ -55,5 +55,15 @@
 <script language="JavaScript">
     document.forms[0].searchString.focus();
     document.forms[0].searchString.select();
+
+	function confirmSubmit(name)
+	{
+	var agree=confirm("Are you sure you want to delete this item?");
+	if (agree)
+		return true ;
+	else
+		return false ;
+	}
+
 </script>
 <%@ include file="/WEB-INF/jsp/footer.jsp" %>

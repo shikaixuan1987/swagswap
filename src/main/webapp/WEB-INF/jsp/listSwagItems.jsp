@@ -31,7 +31,7 @@
                requestURI="/swag/search" keepStatus="true">
 	<display:column sortable="true" property="name" />
 
-	<display:column title="Action" style="width: 74px;">
+	<display:column title="Action">
 		<a href="<c:url value='/swag/edit/${currentObject.key}'/>"> 
 			<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/></a>
 	        &nbsp;&nbsp;

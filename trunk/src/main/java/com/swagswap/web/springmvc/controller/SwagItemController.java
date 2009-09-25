@@ -59,6 +59,12 @@ public class SwagItemController {
 		swagItemService.delete(key);
 		return "redirect:/swag/search";
 	}
+	
+	//For legacy URL that some tweets had already linked to.
+	@RequestMapping(value = "/listSwagItems", method = RequestMethod.GET)
+	public String listHandler(Model model) {
+		return "redirect:/swag/search";
+	}
 
 	/**
 	 * Searching with no searchString does a listAll

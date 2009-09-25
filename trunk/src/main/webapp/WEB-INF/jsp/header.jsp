@@ -24,5 +24,19 @@ pageTracker._trackPageview();
 } catch(err) {}</script>
 
 <body>
+
 <div id="mainContent">
 <img src="<spring:url value="/images/trading-floor-banner.jpg" htmlEscape="true" />" alt="Swag Swap"/>
+
+<table border="1">
+<tr><td>
+<h3>Swagswap Devoxx 2009 Demo application (work in progress)</h3>
+
+<ul>
+	<li>Read about it and run it yourself with these <a href="http://code.google.com/p/swagswap/wiki/Instructions">instructions</a></li> 
+	<li>Visit our <a href="http://cloudmouthdevoxx.blogspot.com/">cloudMouth blog</a></li> 
+	<li>Attend our <a href="http://www.devoxx.com/display/DV09/Google+App+Engine+for+Java+-+a+real+live+voyage+to+The+Cloud">Devoxx session</a> (November 17th at 9:30)</li> 
+</ul>
+--<a href="http://www.devoxx.com/display/DV09/Sam+Brodkin">Sam Brodkin</a> and <a href="http://www.devoxx.com/display/DV09/Scott+Stevenson">Scott Stevenson</a>
+</td></tr>
+</table>

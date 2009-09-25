@@ -114,15 +114,8 @@
 		<exception-type>java.lang.Exception</exception-type>
 		<location>/WEB-INF/jsp/uncaughtException.jsp</location>
 	</error-page>
-	<!--
 
-		<security-constraint> <web-resource-collection>
-		<web-resource-name>all</web-resource-name>
-		<url-pattern>/*</url-pattern> </web-resource-collection>
-		<auth-constraint> <role-name>*</role-name> </auth-constraint>
-		</security-constraint>
-	-->
-
+	<!--JSF-->
 	<security-constraint>
 		<display-name>Restrict raw XHTML Documents</display-name>
 		<web-resource-collection>
@@ -131,6 +124,27 @@
 		</web-resource-collection>
 		<auth-constraint />
 	</security-constraint>
+ 
+     <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/swag/delete/*</url-pattern>
+            <url-pattern>/swag/add/*</url-pattern>
+            <url-pattern>/swag/edit/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>*</role-name>
+        </auth-constraint>
+    </security-constraint>
 
+<!-- 
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+-->
 
 </web-app>

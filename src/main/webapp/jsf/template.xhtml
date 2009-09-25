@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:sf="http://www.springframework.org/tags/faces">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+<title>${title}</title>
+   <sf:includeStyles/> 
+   <sf:resource path="/css/swagswap01.css"/> 
+</head>
+
+<body>
+<center><h:panelGrid columns="1" cellpadding="0"
+	cellspacing="0" width="800px">
+	<h:panelGroup>
+		<h:graphicImage value="/images/trading-floor-banner.jpg"
+			alt="Swag Swap" width="100%" />
+	</h:panelGroup>
+	<br />
+	<br />
+	<ui:insert name="content" />
+</h:panelGrid></center>
+</body>
+</html>

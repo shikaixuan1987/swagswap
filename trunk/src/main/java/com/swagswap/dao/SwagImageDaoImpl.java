@@ -1,24 +1,16 @@
 package com.swagswap.dao;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URL;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.jdo.PersistenceManager;
 
 import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
-import com.google.appengine.api.datastore.Blob;
 import com.swagswap.domain.SwagImage;
 
 /**
- * Inspired by Spring Image Database sample application
+ * Operates on SwagImages.  Inspired by Spring Image Database sample application
  */
 public class SwagImageDaoImpl extends JdoDaoSupport implements SwagImageDao {
 

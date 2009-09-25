@@ -17,6 +17,7 @@ import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
 
 /**
+ * Persistence of SwagItems using Spring JDO
  * (from spring docs): JdoTemplate will ensure that PersistenceManagers are
  * properly opened and closed, and automatically participate in transactions.
  * 
@@ -54,7 +55,7 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 	/**
 	 * Search by tag and by name
 	 * NOTE: only supports case sensitive queries
-	 * This implementation searches for exact SwagItem.name or tag match
+	 * This implementation searches for exact SwagItem.name or exact tag match
 	 * @param searchString
 	 */
     public List<SwagItem> search(String searchString) {
@@ -91,13 +92,7 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		PersistenceManager pm = getPersistenceManager();
 		String query = "select from " + SwagItem.class.getName() + " order by lastUpdated desc";
 		List<SwagItem> swagItems = (List<SwagItem>) pm.newQuery(query).execute();
-
-		if (log.isInfoEnabled()) {
-			log.info("returning " + swagItems.size() + " swag items");
-			for (SwagItem swagItem : swagItems) {
-				log.info(swagItem.getName() + " key: " + swagItem.getKey() + " Time: " + swagItem.getLastUpdated());
-			}
-		}
+		logSwagItems(swagItems); //debugging output
 		return swagItems;
 
 	}
@@ -111,7 +106,7 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 	}
 
 	/**
-	 * Swag images (children) of SwagItems are not automatically deleted
+	 * SwagImages (children) of SwagItems are automatically deleted
 	 * So you have to do that yourself
 	 * see http://code.google.com/appengine/docs/python/datastore/keysandentitygroups.html#Entity_Groups_Ancestors_and_Paths
 	 */
@@ -128,8 +123,6 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 	 * TODO take care of image here
 	 */
 	private void update(SwagItem updatedItem) {
-		//TODO delete old image if it's changed
-		
 		SwagItem orig = get(updatedItem.getKey(),true);
 		orig.setName(updatedItem.getName());
 		orig.setDescription(updatedItem.getDescription());
@@ -138,18 +131,10 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		orig.setLastUpdated(new Date());
 		orig.setTags(updatedItem.getTags());
 		orig.setComments(updatedItem.getComments());
-		if (updatedItem.hasNewImage()) {
+		if (updatedItem.hasNewImage()) { //replace existing image
 			//The following line doesn't work! You have to operate on the stored SwagImage
 			//orig.setImage(updatedItem.getImage());
-			SwagImage swagImage = orig.getImage();
-			if (swagImage==null) { //no image originally, add one
-				//orig.setImage(new SwagImage(updatedItem.getImageBytes()));
-				//TODO this doesn't work.  
-				// fix me (perhaps insert blank image if they don't upload one
-			}
-			else { //replace existing image
-				orig.getImage().setImage(new Blob(updatedItem.getImageBytes()));
-			}
+			orig.getImage().setImage(new Blob(updatedItem.getImageBytes()));
 		}
 	}
 	
@@ -177,6 +162,16 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		// Save image key here in the parent 
 		// See comment in SwagItem above the field imageKey
 		swagItem.setImageKey(swagItem.getImage().getEncodedKey());
+	}
+	
+
+	private void logSwagItems(List<SwagItem> swagItems) {
+		if (log.isDebugEnabled()) {
+			log.debug("returning " + swagItems.size() + " swag items");
+			for (SwagItem swagItem : swagItems) {
+				log.debug(swagItem.getName() + " key: " + swagItem.getKey() + " Time: " + swagItem.getLastUpdated());
+			}
+		}
 	}
 	
 }

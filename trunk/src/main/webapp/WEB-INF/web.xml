@@ -2,7 +2,7 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
-	<display-name>New Project Template</display-name>
+	<display-name>swagswap</display-name>
 
 	<!--
 		Location of the Log4J config file, for initialization and refresh
@@ -14,14 +14,7 @@
 	</context-param>
 
 	<!--
-		- Configures Log4J for this web app. - As this context specifies a
-		context-param "log4jConfigLocation", its file path - is used to load
-		the Log4J configuration, including periodic refresh checks. - - Would
-		fall back to default Log4J initialization (non-refreshing) if no
-		special - context-params are given. - - Exports a "web app root key",
-		i.e. a system property that specifies the root - directory of this web
-		app, for usage in log file paths. - This web app specifies
-		"petclinic.root" (see log4j.properties file).
+		- Configures Log4J for this web app. 
 	-->
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
@@ -29,39 +22,18 @@
 
 	<!--
 		- Location of the XML file that defines the root application context.
-		- Applied by ContextLoaderServlet. - - Can be set to: -
-		"/WEB-INF/applicationContext-hibernate.xml" for the Hibernate
-		implementation, - "/WEB-INF/applicationContext-jpa.xml" for the JPA
-		one, or - "/WEB-INF/applicationContext-jdbc.xml" for the JDBC one.
+		- Applied by ContextLoaderServlet. - - Can be set to different xml files
+		- for different implementations
 	-->
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-
 		<param-value>/WEB-INF/applicationContext.xml</param-value>
-		<!--
-			<param-value>/WEB-INF/applicationContext-hibernate.xml</param-value>
-			<param-value>/WEB-INF/applicationContext-jpa.xml</param-value>
-		-->
-
-		<!--
-			To use the JPA variant above, you will need to enable Spring
-			load-time weaving in your server environment. See PetClinic's readme
-			and/or Spring's JPA documentation for information on how to do this.
-		-->
 	</context-param>
 
 	<!--
 		- Loads the root application context of this web app at startup, - by
-		default from "/WEB-INF/applicationContext.xml". - Note that you need
-		to fall back to Spring's ContextLoaderServlet for - J2EE servers that
-		do not follow the Servlet 2.4 initialization order. - - Use
-		WebApplicationContextUtils.getWebApplicationContext(servletContext) -
-		to access it anywhere in the web application, outside of the
-		framework. - - The root context is the parent of all servlet-specific
-		contexts. - This means that its beans are automatically available in
-		these child contexts, - both for getBean(name) calls and (external)
-		bean references.
+		default from "/WEB-INF/applicationContext.xml". 
 	-->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -71,7 +43,7 @@
 		- Servlet that dispatches request to registered handlers (Controller
 		implementations). - Has its own application context, by default
 		defined in "{servlet-name}-servlet.xml", - i.e.
-		"petclinic-servlet.xml". - - A web app can contain any number of such
+		"swagswap-servlet.xml". - - A web app can contain any number of such
 		servlets. - Note that this web app has a shared root application
 		context, serving as parent - of all DispatcherServlet contexts.
 	-->
@@ -81,18 +53,9 @@
 		<load-on-startup>2</load-on-startup>
 	</servlet>
 
-	<servlet>
-		<servlet-name>hello</servlet-name>
-		<servlet-class>org.example.HelloAppEngineServlet</servlet-class>
-	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>/swag/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>hello</servlet-name>
-		<url-pattern>/helloappengine</url-pattern>
 	</servlet-mapping>
 
 	<error-page>

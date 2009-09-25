@@ -1,5 +1,11 @@
 package com.swagswap.domain;
 
+/**
+ * Wrapper object needed to bind to the spring form
+ * could eventually hold paging and fetch size info
+ * @author sam
+ *
+ */
 public class SearchCriteria {
 	private String searchString;
 

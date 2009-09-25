@@ -16,7 +16,6 @@ import com.google.appengine.api.datastore.Key;
  * Used as a vessel to hold the actual image data so that appengine
  * can save it to a Blob (just saving the byte[] is not allowed due 
  * to size constraints 
- * @author BDBRODS
  *
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)

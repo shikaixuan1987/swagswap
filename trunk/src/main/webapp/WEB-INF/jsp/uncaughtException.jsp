@@ -1,6 +1,8 @@
 <%@ include file="/WEB-INF/jsp/includes.jsp" %>
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
 
+<%--Borrowed from Spring Pet Clinic --%>
+
 <h2/>Error</h2>
 <p/>
 

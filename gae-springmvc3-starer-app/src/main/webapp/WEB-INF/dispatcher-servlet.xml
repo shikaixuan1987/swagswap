@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+	- DispatcherServlet application context for web tier.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+				http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.0.xsd">
+
+	<!--
+		The controllers are autodetected POJOs labeled with the @Controller
+		annotation.
+	-->
+	<context:component-scan base-package="com.swagswap.web" />
+
+	<!-- For fileupload 
+         Can't let multipartResolver store temp file on disk so
+         I had to use this multipartResolver subclass
+	     See http://groups.google.com/group/google-appengine-java/browse_thread/thread/c035d054f0715b6a 
+	-->
+	<bean id="multipartResolver" class="is.hax.spring.web.multipart.StreamingMultipartResolver" >
+		<property name="maxUploadSize" value="100000"/>
+	</bean>
+
+</beans>
+

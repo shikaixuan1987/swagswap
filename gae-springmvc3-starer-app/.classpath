@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/swagswap-0.1/WEB-INF/classes" path="src/main/java"/>
+	<classpathentry kind="src" output="target/test" path="src/test/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-beanutils-1.8.0.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/displaytag-1.2.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.asm-3.0.0.M4.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.beans-3.0.0.M4.jar" sourcepath="D:/downloads/spring-framework-3.0.0.M4/src/org.springframework.beans-sources-3.0.0.M4.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.context-3.0.0.M4.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.core-3.0.0.M4.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.expression-3.0.0.M4.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.jdbc-3.0.0.M4.jar" sourcepath="D:/downloads/spring-framework-3.0.0.M4/src/org.springframework.jdbc-sources-3.0.0.M4.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.orm-3.0.0.M4.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.transaction-3.0.0.M4.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.web-3.0.0.M4.jar" sourcepath="D:/downloads/spring-framework-3.0.0.M4/src/org.springframework.web-sources-3.0.0.M4.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.web.servlet-3.0.0.M4.jar"/>
+	<classpathentry kind="lib" path="src/test/lib/junit.jar"/>
+	<classpathentry kind="var" path="GAE_HOME/lib/user/appengine-api-1.0-sdk-1.2.5.jar"/>
+	<classpathentry kind="var" path="GAE_HOME/lib/user/orm/jdo2-api-2.3-eb.jar"/>
+	<classpathentry kind="var" path="GAE_HOME/lib/impl/appengine-local-runtime.jar"/>
+	<classpathentry kind="var" path="GAE_HOME/lib/impl/appengine-api-stubs.jar"/>
+	<classpathentry kind="var" path="GAE_HOME/lib/user/orm/datanucleus-appengine-1.0.3.jar"/>
+	<classpathentry kind="var" path="GAE_HOME/lib/user/orm/datanucleus-core-1.1.5.jar"/>
+	<classpathentry kind="var" path="GAE_HOME/lib/user/orm/datanucleus-jpa-1.1.5.jar"/>
+	<classpathentry kind="var" path="GAE_HOME/lib/shared/geronimo-servlet_2.5_spec-1.2.jar"/>
+	<classpathentry kind="var" path="GAE_HOME"/>
+	<classpathentry kind="var" path="GAE_HOME/lib/shared/geronimo-jsp_2.1_spec-1.0.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

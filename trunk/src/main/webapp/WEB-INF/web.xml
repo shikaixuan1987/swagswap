@@ -23,6 +23,7 @@
 		<param-name>com.sun.faces.enableThreading</param-name>
 		<param-value>false</param-value>
 	</context-param>
+	<!-- end JSF -->
 
 	<!--
 		Location of the Log4J config file, for initialization and refresh
@@ -59,6 +60,7 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
+	<!-- Spring Faces Configuration -->
 	<!-- Need to explicitly add listener for JSF -->
 	<listener>
 		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
@@ -89,7 +91,7 @@
 	</servlet-mapping>
 	<!--   End of Spring Faces Configuration  -->
 
-
+	<!-- Spring MVC -->
 
 	<!--
 		- Servlet that dispatches request to registered handlers (Controller
@@ -114,6 +116,8 @@
 		<exception-type>java.lang.Exception</exception-type>
 		<location>/WEB-INF/jsp/uncaughtException.jsp</location>
 	</error-page>
+	
+	<!-- End Spring MVC -->
 
 	<!--JSF-->
 	<security-constraint>
@@ -124,7 +128,9 @@
 		</web-resource-collection>
 		<auth-constraint />
 	</security-constraint>
+	<!-- End JSF -->
  
+ 	<!-- Spring MVC -->
      <security-constraint>
         <web-resource-collection>
             <url-pattern>/swag/delete/*</url-pattern>
@@ -135,6 +141,8 @@
             <role-name>*</role-name>
         </auth-constraint>
     </security-constraint>
+    
+    <!-- End Spring MVC -->
 
 <!-- 
     <security-constraint>

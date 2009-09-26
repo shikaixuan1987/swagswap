@@ -8,6 +8,7 @@
 
 <% 
 try {
+	String pleaseLogBugText = "<b>Please <a href=\"http://code.google.com/p/swagswap/issues/entry?template=Defect%20report%20from%20user\">report this issue</a> (requires a google account)</b><br/><br/>";
 	// The Servlet spec guarantees this attribute will be available
 	Throwable exception = (Throwable) request.getAttribute("javax.servlet.error.exception"); 
 
@@ -18,8 +19,10 @@ try {
 			Throwable rootCause = sex.getRootCause();
 			if (rootCause == null)
 				rootCause = sex;
+			out.println(pleaseLogBugText);
 			out.println("** Root cause is: "+ rootCause.getMessage());
 			rootCause.printStackTrace(new java.io.PrintWriter(out)); 
+			
 		}
 		else if (exception instanceof org.springframework.web.multipart.MultipartException) {
 			out.println("File upload is too large.  <a href=\"\" onclick=\"history.go(-1);return false;\">Try again</a>");
@@ -29,12 +32,14 @@ try {
 			Throwable rootCause = exception.getCause();
 			if (rootCause == null)
 				rootCause = exception;
+			out.println(pleaseLogBugText);
 			out.println("** Root cause is: "+ rootCause.getMessage());
 			rootCause.printStackTrace(new java.io.PrintWriter(out)); 
 		}
 	} 
 	else  {
     	out.println("No error information available");
+    	out.println(pleaseLogBugText);
 	} 
 
 	    

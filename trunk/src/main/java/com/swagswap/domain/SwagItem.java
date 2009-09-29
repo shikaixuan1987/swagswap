@@ -13,7 +13,6 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.commons.collections.FactoryUtils;
 import org.apache.commons.collections.list.LazyList;
-import org.apache.commons.lang.StringUtils;
 
 import com.google.appengine.api.datastore.Text;
 
@@ -55,7 +54,10 @@ public class SwagItem {
 	private byte[] imageBytes;
 
 	@Persistent
-	private String owner;
+	private String ownerEmail;
+	
+	@Persistent
+	private String ownerNickName;
 
 	@Persistent
 	private Float rating;
@@ -87,7 +89,7 @@ public class SwagItem {
 		this.name = name;
 		this.description = new Text(description);
 		this.image = image;
-		this.owner = owner;
+		this.ownerEmail = owner;
 		this.rating = rating;
 		this.numberOfRatings = numberOfRatings;
 		this.tags = tags;
@@ -152,12 +154,20 @@ public class SwagItem {
 		this.imageKey = imageKey;
 	}
 
-	public String getOwner() {
-		return owner;
+	public String getOwnerEmail() {
+		return ownerEmail;
 	}
 
-	public void setOwner(String owner) {
-		this.owner = owner;
+	public void setOwnerEmail(String ownerEmail) {
+		this.ownerEmail = ownerEmail;
+	}
+
+	public String getOwnerNickName() {
+		return ownerNickName;
+	}
+
+	public void setOwnerNickName(String ownerNickName) {
+		this.ownerNickName = ownerNickName;
 	}
 
 	public Float getRating() {
@@ -221,7 +231,7 @@ public class SwagItem {
 		result = prime * result + ((lastUpdated == null) ? 0 : lastUpdated.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((numberOfRatings == null) ? 0 : numberOfRatings.hashCode());
-		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+		result = prime * result + ((ownerEmail == null) ? 0 : ownerEmail.hashCode());
 		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
 		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
 		return result;
@@ -282,10 +292,10 @@ public class SwagItem {
 				return false;
 		} else if (!numberOfRatings.equals(other.numberOfRatings))
 			return false;
-		if (owner == null) {
-			if (other.owner != null)
+		if (ownerEmail == null) {
+			if (other.ownerEmail != null)
 				return false;
-		} else if (!owner.equals(other.owner))
+		} else if (!ownerEmail.equals(other.ownerEmail))
 			return false;
 		if (rating == null) {
 			if (other.rating != null)

@@ -10,7 +10,7 @@ import com.swagswap.domain.SwagItem;
 
 public class SwagImageDaoImplTest extends LocalDatastoreTestCase  {
 	
-	private SwagItemDaoImpl swagItemDao;
+	private SwagItemDao swagItemDao;
 	private SwagImageDaoImpl swagImageDao;
 	
 	@Override
@@ -31,7 +31,7 @@ public class SwagImageDaoImplTest extends LocalDatastoreTestCase  {
     public void testGet() {
     	
         SwagItem swagItem = Fixture.createSwagItem();
-        swagItemDao.save(swagItem);
+        swagItemDao.insert(swagItem);
         
         SwagImage image = swagImageDao.get(swagItem.getImageKey());
         assertNotNull(image);

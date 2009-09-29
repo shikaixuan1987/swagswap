@@ -34,9 +34,12 @@ public class SwagItemController {
 
 	@Autowired
 	private SwagItemService swagItemService;
+	@Autowired
+	private com.google.appengine.api.users.UserService googleUserService;
 	
+	//TODO do we need request here?
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String addHandler(Model model) {
+	public String addHandler(Model model, HttpServletRequest req) {
 		model.addAttribute("swagItem", new SwagItem());
 		return "addEditSwagItem";
 	}
@@ -107,4 +110,8 @@ public class SwagItemController {
 		this.swagItemService = swagItemService;
 	}
 
+	public void setGoogleUserService(com.google.appengine.api.users.UserService googleUserService) {
+		this.googleUserService = googleUserService;
+	}
+	
 }

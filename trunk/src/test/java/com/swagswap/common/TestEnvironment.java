@@ -19,12 +19,14 @@ class TestEnvironment implements ApiProxy.Environment {
     return "1.0";
   }
 
+  //assume they're logged in
   public String getEmail() {
-    throw new UnsupportedOperationException();
+    return "test@test.com";
   }
 
+//assume they're logged in
   public boolean isLoggedIn() {
-    throw new UnsupportedOperationException();
+    return true;
   }
 
   public boolean isAdmin() {
@@ -32,7 +34,7 @@ class TestEnvironment implements ApiProxy.Environment {
   }
 
   public String getAuthDomain() {
-    throw new UnsupportedOperationException();
+    return "";
   }
 
   public String getRequestNamespace() {

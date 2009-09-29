@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false"%>
 <%@ include file="/WEB-INF/jsp/includes.jsp" %>
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
+<%@ taglib prefix="isAllowed" tagdir="/WEB-INF/tags" %>
+
 
 <%--Shows a search box and a list of SwagItems using the old but good displaytag library --%>
 
@@ -47,7 +49,7 @@
 			<img border="0" alt="Image" src="<c:url value='/swag/showImage/${currentObject.imageKey}'/>"/>
 		</display:column>
 	</c:if>
-
+	<display:column sortable="true" title="Owner" property="ownerNickName" />
 	<display:column property="lastUpdated" title="Last Updated" format="{0,date,dd-MM-yyyy HH:mm:ss}" sortable="true"/>
 	
 </display:table>

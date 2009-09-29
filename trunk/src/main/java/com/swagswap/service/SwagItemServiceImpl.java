@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.appengine.api.users.User;
 import com.swagswap.dao.SwagItemDao;
 import com.swagswap.domain.SwagItem;
 
@@ -22,6 +23,8 @@ public class SwagItemServiceImpl implements SwagItemService {
 
 	@Autowired
 	private SwagItemDao swagItemDao;
+	@Autowired
+	private com.google.appengine.api.users.UserService googleUserService;
 
 	/**
 	 * Load swagItem, but not associated swagImage
@@ -49,21 +52,49 @@ public class SwagItemServiceImpl implements SwagItemService {
 		return swagItemDao.getAll();
 	}
 
-
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void save(SwagItem swagItem) {
-		swagItemDao.save(swagItem);
+		if (swagItem.isNew()) {
+			swagItem.setOwnerEmail(googleUserService.getCurrentUser().getEmail());
+			swagItem.setOwnerNickName(googleUserService.getCurrentUser().getNickname());
+			swagItemDao.insert(swagItem);
+		}
+		else { //update
+			checkPermissions(swagItem.getKey());
+			swagItemDao.update(swagItem);
+		}
 		//to test transactions, uncomment the throw exception line below
 		//and try this method with and without the annotation
 		//throw new RuntimeException("see if it rolls back");
 	}
 
 	public void delete(Long id) {
+		checkPermissions(id);
 		swagItemDao.delete(id);
 	}
 
 	public void setSwagItemDao(SwagItemDao swagItemDao) {
 		this.swagItemDao = swagItemDao;
 	}
+
+	public void setGoogleUserService(com.google.appengine.api.users.UserService googleUserService) {
+		this.googleUserService = googleUserService;
+	}
 	
+	/**
+	 * @param id
+	 * @throws AccessDeniedException
+	 */
+	private void checkPermissions(Long id) throws AccessDeniedException {
+		User user = googleUserService.getCurrentUser();
+		SwagItem swagItemToCheck = get(id); //get it fresh to prevent client side attacks
+		if (
+				(user==null) ||
+				(!user.getEmail().equals(swagItemToCheck.getOwnerEmail()))
+			) {
+			throw new AccessDeniedException(
+					swagItemToCheck,
+					user.getEmail());
+		}
+	}
 }

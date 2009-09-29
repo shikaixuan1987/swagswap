@@ -1,10 +1,13 @@
 package com.swagswap.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.User;
 
 public class Fixture {
 
@@ -34,6 +37,20 @@ public class Fixture {
 		return swagItem;
 	}
 	
+
+	public static User createUser() {
+		User user = new User();
+		user.setEmail("test@gmail.com");
+		return user;
+	}
+	
+	public static Map<Long, Integer> getRatedItems() {
+		HashMap<Long, Integer> ratedItems = new HashMap<Long, Integer>();
+		ratedItems.put(1L,2);
+		ratedItems.put(2L,3);
+		return ratedItems;
+	}
+	
 	public static String get510Chars() {
 		return "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis scelerisque facilisis " +
 				"tortor. Aliquam semper gravida ligula. Vestibulum sodales lacinia leo. In turpis justo," +
@@ -42,5 +59,8 @@ public class Fixture {
 				" nonummy eros. Praesent bibendum consectetuer neque. Donec vitae eros ut mi adipiscing" +
 				" mollis. Vestibulum eleifend. Maecenas ultrice. Ut vitae velit. 1 2 3 4 5";
 	}
+
+
+
 
 }

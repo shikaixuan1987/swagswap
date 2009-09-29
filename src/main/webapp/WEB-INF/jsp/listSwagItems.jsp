@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false"%>
 <%@ include file="/WEB-INF/jsp/includes.jsp" %>
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
-<%@ taglib prefix="isAllowed" tagdir="/WEB-INF/tags" %>
 
 
 <%--Shows a search box and a list of SwagItems using the old but good displaytag library --%>
@@ -24,6 +23,8 @@
 				&nbsp; 
 				<a href="/swag/add"><img src="/images/newAdd.png" 
 				   title="Add SwagItem" border="0"/>Add Swag</a>
+				&nbsp; 
+				<google-auth:loginLogoutTag requestURL="/swag/search"/>
 			</td>
 		</tr>
 	</table>
@@ -32,15 +33,18 @@
 <display:table name="swagItems" uid="swagItemsList" id="currentObject" 
                requestURI="/swag/search" keepStatus="true">
 	<display:column sortable="true" property="name" />
-
-	<display:column title="Action">
-		<a href="<c:url value='/swag/edit/${currentObject.key}'/>"> 
-			<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/></a>
-	        &nbsp;&nbsp;
-            <a href="<c:url value='/swag/delete/${currentObject.key}'/>" onclick="return confirmSubmit()"> 
-            <img border="0" alt="Delete" src="<%=request.getContextPath()%>/images/delete.gif"/>
-		</a>
-	</display:column>
+		<display:column title="Action">
+			<%-- Users can only edit their own items --%>
+			<google-auth:isAllowed swagItemOwnerEmail="${currentObject.ownerEmail}">
+				<a href="<c:url value='/swag/edit/${currentObject.key}'/>"> 
+					<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/>
+				</a>
+			    &nbsp;&nbsp;
+		        <a href="<c:url value='/swag/delete/${currentObject.key}'/>" onclick="return confirmSubmit()"> 
+		            <img border="0" alt="Delete" src="<%=request.getContextPath()%>/images/delete.gif"/>
+				</a>
+			</google-auth:isAllowed>
+		</display:column>
 
 	<display:column property="tags" decorator="com.swagswap.web.springmvc.displaytag.TagsDecorator"/>
 

@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
 
@@ -29,34 +30,26 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 
 	private static final Logger log = Logger.getLogger(SwagItemDaoImpl.class);
 
-	/**
-	 * Load swagItem, but not associated swagImage
+	/* (non-Javadoc)
+	 * @see com.swagswap.dao.SwagItemDao#get(java.lang.Long)
 	 */
 	public SwagItem get(Long id) {
 		return get(id, false);
 	}
 	
-	/**
-	 * 
-	 * @param id
-	 * @param loadSwagImage whether to load swagImage (it is lazy loaded by GAE)
-	 * @return SwagItem if found
-	 * @throws JDOObjectNotFoundException (RuntimeException) if item not found
+	/* (non-Javadoc)
+	 * @see com.swagswap.dao.SwagItemDao#get(java.lang.Long, boolean)
 	 */
 	public SwagItem get(Long id, boolean loadSwagImage) {
-		PersistenceManager pm = getPersistenceManager();
-		SwagItem swagItem = pm.getObjectById(SwagItem.class, id);
+		SwagItem swagItem = getPersistenceManager().getObjectById(SwagItem.class, id);
 		if (loadSwagImage) {
 			swagItem.getImage();
 		}
 		return swagItem;
 	}
 	
-	/**
-	 * Search by tag and by name
-	 * NOTE: only supports case sensitive queries
-	 * This implementation searches for exact SwagItem.name or exact tag match
-	 * @param searchString
+	/* (non-Javadoc)
+	 * @see com.swagswap.dao.SwagItemDao#search(java.lang.String)
 	 */
     public List<SwagItem> search(String searchString) {
     	if (StringUtils.isEmpty(searchString)) {
@@ -88,6 +81,9 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		return (List<SwagItem>) query.execute(searchString); 
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.swagswap.dao.SwagItemDao#getAll()
+	 */
 	public List<SwagItem> getAll() {
 		PersistenceManager pm = getPersistenceManager();
 		String query = "select from " + SwagItem.class.getName() + " order by lastUpdated desc";
@@ -96,59 +92,16 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		return swagItems;
 
 	}
-
-	public void save(SwagItem swagItem) {
-		if (swagItem.isNew()) {
-			insert(swagItem);
-		} else {
-			update(swagItem);
-		}
-	}
-
-	/**
-	 * SwagImages (children) of SwagItems are automatically deleted
-	 * So you have to do that yourself
-	 * see http://code.google.com/appengine/docs/python/datastore/keysandentitygroups.html#Entity_Groups_Ancestors_and_Paths
-	 */
-	public void delete(Long id) {
-		PersistenceManager pm = getPersistenceManager();
-		SwagItem swagItem = pm.getObjectById(SwagItem.class, id);
-		SwagImage swagImage = swagItem.getImage();
-		pm.deletePersistent(swagImage);
-		pm.deletePersistent(swagItem);
-	}
-
-	/**
-	 * @param updatedItem
-	 * TODO take care of image here
-	 */
-	private void update(SwagItem updatedItem) {
-		SwagItem orig = get(updatedItem.getKey(),true);
-		orig.setName(updatedItem.getName());
-		orig.setDescription(updatedItem.getDescription());
-		orig.setOwner(updatedItem.getOwner());
-		orig.setRating(updatedItem.getRating());
-		orig.setLastUpdated(new Date());
-		orig.setTags(updatedItem.getTags());
-		orig.setComments(updatedItem.getComments());
-		if (updatedItem.hasNewImage()) { //replace existing image
-			//The following line doesn't work! You have to operate on the stored SwagImage
-			//orig.setImage(updatedItem.getImage());
-			orig.getImage().setImage(new Blob(updatedItem.getImageBytes()));
-		}
-	}
 	
-	/**
-	 * Note: swagItem ref passed in is updated 
-	 * @param swagItem
+	/* (non-Javadoc)
+	 * @see com.swagswap.dao.SwagItemDao#insert(com.swagswap.domain.SwagItem)
 	 */
-	private void insert(SwagItem swagItem) {
+	public void insert(SwagItem swagItem) {
+		
+		//could insert current user here
 		Date now = new Date();
 		swagItem.setCreated(now);
 		swagItem.setLastUpdated(now);
-		// TODO DI me
-		// UserService userService = UserServiceFactory.getUserService();
-		// swagItem.setOwner(userService.getCurrentUser().getEmail());
 		swagItem.setNumberOfRatings(0);
 		if (swagItem.hasNewImage()) {
 			swagItem.setImage(new SwagImage(swagItem.getImageBytes()));
@@ -164,6 +117,34 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 		swagItem.setImageKey(swagItem.getImage().getEncodedKey());
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.swagswap.dao.SwagItemDao#update(com.swagswap.domain.SwagItem)
+	 */
+	public void update(SwagItem updatedItem) {
+		SwagItem orig = get(updatedItem.getKey(),true);
+		orig.setName(updatedItem.getName());
+		orig.setDescription(updatedItem.getDescription());
+		orig.setRating(updatedItem.getRating());
+		orig.setLastUpdated(new Date());
+		orig.setTags(updatedItem.getTags());
+		orig.setComments(updatedItem.getComments());
+		if (updatedItem.hasNewImage()) { //replace existing image
+			//The following line doesn't work! You have to operate on the stored SwagImage
+			//orig.setImage(updatedItem.getImage());
+			orig.getImage().setImage(new Blob(updatedItem.getImageBytes()));
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.swagswap.dao.SwagItemDao#delete(java.lang.Long)
+	 */
+	public void delete(Long id) {
+		PersistenceManager pm = getPersistenceManager();
+		SwagItem swagItem = pm.getObjectById(SwagItem.class, id);
+		SwagImage swagImage = swagItem.getImage();
+		pm.deletePersistent(swagImage);
+		pm.deletePersistent(swagItem);
+	}
 
 	private void logSwagItems(List<SwagItem> swagItems) {
 		if (log.isDebugEnabled()) {

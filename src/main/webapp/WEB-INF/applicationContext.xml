@@ -111,6 +111,13 @@
 		<property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
 	</bean>
 	
+	<bean id="userDao" class="com.swagswap.dao.UserDaoImpl" >
+		<property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
+	</bean>
+	
+	<!-- Google UserService (for getting UserPrincipal) -->
+	<bean id="googleUserService" class="com.google.appengine.api.users.UserServiceFactory" factory-method="getUserService"/>
+	
 	<bean id="swagItemService" class="com.swagswap.service.SwagItemServiceImpl" />
 
 	

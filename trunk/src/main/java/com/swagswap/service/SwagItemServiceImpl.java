@@ -82,16 +82,25 @@ public class SwagItemServiceImpl implements SwagItemService {
 	}
 	
 	/**
-	 * @param id
-	 * @throws AccessDeniedException
+	 * @param swagItemIdToCheck
+	 * @throws AccessDeniedException if currentUser is not allowed to access an item
 	 */
-	private void checkPermissions(Long id) throws AccessDeniedException {
+	private void checkPermissions(Long swagItemIdToCheck) throws AccessDeniedException {
 		User user = googleUserService.getCurrentUser();
-		SwagItem swagItemToCheck = get(id); //get it fresh to prevent client side attacks
-		if (
-				(user==null) ||
-				(!user.getEmail().equals(swagItemToCheck.getOwnerEmail()))
-			) {
+		//admins can do everything!
+		if (googleUserService.isUserAdmin()) {
+			return;
+		}
+		// Not logged in 
+		// (if this happened the webapp messed up or someone's trying to hack us)
+		if (user==null) {
+			throw new AccessDeniedException("User not logged in.  No permissions");
+		}
+		//get item fresh to prevent client side attacks
+		SwagItem swagItemToCheck = get(swagItemIdToCheck); 
+		// Their email doesn't match the swagItem 
+		// (again, if this happened the webapp messed up or someone's trying to hack us)
+		if (!user.getEmail().equals(swagItemToCheck.getOwnerEmail())) {
 			throw new AccessDeniedException(
 					swagItemToCheck,
 					user.getEmail());

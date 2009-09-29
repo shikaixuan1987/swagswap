@@ -19,7 +19,7 @@ public class TagsDecorator implements DisplaytagColumnDecorator {
 	 *      PageContext, MediaTypeEnum)
 	 */
 	public Object decorate(Object columnValue, PageContext pageContext, MediaTypeEnum media) {
-		if (columnValue==null) {
+		if (columnValue==null || !(columnValue instanceof List)) {
 			return null;
 		}
 		StringBuilder s = new StringBuilder();

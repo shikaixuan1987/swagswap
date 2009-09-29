@@ -4,3 +4,5 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://displaytag.sf.net" prefix="display" %>
+<%@ taglib uri="/WEB-INF/tlds/google-auth-taglib.tld" prefix="google-auth" %>
+

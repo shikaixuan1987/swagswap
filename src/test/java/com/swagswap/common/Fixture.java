@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
-import com.swagswap.domain.User;
+import com.swagswap.domain.SwagSwapUser;
 
 public class Fixture {
 
@@ -38,10 +38,10 @@ public class Fixture {
 	}
 	
 
-	public static User createUser() {
-		User user = new User();
-		user.setEmail("test@gmail.com");
-		return user;
+	public static SwagSwapUser createUser() {
+		SwagSwapUser swagSwapUser = new SwagSwapUser();
+		swagSwapUser.setEmail("test@gmail.com");
+		return swagSwapUser;
 	}
 	
 	public static Map<Long, Integer> getRatedItems() {

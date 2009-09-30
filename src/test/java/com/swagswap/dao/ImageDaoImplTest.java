@@ -8,21 +8,21 @@ import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
 
 
-public class SwagImageDaoImplTest extends LocalDatastoreTestCase  {
+public class ImageDaoImplTest extends LocalDatastoreTestCase  {
 	
-	private SwagItemDao swagItemDao;
-	private SwagImageDaoImpl swagImageDao;
+	private ItemDao itemDao;
+	private ImageDaoImpl swagImageDao;
 	
 	@Override
     public void setUp() throws Exception {
         super.setUp();
-        if (swagItemDao == null) {
-    		SwagItemDaoImpl swagItemDao = new SwagItemDaoImpl();
+        if (itemDao == null) {
+    		ItemDaoImpl swagItemDao = new ItemDaoImpl();
             swagItemDao.setPersistenceManagerFactory(PMF);
-    		this.swagItemDao=swagItemDao;
+    		this.itemDao=swagItemDao;
         }
         if (swagImageDao == null) {
-        	SwagImageDaoImpl swagImageDao = new SwagImageDaoImpl();
+        	ImageDaoImpl swagImageDao = new ImageDaoImpl();
         	swagImageDao.setPersistenceManagerFactory(PMF);
         	this.swagImageDao=swagImageDao;
         }
@@ -31,7 +31,7 @@ public class SwagImageDaoImplTest extends LocalDatastoreTestCase  {
     public void testGet() {
     	
         SwagItem swagItem = Fixture.createSwagItem();
-        swagItemDao.insert(swagItem);
+        itemDao.insert(swagItem);
         
         SwagImage image = swagImageDao.get(swagItem.getImageKey());
         assertNotNull(image);

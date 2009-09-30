@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.swagswap.domain.SwagItem;
 
-public interface SwagItemService {
+public interface ItemService {
 
 	public abstract SwagItem get(Long id);
 	

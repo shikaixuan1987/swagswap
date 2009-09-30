@@ -4,7 +4,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
 import com.swagswap.common.Fixture;
 import com.swagswap.common.LocalDatastoreTestCase;
-import com.swagswap.domain.User;
+import com.swagswap.domain.SwagSwapUser;
 
 public class UserDaoImplTest extends LocalDatastoreTestCase  {
 	
@@ -20,40 +20,40 @@ public class UserDaoImplTest extends LocalDatastoreTestCase  {
         }
 	}
 
-    public void testSaveNew() {
+    public void testInsert() {
         
-        User user = Fixture.createUser();
-        userDao.save(user);
+        SwagSwapUser swagSwapUser = Fixture.createUser();
+        userDao.insert(swagSwapUser);
 
         assertNumberOfUsers(1);   
-        assertNotNull(user.getJoined()); //joined should be set
+        assertNotNull(swagSwapUser.getJoined()); //joined should be set
     }
     
     public void testUpdate() {
     	
-    	User orig = Fixture.createUser();
-    	userDao.save(orig);
+    	SwagSwapUser orig = Fixture.createUser();
+    	userDao.insert(orig);
     	
     	orig.setNickName("testie");
     	orig.setRatedSwagItems(Fixture.getRatedItems());
-    	userDao.save(orig);
+    	userDao.update(orig);
     	
-    	User retrievedUser = userDao.get(orig.getKey());
+    	SwagSwapUser retrievedUser = userDao.get(orig.getKey());
     	assertEquals(orig, retrievedUser);
     }
 
     public void testFindByEmail() {
     	
-        User orig = Fixture.createUser();
-        userDao.save(orig);
+        SwagSwapUser orig = Fixture.createUser();
+        userDao.insert(orig);
         
-        User retrievedItem = userDao.findByEmail(orig.getEmail());
+        SwagSwapUser retrievedItem = userDao.findByEmail(orig.getEmail());
         assertEquals(orig,retrievedItem);
     }
     
     //Make sure it's null (and doesn't thrown an exception)
     public void testFindByEmail_nonexistant_email() {
-    	User retrievedItem = userDao.findByEmail("bogus");
+    	SwagSwapUser retrievedItem = userDao.findByEmail("bogus");
     	assertNull(retrievedItem);
     		
     }
@@ -63,7 +63,7 @@ public class UserDaoImplTest extends LocalDatastoreTestCase  {
      * @param usersExpected
      */
 	private void assertNumberOfUsers(int usersExpected) {
-		Query query = new Query(User.class.getSimpleName());
+		Query query = new Query(SwagSwapUser.class.getSimpleName());
     	assertEquals(usersExpected, DatastoreServiceFactory.getDatastoreService().prepare(query).countEntities());
 	}
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.swagswap.domain.SwagItem;
 
-public interface SwagItemDao {
+public interface ItemDao {
 
 	/**
 	 * Load swagItem, but not associated swagImage
@@ -31,6 +31,7 @@ public interface SwagItemDao {
 	List<SwagItem> getAll();
 
 	/**
+	 * Insert SwagItem and SwagImage (if applicable)
 	 * Note: swagItem ref passed in is updated 
 	 * @param swagItem
 	 */

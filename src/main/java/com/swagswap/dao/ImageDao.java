@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.swagswap.domain.SwagImage;
 
-public interface SwagImageDao {
+public interface ImageDao {
 
 	List<SwagImage> getAll();
 	

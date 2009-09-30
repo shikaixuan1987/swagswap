@@ -26,19 +26,19 @@ import com.swagswap.domain.SwagItem;
  * 
  */
 @SuppressWarnings("unchecked")
-public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
+public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 
-	private static final Logger log = Logger.getLogger(SwagItemDaoImpl.class);
+	private static final Logger log = Logger.getLogger(ItemDaoImpl.class);
 
 	/* (non-Javadoc)
-	 * @see com.swagswap.dao.SwagItemDao#get(java.lang.Long)
+	 * @see com.swagswap.dao.ItemDao#get(java.lang.Long)
 	 */
 	public SwagItem get(Long id) {
 		return get(id, false);
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.swagswap.dao.SwagItemDao#get(java.lang.Long, boolean)
+	 * @see com.swagswap.dao.ItemDao#get(java.lang.Long, boolean)
 	 */
 	public SwagItem get(Long id, boolean loadSwagImage) {
 		SwagItem swagItem = getPersistenceManager().getObjectById(SwagItem.class, id);
@@ -49,7 +49,7 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.swagswap.dao.SwagItemDao#search(java.lang.String)
+	 * @see com.swagswap.dao.ItemDao#search(java.lang.String)
 	 */
     public List<SwagItem> search(String searchString) {
     	if (StringUtils.isEmpty(searchString)) {
@@ -82,7 +82,7 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.swagswap.dao.SwagItemDao#getAll()
+	 * @see com.swagswap.dao.ItemDao#getAll()
 	 */
 	public List<SwagItem> getAll() {
 		PersistenceManager pm = getPersistenceManager();
@@ -94,7 +94,7 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.swagswap.dao.SwagItemDao#insert(com.swagswap.domain.SwagItem)
+	 * @see com.swagswap.dao.ItemDao#insert(com.swagswap.domain.SwagItem)
 	 */
 	public void insert(SwagItem swagItem) {
 		
@@ -118,7 +118,7 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.swagswap.dao.SwagItemDao#update(com.swagswap.domain.SwagItem)
+	 * @see com.swagswap.dao.ItemDao#update(com.swagswap.domain.SwagItem)
 	 */
 	public void update(SwagItem updatedItem) {
 		SwagItem orig = get(updatedItem.getKey(),true);
@@ -136,7 +136,7 @@ public class SwagItemDaoImpl extends JdoDaoSupport implements SwagItemDao {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.swagswap.dao.SwagItemDao#delete(java.lang.Long)
+	 * @see com.swagswap.dao.ItemDao#delete(java.lang.Long)
 	 */
 	public void delete(Long id) {
 		PersistenceManager pm = getPersistenceManager();

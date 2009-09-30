@@ -10,16 +10,19 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class User {
+public class SwagSwapUser {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long key;
 	
+	//Never displayed. Used as identifier and to communicate with the user
 	@Persistent
 	private String email;
 	
+	//This is the google accounts nickName now.  Maybe make this changeable for swagswap
+	//It is the name displayed as swagitem owner
 	@Persistent
-	private String nickName;
+	private String nickName; 
 	
 	@Persistent
 	private Map<Long,Integer> ratedSwagItems; //SwagItem key, rating
@@ -27,10 +30,15 @@ public class User {
 	@Persistent
 	private Date joined;
 	
-	public User() {
+	public SwagSwapUser() {
 	}
 	
-	public User(String email) {
+	public SwagSwapUser(String email, String nickName) {
+		this.email=email;
+		this.nickName=nickName;
+	}
+	
+	public SwagSwapUser(String email) {
 		this.email=email;
 	}
 
@@ -89,7 +97,7 @@ public class User {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		SwagSwapUser other = (SwagSwapUser) obj;
 		if (email == null) {
 			if (other.email != null)
 				return false;

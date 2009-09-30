@@ -103,22 +103,24 @@
 		<property name="persistenceManagerFactory" ref="persistenceManagerFactory" />
 	</bean>
 
-	<bean id="swagItemDao" class="com.swagswap.dao.SwagItemDaoImpl" >
+	<bean id="swagItemDao" class="com.swagswap.dao.ItemDaoImpl" >
 		<property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
 	</bean>
 	
-	<bean id="swagImageDao" class="com.swagswap.dao.SwagImageDaoImpl" >
+	<bean id="swagImageDao" class="com.swagswap.dao.ImageDaoImpl" >
 		<property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
 	</bean>
 	
-	<bean id="userDao" class="com.swagswap.dao.UserDaoImpl" >
+	<bean id="swagSwapUserDao" class="com.swagswap.dao.UserDaoImpl" >
 		<property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
 	</bean>
 	
 	<!-- Google UserService (for getting UserPrincipal) -->
 	<bean id="googleUserService" class="com.google.appengine.api.users.UserServiceFactory" factory-method="getUserService"/>
 	
-	<bean id="swagItemService" class="com.swagswap.service.SwagItemServiceImpl" />
+	<bean id="swagItemService" class="com.swagswap.service.ItemServiceImpl" />
+	
+	<bean id="swagSwapUserService" class="com.swagswap.service.SwagSwapUserServiceImpl" />
 
 	
 </beans>

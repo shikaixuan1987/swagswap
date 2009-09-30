@@ -18,6 +18,7 @@ public class LoginLogoutTag  extends SimpleTagSupport {
 		if (userService.isUserLoggedIn()) {
 			String logoutUrl = userService.createLogoutURL(requestURL);
 			getJspContext().getOut().println("<a href=\"" + logoutUrl + "\">logout</a>");
+			getJspContext().getOut().println("&nbsp;[Welcome: " + userService.getCurrentUser().getNickname() + "]");
 		}
 		else {
 			String loginUrl = userService.createLoginURL(requestURL);

@@ -1,13 +1,15 @@
 package com.swagswap.dao;
 
-import com.swagswap.domain.User;
+import com.swagswap.domain.SwagSwapUser;
 
 public interface UserDao {
 
-	public abstract User get(Long id);
+	SwagSwapUser get(Long id);
 
-	public abstract User findByEmail(String email);
+	SwagSwapUser findByEmail(String email);
 
-	public abstract void save(User user);
+	void update(SwagSwapUser updatedUser);
+
+	void insert(SwagSwapUser swagSwapUser);
 
 }

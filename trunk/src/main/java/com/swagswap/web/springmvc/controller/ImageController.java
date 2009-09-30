@@ -17,25 +17,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.swagswap.dao.SwagImageDao;
+import com.swagswap.dao.ImageDao;
 import com.swagswap.domain.SwagImage;
 
 @Controller
-public class SwagImageController {
-	private static final Logger log = Logger.getLogger(SwagImageController.class);
+public class ImageController {
+	private static final Logger log = Logger.getLogger(ImageController.class);
 	public static final String PATH_TO_DEFAULT_IMAGE = "images/no_photo.jpg";
 	private static byte[] defaultImage;
 
-	private SwagImageDao swagImageDao;
+	private ImageDao imageDao;
 
 	@Autowired
-	public SwagImageController(SwagImageDao swagImageDao) {
-		this.swagImageDao = swagImageDao;
+	public ImageController(ImageDao imageDao) {
+		this.imageDao = imageDao;
 	}
 
 	@RequestMapping("/imageList")
 	public String showImageList(ModelMap model) {
-		model.addAttribute("images", this.swagImageDao.getAll());
+		model.addAttribute("images", this.imageDao.getAll());
 		return "imageList";
 	}
 	
@@ -45,14 +45,14 @@ public class SwagImageController {
 	@RequestMapping(value = "/showImage/{key}", method = RequestMethod.GET)
 	public void streamImageContent(@PathVariable("key") String key,
 					HttpServletRequest req, OutputStream outputStream) throws IOException {
-		SwagImage swagImage = swagImageDao.get(key);
+		SwagImage swagImage = imageDao.get(key);
 		byte[] swagImageBytes;
 		//if there's not image, return default image
 		if (swagImage.getImage()==null) {
 			swagImageBytes=getDefaultImage(req.getRequestURL().toString());
 		}
 		else {
-			swagImageBytes = swagImageDao.get(key).getImage().getBytes();
+			swagImageBytes = imageDao.get(key).getImage().getBytes();
 		}
 		try {
 			outputStream.write(swagImageBytes, 0, swagImageBytes.length);

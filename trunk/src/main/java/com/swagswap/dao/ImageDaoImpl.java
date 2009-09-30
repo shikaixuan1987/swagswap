@@ -12,9 +12,9 @@ import com.swagswap.domain.SwagImage;
 /**
  * Operates on SwagImages.  Inspired by Spring Image Database sample application
  */
-public class SwagImageDaoImpl extends JdoDaoSupport implements SwagImageDao {
+public class ImageDaoImpl extends JdoDaoSupport implements ImageDao {
 
-	private static final Logger log = Logger.getLogger(SwagImageDaoImpl.class);
+	private static final Logger log = Logger.getLogger(ImageDaoImpl.class);
 
 	@SuppressWarnings("unchecked")
 	public List<SwagImage> getAll() {

@@ -10,15 +10,15 @@ import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
 
 
-public class SwagItemDaoImplTest extends LocalDatastoreTestCase  {
+public class ItemDaoImplTest extends LocalDatastoreTestCase  {
 	
-	private SwagItemDaoImpl swagItemDao;
+	private ItemDaoImpl swagItemDao;
 	
 	@Override
     public void setUp() throws Exception {
         super.setUp();
         if (swagItemDao == null) {
-    		SwagItemDaoImpl swagItemDao = new SwagItemDaoImpl();
+    		ItemDaoImpl swagItemDao = new ItemDaoImpl();
             swagItemDao.setPersistenceManagerFactory(PMF);
     		this.swagItemDao=swagItemDao;
         }

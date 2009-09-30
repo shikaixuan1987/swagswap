@@ -26,14 +26,14 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import com.swagswap.domain.SearchCriteria;
 import com.swagswap.domain.SwagItem;
-import com.swagswap.service.SwagItemService;
+import com.swagswap.service.ItemService;
 
 @Controller
-public class SwagItemController {
-	private static final Logger log = Logger.getLogger(SwagItemController.class);
+public class ItemController {
+	private static final Logger log = Logger.getLogger(ItemController.class);
 
 	@Autowired
-	private SwagItemService swagItemService;
+	private ItemService itemService;
 	@Autowired
 	private com.google.appengine.api.users.UserService googleUserService;
 	
@@ -46,20 +46,20 @@ public class SwagItemController {
 
 	@RequestMapping(value = "/edit/{key}", method = RequestMethod.GET)
 	public String editHandler(@PathVariable("key") Long key, Model model) {
-		SwagItem swagItem = swagItemService.get(key, true);
+		SwagItem swagItem = itemService.get(key, true);
 		model.addAttribute("swagItem", swagItem);
 		return "addEditSwagItem";
 	}
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String saveHandler(@ModelAttribute SwagItem swagItem) {
-		swagItemService.save(swagItem);
+		itemService.save(swagItem);
 		return "redirect:/swag/search";
 	}
 	
 	@RequestMapping(value = "/delete/{key}", method = RequestMethod.GET)
 	public String deleteHandler(@PathVariable("key") Long key) {
-		swagItemService.delete(key);
+		itemService.delete(key);
 		return "redirect:/swag/search";
 	}
 	
@@ -80,7 +80,7 @@ public class SwagItemController {
 		if (searchCriteria==null) {
 			model.addAttribute("searchCriteria", new SearchCriteria());
 		}
-		Collection<SwagItem> swagItems = swagItemService.search(searchCriteria.getSearchString());
+		Collection<SwagItem> swagItems = itemService.search(searchCriteria.getSearchString());
 		model.addAttribute("swagItems", swagItems);
 		return "listSwagItems";
 	}
@@ -106,8 +106,8 @@ public class SwagItemController {
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
 	}
 
-	public void setSwagItemService(SwagItemService swagItemService) {
-		this.swagItemService = swagItemService;
+	public void setSwagItemService(ItemService itemService) {
+		this.itemService = itemService;
 	}
 
 	public void setGoogleUserService(com.google.appengine.api.users.UserService googleUserService) {

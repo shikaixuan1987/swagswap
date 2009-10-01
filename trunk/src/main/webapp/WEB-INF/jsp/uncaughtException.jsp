@@ -13,7 +13,16 @@ try {
 	Throwable exception = (Throwable) request.getAttribute("javax.servlet.error.exception"); 
 
 	if (exception != null) {
-		if (exception instanceof ServletException) {
+		//Custom exception handling
+		if (exception instanceof org.springframework.web.multipart.MultipartException) {
+			out.println("File upload is too large.  <a href=\"\" onclick=\"history.go(-1);return false;\">Try again</a>");
+		}
+		else if (exception instanceof javax.jdo.JDOObjectNotFoundException) {
+			out.println("Can't help you buddy.  You're barking up the wrong tree. "+
+					"<a href=\"/\">Return to Swagswap</a>");
+		}
+		//Standard exception handling
+		else if (exception instanceof ServletException) {
 			// It's a ServletException: we should extract the root cause
 			ServletException sex = (ServletException) exception;
 			Throwable rootCause = sex.getRootCause();
@@ -23,9 +32,6 @@ try {
 			out.println("** Root cause is: "+ rootCause.getMessage());
 			rootCause.printStackTrace(new java.io.PrintWriter(out)); 
 			
-		}
-		else if (exception instanceof org.springframework.web.multipart.MultipartException) {
-			out.println("File upload is too large.  <a href=\"\" onclick=\"history.go(-1);return false;\">Try again</a>");
 		}
 		else {
 			// It's not a ServletException

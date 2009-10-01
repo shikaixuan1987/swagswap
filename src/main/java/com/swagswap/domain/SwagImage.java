@@ -28,7 +28,7 @@ public class SwagImage implements Serializable {
 	// The key here has to be able to include the parent's key
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    //This makes it so we can use a String key instead of a non-portable Google one
+    //This makes it so we can use a String key instead of a non-portable Google key
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
     private String encodedKey;
 	

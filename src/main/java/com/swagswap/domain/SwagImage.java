@@ -24,7 +24,7 @@ public class SwagImage implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// Have to use type Key (in this case a String key, see next comment)
-	// here (not Long) or SwagImage can't be a child of SwagItem.
+	// (not Long) or else SwagImage can't be a child of SwagItem.
 	// The key here has to be able to include the parent's key
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

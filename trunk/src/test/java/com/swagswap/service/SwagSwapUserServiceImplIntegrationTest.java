@@ -91,6 +91,7 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
     	
     	SwagSwapUser user = swagSwapUserService.findByEmail(swagSwapUser.getEmail());
     	assertEquals(user.getSwagItemRatings().size(),1); //should still only be one rating
+    	//Gosh this is the only way to get the first Item of a Set in Java
     	assertEquals(newRating.getUserRating(), user.getSwagItemRatings().iterator().next().getUserRating());
     }
     

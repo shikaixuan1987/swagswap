@@ -6,26 +6,46 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-	xmlns:sf="http://www.springframework.org/tags/faces">
-<head>
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<h:head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
-<title>${title}</title>
-   <sf:includeStyles/> 
-   <sf:resource path="/css/swagswap01.css"/> 
-</head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Swag Swap - ${title}</title>
+	<h:outputStylesheet name="/css/swagswap01.css" />
+</h:head>
 
-<body>
-<center><h:panelGrid columns="1" cellpadding="0"
-	cellspacing="0" width="800px">
-	<h:panelGroup>
-		<h:graphicImage value="/images/trading-floor-banner.jpg"
-			alt="Swag Swap" width="100%" />
+<h:body>
+	<h:panelGroup layout="block"
+		style="width: 1024px; height: 100%; background-color: white;   margin-left: auto; margin-right: auto;">
+		<ui:include src="header.xhtml" />
+		<h:panelGroup layout="block" style="background-color: ">
+			<h:panelGrid columns="2" cellpadding="2" cellspacing="2" width="100%"
+				columnClasses="mainCol1, mainCol2" style="vertical-align: top;">
+				<h:panelGroup>
+					<ui:include src="menu.xhtml" />
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:panelGroup layout="block"
+						style="height: 50px; margin-top: 50px;">
+						<h:outputText value="${title}"
+							style="font-size: 2em; color: #666666" />
+						<h:panelGroup layout="block"
+							style="background-color: #666666; height: 2px" />
+					</h:panelGroup>
+					<ui:insert name="content" />
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:panelGroup>
+		<h:panelGrid styleClass="bottomLeft" columns="2"
+			columnClasses="footerCol1, footerCol2" width="1024">
+			<h:graphicImage value="/images/gae.gif" alt="Google App Engine" />
+			<h:panelGrid cellpadding="1" cellspacing="1"
+				style="text-align: right">
+				<h:outputText value="Version :" />
+				<h:outputText value="Build Date :" />
+			</h:panelGrid>
+		</h:panelGrid>
+
 	</h:panelGroup>
-	<br />
-	<br />
-	<ui:insert name="content" />
-</h:panelGrid></center>
-</body>
+</h:body>
 </html>

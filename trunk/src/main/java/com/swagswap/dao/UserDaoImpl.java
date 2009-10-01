@@ -43,10 +43,15 @@ public class UserDaoImpl extends JdoDaoSupport implements UserDao {
 	//Can't delete users right now (design decision :)
 	// public void delete(Long id) {}
 
+	/**
+	 * Does not update SwagItemRatings. 
+	 */
 	public void update(SwagSwapUser updatedUser) {
 		SwagSwapUser orig = get(updatedUser.getKey());
 		orig.setNickName(updatedUser.getNickName());
-		orig.setRatedSwagItems(updatedUser.getRatedSwagItems());
+		//This will replace any all items. 
+		//TODO this gives error "object is managed by a different object manager"
+		//orig.getSwagItemRatings().addAll(updatedUser.getSwagItemRatings());
 	}
 
 	public void insert(SwagSwapUser swagSwapUser) {

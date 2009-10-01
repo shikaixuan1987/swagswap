@@ -51,6 +51,13 @@ public class ItemController {
 		return "addEditSwagItem";
 	}
 	
+	@RequestMapping(value = "/view/{key}", method = RequestMethod.GET)
+	public String viewHandler(@PathVariable("key") Long key, Model model) {
+		SwagItem swagItem = itemService.get(key, true);
+		model.addAttribute("swagItem", swagItem);
+		return "viewRateSwagItem";
+	}
+	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String saveHandler(@ModelAttribute SwagItem swagItem) {
 		itemService.save(swagItem);

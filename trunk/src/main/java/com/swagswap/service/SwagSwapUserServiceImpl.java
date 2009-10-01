@@ -1,18 +1,13 @@
 package com.swagswap.service;
 
-import java.util.Date;
-
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.users.UserService;
 import com.swagswap.dao.UserDao;
-import com.swagswap.domain.SwagImage;
-import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
 
 public class SwagSwapUserServiceImpl implements SwagSwapUserService {
@@ -61,8 +56,32 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	/* (non-Javadoc)
 	 * @see com.swagswap.service.SwagSwapUserService#addUserRating(com.swagswap.domain.User, java.lang.Long, java.lang.Integer)
 	 */
-	public void addUserRating(SwagSwapUser swagSwapUser, Long swagItemKey, Integer rating){
-		throw new NotImplementedException();
+	public void addOrUpdateRating(String userEmail, SwagItemRating newSwagItemRating){
+		SwagSwapUser swagSwapUser = findByEmail(userEmail);
+		
+		SwagItemRating previousRating = swagSwapUser.getSwagItemRating(newSwagItemRating.getSwagItemKey());
+		if (previousRating!=null) {
+			swagSwapUser.getSwagItemRatings().remove(previousRating);
+		}
+		swagSwapUser.getSwagItemRatings().add(newSwagItemRating);
+		//TODO does user logged in user need to be updated
+		
+		recomputeSwagItemRating(previousRating, newSwagItemRating);
+		update(swagSwapUser);
+	}
+
+	//TODO implement me
+	/**
+	 * @param previousRating can be null
+	 * @param newSwagItemRating
+	 */
+	private void recomputeSwagItemRating(SwagItemRating previousRating, SwagItemRating newSwagItemRating) {
+		if (previousRating!=null) {
+			//TODO update average accordingly by taking out their old rating and adding their new one
+		}
+		else { //new rating
+			//TODO update swagItem average accordingly
+		}
 	}
 		
 }

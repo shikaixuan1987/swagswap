@@ -1,5 +1,6 @@
 package com.swagswap.service;
 
+import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
 
 public interface SwagSwapUserService {
@@ -12,6 +13,6 @@ public interface SwagSwapUserService {
 
 	SwagSwapUser findByEmail(String email);
 
-	void addUserRating(SwagSwapUser swagSwapUser, Long swagItemKey, Integer rating);
+	void addOrUpdateRating(String userEmail, SwagItemRating swagItemRating);
 
 }

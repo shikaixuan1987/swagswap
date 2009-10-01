@@ -1,7 +1,10 @@
 package com.swagswap.domain;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -25,7 +28,7 @@ public class SwagSwapUser {
 	private String nickName; 
 	
 	@Persistent
-	private Map<Long,Integer> ratedSwagItems; //SwagItem key, rating
+	private Set<SwagItemRating> swagItemRatings;// = new HashSet<SwagItemRating>();
 	
 	@Persistent
 	private Date joined;
@@ -46,6 +49,20 @@ public class SwagSwapUser {
 		return joined==null;
 	}
 	
+	/**
+	 * 
+	 * @param swagItemKey
+	 * @return SwagItem by key or null if not found
+	 */
+	public SwagItemRating getSwagItemRating(Long swagItemKey) {
+		for (SwagItemRating rating: swagItemRatings) {
+			if (swagItemKey==rating.getSwagItemKey()) {
+				return rating;
+			}
+		}
+		return null;
+	}
+	
 	public Long getKey() {
 		return key;
 	}
@@ -64,12 +81,15 @@ public class SwagSwapUser {
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
 	}
-	public Map<Long, Integer> getRatedSwagItems() {
-		return ratedSwagItems;
+
+	public Set<SwagItemRating> getSwagItemRatings() {
+		return swagItemRatings;
 	}
-	public void setRatedSwagItems(Map<Long, Integer> ratedSwagItems) {
-		this.ratedSwagItems = ratedSwagItems;
+
+	public void setSwagItemRatings(Set<SwagItemRating> ratedSwagItems) {
+		this.swagItemRatings = ratedSwagItems;
 	}
+
 	public Date getJoined() {
 		return joined;
 	}
@@ -85,7 +105,7 @@ public class SwagSwapUser {
 		result = prime * result + ((joined == null) ? 0 : joined.hashCode());
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
 		result = prime * result + ((nickName == null) ? 0 : nickName.hashCode());
-		result = prime * result + ((ratedSwagItems == null) ? 0 : ratedSwagItems.hashCode());
+		result = prime * result + ((swagItemRatings == null) ? 0 : swagItemRatings.hashCode());
 		return result;
 	}
 
@@ -118,10 +138,10 @@ public class SwagSwapUser {
 				return false;
 		} else if (!nickName.equals(other.nickName))
 			return false;
-		if (ratedSwagItems == null) {
-			if (other.ratedSwagItems != null)
+		if (swagItemRatings == null) {
+			if (other.swagItemRatings != null)
 				return false;
-		} else if (!ratedSwagItems.equals(other.ratedSwagItems))
+		} else if (!swagItemRatings.equals(other.swagItemRatings))
 			return false;
 		return true;
 	}

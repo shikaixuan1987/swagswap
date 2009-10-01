@@ -6,19 +6,16 @@
 
 	<!-- JSF -->
 	<context-param>
-		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
-		<param-value>.xhtml</param-value>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Production</param-value>
 	</context-param>
-	<!-- GAE Bug 1506 JSP 2.1 API but 2.0 Implementation -->
+
 	<context-param>
-		<param-name>com.sun.faces.expressionFactory</param-name>
-		<param-value>com.sun.el.ExpressionFactoryImpl</param-value>
+		<param-name>com.sun.faces.resourceUpdateCheckPeriod</param-name>
+		<param-value>-1</param-value>
 	</context-param>
+	
 	<!-- JSF RI Issue 1709 Mojarra deployment fails in Google App Engine -->
-	<context-param>
-		<param-name>com.sun.faces.enableMultiThreadedStartup</param-name>
-		<param-value>false</param-value>
-	</context-param>
 	<context-param>
 		<param-name>com.sun.faces.enableThreading</param-name>
 		<param-value>false</param-value>
@@ -43,28 +40,23 @@
 
 	<!--
 		- Location of the XML file that defines the root application context.
-		- Applied by ContextLoaderServlet. - - Can be set to different xml files
-		- for different implementations
+		- Applied by ContextLoaderServlet. - - Can be set to different xml
+		files - for different implementations
 	-->
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/applicationContext.xml,/WEB-INF/webflow/web-application-config.xml </param-value>
+		<param-value>/WEB-INF/applicationContext.xml </param-value>
 	</context-param>
-
 	<!--
 		- Loads the root application context of this web app at startup, - by
-		default from "/WEB-INF/applicationContext.xml". 
+		default from "/WEB-INF/applicationContext.xml".
 	-->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
-	<!-- Spring Faces Configuration -->
-	<!-- Need to explicitly add listener for JSF -->
-	<listener>
-		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
-	</listener>
+	<!-- JSF-->
 	<!-- Faces Servlet -->
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -76,20 +68,8 @@
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.jsf</url-pattern>
-	</servlet-mapping>
-
-	<!--   Spring Faces Configuration  -->
-	<servlet>
-		<servlet-name>Resource Servlet</servlet-name>
-		<servlet-class>org.springframework.js.resource.ResourceServlet</servlet-class>
-		<load-on-startup>0</load-on-startup>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>Resource Servlet</servlet-name>
-		<url-pattern>/resources/*</url-pattern>
-	</servlet-mapping>
-	<!--   End of Spring Faces Configuration  -->
+	</servlet-mapping>	
+	<!--   End JSF  -->
 
 	<!-- Spring MVC -->
 
@@ -116,9 +96,8 @@
 		<exception-type>java.lang.Exception</exception-type>
 		<location>/WEB-INF/jsp/uncaughtException.jsp</location>
 	</error-page>
-	
-	<!-- End Spring MVC -->
 
+	<!-- End Spring MVC -->
 	<!--JSF-->
 	<security-constraint>
 		<display-name>Restrict raw XHTML Documents</display-name>
@@ -129,30 +108,26 @@
 		<auth-constraint />
 	</security-constraint>
 	<!-- End JSF -->
- 
- 	<!-- Spring MVC -->
-     <security-constraint>
-        <web-resource-collection>
-            <url-pattern>/swag/delete/*</url-pattern>
-            <url-pattern>/swag/add/*</url-pattern>
-            <url-pattern>/swag/edit/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>*</role-name>
-        </auth-constraint>
-    </security-constraint>
-    
-    <!-- End Spring MVC -->
 
-<!-- 
-    <security-constraint>
-        <web-resource-collection>
-            <url-pattern>/admin/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>admin</role-name>
-        </auth-constraint>
-    </security-constraint>
--->
+	<!-- Spring MVC -->
+	<security-constraint>
+		<web-resource-collection>
+			<url-pattern>/swag/delete/*</url-pattern>
+			<url-pattern>/swag/add/*</url-pattern>
+			<url-pattern>/swag/edit/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>*</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<!-- End Spring MVC -->
+
+	<!--
+		<security-constraint> <web-resource-collection>
+		<url-pattern>/admin/*</url-pattern> </web-resource-collection>
+		<auth-constraint> <role-name>admin</role-name> </auth-constraint>
+		</security-constraint>
+	-->
 
 </web-app>

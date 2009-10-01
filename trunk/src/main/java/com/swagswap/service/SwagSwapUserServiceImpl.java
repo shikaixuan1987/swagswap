@@ -21,6 +21,15 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	@Autowired
 	private UserDao userDao;
 	
+	
+	public SwagSwapUserServiceImpl() {
+	}
+
+	//for Integration test
+	protected SwagSwapUserServiceImpl(UserDao userDao) {
+		this.userDao = userDao;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.swagswap.service.SwagSwapUserService#get(java.lang.Long)
 	 */

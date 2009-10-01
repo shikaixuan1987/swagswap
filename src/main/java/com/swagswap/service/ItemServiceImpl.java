@@ -30,6 +30,14 @@ public class ItemServiceImpl implements ItemService {
 	@Autowired
 	private SwagSwapUserService swagSwapUserService; //for saving users to our app
 
+	public ItemServiceImpl() {
+	}
+
+	//for unit tests
+	protected ItemServiceImpl(ItemDao itemDao) {
+		this.itemDao=itemDao;
+	}
+
 	/**
 	 * Load swagItem, but not associated swagImage
 	 */

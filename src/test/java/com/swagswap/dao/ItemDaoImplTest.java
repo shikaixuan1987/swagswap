@@ -12,22 +12,22 @@ import com.swagswap.domain.SwagItem;
 
 public class ItemDaoImplTest extends LocalDatastoreTestCase  {
 	
-	private ItemDaoImpl swagItemDao;
+	private ItemDaoImpl itemDao;
 	
 	@Override
     public void setUp() throws Exception {
         super.setUp();
-        if (swagItemDao == null) {
-    		ItemDaoImpl swagItemDao = new ItemDaoImpl();
-            swagItemDao.setPersistenceManagerFactory(PMF);
-    		this.swagItemDao=swagItemDao;
+        if (itemDao == null) {
+    		ItemDaoImpl itemDao = new ItemDaoImpl();
+            itemDao.setPersistenceManagerFactory(PMF);
+    		this.itemDao=itemDao;
         }
 	}
 
     public void testInsert() {
         
         SwagItem swagItem = Fixture.createSwagItem();
-        swagItemDao.insert(swagItem);
+        itemDao.insert(swagItem);
 
         assertNumberOfItemsAndImages(1,1);    
     }
@@ -35,12 +35,12 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     //TODO why doesn't this work?
     public void testUpdate() {
         SwagItem orig = Fixture.createSwagItem();
-        swagItemDao.insert(orig);
+        itemDao.insert(orig);
         
         orig.setName("new name");
-        swagItemDao.update(orig);
+        itemDao.update(orig);
         
-        SwagItem retrieved = swagItemDao.get(orig.getKey());
+        SwagItem retrieved = itemDao.get(orig.getKey());
         assertEquals(orig.getName(), retrieved.getName());
     }
     
@@ -53,7 +53,7 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     	
     	SwagItem swagItem = Fixture.createSwagItem();
     	swagItem.setImage(null);
-    	swagItemDao.insert(swagItem);
+    	itemDao.insert(swagItem);
     	
     	assertNumberOfItemsAndImages(1,1);
     }
@@ -62,15 +62,15 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     public void testSaveReplaceImage() {
     	
     	SwagItem swagItem1 = Fixture.createSwagItem();
-    	swagItemDao.insert(swagItem1);
+    	itemDao.insert(swagItem1);
     	SwagImage oldImage=swagItem1.getImage();
     	
     	//Make a new SwagItem so the images reference aren't pointing to the same thing
-    	SwagItem swagItem2 = swagItemDao.get(swagItem1.getKey());
+    	SwagItem swagItem2 = itemDao.get(swagItem1.getKey());
     	//This is how we indicate a new image is coming in
     	swagItem2.setImageBytes(new byte[]{8,7,6,5,4,3,2,1});
-    	swagItemDao.insert(swagItem2);
-    	swagItem2 = swagItemDao.get(swagItem1.getKey());
+    	itemDao.insert(swagItem2);
+    	swagItem2 = itemDao.get(swagItem1.getKey());
     	SwagImage newImage = swagItem2.getImage();
     	
     	assertNotEquals(oldImage, newImage);
@@ -84,10 +84,10 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     	SwagItem originalItem = Fixture.createSwagItem();
     	String randomDescription = Fixture.get510Chars();
     	originalItem.setDescription(randomDescription);
-    	swagItemDao.insert(originalItem);
+    	itemDao.insert(originalItem);
     	assertNumberOfItemsAndImages(1,1);  
     	
-        SwagItem retrievedItem = swagItemDao.get(originalItem.getKey());
+        SwagItem retrievedItem = itemDao.get(originalItem.getKey());
         
     	assertEquals(randomDescription, retrievedItem.getDescription());
     }
@@ -99,9 +99,9 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     public void testGet() {
     	
         SwagItem originalItem = Fixture.createSwagItem();
-        swagItemDao.insert(originalItem);
+        itemDao.insert(originalItem);
         
-        SwagItem retrievedItem = swagItemDao.get(originalItem.getKey());
+        SwagItem retrievedItem = itemDao.get(originalItem.getKey());
         assertEquals(originalItem,retrievedItem);
         
         //Image is lazy loaded but make sure it's available when we access it
@@ -117,19 +117,19 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     	
         SwagItem item0 = Fixture.createSwagItem();
         item0.setName("b");
-        swagItemDao.insert(item0);
+        itemDao.insert(item0);
         
         Thread.currentThread().sleep(1000); //make it wait so they have different timestamps
         SwagItem item1 = Fixture.createSwagItem();
         item1.setName("a");
-        swagItemDao.insert(item1);
+        itemDao.insert(item1);
         
         Thread.currentThread().sleep(1000); //make it wait so they have different timestamps
         SwagItem item2 = Fixture.createSwagItem();
         item2.setName("c");
-        swagItemDao.insert(item2);
+        itemDao.insert(item2);
         
-        List<SwagItem> items = swagItemDao.getAll();
+        List<SwagItem> items = itemDao.getAll();
         
         assertEquals(item2, items.get(0));
         assertEquals(item1, items.get(1));
@@ -137,8 +137,8 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
         
         //TODO why is this not working?
 //        //now save the middle one and hope that it comes out first
-//        swagItemDao.save(item1);
-//        items = swagItemDao.getAll();
+//        itemDao.save(item1);
+//        items = itemDao.getAll();
 //        
 //        assertEquals(item1, items.get(0));
         
@@ -151,37 +151,37 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
         
         SwagItem swagItem = Fixture.createSwagItem();
         
-        swagItemDao.insert(swagItem);
-        swagItemDao.delete(swagItem.getKey());
+        itemDao.insert(swagItem);
+        itemDao.delete(swagItem.getKey());
         
         assertNumberOfItemsAndImages(0,0);
      }
     
     public void testFindByTag() {
         SwagItem swagItem = Fixture.createSwagItem();
-        swagItemDao.insert(swagItem);
-        List<SwagItem> swagItems = swagItemDao.findByTag((swagItem.getTags().get(0)));
+        itemDao.insert(swagItem);
+        List<SwagItem> swagItems = itemDao.findByTag((swagItem.getTags().get(0)));
         assertEquals(swagItem.getName(), swagItems.get(0).getName());
     }
     
     public void testFindByName() {
     	SwagItem swagItem = Fixture.createSwagItem();
-    	swagItemDao.insert(swagItem);
-    	List<SwagItem> swagItems = swagItemDao.findByName(swagItem.getName());
+    	itemDao.insert(swagItem);
+    	List<SwagItem> swagItems = itemDao.findByName(swagItem.getName());
     	assertEquals(swagItem.getName(), swagItems.get(0).getName());
     }
     
     public void testSearch() {
     	SwagItem swagItem1 = Fixture.createSwagItem();
-    	swagItemDao.insert(swagItem1);
+    	itemDao.insert(swagItem1);
     	
     	SwagItem swagItem2 = Fixture.createSwagItem();
     	swagItem2.setName("name2"); //different name than swagItem1
     	//make tag with the same name as item 1
     	swagItem2.getTags().add(swagItem1.getName());
-    	swagItemDao.insert(swagItem2);
+    	itemDao.insert(swagItem2);
     	
-    	List<SwagItem> swagItems = swagItemDao.search(swagItem1.getName());
+    	List<SwagItem> swagItems = itemDao.search(swagItem1.getName());
     	//expect a hit on swagItem1.name and swagItem2.tag
     	assertEquals(2, swagItems.size());
     }
@@ -190,9 +190,9 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     	//make item with a tag that matches name
     	SwagItem swagItem = Fixture.createSwagItem();
     	swagItem.getTags().add(swagItem.getName());
-    	swagItemDao.insert(swagItem);
+    	itemDao.insert(swagItem);
     	
-    	List<SwagItem> swagItems = swagItemDao.search(swagItem.getName());
+    	List<SwagItem> swagItems = itemDao.search(swagItem.getName());
     	assertEquals(1, swagItems.size());
     }
     
@@ -201,9 +201,9 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     public void testEmptySearchString() {
     	SwagItem swagItem = Fixture.createSwagItem();
     	swagItem.getTags().add("another tag");
-    	swagItemDao.insert(swagItem);
+    	itemDao.insert(swagItem);
     	
-    	assertEquals(1, swagItemDao.search("").size());
+    	assertEquals(1, itemDao.search("").size());
     }
 
     /**

@@ -33,13 +33,17 @@
 <display:table name="swagItems" uid="swagItemsList" id="currentObject" 
                requestURI="/swag/search" keepStatus="true">
 	<display:column sortable="true" property="name" />
-		<display:column title="Action">
+		<display:column title="Action" >
+			<a href="<c:url value='/swag/view/${currentObject.key}'/>"> 
+				<img border="0" alt="View/Comment/Rate" src="<%=request.getContextPath()%>/images/view.gif"/>
+			</a>
 			<%-- Users can only edit their own items --%>
 			<google-auth:isAllowed swagItemOwnerEmail="${currentObject.ownerEmail}">
+				
 				<a href="<c:url value='/swag/edit/${currentObject.key}'/>"> 
 					<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/>
 				</a>
-			    &nbsp;&nbsp;
+			  
 		        <a href="<c:url value='/swag/delete/${currentObject.key}'/>" onclick="return confirmSubmit()"> 
 		            <img border="0" alt="Delete" src="<%=request.getContextPath()%>/images/delete.gif"/>
 				</a>

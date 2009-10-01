@@ -5,7 +5,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:composite="http://java.sun.com/jsf/composite"
 	xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:swag="http://java.sun.com/jsf/composite/swag">
 
 
 <composite:interface>
@@ -55,7 +56,9 @@
 		<f:facet name="header">
 			<h:outputText value="Rating" />
 		</f:facet>
-		<h:outputText value="#{row.rating}" />
+		<h:panelGroup layout="block" style="text-align:center; width:100%;">
+			<swag:stars value="#{row.rating}" />
+		</h:panelGroup>
 	</h:column>
 	<h:column headerClass="tableHeader">
 		<f:facet name="header">
@@ -65,11 +68,9 @@
 	</h:column>
 	<h:column headerClass="tableHeader">
 		<f:facet name="header">
-			<h:outputText value="Last Updated" />
+			<h:outputText value="Vendor" />
 		</f:facet>
-		<h:outputText value="#{row.lastUpdated}">
-			<f:convertDateTime pattern="dd/MM/yyyy HH:MM:ss" />
-		</h:outputText>
+		<h:outputText value="" />
 	</h:column>
 	<h:column headerClass="tableHeader">
 		<f:facet name="header">

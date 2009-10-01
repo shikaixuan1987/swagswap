@@ -2,6 +2,8 @@ package com.swagswap.dao;
 
 import java.util.List;
 
+import javax.jdo.JDOObjectNotFoundException;
+
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
 import com.swagswap.common.Fixture;
@@ -143,6 +145,16 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
 //        assertEquals(item1, items.get(0));
         
     }  
+    
+    // This is testing the JDO framework for fun
+    public void testGetNonExistantItem() {
+    	try {
+    		itemDao.get(1000L); //assume non-existant key
+    		fail("Should have thrown a JDOObjectNotFoundException");
+    	} catch (JDOObjectNotFoundException e) {
+    		//good
+    	}
+    }
 
     /**
      * Make sure SwagImages are deleted too!

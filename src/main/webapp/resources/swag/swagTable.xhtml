@@ -14,12 +14,12 @@
 </composite:interface>
 
 <h:dataTable value="#{cc.attrs.value}" var="row" width="100%"
-	style="border: solid black 1px;" rules="all"
+	styleClass="tableBorder" rules="all"
 	rowClasses="tableRow1, tableRow2"
 	columnClasses="tableCol1, tableCol2, tableCol3, tableCol4, tableCol5, tableCol6, tableCol7, tableCol8"
 	onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
 	onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-	cellpadding="2">
+	cellpadding="4">
 	<h:column headerClass="tableHeader">
 		<f:facet name="header">
 			<h:outputText value="" />
@@ -56,9 +56,7 @@
 		<f:facet name="header">
 			<h:outputText value="Rating" />
 		</f:facet>
-		<h:panelGroup layout="block" style="text-align:center; width:100%;">
-			<swag:stars value="#{row.rating}" />
-		</h:panelGroup>
+		<swag:stars value="#{row.rating}" />
 	</h:column>
 	<h:column headerClass="tableHeader">
 		<f:facet name="header">

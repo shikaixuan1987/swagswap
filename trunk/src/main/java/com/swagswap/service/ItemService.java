@@ -4,18 +4,21 @@ import java.util.Collection;
 import java.util.List;
 
 import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagItemRating;
 
 public interface ItemService {
 
-	public abstract SwagItem get(Long id);
-	
-	public SwagItem get(Long id, boolean loadSwagImage);
-	
-	public abstract Collection<SwagItem> search(String queryString);
+	SwagItem get(Long id);
 
-	public abstract List<SwagItem> getAll();
+	SwagItem get(Long id, boolean loadSwagImage);
 
-	public abstract void save(SwagItem swagItem);
+	Collection<SwagItem> search(String queryString);
 
-	public abstract void delete(Long id);
+	List<SwagItem> getAll();
+
+	void save(SwagItem swagItem);
+
+	void delete(Long id);
+
+	void updateRating(SwagItemRating newSwagItemRating);
 }

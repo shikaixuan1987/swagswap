@@ -60,10 +60,10 @@ public class SwagItem {
 	private String ownerNickName;
 
 	@Persistent
-	private Float rating;
+	private Float rating=0F;
 
 	@Persistent
-	private Integer numberOfRatings;
+	private Integer numberOfRatings=0;
 
 	@Persistent
 	private Date created;

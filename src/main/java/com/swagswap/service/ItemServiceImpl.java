@@ -12,6 +12,7 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.swagswap.dao.ItemDao;
 import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
 
 /**
@@ -99,6 +100,14 @@ public class ItemServiceImpl implements ItemService {
 	public void delete(Long id) {
 		checkPermissions(id);
 		itemDao.delete(id);
+	}
+	
+	public synchronized void updateRating(SwagItemRating newSwagItemRating) {
+		SwagItem swagItem = get(newSwagItemRating.getSwagItemKey());
+		swagItem.setNumberOfRatings(swagItem.getNumberOfRatings()+1);
+		Float newRating = (swagItem.getRating() + newSwagItemRating.getUserRating())/swagItem.getNumberOfRatings();
+		swagItem.setRating(newRating);
+		save(swagItem);
 	}
 
 	public void setSwagItemDao(ItemDao itemDao) {

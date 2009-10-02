@@ -26,7 +26,10 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import com.swagswap.domain.SearchCriteria;
 import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagItemRating;
+import com.swagswap.domain.SwagSwapUser;
 import com.swagswap.service.ItemService;
+import com.swagswap.service.SwagSwapUserService;
 
 @Controller
 public class ItemController {
@@ -34,6 +37,8 @@ public class ItemController {
 
 	@Autowired
 	private ItemService itemService;
+	@Autowired
+	private SwagSwapUserService swagSwapUserService;
 	@Autowired
 	private com.google.appengine.api.users.UserService googleUserService;
 	
@@ -54,6 +59,16 @@ public class ItemController {
 	@RequestMapping(value = "/view/{key}", method = RequestMethod.GET)
 	public String viewHandler(@PathVariable("key") Long key, Model model) {
 		SwagItem swagItem = itemService.get(key, true);
+		//put rating (if there is one) into the model
+		String ratingString = "";
+		if (googleUserService.isUserLoggedIn()) {
+			SwagItemRating rating = getSwagSwapUser().getSwagItemRating(key);
+			if (rating !=null) {
+				ratingString = rating.getUserRating().toString();
+			}
+		}
+		model.addAttribute("userRating", ratingString);
+		model.addAttribute("newRating", new SwagItemRating(swagItem.getKey())); //setup for rating form
 		model.addAttribute("swagItem", swagItem);
 		return "viewRateSwagItem";
 	}
@@ -68,6 +83,12 @@ public class ItemController {
 	public String deleteHandler(@PathVariable("key") Long key) {
 		itemService.delete(key);
 		return "redirect:/swag/search";
+	}
+	
+	@RequestMapping(value = "/rate", method = RequestMethod.POST)
+	public String rateHandler(@ModelAttribute SwagItemRating swagItemRating) {
+		swagSwapUserService.addOrUpdateRating(getSwagSwapUser().getEmail(), swagItemRating);
+		return "redirect:/swag/view/" + swagItemRating.getSwagItemKey();
 	}
 	
 	//For legacy URL that some tweets had already linked to.
@@ -90,6 +111,15 @@ public class ItemController {
 		Collection<SwagItem> swagItems = itemService.search(searchCriteria.getSearchString());
 		model.addAttribute("swagItems", swagItems);
 		return "listSwagItems";
+	}
+	
+	/**
+	 * Fetch SwagSwapUser for currentUser
+	 * @return
+	 */
+	private SwagSwapUser getSwagSwapUser() {
+		SwagSwapUser swagSwapUser = swagSwapUserService.findByEmail(googleUserService.getCurrentUser().getEmail());
+		return swagSwapUser;
 	}
 
 	@InitBinder

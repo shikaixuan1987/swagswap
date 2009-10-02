@@ -15,6 +15,8 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private ItemService itemService;
 	
 	
 	public SwagSwapUserServiceImpl() {
@@ -56,17 +58,17 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	/* (non-Javadoc)
 	 * @see com.swagswap.service.SwagSwapUserService#addUserRating(com.swagswap.domain.User, java.lang.Long, java.lang.Integer)
 	 */
+	//TODO make transactional ?
 	public void addOrUpdateRating(String userEmail, SwagItemRating newSwagItemRating){
 		SwagSwapUser swagSwapUser = findByEmail(userEmail);
 		
 		SwagItemRating previousRating = swagSwapUser.getSwagItemRating(newSwagItemRating.getSwagItemKey());
+		recomputeSwagItemRating(previousRating, newSwagItemRating);
 		if (previousRating!=null) {
 			swagSwapUser.getSwagItemRatings().remove(previousRating);
 		}
 		swagSwapUser.getSwagItemRatings().add(newSwagItemRating);
-		//TODO does user logged in user need to be updated
 		
-		recomputeSwagItemRating(previousRating, newSwagItemRating);
 		update(swagSwapUser);
 	}
 
@@ -77,10 +79,15 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	 */
 	private void recomputeSwagItemRating(SwagItemRating previousRating, SwagItemRating newSwagItemRating) {
 		if (previousRating!=null) {
+			if (previousRating.getUserRating().equals(newSwagItemRating.getUserRating())) {
+				return; //they submitted the same rating as before
+			}
 			//TODO update average accordingly by taking out their old rating and adding their new one
+			newSwagItemRating.setUserRating(newSwagItemRating.getUserRating()-previousRating.getUserRating());
+			itemService.updateRating(newSwagItemRating);
 		}
 		else { //new rating
-			//TODO update swagItem average accordingly
+			itemService.updateRating(newSwagItemRating);
 		}
 	}
 		

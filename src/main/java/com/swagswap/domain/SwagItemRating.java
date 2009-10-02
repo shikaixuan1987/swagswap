@@ -31,13 +31,17 @@ public class SwagItemRating implements Serializable {
 	
 	public SwagItemRating() {
 	}
-	public SwagItemRating(Long swagItemKey, Integer userRating) {
-		if (userRating < 1 || userRating > 5 ) {
-			throw new RuntimeException("SwagItemRating must be between 1 and 5");
-		}
-		this.swagItemKey = swagItemKey;
-		this.userRating = userRating;
+	
+	public SwagItemRating(Long key) {
+		this(key,null);
 	}
+
+	public SwagItemRating(Long swagItemKey, Integer userRating) {
+
+		this.swagItemKey = swagItemKey;
+		setUserRating(userRating); //set method has logic in it
+	}
+
 	public String getEncodedKey() {
 		return encodedKey;
 	}
@@ -54,7 +58,14 @@ public class SwagItemRating implements Serializable {
 		return userRating;
 	}
 	public void setUserRating(Integer userRating) {
-		this.userRating = userRating;
+		if (userRating==null) {
+			return;
+		}
+		//TODO rating can be negative when updating a rating
+//		if (userRating < 1 || userRating > 5 ) {
+//			throw new RuntimeException("SwagItemRating must be between 1 and 5");
+//		}
+		this.userRating=userRating;
 	}
 	
 	//just use swagItemKey

@@ -59,6 +59,7 @@
 	</c:if>
 	<display:column sortable="true" title="Owner" property="ownerNickName" />
 	<display:column property="lastUpdated" title="Last Updated" format="{0,date,dd-MM-yyyy HH:mm:ss}" sortable="true"/>
+	<display:column property="rating" title="Average Rating" sortable="true"/>
 	
 </display:table>
 

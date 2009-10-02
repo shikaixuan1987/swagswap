@@ -27,5 +27,37 @@
         <rtexprvalue>true</rtexprvalue>
         <required>true</required>
     </attribute>
+    <attribute>
+        <name>showLogout</name>
+        <rtexprvalue>true</rtexprvalue>
+        <required>false</required>
+    </attribute>
+    <attribute>
+        <name>loginText</name>
+        <rtexprvalue>true</rtexprvalue>
+        <required>false</required>
+    </attribute>
+    <attribute>
+        <name>loginTooltipText</name>
+        <rtexprvalue>true</rtexprvalue>
+        <required>false</required>
+    </attribute>
+    <attribute>
+        <name>logoutText</name>
+        <rtexprvalue>true</rtexprvalue>
+        <required>false</required>
+    </attribute>
+  </tag>
+  <tag>
+    <description>if user is logged in then output enclosed body</description>
+    <name>isLoggedIn</name>
+    <tag-class>com.swagswap.web.springmvc.tags.IsLoggedInTag</tag-class>
+    <body-content>JSP</body-content>
+  </tag>
+  <tag>
+    <description>if user is not logged in then output enclosed body</description>
+    <name>isNotLoggedIn</name>
+    <tag-class>com.swagswap.web.springmvc.tags.IsNotLoggedInTag</tag-class>
+    <body-content>JSP</body-content>
   </tag>
 </taglib>

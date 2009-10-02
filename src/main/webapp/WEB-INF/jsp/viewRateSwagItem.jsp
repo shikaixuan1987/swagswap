@@ -79,10 +79,6 @@
 		<td><c:out value="${swagItem.name}" /></td>
 	</tr>
 	<tr>
-		<td>Name:</td>
-		<td><c:out value="${swagItem.name}" /></td>
-	</tr>
-	<tr>
 		<td>Description:</td>
 		<td><textarea rows="1" cols="40" disabled="true"
 		style="background-color: #FFFFFF;border: #3532ff 1px solid;color: #000000;ursor: default;">

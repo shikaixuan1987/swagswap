@@ -82,7 +82,7 @@ public class ItemServiceImpl implements ItemService {
 			itemDao.insert(swagItem);
 			// insert user if they don't exist (this only happens when creating a new item
 			// since only existing users can update
-			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmail(currentUserEmail);
+			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmailOrCreate(currentUserEmail);
 			if (swagSwapUser==null) { //add them
 				swagSwapUserService.insert(new SwagSwapUser(currentUserEmail,currentUserNickName));
 			}
@@ -96,18 +96,17 @@ public class ItemServiceImpl implements ItemService {
 		//and try this method with and without the annotation
 		//throw new RuntimeException("see if it rolls back");
 	}
+	
+	//TODO is transactional needed here?
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public synchronized void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNewRating) {
+		SwagItem swagItem = get(swagItemKey);
+		itemDao.updateRating(swagItemKey, computedRatingDifference, isNewRating);
+	}
 
 	public void delete(Long id) {
 		checkPermissions(id);
 		itemDao.delete(id);
-	}
-	
-	public synchronized void updateRating(SwagItemRating newSwagItemRating) {
-		SwagItem swagItem = get(newSwagItemRating.getSwagItemKey());
-		swagItem.setNumberOfRatings(swagItem.getNumberOfRatings()+1);
-		Float newRating = (swagItem.getRating() + newSwagItemRating.getUserRating())/swagItem.getNumberOfRatings();
-		swagItem.setRating(newRating);
-		save(swagItem);
 	}
 
 	public void setSwagItemDao(ItemDao itemDao) {

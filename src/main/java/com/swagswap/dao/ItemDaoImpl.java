@@ -16,6 +16,7 @@ import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagItemRating;
 
 /**
  * Persistence of SwagItems using Spring JDO
@@ -102,7 +103,11 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 		Date now = new Date();
 		swagItem.setCreated(now);
 		swagItem.setLastUpdated(now);
+		
+		//TODO are these neeeded?
+		swagItem.setAverageRating(0);
 		swagItem.setNumberOfRatings(0);
+		
 		if (swagItem.hasNewImage()) {
 			swagItem.setImage(new SwagImage(swagItem.getImageBytes()));
 		}
@@ -124,8 +129,9 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 		SwagItem orig = get(updatedItem.getKey(),true);
 		orig.setName(updatedItem.getName());
 		orig.setDescription(updatedItem.getDescription());
-		orig.setRating(updatedItem.getRating());
-		orig.setNumberOfRatings(updatedItem.getNumberOfRatings());
+		//This is done in exclusively in update rating
+//		orig.setRating(updatedItem.getRating());
+//		orig.setNumberOfRatings(updatedItem.getNumberOfRatings());
 		orig.setLastUpdated(new Date());
 		orig.setTags(updatedItem.getTags());
 		orig.setComments(updatedItem.getComments());
@@ -134,6 +140,25 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 			//orig.setImage(updatedItem.getImage());
 			orig.getImage().setImage(new Blob(updatedItem.getImageBytes()));
 		}
+	}
+	
+	/**
+	 * 
+	 * @param calculatedNewRating the new rating for the swagItem. 
+	 * @param newRating already computed for swagItem
+	 * @param isNewRating if true then numberOfRatings is incremented
+	 */
+	public void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNewRating) {
+		SwagItem orig = get(swagItemKey);
+		float totalRatingPoints = orig.getAverageRating() * orig.getNumberOfRatings();
+		if (isNewRating) {
+			//this is persisted since swagItem is JDO connected
+			orig.setNumberOfRatings(orig.getNumberOfRatings()+1); 
+		}
+		float computedTotalRating = 
+			(totalRatingPoints + computedRatingDifference) / orig.getNumberOfRatings();
+		orig.setAverageRating(computedTotalRating);
+		orig.setLastUpdated(new Date());
 	}
 	
 	/* (non-Javadoc)

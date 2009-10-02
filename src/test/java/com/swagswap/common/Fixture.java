@@ -29,7 +29,7 @@ public class Fixture {
 				"description",
 				image, 
 				"owner", 
-				5F,
+				0F,
 				1,
 				tags,
 				comments

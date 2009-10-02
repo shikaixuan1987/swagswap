@@ -217,6 +217,28 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     	
     	assertEquals(1, itemDao.search("").size());
     }
+    
+    //TODO why isn't this working?
+    public void testUpdateRating() {
+    	SwagItem originalSwagItem = Fixture.createSwagItem();
+    	itemDao.insert(originalSwagItem);
+    	Float firstRating = 1.1F;
+    	itemDao.updateRating(originalSwagItem.getKey(), firstRating, true); //new rating
+    	SwagItem retrievedSwagItem = itemDao.get(originalSwagItem.getKey());
+    	
+    	//verify
+    	assertEquals(retrievedSwagItem.getAverageRating(),firstRating);
+    	assertEquals(1,retrievedSwagItem.getNumberOfRatings());
+    	
+    	//update existing rating
+    	Float secondRating = 2.2F;
+    	itemDao.updateRating(originalSwagItem.getKey(), secondRating, false); //new rating
+    	retrievedSwagItem = itemDao.get(originalSwagItem.getKey());
+    	assertEquals(retrievedSwagItem.getAverageRating(),secondRating);
+    	//make sure there's still just one rating
+    	assertEquals(1,retrievedSwagItem.getNumberOfRatings()); 
+    }
+
 
     /**
      * Database count assertions

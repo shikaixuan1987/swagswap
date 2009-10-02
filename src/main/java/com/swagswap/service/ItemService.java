@@ -17,8 +17,9 @@ public interface ItemService {
 	List<SwagItem> getAll();
 
 	void save(SwagItem swagItem);
-
+	
+	void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNew);
+	
 	void delete(Long id);
 
-	void updateRating(SwagItemRating newSwagItemRating);
 }

@@ -1,10 +1,10 @@
 package com.swagswap.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -13,7 +13,11 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class SwagSwapUser {
+public class SwagSwapUser implements Serializable {
+	private static final long serialVersionUID = 1L;
+	//Have to user commons logging in datanucleus enhansed classes!
+	private static final Logger log = Logger.getLogger(SwagSwapUser.class.getName());
+
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long key;
@@ -28,7 +32,7 @@ public class SwagSwapUser {
 	private String nickName; 
 	
 	@Persistent
-	private Set<SwagItemRating> swagItemRatings;// = new HashSet<SwagItemRating>();
+	private Set<SwagItemRating> swagItemRatings = new HashSet<SwagItemRating>();
 	
 	@Persistent
 	private Date joined;
@@ -55,8 +59,10 @@ public class SwagSwapUser {
 	 * @return SwagItem by key or null if not found
 	 */
 	public SwagItemRating getSwagItemRating(Long swagItemKey) {
-		for (SwagItemRating rating: swagItemRatings) {
-			if (swagItemKey==rating.getSwagItemKey()) {
+		for (SwagItemRating rating:swagItemRatings) {
+			//yikes, this worked on the dev server but not on the real thing!
+			//if (swagItemKey==rating.getSwagItemKey())) {
+			if (swagItemKey.equals(rating.getSwagItemKey())) {
 				return rating;
 			}
 		}
@@ -145,7 +151,12 @@ public class SwagSwapUser {
 			return false;
 		return true;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "SwagSwapUser [email=" + email + ", joined=" + joined + ", key="
+				+ key + ", nickName=" + nickName + ", swagItemRatings="
+				+ swagItemRatings + "]";
+	}
 	
 }

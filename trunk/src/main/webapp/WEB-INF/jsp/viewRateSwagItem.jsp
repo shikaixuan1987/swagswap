@@ -5,8 +5,9 @@
 <h2>View / Rate / Comment on ${swagItem.name}</h2>
 <form:form action="/swag/rate" commandName="newRating" name="rateForm" method="post">
 	<form:hidden path="swagItemKey" />
-	<form:hidden path="userRating" /> <!-- This also sets the name of the hidden element to userRating -->
-
+	<!-- can't use spring form:hidden tag here cause if userRating is empty, GAE blows up. 
+	     Spring seems to be doing something not-kosher for GAE when it populates a default value -->
+     <input type="hidden" name="userRating" /> <!-- this is used for javascript trick below -->
 <table>
 	<tr>
 		<td>
@@ -44,6 +45,11 @@
 				<br/>
 				<br/>
 				<a href="/swag/comment">Comment</a>
+			</td>
+			<td>
+				<br/>
+				<br/>
+				<a href="/swag/search">Back to list</a>
 			</td>
 			<td width="30%"></td>
 		</tr>

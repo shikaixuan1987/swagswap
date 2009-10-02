@@ -222,7 +222,7 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     public void testUpdateRating() {
     	SwagItem originalSwagItem = Fixture.createSwagItem();
     	itemDao.insert(originalSwagItem);
-    	Float firstRating = 1.1F;
+    	int firstRating = 1;
     	itemDao.updateRating(originalSwagItem.getKey(), firstRating, true); //new rating
     	SwagItem retrievedSwagItem = itemDao.get(originalSwagItem.getKey());
     	
@@ -231,7 +231,7 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     	assertEquals(1,retrievedSwagItem.getNumberOfRatings());
     	
     	//update existing rating
-    	Float secondRating = 2.2F;
+    	int secondRating = 2;
     	itemDao.updateRating(originalSwagItem.getKey(), secondRating, false); //new rating
     	retrievedSwagItem = itemDao.get(originalSwagItem.getKey());
     	assertEquals(retrievedSwagItem.getAverageRating(),secondRating);

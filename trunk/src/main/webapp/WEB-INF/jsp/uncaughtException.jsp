@@ -22,6 +22,13 @@ try {
 					"<a href=\"/\">Return to Swagswap</a>");
 		}
 		//Standard exception handling
+		else if (exception instanceof java.security.AccessControlException) {
+			java.security.AccessControlException ace = (java.security.AccessControlException) exception;
+			Throwable cause = ace.getCause();
+			out.println(pleaseLogBugText);
+			out.println("** Root cause is: "+ cause.getMessage());
+			cause.printStackTrace(new java.io.PrintWriter(out)); 
+		}
 		else if (exception instanceof ServletException) {
 			// It's a ServletException: we should extract the root cause
 			ServletException sex = (ServletException) exception;

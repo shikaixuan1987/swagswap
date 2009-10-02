@@ -70,7 +70,7 @@ public class ItemServiceImpl implements ItemService {
 	 * also creates new user (using swagSwapUserService if they don't already exist.)
 	 * Note Because SwagSwapUser is not in the same entity group as SwagItem
 	 * (I couldn't get a many-to-one relationship going in JDO), 
-	 * swagSwapUserService.insert is also market as @Transactional REQUIRES_NEW
+	 * swagSwapUserService.insert is also marked as @Transactional REQUIRES_NEW
 	 */
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void save(SwagItem swagItem) {
@@ -80,12 +80,13 @@ public class ItemServiceImpl implements ItemService {
 			String currentUserNickName = googleUserService.getCurrentUser().getNickname();
 			swagItem.setOwnerNickName(currentUserNickName);
 			itemDao.insert(swagItem);
-			// insert user if they don't exist (this only happens when creating a new item
-			// since only existing users can update
-			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmailOrCreate(currentUserEmail);
-			if (swagSwapUser==null) { //add them
-				swagSwapUserService.insert(new SwagSwapUser(currentUserEmail,currentUserNickName));
-			}
+			/**
+			 * No need to create swagSwapUser here. We only need a user in our DB
+			 * if they rate something (to remember their rating)
+			 * Anyway, this call fails since it tries to update two different entity 
+			 * groups in one transaction
+			 */
+			//swagSwapUserService.findByEmailOrCreate(currentUserEmail);
 		}
 		else { //update
 			checkPermissions(swagItem.getKey());

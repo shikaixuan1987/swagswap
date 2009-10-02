@@ -72,6 +72,7 @@ public class SwagItem {
 	@Persistent
 	private Date lastUpdated;
 
+	//For info about LazyList see http://mattfleming.com/node/134
 	@Persistent(defaultFetchGroup = "true")
 	private List<String> tags  = LazyList.decorate(new ArrayList(),FactoryUtils.instantiateFactory(String.class));
 

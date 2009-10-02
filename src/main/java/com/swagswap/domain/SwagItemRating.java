@@ -96,6 +96,12 @@ public class SwagItemRating implements Serializable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "SwagItemRating [encodedKey=" + encodedKey + ", swagItemKey="
+				+ swagItemKey + ", userRating=" + userRating + "]";
+	}
 	
 	
 }

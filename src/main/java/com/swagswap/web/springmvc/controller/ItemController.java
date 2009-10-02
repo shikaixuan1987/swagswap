@@ -56,28 +56,34 @@ public class ItemController {
 		return "addEditSwagItem";
 	}
 	
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	public String saveHandler(@ModelAttribute SwagItem swagItem) {
+		itemService.save(swagItem);
+		return "redirect:/swag/search";
+	}
+	
 	@RequestMapping(value = "/view/{key}", method = RequestMethod.GET)
 	public String viewHandler(@PathVariable("key") Long key, Model model) {
 		SwagItem swagItem = itemService.get(key, true);
 		//put rating (if there is one) into the model
 		String ratingString = "";
 		if (googleUserService.isUserLoggedIn()) {
-			SwagSwapUser swagSwapUser = getSwagSwapUser();
-			SwagItemRating rating = getSwagSwapUser().getSwagItemRating(key);
-			if (rating !=null) {
+			//get swagSwapUser using email key from available google user
+			//we've got to create them here if they don't already exist in our DB
+			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmailOrCreate(
+											googleUserService.getCurrentUser().getEmail());
+			//see if the already have a rating for this item
+			SwagItemRating rating = swagSwapUser.getSwagItemRating(key);
+			if (null!=rating) {
 				ratingString = rating.getUserRating().toString();
 			}
 		}
+		//make previous rating available to the page to show the right number of stars
 		model.addAttribute("userRating", ratingString);
-		model.addAttribute("newRating", new SwagItemRating(swagItem.getKey())); //setup for rating form
+		//backing object for rating form
+		model.addAttribute("newRating", new SwagItemRating(swagItem.getKey())); 
 		model.addAttribute("swagItem", swagItem);
 		return "viewRateSwagItem";
-	}
-	
-	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String saveHandler(@ModelAttribute SwagItem swagItem) {
-		itemService.save(swagItem);
-		return "redirect:/swag/search";
 	}
 	
 	@RequestMapping(value = "/delete/{key}", method = RequestMethod.GET)
@@ -88,7 +94,8 @@ public class ItemController {
 	
 	@RequestMapping(value = "/rate", method = RequestMethod.POST)
 	public String rateHandler(@ModelAttribute SwagItemRating swagItemRating) {
-		swagSwapUserService.addOrUpdateRating(getSwagSwapUser().getEmail(), swagItemRating);
+		String email = googleUserService.getCurrentUser().getEmail();
+		swagSwapUserService.addOrUpdateRating(email, swagItemRating);
 		return "redirect:/swag/view/" + swagItemRating.getSwagItemKey();
 	}
 	
@@ -112,16 +119,6 @@ public class ItemController {
 		Collection<SwagItem> swagItems = itemService.search(searchCriteria.getSearchString());
 		model.addAttribute("swagItems", swagItems);
 		return "listSwagItems";
-	}
-	
-	/**
-	 * Fetch SwagSwapUser for currentUser or create one if this is their first time logging in
-	 * assumes user is logged in to Google
-	 * @return
-	 */
-	private SwagSwapUser getSwagSwapUser() {
-		String email = googleUserService.getCurrentUser().getEmail();
-		return swagSwapUserService.findByEmailOrCreate(email);
 	}
 
 	@InitBinder

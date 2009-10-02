@@ -14,7 +14,7 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
 	private UserDaoImpl userDao;
 	private SwagSwapUserService swagSwapUserService;
 	private ItemDao itemDao;
-	private ItemService itemUserService;
+	private ItemService itemService;
 	
 	@Override
     public void setUp() throws Exception {
@@ -24,16 +24,16 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
             userDao.setPersistenceManagerFactory(PMF);
     		this.userDao=userDao;
         }
-        if (swagSwapUserService==null) {
-        	swagSwapUserService = new SwagSwapUserServiceImpl(userDao);
-        }
         if (itemDao == null) {
-    		ItemDaoImpl itemDao = new ItemDaoImpl();
-            itemDao.setPersistenceManagerFactory(PMF);
-    		this.itemDao=itemDao;
+        	ItemDaoImpl itemDao = new ItemDaoImpl();
+        	itemDao.setPersistenceManagerFactory(PMF);
+        	this.itemDao=itemDao;
         }
-        if (itemUserService==null) {
-        	itemUserService = new ItemServiceImpl(itemDao);
+        if (itemService==null) {
+        	itemService = new ItemServiceImpl(itemDao);
+        }
+        if (swagSwapUserService==null) {
+        	swagSwapUserService = new SwagSwapUserServiceImpl(userDao, itemService);
         }
 	}
 
@@ -42,9 +42,28 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
         SwagSwapUser swagSwapUser = Fixture.createUser();
         userDao.insert(swagSwapUser);
 
-        SwagSwapUser retrievedUser = swagSwapUserService.findByEmailOrCreate(swagSwapUser.getEmail());
+        SwagSwapUser retrievedUser = swagSwapUserService.findByEmail(swagSwapUser.getEmail());
         assertNotNull(retrievedUser);
     }
+    
+    
+    public void testFindByEmailOrCreate_non_existent_user() {
+    	SwagSwapUser retrievedUser = swagSwapUserService.findByEmailOrCreate("someemail@gmail.com");
+    	assertNotNull(retrievedUser);
+    }
+    
+    public void testFindByEmailOrCreate_existing_user() {
+    	
+    	//Try it with existing user
+    	//create user
+    	SwagSwapUser swagSwapUser = Fixture.createUser();
+    	userDao.insert(swagSwapUser);
+    	
+    	//verify
+    	SwagSwapUser retrievedUser = swagSwapUserService.findByEmailOrCreate(swagSwapUser.getEmail());
+    	assertNotNull(retrievedUser);
+    }
+
     
     public void testAddUserRating() {
         //create user
@@ -68,8 +87,24 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
     	swagSwapUserService.addOrUpdateRating(swagSwapUser.getEmail(), swagItemRating2);
     	
     	//verify
-    	SwagSwapUser user = swagSwapUserService.findByEmailOrCreate(swagSwapUser.getEmail());
+    	SwagSwapUser user = swagSwapUserService.findByEmail(swagSwapUser.getEmail());
     	assertEquals(user.getSwagItemRatings().size(),2);
+    }
+    
+    public void testAddUserRating_non_existent_user () {
+    	//don't create user
+    	
+        //create item
+        SwagItem swagItem1 = Fixture.createSwagItem();
+        itemDao.insert(swagItem1);
+        
+        //create rating
+        SwagItemRating swagItemRating1 = new SwagItemRating(swagItem1.getKey(), 1);
+    	swagSwapUserService.addOrUpdateRating("someemail@gmail.com", swagItemRating1);
+    	
+    	//verify
+    	SwagSwapUser user = swagSwapUserService.findByEmailOrCreate("someemail@gmail.com");
+    	assertEquals(user.getSwagItemRatings().size(),1);
     }
     
     public void testUpdateUserRating() {
@@ -89,7 +124,7 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
     	SwagItemRating newRating = new SwagItemRating(swagItem.getKey(), 2);
     	swagSwapUserService.addOrUpdateRating(swagSwapUser.getEmail(), newRating);
     	
-    	SwagSwapUser user = swagSwapUserService.findByEmailOrCreate(swagSwapUser.getEmail());
+    	SwagSwapUser user = swagSwapUserService.findByEmail(swagSwapUser.getEmail());
     	assertEquals(user.getSwagItemRatings().size(),1); //should still only be one rating
     	//Gosh this is the only way to get the first Item of a Set in Java
     	assertEquals(newRating.getUserRating(), user.getSwagItemRatings().iterator().next().getUserRating());

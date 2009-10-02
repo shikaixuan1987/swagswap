@@ -42,6 +42,8 @@ public interface ItemDao {
 	 * TODO take care of image here
 	 */
 	void update(SwagItem updatedItem);
+	
+	void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNewRating);
 
 	/**
 	 * SwagImages (children) of SwagItems are automatically deleted

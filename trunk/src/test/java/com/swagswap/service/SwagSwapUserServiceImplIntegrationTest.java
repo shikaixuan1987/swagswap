@@ -42,7 +42,7 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
         SwagSwapUser swagSwapUser = Fixture.createUser();
         userDao.insert(swagSwapUser);
 
-        SwagSwapUser retrievedUser = swagSwapUserService.findByEmail(swagSwapUser.getEmail());
+        SwagSwapUser retrievedUser = swagSwapUserService.findByEmailOrCreate(swagSwapUser.getEmail());
         assertNotNull(retrievedUser);
     }
     
@@ -68,7 +68,7 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
     	swagSwapUserService.addOrUpdateRating(swagSwapUser.getEmail(), swagItemRating2);
     	
     	//verify
-    	SwagSwapUser user = swagSwapUserService.findByEmail(swagSwapUser.getEmail());
+    	SwagSwapUser user = swagSwapUserService.findByEmailOrCreate(swagSwapUser.getEmail());
     	assertEquals(user.getSwagItemRatings().size(),2);
     }
     
@@ -89,7 +89,7 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
     	SwagItemRating newRating = new SwagItemRating(swagItem.getKey(), 2);
     	swagSwapUserService.addOrUpdateRating(swagSwapUser.getEmail(), newRating);
     	
-    	SwagSwapUser user = swagSwapUserService.findByEmail(swagSwapUser.getEmail());
+    	SwagSwapUser user = swagSwapUserService.findByEmailOrCreate(swagSwapUser.getEmail());
     	assertEquals(user.getSwagItemRatings().size(),1); //should still only be one rating
     	//Gosh this is the only way to get the first Item of a Set in Java
     	assertEquals(newRating.getUserRating(), user.getSwagItemRatings().iterator().next().getUserRating());

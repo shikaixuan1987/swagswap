@@ -12,6 +12,8 @@ public interface SwagSwapUserService {
 	void update(SwagSwapUser swagSwapUser);
 
 	SwagSwapUser findByEmail(String email);
+	
+	SwagSwapUser findByEmailOrCreate(String email);
 
 	void addOrUpdateRating(String userEmail, SwagItemRating swagItemRating);
 

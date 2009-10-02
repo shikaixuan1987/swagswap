@@ -1,6 +1,7 @@
 package com.swagswap.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -60,10 +61,10 @@ public class SwagItem {
 	private String ownerNickName;
 
 	@Persistent
-	private Float rating=0F;
+	private float averageRating=0F;
 
 	@Persistent
-	private Integer numberOfRatings=0;
+	private int numberOfRatings=0;
 
 	@Persistent
 	private Date created;
@@ -90,7 +91,7 @@ public class SwagItem {
 		this.description = new Text(description);
 		this.image = image;
 		this.ownerEmail = owner;
-		this.rating = rating;
+		this.averageRating = rating;
 		this.numberOfRatings = numberOfRatings;
 		this.tags = tags;
 		this.comments = comments;
@@ -170,19 +171,19 @@ public class SwagItem {
 		this.ownerNickName = ownerNickName;
 	}
 
-	public Float getRating() {
-		return rating;
+	public float getAverageRating() {
+		return averageRating;
 	}
 
-	public void setRating(Float rating) {
-		this.rating = rating;
+	public void setAverageRating(float averageRating) {
+		this.averageRating = averageRating;
 	}
 
-	public Integer getNumberOfRatings() {
+	public int getNumberOfRatings() {
 		return numberOfRatings;
 	}
 
-	public void setNumberOfRatings(Integer numberOfRatings) {
+	public void setNumberOfRatings(int numberOfRatings) {
 		this.numberOfRatings = numberOfRatings;
 	}
 
@@ -218,24 +219,32 @@ public class SwagItem {
 		this.comments = comments;
 	}
 
-	//Leave out created field
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result
+				+ ((comments == null) ? 0 : comments.hashCode());
+		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((image == null) ? 0 : image.hashCode());
-		result = prime * result + ((imageKey == null) ? 0 : imageKey.hashCode());
+		result = prime * result + Arrays.hashCode(imageBytes);
+		result = prime * result
+				+ ((imageKey == null) ? 0 : imageKey.hashCode());
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
-		result = prime * result + ((lastUpdated == null) ? 0 : lastUpdated.hashCode());
+		result = prime * result
+				+ ((lastUpdated == null) ? 0 : lastUpdated.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((numberOfRatings == null) ? 0 : numberOfRatings.hashCode());
-		result = prime * result + ((ownerEmail == null) ? 0 : ownerEmail.hashCode());
-		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
+		result = prime * result + numberOfRatings;
+		result = prime * result
+				+ ((ownerEmail == null) ? 0 : ownerEmail.hashCode());
+		result = prime * result
+				+ ((ownerNickName == null) ? 0 : ownerNickName.hashCode());
+		result = prime * result + Float.floatToIntBits(averageRating);
 		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
 		return result;
 	}
+
 
 	/**
 	 * Note, Blobs and children are lazy loaded. You can't just compare
@@ -287,20 +296,14 @@ public class SwagItem {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (numberOfRatings == null) {
-			if (other.numberOfRatings != null)
-				return false;
-		} else if (!numberOfRatings.equals(other.numberOfRatings))
+		if (numberOfRatings!=other.numberOfRatings)
 			return false;
 		if (ownerEmail == null) {
 			if (other.ownerEmail != null)
 				return false;
 		} else if (!ownerEmail.equals(other.ownerEmail))
 			return false;
-		if (rating == null) {
-			if (other.rating != null)
-				return false;
-		} else if (!rating.equals(other.rating))
+		if (averageRating!=other.averageRating)
 			return false;
 		if (tags == null) {
 			if (other.tags != null)
@@ -309,6 +312,7 @@ public class SwagItem {
 			return false;
 		return true;
 	}
+
 
 
 }

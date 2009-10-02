@@ -62,6 +62,7 @@ public class ItemController {
 		//put rating (if there is one) into the model
 		String ratingString = "";
 		if (googleUserService.isUserLoggedIn()) {
+			SwagSwapUser swagSwapUser = getSwagSwapUser();
 			SwagItemRating rating = getSwagSwapUser().getSwagItemRating(key);
 			if (rating !=null) {
 				ratingString = rating.getUserRating().toString();
@@ -114,12 +115,13 @@ public class ItemController {
 	}
 	
 	/**
-	 * Fetch SwagSwapUser for currentUser
+	 * Fetch SwagSwapUser for currentUser or create one if this is their first time logging in
+	 * assumes user is logged in to Google
 	 * @return
 	 */
 	private SwagSwapUser getSwagSwapUser() {
-		SwagSwapUser swagSwapUser = swagSwapUserService.findByEmail(googleUserService.getCurrentUser().getEmail());
-		return swagSwapUser;
+		String email = googleUserService.getCurrentUser().getEmail();
+		return swagSwapUserService.findByEmailOrCreate(email);
 	}
 
 	@InitBinder

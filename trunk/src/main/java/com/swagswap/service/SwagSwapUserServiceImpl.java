@@ -48,11 +48,21 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		userDao.update(swagSwapUser);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.swagswap.service.SwagSwapUserService#findByEmail(java.lang.String)
-	 */
 	public SwagSwapUser findByEmail(String email) {
 		return userDao.findByEmail(email);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.swagswap.service.SwagSwapUserService#findByEmail(java.lang.String)
+	 * TODO integration test me
+	 */
+	public SwagSwapUser findByEmailOrCreate(String email) {
+		SwagSwapUser swagSwapUser = userDao.findByEmail(email);
+		if (swagSwapUser==null) {
+			swagSwapUser = new SwagSwapUser(email);
+			insert(swagSwapUser);
+		}
+		return swagSwapUser;
 	}
 	
 	/* (non-Javadoc)
@@ -60,35 +70,36 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	 */
 	//TODO make transactional ?
 	public void addOrUpdateRating(String userEmail, SwagItemRating newSwagItemRating){
-		SwagSwapUser swagSwapUser = findByEmail(userEmail);
+		SwagSwapUser swagSwapUser = findByEmailOrCreate(userEmail);
 		
+		//previousRating will be null if this is a new rating
 		SwagItemRating previousRating = swagSwapUser.getSwagItemRating(newSwagItemRating.getSwagItemKey());
-		recomputeSwagItemRating(previousRating, newSwagItemRating);
+		recomputeAndRecordTotalRating(previousRating, newSwagItemRating);
 		if (previousRating!=null) {
 			swagSwapUser.getSwagItemRatings().remove(previousRating);
 		}
 		swagSwapUser.getSwagItemRatings().add(newSwagItemRating);
-		
 		update(swagSwapUser);
 	}
 
-	//TODO implement me
 	/**
 	 * @param previousRating can be null
 	 * @param newSwagItemRating
+	 * TODO transaction requiresNew?
 	 */
-	private void recomputeSwagItemRating(SwagItemRating previousRating, SwagItemRating newSwagItemRating) {
+	private void recomputeAndRecordTotalRating(SwagItemRating previousRating, SwagItemRating newSwagItemRating) {
+		//start with new rating which will be used if this is their first rating of this item
+		int computedRatingDifference = newSwagItemRating.getUserRating().intValue(); 
+		boolean isNew=true;
+		//If they have a previous rating, calculate the difference and update the total item rating with that.
 		if (previousRating!=null) {
 			if (previousRating.getUserRating().equals(newSwagItemRating.getUserRating())) {
 				return; //they submitted the same rating as before
 			}
-			//TODO update average accordingly by taking out their old rating and adding their new one
-			newSwagItemRating.setUserRating(newSwagItemRating.getUserRating()-previousRating.getUserRating());
-			itemService.updateRating(newSwagItemRating);
+			isNew=false;
+			computedRatingDifference=newSwagItemRating.getUserRating().intValue()-previousRating.getUserRating().intValue();
 		}
-		else { //new rating
-			itemService.updateRating(newSwagItemRating);
-		}
+		itemService.updateRating(newSwagItemRating.getSwagItemKey(),computedRatingDifference,isNew);
 	}
 		
 }

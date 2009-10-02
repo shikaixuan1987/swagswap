@@ -1,10 +1,51 @@
 html,body {
 	margin: 0;
 	height: 100%;
-	background: #EEEEEE; /* background: red; */
+	background: #EAEAEA; /* background: red; */
 	font-family: sans-serif;
 	font-size: 12px;
 	height: 100%;
+}
+
+.titleText {
+	font-size: 3em;
+	font-style: italic;
+	color: #333333;
+	font-weight: bold;
+}
+
+.titleBar {
+	width: 100%;
+	background-color: #FF8800;
+	height: 5px;
+}
+
+/*  Menu Column  */
+.mainCol1 {
+	width: 20%;
+	/*background-color: #EEEEEE;*/
+	vertical-align: top;
+}
+
+/*  Content Column  */
+.mainCol2 {
+	width: 80%;
+	vertical-align: top;
+	padding-right: 100px;
+}
+
+.subTitleText {
+	font-size: 2em;
+	color: #666666;
+}
+
+.subTitleBar {
+	background-color: #666666;
+	height: 2px
+}
+
+.tableBorder {
+	border: solid #666666 1px;
 }
 
 .tableHeader {
@@ -15,54 +56,55 @@ html,body {
 .tableRow1 {
 	background-color: white;
 	font-size: 11px;
-	padding: 20px;
 }
 
 .tableRow2 {
 	background-color: #F1F1F1;
 	font-size: 11px;
-	padding: 20px;
 }
 
+/*  Image  */
 .tableCol1 {
 	width: 55px;
+	background-color: white;
 }
 
+/*  Name  */
 .tableCol2 {
 	width: 20%;
 }
 
+/*  Description  */
 .tableCol3 {
 	width: 30%;
 }
 
+/*  Tags  */
 .tableCol4 {
 	width: 20%;
 }
-
+/*  Rating  */
 .tableCol5 {
-	width: 10%;
-	text-align: center;
-}
-
-.tableCol6 {
 	width: 5%;
 }
 
-.tableCol7 {
-	width: 10%;
+/*  Number of Ratings  */
+.tableCol6 {
+	width: 5%;
+	text-align: center;
 }
 
+/*  Vendor  */
+.tableCol7 {
+	width: 15%;
+}
+
+/*  Action  */
 .tableCol8 {
 	width: 5%;
 }
 
-.headerBorder {
-	width: 100%;
-	background-color: #FF8800;
-	height: 5px;
-}
-
+/*  swag:panel  */
 .panel {
 	border: 2px solid #FF8800;
 	padding: 10px;
@@ -82,18 +124,6 @@ html,body {
 
 .headCol2 {
 	width: 100%;
-}
-
-.mainCol1 {
-	width: 20%;
-	/*background-color: #EEEEEE;*/
-	vertical-align: top;
-}
-
-.mainCol2 {
-	width: 80%;
-	vertical-align: top;
-	padding-right: 100px;
 }
 
 .bottomLeft {

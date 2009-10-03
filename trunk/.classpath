@@ -31,10 +31,6 @@
 	<classpathentry kind="var" path="GAE_HOME/lib/shared/geronimo-servlet_2.5_spec-1.2.jar"/>
 	<classpathentry kind="var" path="GAE_HOME"/>
 	<classpathentry kind="var" path="GAE_HOME/lib/shared/geronimo-jsp_2.1_spec-1.0.1.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.binding-2.0.8.RELEASE.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.faces-2.0.8.RELEASE.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.js-2.0.8.RELEASE.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.webflow-2.0.8.RELEASE.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/el-api-1.1.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/el-impl-1.1.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/com.springsource.org.jboss.el-2.0.0.GA.jar"/>

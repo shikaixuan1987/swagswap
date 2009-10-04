@@ -123,7 +123,7 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 	/* (non-Javadoc)
 	 * @see com.swagswap.dao.ItemDao#update(com.swagswap.domain.SwagItem)
 	 */
-	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
+//	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public void update(SwagItem updatedItem) {
 		SwagItem orig = get(updatedItem.getKey(),true);
 		orig.setName(updatedItem.getName());

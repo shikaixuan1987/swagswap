@@ -1,9 +1,12 @@
 package com.swagswap.service;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.compass.core.CompassHits;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,8 +15,7 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.swagswap.dao.ItemDao;
 import com.swagswap.domain.SwagItem;
-import com.swagswap.domain.SwagItemRating;
-import com.swagswap.domain.SwagSwapUser;
+import com.swagswap.indexing.SwagSwapCompass;
 
 /**
  * For transactionality and will be used for caching.
@@ -30,6 +32,8 @@ public class ItemServiceImpl implements ItemService {
 	private UserService googleUserService;
 	@Autowired
 	private SwagSwapUserService swagSwapUserService; //for saving users to our app
+	@Autowired
+	private SwagSwapCompass swagSwapCompass; //Compass instance for searching
 
 	public ItemServiceImpl() {
 	}
@@ -56,9 +60,22 @@ public class ItemServiceImpl implements ItemService {
 	public SwagItem get(Long id, boolean loadSwagImage) {
 		return itemDao.get(id, loadSwagImage);
 	}
-
+	
+	/*
+	//This is old impl. We'll use compass instead since GAE doesn't support
+	//case-insensitive queries (yet)
 	public Collection<SwagItem> search(String queryString) {
 		return itemDao.search(queryString);
+	}
+	*/
+	public Collection<SwagItem> search(String queryString) {
+		CompassHits hits = swagSwapCompass.getCompass().openSearchSession().find("*"+queryString+"*");
+		Set<SwagItem> swagItems = new HashSet<SwagItem>();
+		for (int i = 0; i < hits.length(); i++) {
+			swagItems.add((SwagItem)hits.data(i));
+			
+		}
+		return swagItems;
 	}
 
 	public List<SwagItem> getAll() {
@@ -72,7 +89,21 @@ public class ItemServiceImpl implements ItemService {
 	 * (I couldn't get a many-to-one relationship going in JDO), 
 	 * swagSwapUserService.insert is also marked as @Transactional REQUIRES_NEW
 	 */
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	
+	/**
+	 * With Transactional Propagation.REQUIRES_NEW I get
+	 * 
+	 * can't operate on multiple entity groups in a single transaction. found both Element {
+		type: "SwagItem"
+		id: 5
+		}
+		and Element {
+		type: "index"
+		name: "index-index-swagitem"
+		}
+        http://forum.compass-project.org/thread.jspa?threadID=216145
+	 */
+//	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public void save(SwagItem swagItem) {
 		if (swagItem.isNew()) {
 			String currentUserEmail = googleUserService.getCurrentUser().getEmail();
@@ -98,8 +129,7 @@ public class ItemServiceImpl implements ItemService {
 		//throw new RuntimeException("see if it rolls back");
 	}
 	
-	//TODO is transactional needed here?
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public synchronized void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNewRating) {
 		SwagItem swagItem = get(swagItemKey);
 		itemDao.updateRating(swagItemKey, computedRatingDifference, isNewRating);

@@ -45,6 +45,7 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		userDao.insert(swagSwapUser);
 	}
 	
+	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public void update(SwagSwapUser swagSwapUser) {
 		userDao.update(swagSwapUser);
 	}

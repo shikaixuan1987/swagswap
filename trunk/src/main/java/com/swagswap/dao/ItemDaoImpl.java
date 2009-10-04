@@ -11,6 +11,8 @@ import org.apache.commons.collections.list.SetUniqueList;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.appengine.api.datastore.Blob;
 import com.swagswap.domain.SwagImage;
@@ -96,8 +98,6 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 	 * @see com.swagswap.dao.ItemDao#insert(com.swagswap.domain.SwagItem)
 	 */
 	public void insert(SwagItem swagItem) {
-		
-		//could insert current user here
 		Date now = new Date();
 		swagItem.setCreated(now);
 		swagItem.setLastUpdated(now);
@@ -123,6 +123,7 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 	/* (non-Javadoc)
 	 * @see com.swagswap.dao.ItemDao#update(com.swagswap.domain.SwagItem)
 	 */
+	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public void update(SwagItem updatedItem) {
 		SwagItem orig = get(updatedItem.getKey(),true);
 		orig.setName(updatedItem.getName());
@@ -146,17 +147,20 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 	 * @param newRating already computed for swagItem
 	 * @param isNewRating if true then numberOfRatings is incremented
 	 */
-	public void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNewRating) {
+	//Yikes this is gonna be a bottleneck.  This is probably a job for the task manager
+	public synchronized void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNewRating) {
 		SwagItem orig = get(swagItemKey);
-		float totalRatingPoints = orig.getAverageRating() * orig.getNumberOfRatings();
-		if (isNewRating) {
-			//this is persisted since swagItem is JDO connected
-			orig.setNumberOfRatings(orig.getNumberOfRatings()+1); 
+		synchronized (orig) {
+			float totalRatingPoints = orig.getAverageRating() * orig.getNumberOfRatings();
+			if (isNewRating) {
+				//this is persisted since swagItem is JDO connected
+				orig.setNumberOfRatings(orig.getNumberOfRatings()+1); 
+			}
+			float computedTotalRating = 
+				(totalRatingPoints + computedRatingDifference) / orig.getNumberOfRatings();
+			orig.setAverageRating(computedTotalRating);
+			orig.setLastUpdated(new Date());
 		}
-		float computedTotalRating = 
-			(totalRatingPoints + computedRatingDifference) / orig.getNumberOfRatings();
-		orig.setAverageRating(computedTotalRating);
-		orig.setLastUpdated(new Date());
 	}
 	
 	/* (non-Javadoc)

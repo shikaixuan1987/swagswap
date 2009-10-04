@@ -13,10 +13,8 @@ import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
 import com.google.appengine.api.datastore.Blob;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
-import com.swagswap.domain.SwagItemRating;
 
 /**
  * Persistence of SwagItems using Spring JDO

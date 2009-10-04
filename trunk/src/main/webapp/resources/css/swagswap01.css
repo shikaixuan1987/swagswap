@@ -83,6 +83,7 @@ html,body {
 .tableCol4 {
 	width: 20%;
 }
+
 /*  Rating  */
 .tableCol5 {
 	width: 5%;
@@ -124,6 +125,10 @@ html,body {
 
 .headCol2 {
 	width: 100%;
+}
+
+.colWidth50 {
+	width: 50%;
 }
 
 .bottomLeft {

@@ -10,14 +10,10 @@
 	xmlns:swag="http://java.sun.com/jsf/composite/swag">
 
 <ui:composition template="template.xhtml">
-	<ui:param name="title" value="All Swag" />
+	<ui:param name="title" value="Swag Detail" />
 	<ui:define name="content">
 		<h:form>
-			<ui:include src="searchPanel.xhtml">
-				<ui:param name="bean" value="#{swagBean}" />
-			</ui:include>
-			<br />
-			<swag:swagTable value="#{swagBean.swagList}" bean="#{swagBean}"/>
+			<h:outputText value="Swag Detail here" />
 		</h:form>
 	</ui:define>
 </ui:composition>

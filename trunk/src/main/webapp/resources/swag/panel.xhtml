@@ -11,6 +11,7 @@
 	<composite:attribute name="title" />
 	<composite:attribute name="width" />
 	<composite:attribute name="height" />
+	<composite:attribute name="parentAttrs" />
 </composite:interface>
 
 <composite:implementation>
@@ -22,9 +23,8 @@
 	</h:panelGroup>
 	<h:panelGroup layout="block" styleClass="panel"
 		style="height : #{cc.attrs.height}; width: #{cc.attrs.width}">
-
-		<h:outputText value="No Title 3" rendered="#{empty cc.attrs.title}" />
 		<composite:insertChildren />
+		<composite:renderFacet name="content" />
 	</h:panelGroup>
 </composite:implementation>
 </html>

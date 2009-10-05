@@ -39,6 +39,10 @@
 			<form:input path="tags[3]" />
 			</td>
 		</tr>
+		<tr>
+			<td>Company/Vendor:</td>
+			<td><form:input path="company" /></td>
+		</tr>
 		<%-- 
 		<tr>
 			<td>Comments:</td>

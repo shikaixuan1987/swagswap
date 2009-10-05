@@ -30,6 +30,9 @@ public class SwagItem {
 
 	@Persistent
 	private String name;
+	
+	@Persistent
+	private String company; // vendor giving out swag
 
 	//Text and Blob are not part of the default fetch group
 	@Persistent
@@ -121,6 +124,14 @@ public class SwagItem {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getCompany() {
+		return company;
+	}
+
+	public void setCompany(String company) {
+		this.company = company;
 	}
 
 	public String getDescription() {

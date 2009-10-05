@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="<spring:url value="/css/teststyles.css" htmlEscape="true" />" type="text/css"/>
   <link rel="stylesheet" href="<spring:url value="/css/alternative.css" htmlEscape="true" />" type="text/css"/>
   <title>Swag Swap</title>	
+  <link rel="shortcut icon" href="/images/favicon.ico" >
+  <link rel="icon" type="image/gif" href="/images/animated_favicon1.gif" >
 </head>
 
 <%--Google Analytics (only for swagswap, you can put your own here if deploying yourself --%>

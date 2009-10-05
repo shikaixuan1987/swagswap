@@ -111,6 +111,10 @@
 		<c:out value="${swagItem.tags[3]}" />
 		</td>
 	</tr>
+	<tr>
+		<td>Company/Vendor:</td>
+		<td><c:out value="${swagItem.company}" /></td>
+	</tr>
 	<%-- 
 	<tr>
 		<td>Comments:</td>

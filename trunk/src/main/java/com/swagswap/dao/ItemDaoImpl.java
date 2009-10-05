@@ -58,10 +58,14 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
     	}
         List<SwagItem> tagResults = findByTag(searchString);
         List<SwagItem> nameResults = findByName(searchString);
+        List<SwagItem> companyResults = findByCompany(searchString);
+        List<SwagItem> descriptionResults = findByDescription(searchString);
         //commons-lang trickery to ensure uniqueness in a list
         List<SwagItem> allResults = SetUniqueList.decorate(new ArrayList<SwagItem>());
         allResults.addAll(tagResults);
         allResults.addAll(nameResults);
+        allResults.addAll(companyResults);
+        allResults.addAll(descriptionResults);
         return allResults;
     }
 
@@ -79,6 +83,20 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 		Query query = getPersistenceManager().newQuery(
 				"select from " + SwagItem.class.getName()
 				+ " where name==p1 parameters String p1");
+		return (List<SwagItem>) query.execute(searchString); 
+	}
+	
+	protected List<SwagItem> findByDescription(String searchString) {
+		Query query = getPersistenceManager().newQuery(
+				"select from " + SwagItem.class.getName()
+				+ " where description==p1 parameters String p1");
+		return (List<SwagItem>) query.execute(searchString); 
+	}
+	
+	protected List<SwagItem> findByCompany(String searchString) {
+		Query query = getPersistenceManager().newQuery(
+				"select from " + SwagItem.class.getName()
+				+ " where company==p1 parameters String p1");
 		return (List<SwagItem>) query.execute(searchString); 
 	}
 	
@@ -127,6 +145,7 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 	public void update(SwagItem updatedItem) {
 		SwagItem orig = get(updatedItem.getKey(),true);
 		orig.setName(updatedItem.getName());
+		orig.setCompany(updatedItem.getCompany());
 		orig.setDescription(updatedItem.getDescription());
 		//This is done in exclusively in update rating
 //		orig.setRating(updatedItem.getRating());

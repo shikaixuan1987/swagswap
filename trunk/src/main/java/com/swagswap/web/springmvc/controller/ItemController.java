@@ -42,7 +42,6 @@ public class ItemController {
 	@Autowired
 	private com.google.appengine.api.users.UserService googleUserService;
 	
-	//TODO do we need request here?
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String addHandler(Model model, HttpServletRequest req) {
 		model.addAttribute("swagItem", new SwagItem());
@@ -92,12 +91,17 @@ public class ItemController {
 		return "redirect:/swag/search";
 	}
 	
-	@RequestMapping(value = "/rate", method = RequestMethod.POST)
-	public String rateHandler(@ModelAttribute SwagItemRating swagItemRating) {
+    @RequestMapping(value = "/rate", method = RequestMethod.POST)
+	public String rateHandler(@ModelAttribute SwagItemRating swagItemRating, HttpServletRequest request) {
 		String email = googleUserService.getCurrentUser().getEmail();
 		swagSwapUserService.addOrUpdateRating(email, swagItemRating);
-		return "redirect:/swag/view/" + swagItemRating.getSwagItemKey();
+		String referer = request.getHeader("Referer");
+		if (referer==null) { //in case browser doesn't support Redirect header
+			referer="/swag/search";
+		}
+		return "redirect:"+ referer;
 	}
+
 	
 	//For legacy URL that some tweets had already linked to.
 	@RequestMapping(value = "/listSwagItems", method = RequestMethod.GET)
@@ -117,6 +121,21 @@ public class ItemController {
 			model.addAttribute("searchCriteria", new SearchCriteria());
 		}
 		Collection<SwagItem> swagItems = itemService.search(searchCriteria.getSearchString());
+		
+		//put rating (if there is one) into the model
+		if (googleUserService.isUserLoggedIn()) {
+			//get swagSwapUser using email key from available google user
+			//we've got to create them here if they don't already exist in our DB
+			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmailOrCreate(
+											googleUserService.getCurrentUser().getEmail());
+//			Map<Long, Integer> userRatings = new HashMap<Long, Integer>(); //swagItemKey, user rating
+			model.addAttribute("swagSwapUser", swagSwapUser);
+			for (SwagItem swagItem : swagItems) {
+				//add backing object for each possible new rating
+				model.addAttribute("newRating"+"-"+swagItem.getKey(), new SwagItemRating(swagItem.getKey())); 
+			}
+		}
+		
 		model.addAttribute("swagItems", swagItems);
 		return "listSwagItems";
 	}

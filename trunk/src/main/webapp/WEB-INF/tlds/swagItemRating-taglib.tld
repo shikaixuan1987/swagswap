@@ -23,5 +23,15 @@
         <rtexprvalue>true</rtexprvalue>
         <required>false</required>
     </attribute>
+    <attribute>
+        <name>swagSwapUser</name>
+        <rtexprvalue>true</rtexprvalue>
+        <required>false</required>
+    </attribute>
+    <attribute>
+        <name>swagItemKey</name>
+        <rtexprvalue>true</rtexprvalue>
+        <required>false</required>
+    </attribute>
   </tag>
 </taglib>

@@ -1,7 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false"%>
-<%@ include file="/WEB-INF/jsp/includes.jsp" %>
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
-
 
 <%--Shows a search box and a list of SwagItems using the old but good displaytag library --%>
 
@@ -13,7 +10,7 @@
 	<c:if test="${empty searchCriteria.searchString}">
 		<h2>All Swag Items</h2>
 	</c:if>
-
+	
 	Note: Search is case sensitive, full word, and only on Name and Tags in this implementation
 	<table>
 		<tr>

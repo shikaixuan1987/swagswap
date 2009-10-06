@@ -64,10 +64,10 @@ public class SwagItem {
 	private String ownerNickName;
 
 	@Persistent
-	private float averageRating=0F;
+	private Float averageRating=0F;
 
 	@Persistent
-	private int numberOfRatings=0;
+	private Integer numberOfRatings=0;
 
 	@Persistent
 	private Date created;
@@ -183,19 +183,19 @@ public class SwagItem {
 		this.ownerNickName = ownerNickName;
 	}
 
-	public float getAverageRating() {
+	public Float getAverageRating() {
 		return averageRating;
 	}
 
-	public void setAverageRating(float averageRating) {
+	public void setAverageRating(Float averageRating) {
 		this.averageRating = averageRating;
 	}
 
-	public int getNumberOfRatings() {
+	public Integer getNumberOfRatings() {
 		return numberOfRatings;
 	}
 
-	public void setNumberOfRatings(int numberOfRatings) {
+	public void setNumberOfRatings(Integer numberOfRatings) {
 		this.numberOfRatings = numberOfRatings;
 	}
 
@@ -236,27 +236,27 @@ public class SwagItem {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
+				+ ((averageRating == null) ? 0 : averageRating.hashCode());
+		result = prime * result
 				+ ((comments == null) ? 0 : comments.hashCode());
+		result = prime * result + ((company == null) ? 0 : company.hashCode());
+		result = prime * result + ((created == null) ? 0 : created.hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((image == null) ? 0 : image.hashCode());
 		result = prime * result + Arrays.hashCode(imageBytes);
-		result = prime * result
-				+ ((imageKey == null) ? 0 : imageKey.hashCode());
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
 		result = prime * result
 				+ ((lastUpdated == null) ? 0 : lastUpdated.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + numberOfRatings;
+		result = prime * result
+				+ ((numberOfRatings == null) ? 0 : numberOfRatings.hashCode());
 		result = prime * result
 				+ ((ownerEmail == null) ? 0 : ownerEmail.hashCode());
 		result = prime * result
 				+ ((ownerNickName == null) ? 0 : ownerNickName.hashCode());
-		result = prime * result + Float.floatToIntBits(averageRating);
 		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
 		return result;
 	}
-
 
 	/**
 	 * Note, Blobs and children are lazy loaded. You can't just compare
@@ -272,27 +272,33 @@ public class SwagItem {
 		if (getClass() != obj.getClass())
 			return false;
 		SwagItem other = (SwagItem) obj;
+		if (averageRating == null) {
+			if (other.averageRating != null)
+				return false;
+		} else if (!averageRating.equals(other.averageRating))
+			return false;
 		if (comments == null) {
 			if (other.comments != null)
 				return false;
 		} else if (!comments.equals(other.comments))
 			return false;
-		if (description == null) {
-			if (other.description != null)
+		if (company == null) {
+			if (other.company != null)
 				return false;
-		} else if (!getDescription().equals(other.getDescription()))
+		} else if (!company.equals(other.company))
 			return false;
-		if (image == null) {
-			if (other.image != null)
+		if (created == null) {
+			if (other.created != null)
 				return false;
-		} else if (!getImage().equals(other.getImage()))
+		} else if (!created.equals(other.created))
 			return false;
-	    //TODO why is imageKey sometimes null from getAll ?
-//		if (imageKey == null) {
-//			if (other.imageKey != null)
-//				return false;
-//		} else if (!imageKey.equals(other.imageKey))
-//			return false;
+		if (getDescription() == null) {
+			if (other.getDescription() != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (!Arrays.equals(imageBytes, other.imageBytes))
+			return false;
 		if (key == null) {
 			if (other.key != null)
 				return false;
@@ -308,14 +314,20 @@ public class SwagItem {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (numberOfRatings!=other.numberOfRatings)
+		if (numberOfRatings == null) {
+			if (other.numberOfRatings != null)
+				return false;
+		} else if (!numberOfRatings.equals(other.numberOfRatings))
 			return false;
 		if (ownerEmail == null) {
 			if (other.ownerEmail != null)
 				return false;
 		} else if (!ownerEmail.equals(other.ownerEmail))
 			return false;
-		if (averageRating!=other.averageRating)
+		if (ownerNickName == null) {
+			if (other.ownerNickName != null)
+				return false;
+		} else if (!ownerNickName.equals(other.ownerNickName))
 			return false;
 		if (tags == null) {
 			if (other.tags != null)

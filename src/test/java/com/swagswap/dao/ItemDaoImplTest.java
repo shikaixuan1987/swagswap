@@ -227,16 +227,16 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     	SwagItem retrievedSwagItem = itemDao.get(originalSwagItem.getKey());
     	
     	//verify
-    	assertEquals(retrievedSwagItem.getAverageRating(),firstRating);
-    	assertEquals(1,retrievedSwagItem.getNumberOfRatings());
+    	assertEquals(retrievedSwagItem.getAverageRating().floatValue(),firstRating);
+    	assertEquals(1,retrievedSwagItem.getNumberOfRatings().intValue());
     	
     	//update existing rating
     	int secondRating = 2;
     	itemDao.updateRating(originalSwagItem.getKey(), secondRating, false); //new rating
     	retrievedSwagItem = itemDao.get(originalSwagItem.getKey());
-    	assertEquals(retrievedSwagItem.getAverageRating(),secondRating);
+    	assertEquals(retrievedSwagItem.getAverageRating().floatValue(),secondRating);
     	//make sure there's still just one rating
-    	assertEquals(1,retrievedSwagItem.getNumberOfRatings()); 
+    	assertEquals(1,retrievedSwagItem.getNumberOfRatings().intValue()); 
     }
 
 

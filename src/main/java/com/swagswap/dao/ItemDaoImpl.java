@@ -119,11 +119,6 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 		Date now = new Date();
 		swagItem.setCreated(now);
 		swagItem.setLastUpdated(now);
-		
-		//TODO are these neeeded?
-		swagItem.setAverageRating(0);
-		swagItem.setNumberOfRatings(0);
-		
 		if (swagItem.hasNewImage()) {
 			swagItem.setImage(new SwagImage(swagItem.getImageBytes()));
 		}

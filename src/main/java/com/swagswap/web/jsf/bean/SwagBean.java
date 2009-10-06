@@ -1,6 +1,6 @@
 package com.swagswap.web.jsf.bean;
 
-import java.util.Arrays;
+import java.io.Serializable;
 import java.util.Collection;
 
 import javax.faces.bean.ManagedBean;
@@ -12,7 +12,9 @@ import com.swagswap.service.ItemService;
 
 @ManagedBean(name = "swagBean")
 @ViewScoped
-public class SwagBean {
+public class SwagBean implements Serializable {
+
+	static final long serialVersionUID = 1L;
 
 	// Inject the swagItemService Spring Bean
 	@ManagedProperty(value = "#{swagItemService}")
@@ -46,7 +48,6 @@ public class SwagBean {
 		showClear = false;
 		searchString = "";
 	}
-
 
 	public void actionDelete() {
 		getItemService().delete(getSelectedRowId());
@@ -95,6 +96,5 @@ public class SwagBean {
 	public void setShowClear(boolean showClear) {
 		this.showClear = showClear;
 	}
-
 
 }

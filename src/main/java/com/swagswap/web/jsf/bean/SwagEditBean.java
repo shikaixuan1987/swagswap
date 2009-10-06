@@ -1,5 +1,6 @@
 package com.swagswap.web.jsf.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +13,15 @@ import com.swagswap.service.ItemService;
 
 @ManagedBean(name = "swagEditBean")
 @SessionScoped
-public class SwagEditBean {
+public class SwagEditBean implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	// Inject the swagItemService Spring Bean
 	@ManagedProperty(value = "#{swagItemService}")
 	ItemService itemService;
 	private SwagItem editSwagItem = new SwagItem();
 	private Long selectedRowId;
-	
+
 	public SwagEditBean() {
 		super();
 		initialiseSwagItem();
@@ -48,7 +50,7 @@ public class SwagEditBean {
 
 		return "allSwag?faces-redirect=true";
 	}
-	
+
 	public String actionAddItem() {
 		initialiseSwagItem();
 		return "addSwag?faces-redirect=true";

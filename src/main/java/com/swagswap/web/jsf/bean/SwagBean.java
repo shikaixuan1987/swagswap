@@ -23,8 +23,6 @@ public class SwagBean implements Serializable {
 	private Collection<SwagItem> swagList;
 	private String searchString = "Search";
 	private boolean showClear = false;
-
-	private String[] tagList = new String[] { "", "", "", "" };
 	private Long selectedRowId;
 
 	public Long getSelectedRowId() {
@@ -52,14 +50,6 @@ public class SwagBean implements Serializable {
 	public void actionDelete() {
 		getItemService().delete(getSelectedRowId());
 		swagList = getItemService().getAll();
-	}
-
-	public String[] getTagList() {
-		return tagList;
-	}
-
-	public void setTagList(String[] tagList) {
-		this.tagList = tagList;
 	}
 
 	public String getSearchString() {

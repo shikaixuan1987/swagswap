@@ -62,10 +62,6 @@ public class SwagItemRating implements Serializable {
 		if (userRating==null) {
 			return;
 		}
-		//TODO rating can be negative when updating a rating
-//		if (userRating < 1 || userRating > 5 ) {
-//			throw new RuntimeException("SwagItemRating must be between 1 and 5");
-//		}
 		this.userRating=userRating;
 	}
 	

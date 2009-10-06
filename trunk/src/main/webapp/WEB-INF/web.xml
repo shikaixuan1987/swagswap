@@ -15,6 +15,13 @@
 		<param-value>-1</param-value>
 	</context-param>
 	
+	<!-- see http://www.mail-archive.com/google-appengine-java@googlegroups.com/msg00020.html -->
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>client</param-value>
+    </context-param>
+
+	
 	<!-- JSF RI Issue 1709 Mojarra deployment fails in Google App Engine -->
 	<context-param>
 		<param-name>com.sun.faces.enableThreading</param-name>

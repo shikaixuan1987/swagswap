@@ -5,6 +5,21 @@
 	<display-name>swagswap</display-name>
 
 	<!-- JSF -->
+	<!--
+		Set Client side state-saving. May be problem using server state saving
+		in GAE. See issue 1700
+	-->
+	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>client</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Production</param-value>
+	</context-param>
+
+
 	<context-param>
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
 		<param-value>Production</param-value>
@@ -14,7 +29,7 @@
 		<param-name>com.sun.faces.resourceUpdateCheckPeriod</param-name>
 		<param-value>-1</param-value>
 	</context-param>
-	
+
 	<!-- JSF RI Issue 1709 Mojarra deployment fails in Google App Engine -->
 	<context-param>
 		<param-name>com.sun.faces.enableThreading</param-name>
@@ -68,7 +83,7 @@
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.jsf</url-pattern>
-	</servlet-mapping>	
+	</servlet-mapping>
 	<!--   End JSF  -->
 
 	<!-- Spring MVC -->

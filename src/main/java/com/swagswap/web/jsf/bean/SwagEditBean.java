@@ -1,33 +1,39 @@
 package com.swagswap.web.jsf.bean;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
 
 import com.swagswap.domain.SwagItem;
 import com.swagswap.service.ItemService;
 
 @ManagedBean(name = "swagEditBean")
-@SessionScoped
-public class SwagEditBean implements Serializable {
+@RequestScoped
+public class SwagEditBean {
 
-	private static final long serialVersionUID = 1L;
+	
+	
 	// Inject the swagItemService Spring Bean
 	@ManagedProperty(value = "#{swagItemService}")
-	ItemService itemService;
+	private ItemService itemService;
 	private SwagItem editSwagItem = new SwagItem();
 	private Long selectedRowId;
-
+	
 	public SwagEditBean() {
 		super();
 		initialiseSwagItem();
 	}
+	
+	
+	public void populateSwagItem() {
+		editSwagItem = getItemService().get(getSelectedRowId());
+		
+	}
 
-	private void initialiseSwagItem() {
+	public void initialiseSwagItem() {
 		editSwagItem = new SwagItem();
 		List<String> tagList = new ArrayList<String>();
 		for (int i = 0; i < 4; i++) {
@@ -49,17 +55,6 @@ public class SwagEditBean implements Serializable {
 		initialiseSwagItem();
 
 		return "allSwag?faces-redirect=true";
-	}
-
-	public String actionAddItem() {
-		initialiseSwagItem();
-		return "addSwag?faces-redirect=true";
-	}
-
-	public String actionEditItem() {
-		// Refresh selected item from DB
-		editSwagItem = getItemService().get(getSelectedRowId());
-		return "editSwag?faces-redirect=true";
 	}
 
 	public SwagItem getEditSwagItem() {

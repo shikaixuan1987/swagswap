@@ -91,7 +91,7 @@ public class ItemController {
 		return "redirect:/swag/search";
 	}
 	
-    @RequestMapping(value = "/rate", method = RequestMethod.POST)
+    @RequestMapping(value = "/rate", method = RequestMethod.GET)
 	public String rateHandler(@ModelAttribute SwagItemRating swagItemRating, HttpServletRequest request) {
 		String email = googleUserService.getCurrentUser().getEmail();
 		swagSwapUserService.addOrUpdateRating(email, swagItemRating);
@@ -130,10 +130,10 @@ public class ItemController {
 											googleUserService.getCurrentUser().getEmail());
 //			Map<Long, Integer> userRatings = new HashMap<Long, Integer>(); //swagItemKey, user rating
 			model.addAttribute("swagSwapUser", swagSwapUser);
-			for (SwagItem swagItem : swagItems) {
-				//add backing object for each possible new rating
-				model.addAttribute("newRating"+"-"+swagItem.getKey(), new SwagItemRating(swagItem.getKey())); 
-			}
+		}
+		for (SwagItem swagItem : swagItems) {
+			//add backing object for each possible new rating
+			model.addAttribute("newRating"+"-"+swagItem.getKey(), new SwagItemRating(swagItem.getKey())); 
 		}
 		
 		model.addAttribute("swagItems", swagItems);

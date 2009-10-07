@@ -122,6 +122,7 @@
 			<url-pattern>/swag/delete/*</url-pattern>
 			<url-pattern>/swag/add/*</url-pattern>
 			<url-pattern>/swag/edit/*</url-pattern>
+			<url-pattern>/swag/rate/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name>

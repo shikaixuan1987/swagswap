@@ -48,41 +48,29 @@
 		</display:column>
 
 	<%-- Ratings --%>
-	<google-auth:isLoggedIn>
 	<display:column title="Your Rating" >
-		<form:form action="/swag/rate" commandName="newRating-${currentObject.key}" name="rateForm${currentObject.key}" method="post">
+		<google-auth:isLoggedIn>
+		<%--HTML anchor to compensate for web 1.0 implementation --%>
+		<a name="${currentObject.key}"></a>
+		<form:form action="/swag/rate#${currentObject.key}" commandName="newRating-${currentObject.key}" name="rateForm${currentObject.key}" method="get">
 			<form:hidden path="swagItemKey" />
 			<!-- can't use spring form:hidden tag here cause if userRating is empty, GAE blows up. 
 		     Spring seems to be doing something not-kosher for GAE when it populates a default value -->
      		<input type="hidden" name="userRating" /> <!-- this is used for javascript trick below -->
-			<table style="border:0">
-			<tr>
-				<td>
-					<a href="#" onclick="document.rateForm${currentObject.key}.userRating.value='1';document.rateForm${currentObject.key}.submit();">
-					<swagItemRating:showRatingStars numberOfStarsToShow="1" swagSwapUser="${swagSwapUser}" swagItemKey="${currentObject.key}"/></a>
-					<br/> 
-					<a href="#" onclick="document.rateForm${currentObject.key}.userRating.value='2';document.rateForm${currentObject.key}.submit();">
-					<swagItemRating:showRatingStars numberOfStarsToShow="2" swagSwapUser="${swagSwapUser}" swagItemKey="${currentObject.key}"/>
-					</a>
-					<br/> 
-					<a href="#" onclick="document.rateForm${currentObject.key}.userRating.value='3';document.rateForm${currentObject.key}.submit();">
-					<swagItemRating:showRatingStars numberOfStarsToShow="3" swagSwapUser="${swagSwapUser}" swagItemKey="${currentObject.key}"/>
-					</a>
-					<br/> 
-					<a href="#" onclick="document.rateForm${currentObject.key}.userRating.value='4';document.rateForm${currentObject.key}.submit();">
-					<swagItemRating:showRatingStars numberOfStarsToShow="4" swagSwapUser="${swagSwapUser}" swagItemKey="${currentObject.key}"/>
-					</a>
-					<br/> 
-					<a href="#" onclick="document.rateForm${currentObject.key}.userRating.value='5';document.rateForm${currentObject.key}.submit();">
-					<swagItemRating:showRatingStars numberOfStarsToShow="5" swagSwapUser="${swagSwapUser}" swagItemKey="${currentObject.key}"/>
-					</a>
-					<br/> 
-				</td>
-			</tr>
-			</table>
+     		<center>
+			<swagItemRating:showRatingStars 
+				rateFormName="rateForm${currentObject.key}" 
+				swagSwapUser="${swagSwapUser}" 
+				swagItemKey="${currentObject.key}"/>
+			</center>
 		</form:form>
+		</google-auth:isLoggedIn>
+		<google-auth:isNotLoggedIn><%--show them a teaser with a link to the login page --%>
+		<a href="http://localhost:8080/_ah/login?continue=%2Fswag%2Fsearch" border="0">
+		<img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/>
+		</a>
+		</google-auth:isNotLoggedIn>
 	</display:column>
-	</google-auth:isLoggedIn>
 	
 	<display:column property="tags" decorator="com.swagswap.web.springmvc.displaytag.TagsDecorator"/>
 

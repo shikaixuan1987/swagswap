@@ -9,6 +9,10 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:swag="http://java.sun.com/jsf/composite/swag">
 
+<br />
+<h:outputText value="Selected Swag Key is #{swagEditBean.selectedRowId}" />
+<br />
+<br />
 <swag:panel title="${title}">
 	<h:panelGrid columns="2" style="vertical-align: middle">
 		<swag:label value="Name" />
@@ -31,7 +35,7 @@
 <br />
 <h:panelGroup layout="block" style="text-align: center;">
 	<h:commandButton value="Save" action="#{swagEditBean.actionSaveItem}" />
-	<h:commandButton value="Cancel" action="allSwag" />
+	<h:commandButton value="Cancel" action="allSwag" immediate="true"/>
 </h:panelGroup>
 
 </html>

@@ -13,6 +13,10 @@
 	<ui:param name="title" value="New Swag Item" />
 	<ui:define name="content">
 		<h:form>
+			<f:metadata>
+				<f:event type="preRenderView"
+					listener="#{swagEditBean.initialiseSwagItem}" />
+			</f:metadata>
 			<ui:include src="editAddSwagPanel.xhtml">
 				<ui:param name="title" value="New Swag Item" />
 			</ui:include>

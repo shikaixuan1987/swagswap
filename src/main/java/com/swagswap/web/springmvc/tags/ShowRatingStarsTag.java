@@ -8,11 +8,15 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
 
+/**
+ * Show rating stars, link each star to the ratingForm name passed in
+ *
+ */
 public class ShowRatingStarsTag  extends SimpleTagSupport {
-	public static final String RATED_IMAGE = "starOn.gif";
-	public static final String NOT_RATED_IMAGE = "starOff.gif";
+	public static final String STAR_ON_IMAGE = "starOn.gif";
+	public static final String STAR_OFF_IMAGE = "starOff.gif";
 	// tag attributes
-	private Integer numberOfStarsToShow;
+	private String rateFormName; //name of the form they'll use to submit rating
 	//the following are optional (should have userRating or swagSwapUser and swagaItemKey to calculate rating)
 	private Integer userRating; //optional
 	private SwagSwapUser swagSwapUser; //optional
@@ -24,27 +28,33 @@ public class ShowRatingStarsTag  extends SimpleTagSupport {
 	public void doTag() throws JspException, IOException {
 		Integer userRating = this.userRating;
 		if (userRating==null) { //we'll have to look it up
-			if (swagSwapUser==null) {
-				throw new RuntimeException("tag requires either userRating or swagSwapUser and swagItemKey");
-			}
-			SwagItemRating swagItemRating = swagSwapUser.getSwagItemRating(swagItemKey);
-			if (swagItemRating==null) {
+			if (swagSwapUser==null) { //not logged in
+//				throw new RuntimeException("tag requires either userRating or swagSwapUser and swagItemKey");
 				userRating=0;
 			}
 			else {
-				userRating=swagItemRating.getUserRating();
+				SwagItemRating swagItemRating = swagSwapUser.getSwagItemRating(swagItemKey);
+				if (swagItemRating==null) {
+					userRating=0;
+				}
+				else {
+					userRating=swagItemRating.getUserRating();
+				}
 			}
 		}
-		String starImage = (userRating.equals(numberOfStarsToShow)) ? RATED_IMAGE : NOT_RATED_IMAGE;
-		for (int i=0;i<numberOfStarsToShow;i++) {
-			getJspContext().getOut().println("<img src=\"/images/" + starImage + "\" border=\"0\"/>");
+		//Show appropriate star-on star-off images based on their rating.  Link each star to the rateForm they pass in
+		getJspContext().getOut().print("<A NAME=\""+swagItemKey+"\"></A>");
+		for (int i=1;i<=5;i++) {
+			String starImage = (i <= userRating) ? STAR_ON_IMAGE : STAR_OFF_IMAGE;
+			getJspContext().getOut().print("<a href=\"#\" onclick=\"document." + rateFormName + ".userRating.value='"+i+"';document." + rateFormName + ".submit();\">");
+			getJspContext().getOut().print("<img src=\"/images/" + starImage + "\" border=\"0\"/></a>");
 		}
 	}
-
-	public void setNumberOfStarsToShow(Integer numberOfStarsToShow) {
-		this.numberOfStarsToShow = numberOfStarsToShow;
-	}
 	
+	public void setRateFormName(String rateFormName) {
+		this.rateFormName = rateFormName;
+	}
+
 	public void setUserRating(Integer userRating) {
 		this.userRating = userRating;
 	}

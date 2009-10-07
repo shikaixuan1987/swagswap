@@ -8,14 +8,14 @@
 
   <tag>
     <description>Shows the number of stars passed in in the right color according to whether
-    			 an item is rated or not rated)
+    			 an item is rated or not rated). Link these to the formName passed in
     </description>
     <name>showRatingStars</name>
     <tag-class>com.swagswap.web.springmvc.tags.ShowRatingStarsTag</tag-class>
     <body-content>empty</body-content>
     <attribute>
-        <name>numberOfStarsToShow</name>
-        <rtexprvalue>false</rtexprvalue>
+        <name>rateFormName</name>
+        <rtexprvalue>true</rtexprvalue>
         <required>true</required>
     </attribute>
     <attribute>

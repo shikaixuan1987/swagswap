@@ -1,28 +1,27 @@
 package com.swagswap.web.jsf.bean;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.RequestScoped;
 
 import com.swagswap.domain.SwagItem;
 import com.swagswap.service.ItemService;
 
 @ManagedBean(name = "swagBean")
-@ViewScoped
-public class SwagBean implements Serializable {
+@RequestScoped
+public class SwagBean {
 
 	static final long serialVersionUID = 1L;
 
 	// Inject the swagItemService Spring Bean
 	@ManagedProperty(value = "#{swagItemService}")
-	ItemService itemService;
+	private ItemService itemService;
 
 	private Collection<SwagItem> swagList;
 	private String searchString = "Search";
-	private boolean showClear = false;
+	private Boolean showClear = false;
 	private Long selectedRowId;
 
 	public Long getSelectedRowId() {
@@ -79,11 +78,11 @@ public class SwagBean implements Serializable {
 		this.swagList = swagList;
 	}
 
-	public boolean isShowClear() {
+	public Boolean getShowClear() {
 		return showClear;
 	}
 
-	public void setShowClear(boolean showClear) {
+	public void setShowClear(Boolean showClear) {
 		this.showClear = showClear;
 	}
 

@@ -1,5 +1,6 @@
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
-
+<%@page import="com.google.appengine.api.users.UserService"%>
+<%@page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%--Shows a search box and a list of SwagItems using the old but good displaytag library --%>
 
 <form:form action="/swag/search" commandName="searchCriteria" name="searchForm" method="GET">
@@ -50,7 +51,7 @@
 	<%-- Ratings --%>
 	<display:column title="Your Rating" >
 		<google-auth:isLoggedIn>
-		<%--HTML anchor to compensate for web 1.0 implementation --%>
+		<%-- HTML anchor to compensate for web 1.0 implementation --%>
 		<a name="${currentObject.key}"></a>
 		<form:form action="/swag/rate#${currentObject.key}" commandName="newRating-${currentObject.key}" name="rateForm${currentObject.key}" method="get">
 			<form:hidden path="swagItemKey" />
@@ -66,7 +67,8 @@
 		</form:form>
 		</google-auth:isLoggedIn>
 		<google-auth:isNotLoggedIn><%--show them a teaser with a link to the login page --%>
-		<a href="http://localhost:8080/_ah/login?continue=%2Fswag%2Fsearch" border="0">
+		<% UserService userService = UserServiceFactory.getUserService();%>
+		<a href="<%=userService.createLoginURL("/swag/search")%>" border="0">
 		<img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/>
 		</a>
 		</google-auth:isNotLoggedIn>

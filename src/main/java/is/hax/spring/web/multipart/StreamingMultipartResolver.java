@@ -43,7 +43,7 @@ import is.hax.spring.web.multipart.StreamingMultipartFile;
  */
 public class StreamingMultipartResolver implements MultipartResolver {
 
-    private long maxUploadSize = 50000L;
+    private long maxUploadSize;
 
     public long getMaxUploadSize() {
         return maxUploadSize;

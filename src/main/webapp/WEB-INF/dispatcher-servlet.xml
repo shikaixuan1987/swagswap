@@ -22,7 +22,7 @@
 	     See http://groups.google.com/group/google-appengine-java/browse_thread/thread/c035d054f0715b6a 
 	-->
 	<bean id="multipartResolver" class="is.hax.spring.web.multipart.StreamingMultipartResolver" >
-		<property name="maxUploadSize" value="100000"/>
+		<property name="maxUploadSize" value="150000"/>
 	</bean>
 
 </beans>

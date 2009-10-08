@@ -34,10 +34,6 @@ public class SwagImage implements Serializable {
 	
     @Persistent
 	private Blob image;
-    @Persistent
-    private String filename;
-    @Persistent
-    private String mimeType;
     
     public SwagImage() {
     }
@@ -60,27 +56,14 @@ public class SwagImage implements Serializable {
 	public void setImage(Blob image) {
 		this.image = image;
 	}
-	public String getFilename() {
-		return filename;
-	}
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
-	public String getMimeType() {
-		return mimeType;
-	}
-	public void setMimeType(String mimeType) {
-		this.mimeType = mimeType;
-	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((encodedKey == null) ? 0 : encodedKey.hashCode());
-		result = prime * result + ((filename == null) ? 0 : filename.hashCode());
+		result = prime * result
+				+ ((encodedKey == null) ? 0 : encodedKey.hashCode());
 		result = prime * result + ((image == null) ? 0 : image.hashCode());
-		result = prime * result + ((mimeType == null) ? 0 : mimeType.hashCode());
 		return result;
 	}
 
@@ -94,31 +77,20 @@ public class SwagImage implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		SwagImage other = (SwagImage) obj;
-		//TODO For some reason encodedKey is null when you fetch a list of SwagItems
-//		if (encodedKey == null) {
-//			if (other.encodedKey != null)
-//				return false;
-//		} else if (!encodedKey.equals(other.encodedKey))
-//			return false;
-		if (filename == null) {
-			if (other.filename != null)
+		if (encodedKey == null) {
+			if (other.encodedKey != null)
 				return false;
-		} else if (!filename.equals(other.filename))
+		} else if (!encodedKey.equals(other.encodedKey))
 			return false;
-		if (image == null) {
-			if (other.image != null)
+		if (getImage() == null) {
+			if (other.getImage() != null)
 				return false;
 		} else if (!getImage().equals(other.getImage()))
 			return false;
-		if (mimeType == null) {
-			if (other.mimeType != null)
-				return false;
-		} else if (!mimeType.equals(other.mimeType))
-			return false;
 		return true;
 	}
-	
-	
+
+
     
     
 

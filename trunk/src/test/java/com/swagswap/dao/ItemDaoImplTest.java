@@ -49,12 +49,11 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     /**
      * Make sure if there's no image, that an empty one is created
      * Otherwise with JDO 1-to-1 owned relationships you can't
-     * add one later.  TODO ask about this on mailing list
+     * add one later.
      */
     public void testSaveNoImage() {
     	
-    	SwagItem swagItem = Fixture.createSwagItem();
-    	swagItem.setImage(null);
+    	SwagItem swagItem = Fixture.createSwagItemNoImage();
     	itemDao.insert(swagItem);
     	
     	assertNumberOfItemsAndImages(1,1);

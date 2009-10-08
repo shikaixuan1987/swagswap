@@ -1,4 +1,4 @@
-package com.swagswap.service;
+package com.swagswap.exceptions;
 
 import com.swagswap.domain.SwagItem;
 

@@ -1,17 +1,28 @@
 package com.swagswap.service;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.swagswap.dao.ItemDao;
 import com.swagswap.domain.SwagItem;
+import com.swagswap.exceptions.AccessDeniedException;
+import com.swagswap.exceptions.ImageTooLargeException;
+import com.swagswap.exceptions.InvalidSwagItemException;
+import com.swagswap.exceptions.LoadImageFromURLException;
 
 /**
  * For transactionality and will be used for caching.
@@ -80,15 +91,24 @@ public class ItemServiceImpl implements ItemService {
 	 * saves swag item and image (image is saved in dao because it's a child object)
 	 * (A user is not associated with a swagitem via a JDO relationship because 
 	 * Icouldn't get a many-to-one relationship going in JDO), 
+	 * @throws IOException 
+	 * @throws MalformedURLException 
 	 */
 	
 	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
-	public void save(SwagItem swagItem) {
+	public void save(SwagItem swagItem) 
+		throws LoadImageFromURLException, ImageTooLargeException {
+		if (StringUtils.isEmpty(swagItem.getName())) { //only required field
+			throw new InvalidSwagItemException("name is required");
+		}
 		if (swagItem.isNew()) {
 			String currentUserEmail = googleUserService.getCurrentUser().getEmail();
 			swagItem.setOwnerEmail(currentUserEmail);
 			String currentUserNickName = googleUserService.getCurrentUser().getNickname();
 			swagItem.setOwnerNickName(currentUserNickName);
+			
+			populateSwagImage(swagItem);
+			
 			itemDao.insert(swagItem);
 			/**
 			 * No need to create swagSwapUser here. We only need a user in our DB
@@ -100,6 +120,7 @@ public class ItemServiceImpl implements ItemService {
 		}
 		else { //update
 			checkPermissions(swagItem.getKey());
+			populateSwagImage(swagItem);
 			itemDao.update(swagItem);
 		}
 		
@@ -107,9 +128,10 @@ public class ItemServiceImpl implements ItemService {
 		//and try this method with and without the annotation
 		//throw new RuntimeException("see if it rolls back");
 	}
-	
+
 	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public synchronized void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNewRating) {
+		//TODO can this line be removed?
 		SwagItem swagItem = get(swagItemKey);
 		itemDao.updateRating(swagItemKey, computedRatingDifference, isNewRating);
 	}
@@ -129,6 +151,53 @@ public class ItemServiceImpl implements ItemService {
 	
 	public void setSwagSwapUserService(SwagSwapUserService swagSwapUserService) {
 		this.swagSwapUserService = swagSwapUserService;
+	}
+	
+	private void populateSwagImage(SwagItem swagItem) 
+		throws LoadImageFromURLException, ImageTooLargeException {
+		if (swagItem.hasNewImageBytes()) {
+			//TODO fix this comment
+			// The following line only works for a save, 
+			// not an upate cause there you have to operate on the stored SwagImage
+			//orig.setImage(updatedItem.getImage();
+			swagItem.getImage().setImage(new Blob(swagItem.getImageBytes()));
+		} else if (swagItem.hasNewImageURL()) {
+			populateSwagImageFromURL(swagItem);
+		}
+	}
+
+	protected void populateSwagImageFromURL(SwagItem swagItem) 
+		throws LoadImageFromURLException, ImageTooLargeException {
+		BufferedInputStream bis=null;
+		ByteArrayOutputStream bos=null;
+		try {
+			//fetch URL as InputStream
+			URL url = new URL(swagItem.getImageURL());
+			bis = new BufferedInputStream(url.openStream());
+			//write it to a byte[] using a buffer since we don't know the exact image size
+			byte [] buffer = new byte[1024];
+			bos = new ByteArrayOutputStream();
+			int i = 0;
+		    while (-1 != (i = bis.read(buffer))) {
+		       bos.write(buffer, 0, i);
+		    }
+		    byte[] imageData = bos.toByteArray();
+		    if (imageData.length > 150000) {
+		    	throw new ImageTooLargeException(url.toString(),150000);
+		    }
+			swagItem.getImage().setImage(new Blob(imageData));
+		}
+		catch (IOException e) {
+			throw new LoadImageFromURLException(swagItem.getImageURL(), e);
+		}
+		finally {
+			try {
+				if (bis!=null) bis.close();
+				if (bos!=null) bos.close();
+			} catch (IOException e) {
+				//ignore
+			}
+		}
 	}
 	
 	/**

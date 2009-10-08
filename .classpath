@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="target/swagswap-0.1/WEB-INF/classes" path="src/main/java"/>
+	<classpathentry kind="src" output="target/swagswap/WEB-INF/classes" path="src/main/java"/>
 	<classpathentry kind="src" output="target/test" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME"/>

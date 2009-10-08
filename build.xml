@@ -2,9 +2,6 @@
 
 <project name="swagswap" default="war">
 
-	<!-- For war file naming -->
-	<property name="version" value="0.1" />
-
 	<!-- Try reading GAE_HOME env var first-->
 
 	<property environment="env" />
@@ -42,7 +39,7 @@
 
 
 	<!-- Change if you like e.g. "war" better than "www" for the output -->
-	<property name="war.dir" location="target/${ant.project.name}-${version}" />
+	<property name="war.dir" location="target/${ant.project.name}" />
 
 	<target name="war" depends="compile, copyResources" description="Assemble the application directory">
 		<mkdir dir="${war.dir}/WEB-INF/lib" />

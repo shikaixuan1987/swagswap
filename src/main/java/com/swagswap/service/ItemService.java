@@ -1,10 +1,12 @@
 package com.swagswap.service;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemRating;
+import com.swagswap.exceptions.LoadImageFromURLException;
 
 public interface ItemService {
 
@@ -16,7 +18,7 @@ public interface ItemService {
 
 	List<SwagItem> getAll();
 
-	void save(SwagItem swagItem);
+	void save(SwagItem swagItem) throws LoadImageFromURLException;
 	
 	void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNew);
 	

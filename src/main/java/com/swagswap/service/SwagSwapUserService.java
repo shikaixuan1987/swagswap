@@ -2,6 +2,7 @@ package com.swagswap.service;
 
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
+import com.swagswap.exceptions.UserAlreadyExistsException;
 
 public interface SwagSwapUserService {
 

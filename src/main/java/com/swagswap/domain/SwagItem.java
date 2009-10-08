@@ -14,6 +14,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.commons.collections.FactoryUtils;
 import org.apache.commons.collections.list.LazyList;
+import org.apache.commons.lang.StringUtils;
 
 import com.google.appengine.api.datastore.Text;
 
@@ -41,9 +42,13 @@ public class SwagItem {
 	/**
 	 * Owned One-to-One Relationship (lazy loaded)
 	 * see http://code.google.com/appengine/docs/java/datastore/relationships.html
+	 * 
+	 * Add empty image object, otherwise JDO won't allow you to add one as a child later
+	 * plus we never want it to be null because the the only way to update the image data
+	 * is to get the exiting SwagImage and set the image Blob.  See ItemService populateSwagImage()
 	 */
 	@Persistent
-	private SwagImage image;
+	private SwagImage image = new SwagImage();
 	
 	/**
 	 * Store this so we can get the images separately with an image servlet
@@ -53,9 +58,13 @@ public class SwagItem {
 	@Persistent
 	private String imageKey;
 	
-	//just used to store imageBytes from the HTML form
+	// used to store imageBytes from the HTML form
 	@NotPersistent
 	private byte[] imageBytes;
+	
+	// used to store imageURL from the HTML form
+	@NotPersistent
+	private String imageURL;
 
 	@Persistent
 	private String ownerEmail;
@@ -84,16 +93,23 @@ public class SwagItem {
 
 	
 	public SwagItem() {
-		super();
 	}
 	
+	
 	public SwagItem(String name, String description, SwagImage image,
+			String owner, Float rating, Integer numberOfRatings,
+			List<String> tags, List<String> comments) {
+		this(name,description,owner,rating,numberOfRatings,tags,comments);
+		this.image = image;
+	}
+	
+	//No image
+	public SwagItem(String name, String description,
 			String owner, Float rating, Integer numberOfRatings,
 			List<String> tags, List<String> comments) {
 		super();
 		this.name = name;
 		this.description = new Text(description);
-		this.image = image;
 		this.ownerEmail = owner;
 		this.averageRating = rating;
 		this.numberOfRatings = numberOfRatings;
@@ -105,9 +121,20 @@ public class SwagItem {
 		return getKey() == null;
 	}
 	
-	// SwagItem has a new image if imageBytes is filled from file upload
+	/**
+	 * @return whether the swagItem has an image to update
+	 */
 	public boolean hasNewImage() {
+		return (imageBytes.length!=0 || StringUtils.isNotEmpty(imageURL));
+	}
+	
+	// SwagItem has a new image if imageBytes is filled from file upload
+	public boolean hasNewImageBytes() {
 		return (imageBytes != null && imageBytes.length !=0);
+	}
+	
+	public boolean hasNewImageURL() {
+		return StringUtils.isNotEmpty(imageURL);
 	}
 
 	public Long getKey() {
@@ -158,6 +185,14 @@ public class SwagItem {
 		this.imageBytes = imageBytes;
 	}
 	
+	public String getImageURL() {
+		return imageURL;
+	}
+
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
+
 	//Lazily populate this
 	public String getImageKey() {
 		return imageKey;

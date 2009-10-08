@@ -9,12 +9,6 @@
      <input type="hidden" name="userRating" /> <!-- this is used for javascript trick below -->
 <table>
 	<tr>
-		<td>
-			<c:if test="${not empty ratingSuccessMessage}">
-				<c:out value="${swagItem.name}" /> Rated successfully
-			</c:if>
-		</td>
-		<td></td>
 	</tr>
 	<google-auth:isLoggedIn>
 		<tr>
@@ -48,20 +42,13 @@
 </form:form>
 <table>
 	<tr>
-		<td>Image:</td>
+		<td>${swagItem.name}</td>
 		<td nowrap="true">
 			<%--TODO is this test needed anymore? --%>
 			<c:if test="${not empty swagItem.imageKey}">
 				<img border="0" src="<c:url value='/swag/showImage/${swagItem.imageKey}'/>"/>
 			</c:if>
 		</td>
-	</tr>
-
-</table>
-<table>
-	<tr>
-		<td>Name:</td>
-		<td><c:out value="${swagItem.name}" /></td>
 	</tr>
 	<tr>
 		<td>Description:</td>
@@ -90,14 +77,13 @@
 		<td>Company/Vendor:</td>
 		<td><c:out value="${swagItem.company}" /></td>
 	</tr>
-	<%-- 
+	<%--
 	<tr>
 		<td>Comments:</td>
 		<td>
 		<form:checkboxes path="comments" /></td>
 	</tr>
 	 --%>
-
 </table>
 <form:form  method="post">	
 	<input type="submit" value="cancel" onclick="document.location.href='<c:url value='/swag/search'/>';return false;" />

@@ -1,5 +1,6 @@
 package com.swagswap.dao;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,8 +12,6 @@ import org.apache.commons.collections.list.SetUniqueList;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.appengine.api.datastore.Blob;
 import com.swagswap.domain.SwagImage;
@@ -119,14 +118,6 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 		Date now = new Date();
 		swagItem.setCreated(now);
 		swagItem.setLastUpdated(now);
-		if (swagItem.hasNewImage()) {
-			swagItem.setImage(new SwagImage(swagItem.getImageBytes()));
-		}
-		else {
-			//add empty image, otherwise JDO won't allow you to add one
-			//a child later
-			swagItem.setImage(new SwagImage());
-		}
 		getPersistenceManager().makePersistent(swagItem);
 		// Save image key here in the parent 
 		// See comment in SwagItem above the field imageKey
@@ -142,16 +133,14 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 		orig.setName(updatedItem.getName());
 		orig.setCompany(updatedItem.getCompany());
 		orig.setDescription(updatedItem.getDescription());
-		//This is done in exclusively in update rating
+		//These are done in exclusively in update rating
 //		orig.setRating(updatedItem.getRating());
 //		orig.setNumberOfRatings(updatedItem.getNumberOfRatings());
 		orig.setLastUpdated(new Date());
 		orig.setTags(updatedItem.getTags());
 		orig.setComments(updatedItem.getComments());
-		if (updatedItem.hasNewImage()) { //replace existing image
-			//The following line doesn't work! You have to operate on the stored SwagImage
-			//orig.setImage(updatedItem.getImage());
-			orig.getImage().setImage(new Blob(updatedItem.getImageBytes()));
+		if (updatedItem.hasNewImage()) {
+			orig.getImage().setImage(updatedItem.getImage().getImage());
 		}
 	}
 	

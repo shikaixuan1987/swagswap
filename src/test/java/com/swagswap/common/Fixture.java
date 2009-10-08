@@ -13,7 +13,12 @@ public class Fixture {
 
 	public static SwagItem createSwagItem() {
 		SwagImage image = new SwagImage(new byte[]{0,1,2,3,4,5,6,7,8});
-		
+		SwagItem swagItem = createSwagItemNoImage();
+		swagItem.setImage(image);
+		return swagItem;
+	}
+	
+	public static SwagItem createSwagItemNoImage() {
 		List<String> tags = new ArrayList<String>();
 		tags.add("orange");
 		tags.add("2008");
@@ -27,7 +32,6 @@ public class Fixture {
 		SwagItem swagItem = new SwagItem(
 				"name", 
 				"description",
-				image, 
 				"owner", 
 				0F,
 				1,

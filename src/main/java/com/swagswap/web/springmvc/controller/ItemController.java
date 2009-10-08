@@ -16,6 +16,7 @@ import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,6 +29,8 @@ import com.swagswap.domain.SearchCriteria;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
+import com.swagswap.exceptions.ImageTooLargeException;
+import com.swagswap.exceptions.LoadImageFromURLException;
 import com.swagswap.service.ItemService;
 import com.swagswap.service.SwagSwapUserService;
 
@@ -56,8 +59,18 @@ public class ItemController {
 	}
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String saveHandler(@ModelAttribute SwagItem swagItem) {
-		itemService.save(swagItem);
+	public String saveHandler(@ModelAttribute SwagItem swagItem, Errors errors) {
+		try {
+			itemService.save(swagItem);
+		}
+		catch (LoadImageFromURLException e) {
+			errors.rejectValue("imageURL","","could not retrieve URL");
+			return "addEditSwagItem";
+		}
+		catch (ImageTooLargeException e) {
+			errors.rejectValue("imageURL","","image is too large (max size is 150K)");
+			return "addEditSwagItem";
+		}
 		return "redirect:/swag/search";
 	}
 	

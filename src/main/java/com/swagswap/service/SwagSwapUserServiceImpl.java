@@ -9,6 +9,7 @@ import com.google.appengine.api.users.UserService;
 import com.swagswap.dao.UserDao;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
+import com.swagswap.exceptions.UserAlreadyExistsException;
 
 public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	private static final Logger log = Logger.getLogger(SwagSwapUserServiceImpl.class);

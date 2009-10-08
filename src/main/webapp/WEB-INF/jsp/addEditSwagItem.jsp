@@ -9,7 +9,7 @@
 
 <form:form action="/swag/save" enctype="multipart/form-data" commandName="swagItem" method="post">
 	<form:hidden path="key" />
-
+	<font color="red"><form:errors path="*" /></font>
 	<table>
 		<tr>
 			<td>Name:</td>
@@ -49,12 +49,30 @@
 		</tr>
 		 --%>
 		<tr>
-			<td>Image:</td>
-			<td nowrap="true">
-			<c:if test="${not empty swagItem.imageKey}">
-			<img border="0" src="<c:url value='/swag/showImage/${swagItem.imageKey}'/>"/>
-			</c:if>
-			<input type="file" name="imageBytes" value="Change Image"/> (Upload New Image)</td>
+			<td>Current Image:</td>
+			<td>
+				<c:if test="${not empty swagItem.imageKey}">
+					<img border="0" src="<c:url value='/swag/showImage/${swagItem.imageKey}'/>"/>
+				</c:if>
+			</td>
+		</tr>
+		<tr>
+			<td>Upload a New Image:</td>
+			<td>
+			<input type="file" name="imageBytes" value="Change Image"/>
+			<font color="red"><form:errors path="imageBytes" /></font>
+			</td>
+		</tr>
+		<tr>
+			<td>or</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Specify an image URL:</td>
+			<td>
+			<form:input path="imageURL" size="70" />
+			<font color="red"><form:errors path="imageURL" /></font>
+			</td>
 		</tr>
 
 	</table>

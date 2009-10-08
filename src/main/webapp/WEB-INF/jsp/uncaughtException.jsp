@@ -14,10 +14,10 @@ try {
 	if (exception != null) {
 		//Custom exception handling
 		if (exception instanceof org.springframework.web.multipart.MultipartException) {
-			out.println("File upload is too large.  <a href=\"\" onclick=\"history.go(-1);return false;\">Try again</a>");
+			out.println("File upload is too large (max size 150K).  <a href=\"\" onclick=\"history.go(-1);return false;\">Try again</a>");
 		}
 		else if (exception instanceof javax.jdo.JDOObjectNotFoundException) {
-			out.println("Can't help you buddy.  You're barking up the wrong tree. "+
+			out.println("Object not found. Can't help you buddy. You're barking up the wrong tree. "+
 					"<a href=\"/\">Return to Swagswap</a>");
 		}
 		//Standard exception handling

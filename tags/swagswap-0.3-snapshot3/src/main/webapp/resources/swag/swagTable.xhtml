@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:swag="http://java.sun.com/jsf/composite/swag">
+
+
+<composite:interface>
+	<composite:attribute name="value" required="true" />
+	<composite:attribute name="bean" required="true" />
+</composite:interface>
+
+<composite:implementation>
+	<h:dataTable value="#{cc.attrs.value}" var="row" width="100%"
+		styleClass="tableBorder" rules="all" rowClasses="tableRow1, tableRow2"
+		columnClasses="tableCol1, tableCol2, tableCol3, tableCol4, tableCol5, tableCol6, tableCol7, tableCol8"
+		onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+		onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+		cellpadding="4" >
+		<h:column headerClass="tableHeader">
+			<f:facet name="header">
+				<h:outputText value="" />
+			</f:facet>
+			<h:panelGroup layout="block"
+				style="text-align:center; width:100%; background-color:white;">
+				<h:graphicImage value="/swag/showImage/#{row.image.encodedKey}"
+					style="height: 50px; width: 50px;" />
+			</h:panelGroup>
+		</h:column>
+		<h:column headerClass="tableHeader">
+			<f:facet name="header">
+				<h:outputText value="Name" />
+			</f:facet>
+			<h:outputText value="#{row.name}" />
+		</h:column>
+		<h:column headerClass="tableHeader">
+			<f:facet name="header">
+				<h:outputText value="Description" />
+			</f:facet>
+			<h:outputText value="#{row.description}" />
+		</h:column>
+		<h:column headerClass="tableHeader">
+			<f:facet name="header">
+				<h:outputText value="Tags" />
+			</f:facet>
+			<h:dataTable value="#{row.tags}" var="tag">
+				<h:column>
+					<h:outputText value="#{tag}" />
+				</h:column>
+			</h:dataTable>
+		</h:column>
+		<h:column headerClass="tableHeader">
+			<f:facet name="header">
+				<h:outputText value="Average Rating" />
+			</f:facet>
+			<swag:stars value="#{row.rating}" />
+		</h:column>
+		<h:column headerClass="tableHeader">
+			<f:facet name="header">
+				<h:outputText value="Number of Ratings" />
+			</f:facet>
+			<h:outputText value="#{row.numberOfRatings}" />
+		</h:column>
+		<h:column headerClass="tableHeader">
+			<f:facet name="header">
+				<h:outputText value="Vendor" />
+			</f:facet>
+			<h:outputText value="" />
+		</h:column>
+		<h:column headerClass="tableHeader">
+			<f:facet name="header">
+				<h:outputText value="Action" />
+			</f:facet>
+			<h:panelGrid cellPadding="0" cellspacing="0" columns="2">
+				<h:button image="/images/edit.gif"
+					outcome="editSwag">
+					<f:param name="rowId" value="#{row.key}"/>
+				</h:button>
+				<h:commandButton image="/images/delete.gif"
+					action="#{swagEditBean.actionDelete}">
+					<f:setPropertyActionListener value="#{row.key}"
+						target="#{swagEditBean.selectedRowId}" />
+				</h:commandButton>
+			</h:panelGrid>
+		</h:column>
+	</h:dataTable>
+</composite:implementation>
+
+</html>
+

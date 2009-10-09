@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:swag="http://java.sun.com/jsf/composite/swag">
+
+<h:form>
+	<h:panelGroup
+		style="padding-left: 10px; height: 100%; font-weight: bold; font-style: italic;"
+		layout="block">
+		<h:panelGroup layout="block" style="height: 50px; margin-top: 50px;" />
+		<h:commandLink value="Home" action="home?faces-redirect=true" />
+		<br />
+		<br />
+		<h:commandLink value="All Swag" action="allSwag?faces-redirect=true" />
+		<br />
+		<br />
+		<h:outputText value="My Swag" />
+		<br />
+		<br />
+		<h:outputText value="Top Rated Swag" />
+		<br />
+		<br />
+		<h:commandLink value="Add Swag" action="addSwag?faces-redirect=true" />
+	</h:panelGroup>
+</h:form>
+</html>

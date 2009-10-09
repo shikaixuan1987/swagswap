@@ -8,12 +8,18 @@
 </c:if>
 
 <form:form action="/swag/save" enctype="multipart/form-data" commandName="swagItem" method="post">
+	<%--Any fields they're not filling in have to be carried
+	    over in hidden fields because of request scoping --%>
 	<form:hidden path="key" />
+	<form:hidden path="imageKey" />
 	<font color="red"><form:errors path="*" /></font>
 	<table>
 		<tr>
 			<td>Name:</td>
-			<td><form:input path="name" /></td>
+			<td>
+			<form:input path="name" /> 
+			<font color="red"><form:errors path="name" /></font>
+			</td>
 		</tr>
 		<tr>
 			<td>Description:</td>

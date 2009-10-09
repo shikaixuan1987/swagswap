@@ -30,6 +30,8 @@ import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
 import com.swagswap.exceptions.ImageTooLargeException;
+import com.swagswap.exceptions.InvalidSwagImageException;
+import com.swagswap.exceptions.InvalidSwagItemException;
 import com.swagswap.exceptions.LoadImageFromURLException;
 import com.swagswap.service.ItemService;
 import com.swagswap.service.SwagSwapUserService;
@@ -65,13 +67,19 @@ public class ItemController {
 		}
 		catch (LoadImageFromURLException e) {
 			errors.rejectValue("imageURL","","could not retrieve URL");
-			return "addEditSwagItem";
 		}
 		catch (ImageTooLargeException e) {
 			errors.rejectValue("imageURL","","image is too large (max size is 150K)");
-			return "addEditSwagItem";
 		}
-		return "redirect:/swag/search";
+		catch (InvalidSwagImageException e) {
+			errors.rejectValue("","","image of type " + e.getMimeType() + " is not allowed");
+		}
+		// Normally you would use front end validation for this, but we only need to 
+		// validate one field and it's already implemented on the server-side. 
+		catch (InvalidSwagItemException e) {
+			errors.rejectValue("name","","name is required");
+		}
+		return (errors.hasErrors()) ? "addEditSwagItem" : "redirect:/swag/search";
 	}
 	
 	@RequestMapping(value = "/view/{key}", method = RequestMethod.GET)

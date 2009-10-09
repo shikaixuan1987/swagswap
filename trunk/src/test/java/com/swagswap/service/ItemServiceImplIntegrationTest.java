@@ -47,6 +47,8 @@ public class ItemServiceImplIntegrationTest extends LocalDatastoreTestCase  {
         SwagItem retrieved = itemService.get(swagItemWithNoImage.getKey());
         assertNotNull(retrieved.getImage().getImage());
     }
+    
+    //TODO test save exceptions
  
     
 }

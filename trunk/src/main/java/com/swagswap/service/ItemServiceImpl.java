@@ -8,6 +8,9 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
+import net.sf.jmimemagic.Magic;
+import net.sf.jmimemagic.MagicMatch;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import com.swagswap.dao.ItemDao;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.exceptions.AccessDeniedException;
 import com.swagswap.exceptions.ImageTooLargeException;
+import com.swagswap.exceptions.InvalidSwagImageException;
 import com.swagswap.exceptions.InvalidSwagItemException;
 import com.swagswap.exceptions.LoadImageFromURLException;
 
@@ -39,6 +43,8 @@ public class ItemServiceImpl implements ItemService {
 	private UserService googleUserService;
 	@Autowired
 	private SwagSwapUserService swagSwapUserService; //for saving users to our app
+	//for checking mime type
+	private Magic jmimeMagicParser = new Magic();
 
 	public ItemServiceImpl() {
 	}
@@ -90,14 +96,14 @@ public class ItemServiceImpl implements ItemService {
 	/**
 	 * saves swag item and image (image is saved in dao because it's a child object)
 	 * (A user is not associated with a swagitem via a JDO relationship because 
-	 * Icouldn't get a many-to-one relationship going in JDO), 
+	 * I couldn't get a many-to-one relationship going in JDO), 
 	 * @throws IOException 
 	 * @throws MalformedURLException 
 	 */
 	
 	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public void save(SwagItem swagItem) 
-		throws LoadImageFromURLException, ImageTooLargeException {
+		throws LoadImageFromURLException, ImageTooLargeException, InvalidSwagImageException {
 		if (StringUtils.isEmpty(swagItem.getName())) { //only required field
 			throw new InvalidSwagItemException("name is required");
 		}
@@ -154,25 +160,35 @@ public class ItemServiceImpl implements ItemService {
 	}
 	
 	private void populateSwagImage(SwagItem swagItem) 
-		throws LoadImageFromURLException, ImageTooLargeException {
+		throws LoadImageFromURLException, ImageTooLargeException, InvalidSwagImageException {
+		if (!swagItem.hasNewImage()) {
+			return;
+		}
+		byte[] newImageData = null;
 		if (swagItem.hasNewImageBytes()) {
 			//TODO fix this comment
 			// The following line only works for a save, 
 			// not an upate cause there you have to operate on the stored SwagImage
 			//orig.setImage(updatedItem.getImage();
-			swagItem.getImage().setImage(new Blob(swagItem.getImageBytes()));
+			 newImageData = swagItem.getImageBytes();
 		} else if (swagItem.hasNewImageURL()) {
-			populateSwagImageFromURL(swagItem);
+			newImageData = getImageDataFromURL(swagItem.getImageURL());
 		}
+		checkImageMimeType(newImageData);
+		swagItem.getImage().setImage(new Blob(newImageData));
 	}
 
-	protected void populateSwagImageFromURL(SwagItem swagItem) 
+	/**
+	 * 
+	 * @return image data from swagItem
+	 */
+	protected byte[] getImageDataFromURL(String imageURL) 
 		throws LoadImageFromURLException, ImageTooLargeException {
 		BufferedInputStream bis=null;
 		ByteArrayOutputStream bos=null;
 		try {
 			//fetch URL as InputStream
-			URL url = new URL(swagItem.getImageURL());
+			URL url = new URL(imageURL);
 			bis = new BufferedInputStream(url.openStream());
 			//write it to a byte[] using a buffer since we don't know the exact image size
 			byte [] buffer = new byte[1024];
@@ -185,10 +201,10 @@ public class ItemServiceImpl implements ItemService {
 		    if (imageData.length > 150000) {
 		    	throw new ImageTooLargeException(url.toString(),150000);
 		    }
-			swagItem.getImage().setImage(new Blob(imageData));
+			return imageData;
 		}
 		catch (IOException e) {
-			throw new LoadImageFromURLException(swagItem.getImageURL(), e);
+			throw new LoadImageFromURLException(imageURL, e);
 		}
 		finally {
 			try {
@@ -198,6 +214,31 @@ public class ItemServiceImpl implements ItemService {
 				//ignore
 			}
 		}
+	}
+	
+	/**
+	 * 
+	 * @param imageData
+	 * @throws InvalidSwagImageException
+	 */
+	public void checkImageMimeType(byte[] imageData) throws InvalidSwagImageException {
+			String mimeType;
+			try {
+				MagicMatch match = jmimeMagicParser.getMagicMatch(imageData);
+				mimeType = match.getMimeType();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				log.error(e);
+				throw new InvalidSwagImageException(e);
+			}
+			if (!(
+					("image/gif".equals(mimeType)) ||
+					("image/png".equals(mimeType)) || 
+					("image/jpeg".equals(mimeType))
+				))
+			{
+				throw new InvalidSwagImageException(mimeType);
+			}
 	}
 	
 	/**

@@ -36,5 +36,6 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/com.springsource.org.jboss.el-2.0.0.GA.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jsf-api.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jsf-impl.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jmimemagic-0.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -7,6 +7,7 @@ public class LoadImageFromURLException extends RuntimeException {
 
 	public LoadImageFromURLException(String url, Throwable cause) {
 		super("Cannot load image from " + url, cause);
+		this.url=url;
 	}
 
 	public String getUrl() {

@@ -1,5 +1,6 @@
 package com.swagswap.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -23,7 +24,9 @@ import com.google.appengine.api.datastore.Text;
  */
 @SuppressWarnings("unchecked")
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class SwagItem {
+public class SwagItem implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -31,52 +34,54 @@ public class SwagItem {
 
 	@Persistent
 	private String name;
-	
+
 	@Persistent
 	private String company; // vendor giving out swag
 
-	//Text and Blob are not part of the default fetch group
+	// Text and Blob are not part of the default fetch group
 	@Persistent
 	private Text description;
 
 	/**
-	 * Owned One-to-One Relationship (lazy loaded)
-	 * see http://code.google.com/appengine/docs/java/datastore/relationships.html
+	 * Owned One-to-One Relationship (lazy loaded) see
+	 * http://code.google.com/appengine/docs/java/datastore/relationships.html
 	 * 
-	 * Add empty image object, otherwise JDO won't allow you to add one as a child later
-	 * plus we never want it to be null because the the only way to update the image data
-	 * is to get the exiting SwagImage and set the image Blob.  See ItemService populateSwagImage()
+	 * Add empty image object, otherwise JDO won't allow you to add one as a
+	 * child later plus we never want it to be null because the the only way to
+	 * update the image data is to get the exiting SwagImage and set the image
+	 * Blob. See ItemService populateSwagImage()
 	 */
 	@Persistent
 	private SwagImage image = new SwagImage();
-	
+
 	/**
-	 * Store this so we can get the images separately with an image servlet
-	 * to show them with an image tag but not have to load them twice
-	 * (once when retrieving it from SwagItem, and once when looking it up with the servlet)
+	 * Store this so we can get the images separately with an image servlet to
+	 * show them with an image tag but not have to load them twice (once when
+	 * retrieving it from SwagItem, and once when looking it up with the
+	 * servlet)
 	 */
 	@Persistent
 	private String imageKey;
-	
+
 	// used to store imageBytes from the HTML form
 	@NotPersistent
 	private byte[] imageBytes;
-	
+
 	// used to store imageURL from the HTML form
 	@NotPersistent
 	private String imageURL;
 
 	@Persistent
 	private String ownerEmail;
-	
+
 	@Persistent
 	private String ownerNickName;
 
 	@Persistent
-	private Float averageRating=0F;
+	private Float averageRating = 0F;
 
 	@Persistent
-	private Integer numberOfRatings=0;
+	private Integer numberOfRatings = 0;
 
 	@Persistent
 	private Date created;
@@ -84,29 +89,28 @@ public class SwagItem {
 	@Persistent
 	private Date lastUpdated;
 
-	//For info about LazyList see http://mattfleming.com/node/134
+	// For info about LazyList see http://mattfleming.com/node/134
 	@Persistent(defaultFetchGroup = "true")
-	private List<String> tags  = LazyList.decorate(new ArrayList(),FactoryUtils.instantiateFactory(String.class));
+	private List<String> tags = LazyList.decorate(new ArrayList(), FactoryUtils
+			.instantiateFactory(String.class));
 
 	@Persistent(defaultFetchGroup = "true")
 	private List<String> comments = new ArrayList<String>();
 
-	
 	public SwagItem() {
 	}
-	
-	
+
 	public SwagItem(String name, String description, SwagImage image,
 			String owner, Float rating, Integer numberOfRatings,
 			List<String> tags, List<String> comments) {
-		this(name,description,owner,rating,numberOfRatings,tags,comments);
+		this(name, description, owner, rating, numberOfRatings, tags, comments);
 		this.image = image;
 	}
-	
-	//No image
-	public SwagItem(String name, String description,
-			String owner, Float rating, Integer numberOfRatings,
-			List<String> tags, List<String> comments) {
+
+	// No image
+	public SwagItem(String name, String description, String owner,
+			Float rating, Integer numberOfRatings, List<String> tags,
+			List<String> comments) {
 		super();
 		this.name = name;
 		this.description = new Text(description);
@@ -116,23 +120,23 @@ public class SwagItem {
 		this.tags = tags;
 		this.comments = comments;
 	}
-	
+
 	public boolean isNew() {
 		return getKey() == null;
 	}
-	
+
 	/**
 	 * @return whether the swagItem has an image to update
 	 */
 	public boolean hasNewImage() {
-		return (imageBytes.length!=0 || StringUtils.isNotEmpty(imageURL));
+		return (imageBytes.length != 0 || StringUtils.isNotEmpty(imageURL));
 	}
-	
+
 	// SwagItem has a new image if imageBytes is filled from file upload
 	public boolean hasNewImageBytes() {
-		return (imageBytes != null && imageBytes.length !=0);
+		return (imageBytes != null && imageBytes.length != 0);
 	}
-	
+
 	public boolean hasNewImageURL() {
 		return StringUtils.isNotEmpty(imageURL);
 	}
@@ -152,7 +156,7 @@ public class SwagItem {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getCompany() {
 		return company;
 	}
@@ -162,7 +166,7 @@ public class SwagItem {
 	}
 
 	public String getDescription() {
-		return (description==null)?"":description.getValue();
+		return (description == null) ? "" : description.getValue();
 	}
 
 	public void setDescription(String description) {
@@ -184,7 +188,7 @@ public class SwagItem {
 	public void setImageBytes(byte[] imageBytes) {
 		this.imageBytes = imageBytes;
 	}
-	
+
 	public String getImageURL() {
 		return imageURL;
 	}
@@ -193,7 +197,7 @@ public class SwagItem {
 		this.imageURL = imageURL;
 	}
 
-	//Lazily populate this
+	// Lazily populate this
 	public String getImageKey() {
 		return imageKey;
 	}
@@ -296,7 +300,8 @@ public class SwagItem {
 	/**
 	 * Note, Blobs and children are lazy loaded. You can't just compare
 	 * description fields for example, you have to actually call the
-	 * getDescription() method to have it loaded.  Same with image (since it's a child object).
+	 * getDescription() method to have it loaded. Same with image (since it's a
+	 * child object).
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -371,7 +376,5 @@ public class SwagItem {
 			return false;
 		return true;
 	}
-
-
 
 }

@@ -1,10 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:swag="http://java.sun.com/jsf/composite/swag">
 
@@ -27,7 +26,8 @@
 			</f:facet>
 			<h:panelGroup layout="block"
 				style="text-align:center; width:100%; background-color:white;">
-				<h:graphicImage value="/swag/showImage/#{row.swagItem.image.encodedKey}"
+				<h:graphicImage
+					value="/swag/showImage/#{row.swagItem.image.encodedKey}"
 					style="height: 50px; width: 66px;" />
 			</h:panelGroup>
 		</h:column>
@@ -35,7 +35,8 @@
 			<f:facet name="header">
 				<h:outputText value="Name" />
 			</f:facet>
-			<h:outputText value="#{row.swagItem.name}" title="#{row.swagItem.description}" />
+			<h:outputText value="#{row.swagItem.name}"
+				title="#{row.swagItem.description}" />
 		</h:column>
 		<h:column headerClass="tableHeader">
 			<f:facet name="header">
@@ -47,7 +48,7 @@
 				</h:column>
 			</h:dataTable>
 		</h:column>
-				<h:column headerClass="tableHeader">
+		<h:column headerClass="tableHeader">
 			<f:facet name="header">
 				<h:outputText value="Company" />
 			</f:facet>
@@ -57,7 +58,11 @@
 			<f:facet name="header">
 				<h:outputText value="My Rating" />
 			</f:facet>
-			<swag:stars value="#{row.userRating}" editable="true"  />
+			<swag:stars value="#{row.userRating}" editable="true"
+				key="#{row.swagItem.key}" keyTarget="#{swagBean.selectedRowId}"
+				action="#{swagBean.actionRateSwag}"
+				ratingTarget="#{swagBean.userRating}">
+			</swag:stars>
 		</h:column>
 		<h:column headerClass="tableHeader">
 			<f:facet name="header">
@@ -65,11 +70,13 @@
 			</f:facet>
 			<h:outputText value="#{row.swagItem.numberOfRatings}" />
 		</h:column>
-				<h:column headerClass="tableHeader">
+		<h:column headerClass="tableHeader">
 			<f:facet name="header">
 				<h:outputText value="Average Rating" />
 			</f:facet>
-			<swag:stars value="#{row.swagItem.averageRating}" />
+			<h:panelGroup id="averageRating">
+				<swag:stars value="#{row.swagItem.averageRating}" />
+			</h:panelGroup>
 		</h:column>
 
 		<h:column headerClass="tableHeader">

@@ -1,73 +1,63 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 <composite:interface>
-	<composite:attribute name="value" />
+	<composite:attribute name="value" required="true" />
 	<composite:attribute name="style" />
 	<composite:attribute name="editable" />
+	<!--   TODO Cannot pass action like this.  Remove hard coding and consider <composite:actionSource -->
+	<composite:attribute name="action" />
+	<composite:attribute name="key" />
+	<composite:attribute name="keyTarget" />
+	<composite:attribute name="ratingTarget" />
+	<composite:attribute name="stars" default="5" />
 </composite:interface>
 
 <composite:implementation>
-	<h:panelGroup rendered="#{! cc.attrs.editable}">
+	<h:panelGroup rendered="#{! cc.attrs.editable}" >
+		<!--   Add JSTL forEach.  When it works -->
 		<h:panelGrid columns="5" cellpadding="0" cellspacing="0"
 			style="#{cc.attrs.style}">
-
-			<h:graphicImage value="/images/StarOff.gif"
-				rendered="#{cc.attrs.value lt (0.5)}" />
-			<h:graphicImage value="/images/StarOn.gif"
-				rendered="#{cc.attrs.value ge (0.5)}" />
-			<h:graphicImage value="/images/StarOff.gif"
-				rendered="#{cc.attrs.value lt (1.5)}" />
-			<h:graphicImage value="/images/StarOn.gif"
-				rendered="#{cc.attrs.value ge (1.5)}" />
-			<h:graphicImage value="/images/StarOff.gif"
-				rendered="#{cc.attrs.value lt (2.5)}" />
-			<h:graphicImage value="/images/StarOn.gif"
-				rendered="#{cc.attrs.value ge (2.5)}" />
-			<h:graphicImage value="/images/StarOff.gif"
-				rendered="#{cc.attrs.value lt (3.5)}" />
-			<h:graphicImage value="/images/StarOn.gif"
-				rendered="#{cc.attrs.value ge (3.5)}" />
-			<h:graphicImage value="/images/StarOff.gif"
-				rendered="#{cc.attrs.value lt (4.5)}" />
-			<h:graphicImage value="/images/StarOn.gif"
-				rendered="#{cc.attrs.value ge (4.5)}" />
-
+			<c:forEach var="i" begin="5" end="#{(cc.attrs.stars * 10)}" step="10">
+				<h:graphicImage value="/images/StarOff.gif"
+					rendered="#{cc.attrs.value lt (i / 10)}" />
+				<h:graphicImage value="/images/StarOn.gif"
+					rendered="#{cc.attrs.value ge (i / 10)}" />
+			</c:forEach>
 		</h:panelGrid>
 	</h:panelGroup>
-	<h:panelGroup rendered="#{cc.attrs.editable}">
+	<h:panelGroup rendered="#{cc.attrs.editable}" id="stars">
 		<h:panelGrid columns="5" cellpadding="0" cellspacing="0"
 			style="#{cc.attrs.style}">
-
-			<h:commandButton image="/images/StarOff.gif"
-				rendered="#{(cc.attrs.value == 0)}" />
-			<h:commandButton image="/images/StarOn.gif"
-				rendered="#{(cc.attrs.value gt 0)}" />
-			<h:commandButton image="/images/StarOff.gif"
-				rendered="#{(cc.attrs.value lt 1)}" />
-			<h:commandButton image="/images/StarOn.gif"
-				rendered="#{(cc.attrs.value ge 1)}" />
-			<h:commandButton image="/images/StarOff.gif"
-				rendered="#{(cc.attrs.value lt 2)}" />
-			<h:commandButton image="/images/StarOn.gif"
-				rendered="#{(cc.attrs.value ge 2)}" />
-			<h:commandButton image="/images/StarOff.gif"
-				rendered="#{(cc.attrs.value lt 3)}" />
-			<h:commandButton image="/images/StarOn.gif"
-				rendered="#{(cc.attrs.value ge 3)}" />
-			<h:commandButton image="/images/StarOff.gif"
-				rendered="#{(cc.attrs.value lt 4)}" />
-			<h:commandButton image="/images/StarOn.gif"
-				rendered="#{(cc.attrs.value ge 4)}" />
-
+			<c:forEach var="i" begin="10" end="#{(cc.attrs.stars * 10)}"
+				step="10">
+				<h:panelGroup>
+					<h:commandButton image="/images/StarOff.gif"
+						rendered="#{cc.attrs.value le ((i / 10 )- 1)}"
+						action="#{swagBean.actionRateSwag}">
+						<f:setPropertyActionListener value="${i / 10}"
+							target="#{cc.attrs.ratingTarget}" />
+						<f:setPropertyActionListener value="#{cc.attrs.key}"
+							target="#{cc.attrs.keyTarget}" />
+						<f:ajax render="@form" />
+					</h:commandButton>
+					<h:commandButton image="/images/StarOn.gif"
+						rendered="#{cc.attrs.value gt ((i / 10 )- 1)}"
+						action="#{swagBean.actionRateSwag}">
+						<f:setPropertyActionListener value="${i / 10}"
+							target="#{cc.attrs.ratingTarget}" />
+						<f:setPropertyActionListener value="#{cc.attrs.key}"
+							target="#{cc.attrs.keyTarget}" />
+						<f:ajax render="@form" />
+					</h:commandButton>
+				</h:panelGroup>
+			</c:forEach>
 		</h:panelGrid>
 	</h:panelGroup>
-	<h:outputText value="#{cc.attrs.value}" />
 </composite:implementation>
 </html>

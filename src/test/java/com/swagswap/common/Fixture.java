@@ -42,13 +42,6 @@ public class Fixture {
 		return swagSwapUser;
 	}
 	
-	public static Map<Long, Integer> getRatedItems() {
-		HashMap<Long, Integer> ratedItems = new HashMap<Long, Integer>();
-		ratedItems.put(1L,2);
-		ratedItems.put(2L,3);
-		return ratedItems;
-	}
-	
 	public static String get510Chars() {
 		return "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis scelerisque facilisis " +
 				"tortor. Aliquam semper gravida ligula. Vestibulum sodales lacinia leo. In turpis justo," +

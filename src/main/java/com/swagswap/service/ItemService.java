@@ -1,11 +1,10 @@
 package com.swagswap.service;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
 import com.swagswap.domain.SwagItem;
-import com.swagswap.domain.SwagItemRating;
+import com.swagswap.domain.SwagItemComment;
 import com.swagswap.exceptions.LoadImageFromURLException;
 
 public interface ItemService {
@@ -23,5 +22,7 @@ public interface ItemService {
 	void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNew);
 	
 	void delete(Long id);
+	
+	void addComment(SwagItemComment swagItemComment);
 
 }

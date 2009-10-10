@@ -1,6 +1,6 @@
 package com.swagswap.service;
 
-import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.swagswap.common.Fixture;
 import com.swagswap.common.LocalDatastoreTestCase;
 import com.swagswap.dao.ItemDao;
@@ -10,7 +10,8 @@ import com.swagswap.domain.SwagItem;
 public class ItemServiceImplIntegrationTest extends LocalDatastoreTestCase  {
 	
 	private ItemDao itemDao;
-	private ItemService itemService;
+	private SwagSwapUserService swagSwapUserService;
+	private ItemServiceImpl itemService;
 	
 	@Override
     public void setUp() throws Exception {
@@ -20,13 +21,20 @@ public class ItemServiceImplIntegrationTest extends LocalDatastoreTestCase  {
         	itemDao.setPersistenceManagerFactory(PMF);
         	this.itemDao=itemDao;
         }
-        //TODO
-        //use easymock to create googleUserService and set it in itemService
-        //see http://blog.appenginefan.com/2009/04/writing-unit-testable-backend.html
+        // These two services use each other which is fine but it makes test
+        // setup weird
+        if (swagSwapUserService == null) {
+        	if (itemService==null) {
+        		itemService = new ItemServiceImpl(itemDao);
+        	}
+        	//don't need userDao here
+        	swagSwapUserService = new SwagSwapUserServiceImpl(
+        	null, itemService,UserServiceFactory.getUserService());
         	
-        if (itemService==null) {
-        	itemService = new ItemServiceImpl(itemDao);
+        	itemService.setSwagSwapUserService(swagSwapUserService);
         }
+        
+
 	}
 
 	/**

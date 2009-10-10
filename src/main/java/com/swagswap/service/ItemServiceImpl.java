@@ -19,9 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserService;
 import com.swagswap.dao.ItemDao;
 import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagItemComment;
 import com.swagswap.exceptions.AccessDeniedException;
 import com.swagswap.exceptions.ImageTooLargeException;
 import com.swagswap.exceptions.InvalidSwagImageException;
@@ -144,17 +144,25 @@ public class ItemServiceImpl implements ItemService {
 		checkPermissions(id);
 		itemDao.delete(id);
 	}
+	
+	public void addComment(SwagItemComment newComment) {
+		if (StringUtils.isEmpty(newComment.getCommentText())) {
+			return;
+		}
+		newComment.setSwagSwapUserNickname(swagSwapUserService.getCurrentUser().getNickname());
+		itemDao.addComment(newComment);
+	}
 
 	public void setSwagItemDao(ItemDao itemDao) {
 		this.itemDao = itemDao;
 	}
 
-	//TODO is this needed with @Autowire?
+	// for tests
 	public void setSwagSwapUserService(SwagSwapUserService swagSwapUserService) {
 		this.swagSwapUserService = swagSwapUserService;
 	}
 	
-	private void populateSwagImage(SwagItem swagItem) 
+	protected void populateSwagImage(SwagItem swagItem) 
 		throws LoadImageFromURLException, ImageTooLargeException, InvalidSwagImageException {
 		if (!swagItem.hasNewImage()) {
 			return;
@@ -246,11 +254,6 @@ public class ItemServiceImpl implements ItemService {
 		//admins can do everything!
 		if (swagSwapUserService.isUserAdmin()) {
 			return;
-		}
-		// Not logged in 
-		// (if this happened the webapp messed up or someone's trying to hack us)
-		if (user==null) {
-			throw new AccessDeniedException("User not logged in.  No permissions");
 		}
 		//get item fresh to prevent client side attacks
 		SwagItem swagItemToCheck = get(swagItemIdToCheck); 

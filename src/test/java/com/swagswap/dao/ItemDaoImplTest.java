@@ -6,10 +6,12 @@ import javax.jdo.JDOObjectNotFoundException;
 
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.swagswap.common.Fixture;
 import com.swagswap.common.LocalDatastoreTestCase;
 import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagItemComment;
 
 
 public class ItemDaoImplTest extends LocalDatastoreTestCase  {
@@ -167,6 +169,18 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
         
         assertNumberOfItemsAndImages(0,0);
      }
+    
+    public void testAddComment() {
+    	
+    	SwagItem swagItem = Fixture.createSwagItem();
+    	itemDao.insert(swagItem);
+    	SwagItem retrievedItem = itemDao.get(swagItem.getKey());
+    	String nickName = UserServiceFactory.getUserService().getCurrentUser().getNickname();
+    	itemDao.addComment(new SwagItemComment(swagItem.getKey(), nickName, "comment"));
+    	//get it again
+    	retrievedItem = itemDao.get(swagItem.getKey());
+    	assertEquals(1, retrievedItem.getComments().size());
+    }
     
     public void testFindByTag() {
         SwagItem swagItem = Fixture.createSwagItem();

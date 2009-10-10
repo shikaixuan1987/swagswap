@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import com.swagswap.domain.SwagItem;
@@ -19,6 +20,8 @@ import com.swagswap.domain.SwagItem;
 @ManagedBean(name = "swagEditBean")
 @ViewScoped
 public class SwagEditBean implements Serializable {
+
+	private Integer userRating = 0;
 
 	private static final long serialVersionUID = 1L;
 	private SwagItem editSwagItem;
@@ -43,6 +46,14 @@ public class SwagEditBean implements Serializable {
 			tagList.add("");
 		}
 		editSwagItem.setTags(tagList);
+	}
+
+	public Integer getUserRating() {
+		return userRating;
+	}
+
+	public void setUserRating(Integer userRating) {
+		this.userRating = userRating;
 	}
 
 }

@@ -10,7 +10,9 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
 import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagItemRating;
 import com.swagswap.service.ItemService;
+import com.swagswap.service.SwagSwapUserService;
 import com.swagswap.web.jsf.model.SwagItemWrapper;
 
 @ManagedBean(name = "swagBean")
@@ -21,23 +23,43 @@ public class SwagBean {
 	@ManagedProperty(value = "#{swagItemService}")
 	private ItemService itemService;
 
+	// Inject the swagSwapUserService Spring Bean
+	@ManagedProperty(value = "#{swagSwapUserService}")
+	private SwagSwapUserService swagSwapUserService;
+
 	@ManagedProperty(value = "#{swagEditBean}")
 	private SwagEditBean swagEditBean;
-	
+
 	@ManagedProperty(value = "#{userBean}")
 	private UserBean userBean;
-
-
 
 	private Collection<SwagItemWrapper> swagList;
 	private String searchString = "Search";
 	private Boolean showClear = false;
 	private Long selectedRowId;
+	private Integer userRating;
+
+	public Integer getUserRating() {
+		return userRating;
+	}
+
+	public void setUserRating(Integer userRating) {
+		this.userRating = userRating;
+	}
+
+	public SwagSwapUserService getSwagSwapUserService() {
+		return swagSwapUserService;
+	}
+
+	public void setSwagSwapUserService(SwagSwapUserService swagSwapUserService) {
+		this.swagSwapUserService = swagSwapUserService;
+	}
 
 	public void populateSwagItem() {
 		SwagItem item = getItemService().get(getSelectedRowId());
 		hackSwagItemList(item);
-		setEditSwagItem(item);
+		getSwagEditBean().setEditSwagItem(item);
+		getSwagEditBean().setUserRating(getUserBean().getUserRatingForItem(item));
 	}
 
 	private void hackSwagItemList(SwagItem item) {
@@ -64,7 +86,8 @@ public class SwagBean {
 		if (searchString.length() < 1) {
 			return;
 		}
-		swagList = convertSwagListToWrapperList(getItemService().search(searchString));
+		swagList = convertSwagListToWrapperList(getItemService().search(
+				searchString));
 		showClear = true;
 	}
 
@@ -75,12 +98,20 @@ public class SwagBean {
 	}
 
 	public String actionSaveItem() {
-		getItemService().save(getEditSwagItem());
+		getItemService().save(getSwagEditBean().getEditSwagItem());
 		return "allSwag?faces-redirect=true";
 	}
 
 	public void actionDelete() {
 		getItemService().delete(getSelectedRowId());
+	}
+
+	public void actionRateSwag() {
+		getSwagSwapUserService().addOrUpdateRating(userBean.getUserEmail(),
+				new SwagItemRating(getSelectedRowId(), getUserRating()));
+		// Force SwagList refresh so new rating is displayed
+		refreshSwagList();
+		populateSwagItem();
 	}
 
 	public String getSearchString() {
@@ -106,7 +137,7 @@ public class SwagBean {
 	public void setSwagEditBean(SwagEditBean swagEditBean) {
 		this.swagEditBean = swagEditBean;
 	}
-	
+
 	public UserBean getUserBean() {
 		return userBean;
 	}
@@ -122,20 +153,21 @@ public class SwagBean {
 		return swagList;
 	}
 
+	public void refreshSwagList() {
+		// Set swagList to null to force refresh on next get
+		swagList = null;
+	}
+
 	private Collection<SwagItemWrapper> convertSwagListToWrapperList(
 			Collection<SwagItem> itemList) {
 
 		List<SwagItemWrapper> wrapperList = new ArrayList<SwagItemWrapper>();
 		Iterator<SwagItem> iter = itemList.iterator();
 		while (iter.hasNext()) {
-			SwagItem swagItem = (SwagItem) iter.next();
-			Integer userItemRating;
-			if (getUserBean().getLoggedInUser().getSwagItemRating(swagItem.getKey()) == null) {
-				userItemRating = 0;
-			} else {
-				userItemRating = getUserBean().getLoggedInUser().getSwagItemRating(swagItem.getKey()).getUserRating();
-			}
-			wrapperList.add(new SwagItemWrapper(swagItem, userItemRating));	
+			SwagItem swagItem = iter.next();
+
+			wrapperList.add(new SwagItemWrapper(swagItem, getUserBean()
+					.getUserRatingForItem(swagItem)));
 		}
 
 		return wrapperList;
@@ -159,14 +191,6 @@ public class SwagBean {
 
 	public void setSelectedRowId(Long selectedRowId) {
 		this.selectedRowId = selectedRowId;
-	}
-
-	public SwagItem getEditSwagItem() {
-		return getSwagEditBean().getEditSwagItem();
-	}
-
-	public void setEditSwagItem(SwagItem editSwagItem) {
-		getSwagEditBean().setEditSwagItem(editSwagItem);
 	}
 
 }

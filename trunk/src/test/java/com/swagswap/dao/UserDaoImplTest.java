@@ -4,6 +4,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
 import com.swagswap.common.Fixture;
 import com.swagswap.common.LocalDatastoreTestCase;
+import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
 
 public class UserDaoImplTest extends LocalDatastoreTestCase  {
@@ -35,7 +36,7 @@ public class UserDaoImplTest extends LocalDatastoreTestCase  {
     	userDao.insert(orig);
     	
     	orig.setNickName("testie");
-    	orig.setRatedSwagItems(Fixture.getRatedItems());
+    	orig.getSwagItemRatings().add(new SwagItemRating(1L,2));
     	userDao.update(orig);
     	
     	SwagSwapUser retrievedUser = userDao.get(orig.getKey());

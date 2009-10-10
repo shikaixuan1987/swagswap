@@ -33,8 +33,8 @@ public class SwagItemRating implements Serializable {
 	public SwagItemRating() {
 	}
 	
-	public SwagItemRating(Long key) {
-		this(key,null);
+	public SwagItemRating(Long swagItemKey) {
+		this(swagItemKey,null);
 	}
 
 	public SwagItemRating(Long swagItemKey, Integer userRating) {

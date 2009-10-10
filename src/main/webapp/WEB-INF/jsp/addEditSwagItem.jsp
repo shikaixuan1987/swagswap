@@ -27,12 +27,12 @@
 		<tr>
 			<td>Created:</td>
 			<td><fmt:formatDate value="${swagItem.created}" type="both"
-				dateStyle="full" /></td>
+				dateStyle="short" /></td>
 		</tr>
 		<tr>
 			<td>Last Updated:</td>
 			<td><fmt:formatDate value="${swagItem.lastUpdated}" type="both"
-				dateStyle="full" /></td>
+				dateStyle="short" /></td>
 		</tr>
 		<tr>
 			<td>Tags:</td>

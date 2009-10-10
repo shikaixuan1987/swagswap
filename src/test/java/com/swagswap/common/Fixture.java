@@ -1,8 +1,6 @@
 package com.swagswap.common;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.swagswap.domain.SwagImage;
@@ -19,25 +17,21 @@ public class Fixture {
 	}
 	
 	public static SwagItem createSwagItemNoImage() {
-		List<String> tags = new ArrayList<String>();
-		tags.add("orange");
-		tags.add("2008");
-		tags.add("squishy");
+		SwagItem swagItem = new SwagItem();
+		swagItem.setName("name");
+		swagItem.setDescription("description");
+		swagItem.setOwnerEmail("owner");
 		
-		List<String> comments = new ArrayList<String>();
-		comments.add("great");
-		comments.add("I want one");
-		comments.add("yuck! \n That's terrible");
+//		List<String> tags = new ArrayList<String>();
+//		tags.add("orange");
+//		tags.add("2008");
+//		tags.add("squishy");
+//		
+//		List<String> comments = new ArrayList<String>();
+//		comments.add("great");
+//		comments.add("I want one");
+//		comments.add("yuck! \n That's terrible");
 		
-		SwagItem swagItem = new SwagItem(
-				"name", 
-				"description",
-				"owner", 
-				0F,
-				1,
-				tags,
-				comments
-				);
 		return swagItem;
 	}
 	

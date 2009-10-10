@@ -84,7 +84,7 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	public SwagSwapUser findByEmailOrCreate(String email) {
 		SwagSwapUser swagSwapUser = findByEmail(email);
 		if (swagSwapUser==null) {
-			swagSwapUser = new SwagSwapUser(email); //TODO do we need to add nickname?
+			swagSwapUser = new SwagSwapUser(email,getCurrentUser().getNickname());
 			insert(swagSwapUser);
 		}
 		return swagSwapUser;

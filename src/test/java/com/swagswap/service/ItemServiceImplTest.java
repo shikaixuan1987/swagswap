@@ -22,7 +22,7 @@ public class ItemServiceImplTest extends LocalDatastoreTestCase  {
         
         SwagItem swagItem = Fixture.createSwagItem();
         swagItem.setImageURL("http://www.google.com/images/nav_logo7.png"); //google logo
-        itemService.populateSwagImageFromURL(swagItem);
+        itemService.populateSwagImage(swagItem);
         
         assertNotNull(swagItem.getImage());
     }
@@ -32,7 +32,7 @@ public class ItemServiceImplTest extends LocalDatastoreTestCase  {
     	SwagItem swagItem = Fixture.createSwagItem();
     	swagItem.setImageURL("http://www.vs.inf.ethz.ch/contact/pics/tram-map-large.gif"); //big image
     	try {
-    		itemService.populateSwagImageFromURL(swagItem);
+    		itemService.populateSwagImage(swagItem);
     		fail ("Should have thrown an ImageTooLargeException");
     	} catch (ImageTooLargeException e) {
     		//good

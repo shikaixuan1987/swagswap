@@ -3,7 +3,7 @@
 		application id from http://appengine.google.com
 	-->
 	<application>swagswap</application>
-	<version>scott2</version>
+	<version>test</version>
 
 	<sessions-enabled>true</sessions-enabled>
 </appengine-web-app>

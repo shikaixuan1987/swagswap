@@ -40,8 +40,6 @@ public class ItemServiceImpl implements ItemService {
 	@Autowired
 	private ItemDao itemDao;
 	@Autowired
-	private UserService googleUserService;
-	@Autowired
 	private SwagSwapUserService swagSwapUserService; //for saving users to our app
 	//for checking mime type
 	private Magic jmimeMagicParser = new Magic();
@@ -108,9 +106,9 @@ public class ItemServiceImpl implements ItemService {
 			throw new InvalidSwagItemException("name is required");
 		}
 		if (swagItem.isNew()) {
-			String currentUserEmail = googleUserService.getCurrentUser().getEmail();
+			String currentUserEmail = swagSwapUserService.getCurrentUser().getEmail();
 			swagItem.setOwnerEmail(currentUserEmail);
-			String currentUserNickName = googleUserService.getCurrentUser().getNickname();
+			String currentUserNickName = swagSwapUserService.getCurrentUser().getNickname();
 			swagItem.setOwnerNickName(currentUserNickName);
 			
 			populateSwagImage(swagItem);
@@ -151,10 +149,7 @@ public class ItemServiceImpl implements ItemService {
 		this.itemDao = itemDao;
 	}
 
-	public void setGoogleUserService(UserService googleUserService) {
-		this.googleUserService = googleUserService;
-	}
-	
+	//TODO is this needed with @Autowire?
 	public void setSwagSwapUserService(SwagSwapUserService swagSwapUserService) {
 		this.swagSwapUserService = swagSwapUserService;
 	}
@@ -218,6 +213,7 @@ public class ItemServiceImpl implements ItemService {
 	
 	/**
 	 * 
+	 * Make sure they're uploading a picture
 	 * @param imageData
 	 * @throws InvalidSwagImageException
 	 */
@@ -246,9 +242,9 @@ public class ItemServiceImpl implements ItemService {
 	 * @throws AccessDeniedException if currentUser is not allowed to access an item
 	 */
 	private void checkPermissions(Long swagItemIdToCheck) throws AccessDeniedException {
-		User user = googleUserService.getCurrentUser();
+		User user = swagSwapUserService.getCurrentUser();
 		//admins can do everything!
-		if (googleUserService.isUserAdmin()) {
+		if (swagSwapUserService.isUserAdmin()) {
 			return;
 		}
 		// Not logged in 

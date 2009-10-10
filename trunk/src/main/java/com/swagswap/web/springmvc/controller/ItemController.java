@@ -44,11 +44,9 @@ public class ItemController {
 	private ItemService itemService;
 	@Autowired
 	private SwagSwapUserService swagSwapUserService;
-	@Autowired
-	private com.google.appengine.api.users.UserService googleUserService;
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String addHandler(Model model, HttpServletRequest req) {
+	public String addHandler(Model model) {
 		model.addAttribute("swagItem", new SwagItem());
 		return "addEditSwagItem";
 	}
@@ -87,11 +85,12 @@ public class ItemController {
 		SwagItem swagItem = itemService.get(key, true);
 		//put rating (if there is one) into the model
 		String ratingString = "";
-		if (googleUserService.isUserLoggedIn()) {
+		if (swagSwapUserService.isUserLoggedIn()) {
 			//get swagSwapUser using email key from available google user
 			//we've got to create them here if they don't already exist in our DB
 			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmailOrCreate(
-											googleUserService.getCurrentUser().getEmail());
+				swagSwapUserService.getCurrentUser().getEmail()
+				);
 			//see if the already have a rating for this item
 			SwagItemRating rating = swagSwapUser.getSwagItemRating(key);
 			if (null!=rating) {
@@ -114,15 +113,10 @@ public class ItemController {
 	
     @RequestMapping(value = "/rate", method = RequestMethod.GET)
 	public String rateHandler(@ModelAttribute SwagItemRating swagItemRating, HttpServletRequest request) {
-		String email = googleUserService.getCurrentUser().getEmail();
+		String email = swagSwapUserService.getCurrentUser().getEmail();
 		swagSwapUserService.addOrUpdateRating(email, swagItemRating);
-		String referer = request.getHeader("Referer");
-		if (referer==null) { //in case browser doesn't support Redirect header
-			referer="/swag/search";
-		}
-		return "redirect:"+ referer;
+		return "redirect:"+ getReferringPage(request);
 	}
-
 	
 	//For legacy URL that some tweets had already linked to.
 	@RequestMapping(value = "/listSwagItems", method = RequestMethod.GET)
@@ -137,28 +131,43 @@ public class ItemController {
 	 * @return
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public String searchHandler(@ModelAttribute SearchCriteria searchCriteria, Model model) {
+	public String searchHandler(@ModelAttribute SearchCriteria searchCriteria,
+			Model model, HttpServletRequest request) {
 		if (searchCriteria==null) {
 			model.addAttribute("searchCriteria", new SearchCriteria());
 		}
 		Collection<SwagItem> swagItems = itemService.search(searchCriteria.getSearchString());
 		
-		//put rating (if there is one) into the model
-		if (googleUserService.isUserLoggedIn()) {
+		//put SwagSwaUser (if there is one) into the model
+		if (swagSwapUserService.isUserLoggedIn()) {
 			//get swagSwapUser using email key from available google user
 			//we've got to create them here if they don't already exist in our DB
 			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmailOrCreate(
-											googleUserService.getCurrentUser().getEmail());
-//			Map<Long, Integer> userRatings = new HashMap<Long, Integer>(); //swagItemKey, user rating
+					swagSwapUserService.getCurrentUser().getEmail()
+					);
 			model.addAttribute("swagSwapUser", swagSwapUser);
 		}
+		//add backing object for each possible new rating
 		for (SwagItem swagItem : swagItems) {
-			//add backing object for each possible new rating
 			model.addAttribute("newRating"+"-"+swagItem.getKey(), new SwagItemRating(swagItem.getKey())); 
 		}
 		
 		model.addAttribute("swagItems", swagItems);
+		//needed in JSP to create loginURL
+		model.addAttribute("loginUrl", swagSwapUserService.createLoginURL(getReferringPage(request)));
 		return "listSwagItems";
+	}
+
+	/**
+	 * @param request
+	 * @return referring page
+	 */
+	private String getReferringPage(HttpServletRequest request) {
+		String referer = request.getHeader("Referer");
+		if (referer==null) { //in case browser doesn't support Redirect header
+			referer="/swag/search";
+		}
+		return referer;
 	}
 
 	@InitBinder
@@ -182,12 +191,10 @@ public class ItemController {
         binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
 	}
 
+	//TODO is this needed with @Autowire?
 	public void setSwagItemService(ItemService itemService) {
 		this.itemService = itemService;
 	}
 
-	public void setGoogleUserService(com.google.appengine.api.users.UserService googleUserService) {
-		this.googleUserService = googleUserService;
-	}
 	
 }

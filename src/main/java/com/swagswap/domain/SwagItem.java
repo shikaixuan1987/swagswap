@@ -100,27 +100,6 @@ public class SwagItem implements Serializable {
 	public SwagItem() {
 	}
 
-	public SwagItem(String name, String description, SwagImage image,
-			String owner, Float rating, Integer numberOfRatings,
-			List<String> tags, List<String> comments) {
-		this(name, description, owner, rating, numberOfRatings, tags, comments);
-		this.image = image;
-	}
-
-	// No image
-	public SwagItem(String name, String description, String owner,
-			Float rating, Integer numberOfRatings, List<String> tags,
-			List<String> comments) {
-		super();
-		this.name = name;
-		this.description = new Text(description);
-		this.ownerEmail = owner;
-		this.averageRating = rating;
-		this.numberOfRatings = numberOfRatings;
-		this.tags = tags;
-		this.comments = comments;
-	}
-
 	public boolean isNew() {
 		return getKey() == null;
 	}

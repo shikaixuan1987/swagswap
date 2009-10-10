@@ -5,12 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.swagswap.dao.UserDao;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
 import com.swagswap.exceptions.UserAlreadyExistsException;
 
+/**
+ * Maintains users in our DB which are used for authorization and holding SwagItem ratings.
+ * Also wraps Google's user service and uses it's authentication functionality
+ *
+ */
 public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	private static final Logger log = Logger.getLogger(SwagSwapUserServiceImpl.class);
 
@@ -19,21 +25,20 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	@Autowired
 	private ItemService itemService;
 	
+	private UserService googleUserService;
+	
 	
 	public SwagSwapUserServiceImpl() {
 	}
 
 	//for Integration test
-	protected SwagSwapUserServiceImpl(UserDao userDao, ItemService itemService) {
+	protected SwagSwapUserServiceImpl(UserDao userDao, ItemService itemService, UserService googleUserService) {
 		this.userDao = userDao;
 		this.itemService = itemService;
+		this.googleUserService=googleUserService;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.swagswap.service.SwagSwapUserService#get(java.lang.Long)
-	 */
 	public SwagSwapUser get(Long key) {
-		UserService userService;
 		return userDao.get(key);
 	}
 	
@@ -73,6 +78,7 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	//fails since you can't operate on 2 different entity groups in one transaction
 	//however if you do make it transactional it doesn't seem to update the user rating properly
 //	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	//TODO this can take 0 params
 	public SwagSwapUser findByEmailOrCreate(String email) {
 		SwagSwapUser swagSwapUser = findByEmail(email);
 		if (swagSwapUser==null) {
@@ -82,14 +88,10 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		return swagSwapUser;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.swagswap.service.SwagSwapUserService#addUserRating(com.swagswap.domain.User, java.lang.Long, java.lang.Integer)
-	 */
 	public void addOrUpdateRating(String email, SwagItemRating newSwagItemRating){
-		//previousRating will be null if this is a new rating
-
 		SwagSwapUser swagSwapUser = findByEmailOrCreate(email);
 		swagSwapUser.getSwagItemRatings();
+		//previousRating will be null if this is a new rating
 		SwagItemRating previousRating = swagSwapUser.getSwagItemRating(newSwagItemRating.getSwagItemKey());
 		//get the data we need before deleting it
 		Integer previousRatingValue = (previousRating==null)?null:previousRating.getUserRating(); 
@@ -102,6 +104,35 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		//update swagItem with new average rating
 		recomputeAndRecordSwagItemAverageRating(previousRatingValue, newSwagItemRating);
 	}
+	
+	/**
+	 * Wrapped Google UserService methods so that we can 
+	 * add openId or something else later
+	 */
+	
+	public String createLoginURL(String destinationURL) {
+		return googleUserService.createLoginURL(destinationURL);
+	}
+	
+	public String createLogoutURL(String destinationURL) {
+		return googleUserService.createLogoutURL(destinationURL);
+	}
+	
+	public User getCurrentUser() {
+		return googleUserService.getCurrentUser();
+	}
+	
+	public boolean isUserAdmin() {
+		return googleUserService.isUserAdmin();
+	}
+	
+	public boolean isUserLoggedIn() {
+		return googleUserService.isUserLoggedIn();
+	}
+
+	/**
+	 * End Wrapped Google UserService methods
+	 */
 
 	/**
 	 * @param previousRating can be null
@@ -122,5 +153,12 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		}
 		itemService.updateRating(newSwagItemRating.getSwagItemKey(),computedRatingDifference,isNew);
 	}
+
+	// for DI
+	public void setGoogleUserService(UserService googleUserService) {
+		this.googleUserService = googleUserService;
+	}
+	
+	
 		
 }

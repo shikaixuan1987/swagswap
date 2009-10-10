@@ -6,7 +6,6 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
-import com.google.appengine.api.users.UserService;
 import com.swagswap.domain.SwagSwapUser;
 import com.swagswap.service.SwagSwapUserService;
 
@@ -14,21 +13,9 @@ import com.swagswap.service.SwagSwapUserService;
 @RequestScoped
 public class UserBean {
 
-	// Inject the googleUserService Spring Bean
-	@ManagedProperty(value = "#{googleUserService}")
-	private UserService googleUserService;
-
 	// Inject the swagSwapUserService Spring Bean
 	@ManagedProperty(value = "#{swagSwapUserService}")
 	private SwagSwapUserService swagSwapUserService;
-
-	public UserService getGoogleUserService() {
-		return googleUserService;
-	}
-
-	public void setGoogleUserService(UserService googleUserService) {
-		this.googleUserService = googleUserService;
-	}
 
 	public SwagSwapUserService getSwagSwapUserService() {
 		return swagSwapUserService;
@@ -39,23 +26,23 @@ public class UserBean {
 	}
 
 	public boolean isLoggedIn() {
-		return getGoogleUserService().isUserLoggedIn();
+		return swagSwapUserService.isUserLoggedIn();
 	}
 
 	public String getUserName() {
-		return getGoogleUserService().getCurrentUser().getEmail();
+		return swagSwapUserService.getCurrentUser().getEmail();
 	}
 
 	public String getLoginURL() {
-		return getGoogleUserService().createLoginURL(getCurrentUrl());
+		return swagSwapUserService.createLoginURL(getCurrentUrl());
 	}
 	
 	public String getLogoutURL() {
-		return getGoogleUserService().createLogoutURL(getCurrentUrl());
+		return swagSwapUserService.createLogoutURL(getCurrentUrl());
 	}
 	
 	public SwagSwapUser getLoggedInUser() {
-		return getSwagSwapUserService().findByEmail(getUserName());
+		return swagSwapUserService.findByEmail(getUserName());
 	}
 
 	private String getCurrentUrl() {

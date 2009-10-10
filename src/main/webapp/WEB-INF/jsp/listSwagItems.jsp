@@ -1,6 +1,4 @@
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
-<%@page import="com.google.appengine.api.users.UserService"%>
-<%@page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%--Shows a search box and a list of SwagItems using the old but good displaytag library --%>
 
 <form:form action="/swag/search" commandName="searchCriteria" name="searchForm" method="GET">
@@ -67,10 +65,9 @@
 		</form:form>
 		</google-auth:isLoggedIn>
 		<google-auth:isNotLoggedIn><%--show them a teaser with a link to the login page --%>
-		<% UserService userService = UserServiceFactory.getUserService();%>
-		<a href="<%=userService.createLoginURL("/swag/search")%>" border="0">
-		<img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/>
-		</a>
+			<a href="${loginUrl}" border="0">
+			<img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/><img border="0" src="/images/starOff.gif"/>
+			</a>
 		</google-auth:isNotLoggedIn>
 	</display:column>
 	

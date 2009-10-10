@@ -1,5 +1,6 @@
 package com.swagswap.service;
 
+import com.google.appengine.api.users.User;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
 import com.swagswap.exceptions.UserAlreadyExistsException;
@@ -17,5 +18,19 @@ public interface SwagSwapUserService {
 	SwagSwapUser findByEmailOrCreate(String email);
 
 	void addOrUpdateRating(String userEmail, SwagItemRating swagItemRating);
+	
+	/**
+	 * Wrapped Google UserService methods
+	 */
+	
+	public String createLoginURL(String destinationURL);
+	
+	public String createLogoutURL(String destinationURL);
+	
+	public User getCurrentUser();
+	
+	public boolean isUserAdmin();
+	
+	public boolean isUserLoggedIn();
 
 }

@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
 import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagItemComment;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.service.ItemService;
 import com.swagswap.service.SwagSwapUserService;
@@ -56,10 +57,15 @@ public class SwagBean {
 	}
 
 	public void populateSwagItem() {
-		SwagItem item = getItemService().get(getSelectedRowId());
-		hackSwagItemList(item);
-		getSwagEditBean().setEditSwagItem(item);
-		getSwagEditBean().setUserRating(getUserBean().getUserRatingForItem(item));
+	//TODO This is called each time the view page is rendered.  This isn't desirable.  Refactor.  
+		if (getSelectedRowId() != null) {
+			SwagItem item = getItemService().get(getSelectedRowId());
+			hackSwagItemList(item);
+			getSwagEditBean().setEditSwagItem(item);
+			getSwagEditBean().setUserRating(
+					getUserBean().getUserRatingForItem(item));
+			getSwagEditBean().setComments(item.getComments());
+		}
 	}
 
 	private void hackSwagItemList(SwagItem item) {
@@ -112,6 +118,18 @@ public class SwagBean {
 		// Force SwagList refresh so new rating is displayed
 		refreshSwagList();
 		populateSwagItem();
+	}
+	
+	public void actionAddComment() {
+		String newComment = swagEditBean.getNewComment();
+		if (newComment.trim().length() == 0) {
+			return;
+		}
+		Long itemKey = swagEditBean.getEditSwagItem().getKey();
+		SwagItemComment comment = new SwagItemComment(itemKey, userBean.getUserName(), newComment);
+		itemService.addComment(comment);
+		swagEditBean.setComments(itemService.get(itemKey).getComments());
+		swagEditBean.setNewComment("");
 	}
 
 	public String getSearchString() {

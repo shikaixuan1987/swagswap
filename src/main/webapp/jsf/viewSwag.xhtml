@@ -19,48 +19,50 @@
 				<f:event type="preRenderView"
 					listener="#{swagBean.populateSwagItem}" />
 			</f:metadata>
-			<h:panelGrid columns="3" width="100%" cellpadding="0" cellspacing="0">
-				<swag:panel height="210px">
-					<h:panelGrid columns="2" style="vertical-align: middle">
-						<swag:label value="Name" />
-						<h:outputText value="#{swagEditBean.editSwagItem.name}" />
-						<swag:label value="Description" />
-						<h:outputText value="#{swagEditBean.editSwagItem.description}" />
-						<swag:label value="Company" />
-						<h:outputText value="#{swagEditBean.editSwagItem.company}" />
-						<swag:label value="Tags" />
-						<h:panelGrid columns="4" cellpadding="0" cellspacing="0">
-							<h:outputText value="#{swagEditBean.editSwagItem.tags[0]}"
-								size="15" style="margin-right: 5px" />
-							<h:outputText value="#{swagEditBean.editSwagItem.tags[1]}"
-								size="15" style="margin-right: 5px" />
-							<h:outputText value="#{swagEditBean.editSwagItem.tags[2]}"
-								size="15" style="margin-right: 5px" />
-							<h:outputText value="#{swagEditBean.editSwagItem.tags[3]}"
-								size="15" />
+			<h:panelGroup id="test">
+				<h:panelGrid columns="3" width="100%" cellpadding="0"
+					cellspacing="0">
+					<swag:panel height="210px">
+						<h:panelGrid columns="2" style="vertical-align: middle">
+							<swag:label value="Name" />
+							<h:outputText value="#{swagEditBean.editSwagItem.name}" />
+							<swag:label value="Description" />
+							<h:outputText value="#{swagEditBean.editSwagItem.description}" />
+							<swag:label value="Company" />
+							<h:outputText value="#{swagEditBean.editSwagItem.company}" />
+							<swag:label value="Tags" />
+							<h:panelGrid columns="4" cellpadding="0" cellspacing="0">
+								<h:outputText value="#{swagEditBean.editSwagItem.tags[0]}"
+									size="15" style="margin-right: 5px" />
+								<h:outputText value="#{swagEditBean.editSwagItem.tags[1]}"
+									size="15" style="margin-right: 5px" />
+								<h:outputText value="#{swagEditBean.editSwagItem.tags[2]}"
+									size="15" style="margin-right: 5px" />
+								<h:outputText value="#{swagEditBean.editSwagItem.tags[3]}"
+									size="15" />
+							</h:panelGrid>
+							<swag:label value="Average Rating" />
+							<h:outputText value="#{swagEditBean.editSwagItem.averageRating}" />
+							<swag:label value="Number of Ratings" />
+							<h:outputText
+								value="#{swagEditBean.editSwagItem.numberOfRatings}" />
+							<swag:label value="Created" />
+							<swag:date value="#{swagEditBean.editSwagItem.created}" />
+							<swag:label value="Last Updated" />
+							<swag:date value="#{swagEditBean.editSwagItem.lastUpdated}" />
 						</h:panelGrid>
-						<swag:label value="Average Rating" />
-						<h:outputText value="#{swagEditBean.editSwagItem.averageRating}" />
-						<swag:label value="Number of Ratings" />
-						<h:outputText value="#{swagEditBean.editSwagItem.numberOfRatings}" />
-						<swag:label value="Created" />
-						<swag:date value="#{swagEditBean.editSwagItem.created}" />
-						<swag:label value="Last Updated" />
-						<swag:date value="#{swagEditBean.editSwagItem.lastUpdated}" />
-					</h:panelGrid>
 
-				</swag:panel>
-				<h:panelGroup style="width: 20px" layout="block" />
-				<swag:panel height="210px"
-					style="text-align: center; vertical-align: middle;">
-					<h:graphicImage
-						value="/swag/showImage/#{swagEditBean.editSwagItem.image.encodedKey}"
-						style="height: 212px; width: 283px;" />
-				</swag:panel>
+					</swag:panel>
+					<h:panelGroup style="width: 20px" layout="block" />
+					<swag:panel height="210px"
+						style="text-align: center; vertical-align: middle;">
+						<h:graphicImage
+							value="/swag/showImage/#{swagEditBean.editSwagItem.image.encodedKey}"
+							style="height: 212px; width: 283px;" />
+					</swag:panel>
 
-			</h:panelGrid>
-			<br />
-			<swag:panel title="Rate and Comment">
+				</h:panelGrid>
+				<br />
 				<h:panelGrid columns="2">
 					<swag:label value="My rating" />
 					<swag:stars style="margin-left: 10px"
@@ -73,19 +75,40 @@
 
 					<swag:label value="Add comment" />
 					<h:panelGroup>
-						<h:inputText size="60" />
-						<h:commandButton value="Add" />
+						<h:inputText size="60" value="#{swagEditBean.newComment}" />
+						<h:commandButton value="Add" style="margin-left: 5px;"
+							action="#{swagBean.actionAddComment}" execute="test">
+						</h:commandButton>
 					</h:panelGroup>
+
+
 				</h:panelGrid>
+				<br />
+				<h:panelGroup layout="block" style="width: 100%; border: 1px solid #FF8800;" />
+				<br />
+				<h:panelGroup id="comments">
+					<h:dataTable value="#{swagEditBean.comments}" var="row"
+						width="100%" styleClass="tableBorder" style="border: none;"
+						rowClasses="tableRow1, tableRow2" cellpadding="4" rules="row"
+						columnClasses="commentCol1, commentCol2">
+						<h:column>
+							<h:panelGroup layout="block" style="height: 30px;">
+								<h:outputText value="#{row.swagSwapUserNickname}"
+									style="font-weight: bold;" />
+								<br />
+								<swag:date value="#{row.created}" />
+							</h:panelGroup>
+						</h:column>
+						<h:column>
+							<h:panelGroup layout="block" style="height: 30px;">
+								<h:outputText value="#{row.commentText}" />
+							</h:panelGroup>
+						</h:column>
+					</h:dataTable>
+				</h:panelGroup>
+				<br />
 
-			</swag:panel>
-			<br />
-
-
-			<swag:panel title="All Comments">
-
-			</swag:panel>
-
+			</h:panelGroup>
 		</h:form>
 	</ui:define>
 </ui:composition>

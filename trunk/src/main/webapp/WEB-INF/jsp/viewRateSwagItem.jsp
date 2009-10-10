@@ -77,13 +77,20 @@
 		<td>Company/Vendor:</td>
 		<td><c:out value="${swagItem.company}" /></td>
 	</tr>
-	<%--
 	<tr>
 		<td>Comments:</td>
 		<td>
-		<form:checkboxes path="comments" /></td>
+			 <c:forEach var="comment" items="${swagItem.comments}">
+			 	${comment.swagSwapUserNickname} 
+			 	(<fmt:formatDate value="${swagItem.created}" type="both" dateStyle="short" />):
+			 	 ${comment.commentText}<br/><br/>
+			 </c:forEach>
+			 <form:form action="/swag/addComment" commandName="newComment" method="get">
+			 	<form:hidden path="swagItemKey" />
+			 	<form:input path="commentText" /><input type="submit" value="add comment" />
+			 </form:form>
+		</td>
 	</tr>
-	 --%>
 </table>
 <form:form  method="post">	
 	<input type="submit" value="cancel" onclick="document.location.href='<c:url value='/swag/search'/>';return false;" />

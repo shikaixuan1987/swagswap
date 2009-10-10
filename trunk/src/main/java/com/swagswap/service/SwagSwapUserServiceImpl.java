@@ -10,6 +10,7 @@ import com.google.appengine.api.users.UserService;
 import com.swagswap.dao.UserDao;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
+import com.swagswap.exceptions.AccessDeniedException;
 import com.swagswap.exceptions.InvalidSwagItemRatingException;
 import com.swagswap.exceptions.UserAlreadyExistsException;
 
@@ -122,8 +123,15 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		return googleUserService.createLogoutURL(destinationURL);
 	}
 	
+	/**
+	 * Expects users to be logged in, otherwise throws a AccessDeniedException
+	 */
 	public User getCurrentUser() {
-		return googleUserService.getCurrentUser();
+		User user = googleUserService.getCurrentUser();
+		if (user==null) {
+			throw new AccessDeniedException("User not logged in.  No permissions");
+		}
+		return user;
 	}
 	
 	public boolean isUserAdmin() {

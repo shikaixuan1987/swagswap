@@ -94,8 +94,9 @@ public class SwagItem implements Serializable {
 	private List<String> tags = LazyList.decorate(new ArrayList(), FactoryUtils
 			.instantiateFactory(String.class));
 
-	@Persistent(defaultFetchGroup = "true")
-	private List<String> comments = new ArrayList<String>();
+	@Persistent
+	private List<SwagItemComment> comments = new ArrayList<SwagItemComment>();
+
 
 	public SwagItem() {
 	}
@@ -241,11 +242,11 @@ public class SwagItem implements Serializable {
 		this.tags = tags;
 	}
 
-	public List<String> getComments() {
+	public List<SwagItemComment> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<String> comments) {
+	public void setComments(List<SwagItemComment> comments) {
 		this.comments = comments;
 	}
 

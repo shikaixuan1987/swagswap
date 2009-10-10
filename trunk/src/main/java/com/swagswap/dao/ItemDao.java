@@ -2,7 +2,10 @@ package com.swagswap.dao;
 
 import java.util.List;
 
+import javax.jdo.JDOObjectNotFoundException;
+
 import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagItemComment;
 
 public interface ItemDao {
 
@@ -51,5 +54,7 @@ public interface ItemDao {
 	 * see http://code.google.com/appengine/docs/python/datastore/keysandentitygroups.html#Entity_Groups_Ancestors_and_Paths
 	 */
 	void delete(Long id);
+
+	void addComment(SwagItemComment swagItemComment);
 
 }

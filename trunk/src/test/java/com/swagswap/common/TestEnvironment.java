@@ -30,7 +30,7 @@ class TestEnvironment implements ApiProxy.Environment {
   }
 
   public boolean isAdmin() {
-    throw new UnsupportedOperationException();
+    return false;
   }
 
   public String getAuthDomain() {

@@ -27,6 +27,7 @@ import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import com.swagswap.domain.SearchCriteria;
 import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagItemComment;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
 import com.swagswap.exceptions.ImageTooLargeException;
@@ -99,8 +100,10 @@ public class ItemController {
 		}
 		//make previous rating available to the page to show the right number of stars
 		model.addAttribute("userRating", ratingString);
-		//backing object for rating form
+		//backing object for rating `
 		model.addAttribute("newRating", new SwagItemRating(swagItem.getKey())); 
+		//backing object for comment
+		model.addAttribute("newComment", new SwagItemComment(swagItem.getKey())); 
 		model.addAttribute("swagItem", swagItem);
 		return "viewRateSwagItem";
 	}
@@ -115,8 +118,14 @@ public class ItemController {
 	public String rateHandler(@ModelAttribute SwagItemRating swagItemRating, HttpServletRequest request) {
 		String email = swagSwapUserService.getCurrentUser().getEmail();
 		swagSwapUserService.addOrUpdateRating(email, swagItemRating);
-		return "redirect:"+ getReferringPage(request);
+		return "redirect:" + getReferringPage(request);
 	}
+    
+    @RequestMapping(value = "/addComment", method = RequestMethod.GET)
+    public String addCommentHandler(@ModelAttribute SwagItemComment swagItemComment, HttpServletRequest request) {
+    	itemService.addComment(swagItemComment);
+    	return "redirect:" + getReferringPage(request);
+    }
 	
 	//For legacy URL that some tweets had already linked to.
 	@RequestMapping(value = "/listSwagItems", method = RequestMethod.GET)

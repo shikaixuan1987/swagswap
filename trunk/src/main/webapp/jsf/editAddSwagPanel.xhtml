@@ -9,17 +9,15 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:swag="http://java.sun.com/jsf/composite/swag">
 
-<br />
-<h:outputText value="Selected Swag Key is #{swagEditBean.selectedRowId}" />
-<br />
-<br />
 <swag:panel title="${title}">
 	<h:panelGrid columns="2" style="vertical-align: middle">
 		<swag:label value="Name" />
 		<h:inputText value="#{swagEditBean.editSwagItem.name}" />
 		<swag:label value="Description" />
 		<h:inputText value="#{swagEditBean.editSwagItem.description}"
-			size="75" />
+			size="75" maxLength="100"/>
+		<swag:label value="Company" />
+		<h:inputText value="#{swagEditBean.editSwagItem.company}" />
 		<swag:label value="Tags" />
 		<h:panelGrid columns="4" cellpadding="0" cellspacing="0">
 			<h:inputText value="#{swagEditBean.editSwagItem.tags[0]}" size="15"
@@ -34,8 +32,8 @@
 </swag:panel>
 <br />
 <h:panelGroup layout="block" style="text-align: center;">
-	<h:commandButton value="Save" action="#{swagEditBean.actionSaveItem}" />
-	<h:commandButton value="Cancel" action="allSwag" immediate="true"/>
+	<h:commandButton value="Save" action="#{swagBean.actionSaveItem}" />
+	<h:commandButton value="Cancel" action="allSwag" immediate="true" />
 </h:panelGroup>
 
 </html>

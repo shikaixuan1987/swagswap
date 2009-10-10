@@ -9,16 +9,65 @@
 
 <composite:interface>
 	<composite:attribute name="value" />
+	<composite:attribute name="style" />
 	<composite:attribute name="editable" />
 </composite:interface>
 
 <composite:implementation>
-		<h:panelGrid columns="5" cellpadding="0" cellspacing="0">
-			<h:graphicImage value="/images/StarOn.gif" />
-			<h:graphicImage value="/images/StarOn.gif" />
-			<h:graphicImage value="/images/StarOn.gif" />
-			<h:graphicImage value="/images/StarOn.gif" />
-			<h:graphicImage value="/images/StarOn.gif" />
+	<h:panelGroup rendered="#{! cc.attrs.editable}">
+		<h:panelGrid columns="5" cellpadding="0" cellspacing="0"
+			style="#{cc.attrs.style}">
+
+			<h:graphicImage value="/images/StarOff.gif"
+				rendered="#{cc.attrs.value lt (0.5)}" />
+			<h:graphicImage value="/images/StarOn.gif"
+				rendered="#{cc.attrs.value ge (0.5)}" />
+			<h:graphicImage value="/images/StarOff.gif"
+				rendered="#{cc.attrs.value lt (1.5)}" />
+			<h:graphicImage value="/images/StarOn.gif"
+				rendered="#{cc.attrs.value ge (1.5)}" />
+			<h:graphicImage value="/images/StarOff.gif"
+				rendered="#{cc.attrs.value lt (2.5)}" />
+			<h:graphicImage value="/images/StarOn.gif"
+				rendered="#{cc.attrs.value ge (2.5)}" />
+			<h:graphicImage value="/images/StarOff.gif"
+				rendered="#{cc.attrs.value lt (3.5)}" />
+			<h:graphicImage value="/images/StarOn.gif"
+				rendered="#{cc.attrs.value ge (3.5)}" />
+			<h:graphicImage value="/images/StarOff.gif"
+				rendered="#{cc.attrs.value lt (4.5)}" />
+			<h:graphicImage value="/images/StarOn.gif"
+				rendered="#{cc.attrs.value ge (4.5)}" />
+
 		</h:panelGrid>
+	</h:panelGroup>
+	<h:panelGroup rendered="#{cc.attrs.editable}">
+		<h:panelGrid columns="5" cellpadding="0" cellspacing="0"
+			style="#{cc.attrs.style}">
+
+			<h:commandButton image="/images/StarOff.gif"
+				rendered="#{(cc.attrs.value == 0)}" />
+			<h:commandButton image="/images/StarOn.gif"
+				rendered="#{(cc.attrs.value gt 0)}" />
+			<h:commandButton image="/images/StarOff.gif"
+				rendered="#{(cc.attrs.value lt 1)}" />
+			<h:commandButton image="/images/StarOn.gif"
+				rendered="#{(cc.attrs.value ge 1)}" />
+			<h:commandButton image="/images/StarOff.gif"
+				rendered="#{(cc.attrs.value lt 2)}" />
+			<h:commandButton image="/images/StarOn.gif"
+				rendered="#{(cc.attrs.value ge 2)}" />
+			<h:commandButton image="/images/StarOff.gif"
+				rendered="#{(cc.attrs.value lt 3)}" />
+			<h:commandButton image="/images/StarOn.gif"
+				rendered="#{(cc.attrs.value ge 3)}" />
+			<h:commandButton image="/images/StarOff.gif"
+				rendered="#{(cc.attrs.value lt 4)}" />
+			<h:commandButton image="/images/StarOn.gif"
+				rendered="#{(cc.attrs.value ge 4)}" />
+
+		</h:panelGrid>
+	</h:panelGroup>
+	<h:outputText value="#{cc.attrs.value}" />
 </composite:implementation>
 </html>

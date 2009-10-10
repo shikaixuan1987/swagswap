@@ -129,7 +129,7 @@ public class SwagItem implements Serializable {
 	 * @return whether the swagItem has an image to update
 	 */
 	public boolean hasNewImage() {
-		return (imageBytes.length != 0 || StringUtils.isNotEmpty(imageURL));
+		return ((imageBytes != null && imageBytes.length != 0) || StringUtils.isNotEmpty(imageURL));
 	}
 
 	// SwagItem has a new image if imageBytes is filled from file upload

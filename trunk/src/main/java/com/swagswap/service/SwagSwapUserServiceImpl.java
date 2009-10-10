@@ -10,6 +10,7 @@ import com.google.appengine.api.users.UserService;
 import com.swagswap.dao.UserDao;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
+import com.swagswap.exceptions.InvalidSwagItemRatingException;
 import com.swagswap.exceptions.UserAlreadyExistsException;
 
 /**
@@ -88,7 +89,10 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		return swagSwapUser;
 	}
 	
-	public void addOrUpdateRating(String email, SwagItemRating newSwagItemRating){
+	public void addOrUpdateRating(String email, SwagItemRating newSwagItemRating) throws InvalidSwagItemRatingException {
+		if (newSwagItemRating.getSwagItemKey() == null || newSwagItemRating.getUserRating() == null) {
+			throw new InvalidSwagItemRatingException(newSwagItemRating);
+		}
 		SwagSwapUser swagSwapUser = findByEmailOrCreate(email);
 		swagSwapUser.getSwagItemRatings();
 		//previousRating will be null if this is a new rating

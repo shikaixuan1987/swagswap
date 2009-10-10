@@ -3,6 +3,7 @@ package com.swagswap.service;
 import com.google.appengine.api.users.User;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
+import com.swagswap.exceptions.InvalidSwagItemRatingException;
 import com.swagswap.exceptions.UserAlreadyExistsException;
 
 public interface SwagSwapUserService {
@@ -17,7 +18,7 @@ public interface SwagSwapUserService {
 	
 	SwagSwapUser findByEmailOrCreate(String email);
 
-	void addOrUpdateRating(String userEmail, SwagItemRating swagItemRating);
+	void addOrUpdateRating(String userEmail, SwagItemRating swagItemRating) throws InvalidSwagItemRatingException ;
 	
 	/**
 	 * Wrapped Google UserService methods

@@ -8,6 +8,7 @@ import com.swagswap.dao.UserDaoImpl;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
+import com.swagswap.exceptions.InvalidSwagItemRatingException;
 
 public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCase  {
 	
@@ -33,7 +34,8 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
         	itemService = new ItemServiceImpl(itemDao);
         }
         if (swagSwapUserService==null) {
-        	swagSwapUserService = new SwagSwapUserServiceImpl(userDao, itemService);
+        	//TODO what are we gonna do about Google service null injection?
+        	swagSwapUserService = new SwagSwapUserServiceImpl(userDao, itemService, null);
         }
 	}
 
@@ -128,6 +130,26 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
     	assertEquals(user.getSwagItemRatings().size(),1); //should still only be one rating
     	//Gosh this is the only way to get the first Item of a Set in Java
     	assertEquals(newRating.getUserRating(), user.getSwagItemRatings().iterator().next().getUserRating());
+    }
+    
+    public void testAddOrUpdateRating_invalid_rating() {
+    	//create user
+    	SwagSwapUser swagSwapUser = Fixture.createUser();
+    	userDao.insert(swagSwapUser);
+    	
+    	//create item
+    	SwagItem swagItem = Fixture.createSwagItem();
+    	itemDao.insert(swagItem);
+    	
+    	//create INVALID rating
+    	SwagItemRating originalRating = new SwagItemRating(swagItem.getKey(), null);
+    	try {
+    		swagSwapUserService.addOrUpdateRating(swagSwapUser.getEmail(), originalRating);
+    		fail ("should have thrown InvalidSwagItemRatingException");
+    	}
+    	catch (InvalidSwagItemRatingException e) {
+    		//good
+    	}
     }
     
 }

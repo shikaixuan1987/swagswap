@@ -3,8 +3,13 @@ package com.swagswap.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -95,7 +100,7 @@ public class SwagItem implements Serializable {
 			.instantiateFactory(String.class));
 
 	@Persistent
-	private List<SwagItemComment> comments = new ArrayList<SwagItemComment>();
+	private SortedSet<SwagItemComment> comments = new TreeSet<SwagItemComment>();
 
 
 	public SwagItem() {
@@ -242,11 +247,12 @@ public class SwagItem implements Serializable {
 		this.tags = tags;
 	}
 
-	public List<SwagItemComment> getComments() {
+	public SortedSet<SwagItemComment> getComments() {
+//		Collections.sort(comments);
 		return comments;
 	}
 
-	public void setComments(List<SwagItemComment> comments) {
+	public void setComments(SortedSet<SwagItemComment> comments) {
 		this.comments = comments;
 	}
 

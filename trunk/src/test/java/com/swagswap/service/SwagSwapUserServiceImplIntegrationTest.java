@@ -1,5 +1,7 @@
 package com.swagswap.service;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.swagswap.common.Fixture;
 import com.swagswap.common.LocalDatastoreTestCase;
 import com.swagswap.dao.ItemDao;
@@ -34,8 +36,9 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
         	itemService = new ItemServiceImpl(itemDao);
         }
         if (swagSwapUserService==null) {
-        	//TODO what are we gonna do about Google service null injection?
-        	swagSwapUserService = new SwagSwapUserServiceImpl(userDao, itemService, null);
+        	//This will give us a UserService based on the TestEnvironment class
+        	UserService googleUserService = UserServiceFactory.getUserService();
+        	swagSwapUserService = new SwagSwapUserServiceImpl(userDao, itemService, googleUserService);
         }
 	}
 

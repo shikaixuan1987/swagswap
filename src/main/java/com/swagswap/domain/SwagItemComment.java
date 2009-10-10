@@ -12,7 +12,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class SwagItemComment implements Serializable {
+public class SwagItemComment implements Serializable, Comparable<SwagItemComment> {
 	private static final long serialVersionUID = 1L;
 
 	@PrimaryKey
@@ -83,6 +83,17 @@ public class SwagItemComment implements Serializable {
 	public String toString() {
 		return "SwagItemComment [encodedKey=" + encodedKey + ", swagItemKey="
 				+ swagItemKey + ", swagSwapUserNickname=" + swagSwapUserNickname + "]";
+	}
+
+	@Override
+	public int compareTo(SwagItemComment comment) {
+		if (comment == null) {
+			throw new NullPointerException("Cannot compareTo null");
+		}
+		if (SwagItemComment.class != comment.getClass()) {
+			throw new IllegalArgumentException("Cannot compare to a " + comment.getClass());
+		}
+		return -1 * this.created.compareTo(comment.getCreated()); //desc order
 	}
 	
 	

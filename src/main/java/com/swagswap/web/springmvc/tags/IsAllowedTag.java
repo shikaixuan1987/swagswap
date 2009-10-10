@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
  * and includes the body of the tag if they are
  *
  */
-public class IsAllowedTag extends SwagSwapUserServiceTag {
+public class IsAllowedTag extends AbstractSpringContextLookupTag {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(IsAllowedTag.class);
 	// tag attributes

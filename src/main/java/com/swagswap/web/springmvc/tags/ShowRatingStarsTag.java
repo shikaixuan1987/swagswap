@@ -11,7 +11,7 @@ import com.swagswap.domain.SwagSwapUser;
  * Show rating stars, link each star to the ratingForm name passed in
  * 
  */
-public class ShowRatingStarsTag extends SwagSwapUserServiceTag {
+public class ShowRatingStarsTag extends AbstractSpringContextLookupTag {
 	private static final long serialVersionUID = 1L;
 	public static final String STAR_ON_IMAGE = "starOn.gif";
 	public static final String STAR_OFF_IMAGE = "starOff.gif";

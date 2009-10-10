@@ -7,7 +7,7 @@ import javax.servlet.jsp.JspException;
  * and includes the body of the tag if they are
  *
  */
-public class IsNotLoggedInTag extends SwagSwapUserServiceTag {
+public class IsNotLoggedInTag extends AbstractSpringContextLookupTag {
 	private static final long serialVersionUID = 1L;
 
 	public int doStartTag() throws JspException {

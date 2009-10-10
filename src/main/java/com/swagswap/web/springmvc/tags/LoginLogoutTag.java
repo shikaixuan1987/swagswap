@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
-public class LoginLogoutTag  extends SwagSwapUserServiceTag {
+public class LoginLogoutTag  extends AbstractSpringContextLookupTag {
 	private static final long serialVersionUID = 1L;
 	
 	// required tag attributes

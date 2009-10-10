@@ -2,13 +2,15 @@ package com.swagswap.web.jsf.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagItemComment;
 
 /**
  * @author scott
@@ -25,6 +27,28 @@ public class SwagEditBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private SwagItem editSwagItem;
+	private List<SwagItemComment> comments;
+	private String newComment = "";
+
+	public String getNewComment() {
+		return newComment;
+	}
+
+	public void setNewComment(String newComment) {
+		this.newComment = newComment;
+	}
+
+	public List<SwagItemComment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<SwagItemComment> comments) {
+		this.comments = comments;
+	}
+
+	public Date getTime() {
+		return new Date();
+	}
 
 	public SwagEditBean() {
 		super();

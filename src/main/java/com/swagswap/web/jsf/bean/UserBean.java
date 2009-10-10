@@ -6,7 +6,6 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
-import com.google.appengine.api.users.UserService;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagSwapUser;
 import com.swagswap.service.SwagSwapUserService;
@@ -32,11 +31,11 @@ public class UserBean {
 	}
 
 	public String getUserEmail() {
-		return getGoogleUserService().getCurrentUser().getEmail();
+		return swagSwapUserService.getCurrentUser().getEmail();
 	}
 	
 	public String getUserName() {
-		return getGoogleUserService().getCurrentUser().getNickname();
+		return swagSwapUserService.getCurrentUser().getEmail();
 	}
 
 	public String getLoginURL() {
@@ -48,7 +47,7 @@ public class UserBean {
 	}
 	
 	public SwagSwapUser getLoggedInUser() {
-		return getSwagSwapUserService().findByEmailOrCreate((getUserEmail()));
+		return swagSwapUserService.findByEmailOrCreate((getUserEmail()));
 	}
 
 	private String getCurrentUrl() {

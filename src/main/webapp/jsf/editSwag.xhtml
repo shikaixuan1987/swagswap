@@ -15,8 +15,8 @@
 	<ui:define name="content">
 		<h:form>
 			<f:metadata>
-				<f:viewParam name="rowId" value="#{swagEditBean.selectedRowId}" />
-				<f:event type="preRenderView" listener="#{swagEditBean.populateSwagItem}" />
+				<f:viewParam name="rowId" value="#{swagBean.selectedRowId}" />
+				<f:event type="preRenderView" listener="#{swagBean.populateSwagItem}" />
 			</f:metadata>
 			<ui:include src="editAddSwagPanel.xhtml">
 				<ui:param name="title" value="Edit Swag Item" />

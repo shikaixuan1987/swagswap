@@ -12,6 +12,7 @@
 	<composite:attribute name="width" />
 	<composite:attribute name="height" />
 	<composite:attribute name="parentAttrs" />
+	<composite:attribute name="style" />
 </composite:interface>
 
 <composite:implementation>
@@ -22,7 +23,7 @@
 
 	</h:panelGroup>
 	<h:panelGroup layout="block" styleClass="panel"
-		style="height : #{cc.attrs.height}; width: #{cc.attrs.width}">
+		style="height : #{cc.attrs.height}; width: #{cc.attrs.width}; #{cc.attrs.style}">
 		<composite:insertChildren />
 		<composite:renderFacet name="content" />
 	</h:panelGroup>

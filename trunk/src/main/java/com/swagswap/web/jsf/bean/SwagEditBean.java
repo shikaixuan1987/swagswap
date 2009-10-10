@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.SortedSet;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -27,7 +26,7 @@ public class SwagEditBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private SwagItem editSwagItem;
-	private SortedSet<SwagItemComment> comments;
+	private List<SwagItemComment> comments;
 	private String newComment = "";
 
 	public String getNewComment() {
@@ -38,11 +37,11 @@ public class SwagEditBean implements Serializable {
 		this.newComment = newComment;
 	}
 
-	public SortedSet<SwagItemComment> getComments() {
+	public List<SwagItemComment> getComments() {
 		return comments;
 	}
 
-	public void setComments(SortedSet<SwagItemComment> comments) {
+	public void setComments(List<SwagItemComment> comments) {
 		this.comments = comments;
 	}
 

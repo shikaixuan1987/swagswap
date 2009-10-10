@@ -3,16 +3,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 <!-- This doesn't work.  Yet. -->
 <composite:interface>
-	<composite:attribute name="action" method-signature="String f1()" targets="menuItem"/> 
+	<composite:attribute name="action" method-signature="String f1()"
+		targets="menuItem" />
 	<composite:attribute name="value" />
 </composite:interface>
 
 <composite:implementation>
-	<h:commandLink id-"menuItem" value="#{cc.attrs.value}" action="#{cc.attrs.action}" />
+	<h:commandLink id-"menuItem" value="#{cc.attrs.value}"
+		action="#{cc.attrs.action}" />
 </composite:implementation>
 </html>

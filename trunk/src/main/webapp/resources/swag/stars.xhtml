@@ -24,9 +24,9 @@
 		<h:panelGrid columns="5" cellpadding="0" cellspacing="0"
 			style="#{cc.attrs.style}">
 			<c:forEach var="i" begin="5" end="#{(cc.attrs.stars * 10)}" step="10">
-				<h:graphicImage value="/images/StarOff.gif"
+				<h:graphicImage value="/images/starOff.gif"
 					rendered="#{cc.attrs.value lt (i / 10)}" />
-				<h:graphicImage value="/images/StarOn.gif"
+				<h:graphicImage value="/images/starOn.gif"
 					rendered="#{cc.attrs.value ge (i / 10)}" />
 			</c:forEach>
 		</h:panelGrid>
@@ -37,7 +37,7 @@
 			<c:forEach var="i" begin="10" end="#{(cc.attrs.stars * 10)}"
 				step="10">
 				<h:panelGroup>
-					<h:commandButton image="/images/StarOff.gif"
+					<h:commandButton image="/images/starOff.gif"
 						rendered="#{cc.attrs.value le ((i / 10 )- 1)}"
 						action="#{swagBean.actionRateSwag}">
 						<f:setPropertyActionListener value="${i / 10}"
@@ -46,7 +46,7 @@
 							target="#{cc.attrs.keyTarget}" />
 						<f:ajax render="@form" />
 					</h:commandButton>
-					<h:commandButton image="/images/StarOn.gif"
+					<h:commandButton image="/images/starOn.gif"
 						rendered="#{cc.attrs.value gt ((i / 10 )- 1)}"
 						action="#{swagBean.actionRateSwag}">
 						<f:setPropertyActionListener value="${i / 10}"

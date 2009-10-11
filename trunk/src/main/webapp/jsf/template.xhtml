@@ -17,13 +17,24 @@
 <h:body>
 	<!-- Change to 100% but still problems  -->
 	<h:panelGroup layout="block"
-		style="width: 1024px; height: auto; background-color: white;   margin-left: auto; margin-right: auto;">
+		style="width: 1024px; min-height: 100%; background-color: white; margin-left: auto; margin-right: auto; position: relative;">
 		<ui:include src="header.xhtml" />
 		<h:panelGroup layout="block" style="height: auto;">
 			<h:panelGrid columns="2" cellpadding="2" cellspacing="2" width="100%"
 				columnClasses="mainCol1, mainCol2" style="vertical-align: top;">
 				<h:panelGroup>
 					<ui:include src="menu.xhtml" />
+					<h:panelGrid styleClass="" columns="1"
+						style="position: absolute; bottom: 0px;"
+						columnClasses="footerCol1, footerCol2">
+						<h:panelGrid cellpadding="1" cellspacing="1"
+							style="text-align: right; font-size: 10px; margin-bottom: 10px;">
+							<h:outputText value="Version :" />
+							<h:outputText value="Build Date :" />
+						</h:panelGrid>
+						<h:graphicImage value="/images/gae.gif" alt="Google App Engine" />
+
+					</h:panelGrid>
 				</h:panelGroup>
 				<h:panelGroup>
 					<h:form>
@@ -57,18 +68,10 @@
 				</h:panelGroup>
 			</h:panelGrid>
 		</h:panelGroup>
-		<h:panelGrid styleClass="bottomLeft" columns="2"
-			columnClasses="footerCol1, footerCol2" width="1024">
-			<h:graphicImage value="/images/gae.gif" alt="Google App Engine" />
-			<h:panelGrid cellpadding="1" cellspacing="1"
-				style="text-align: right">
-				<!-- 
-				<h:outputText value="Version :" />
-				<h:outputText value="Build Date :" />
-		 -->
-			</h:panelGrid>
-		</h:panelGrid>
+
+
 
 	</h:panelGroup>
+
 </h:body>
 </html>

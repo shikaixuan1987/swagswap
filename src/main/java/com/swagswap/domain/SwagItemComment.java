@@ -6,7 +6,6 @@ import java.util.Date;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
@@ -85,7 +84,6 @@ public class SwagItemComment implements Serializable, Comparable<SwagItemComment
 				+ swagItemKey + ", swagSwapUserNickname=" + swagSwapUserNickname + "]";
 	}
 
-	@Override
 	public int compareTo(SwagItemComment comment) {
 		if (comment == null) {
 			throw new NullPointerException("Cannot compareTo null");

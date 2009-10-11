@@ -3,3 +3,10 @@
 	margin-left: 16%;
 	margin-right: 16%;
 }
+
+td.linebreaks
+{
+width: 300px;
+word-wrap: break-word; /* Internet Explorer 5.5+ */
+word-break: break-all;
+}

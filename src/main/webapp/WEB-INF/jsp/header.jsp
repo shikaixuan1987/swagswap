@@ -15,6 +15,7 @@
   <link rel="shortcut icon" href="/images/favicon.ico" >
   <link rel="icon" type="image/gif" href="/images/animated_favicon1.gif" >
   <script type="text/javascript" src="/js/prototype.js"></script>
+  <script type="text/javascript" src="/js/swagswap.js"></script>
   
   	<%-- This is to show cost and usage stats from liveHttpHeaders --%>
 	<google-auth:isAdmin>

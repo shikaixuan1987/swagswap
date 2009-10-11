@@ -184,14 +184,6 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 		newComment.setCreated(new Date());
 		synchronized (orig) {
 			orig.getComments().add(newComment);
-			//Why isn't instantiating the ArrayList in the
-			//attribute definition not enough to guarantee this is never null?
-//			List comments = orig.getComments();
-//			if (comments==null) {
-//				comments = new ArrayList();
-//			}
-//			comments.add(comment);
-//			orig.setComments(comments);
 		}
 	}
 

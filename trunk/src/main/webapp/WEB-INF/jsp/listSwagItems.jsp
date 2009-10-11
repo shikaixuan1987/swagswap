@@ -71,8 +71,9 @@
 		</google-auth:isNotLoggedIn>
 	</display:column>
 	
+	<%-- 
 	<display:column property="tags" decorator="com.swagswap.web.springmvc.displaytag.TagsDecorator"/>
-
+	--%>
 	<c:if test="${not empty currentObject.imageKey}">
 		<display:column title="Image">
 			<img border="0" alt="Image" height="100" width="100" src="<c:url value='/swag/showImage/${currentObject.imageKey}'/>"/>

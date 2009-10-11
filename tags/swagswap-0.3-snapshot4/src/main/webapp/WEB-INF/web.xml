@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<display-name>swagswap</display-name>
+
+	<!-- JSF -->
+	<context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Production</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>com.sun.faces.resourceUpdateCheckPeriod</param-name>
+		<param-value>-1</param-value>
+	</context-param>
+	
+	<!-- see http://www.mail-archive.com/google-appengine-java@googlegroups.com/msg00020.html -->
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>client</param-value>
+    </context-param>
+
+	
+	<!-- JSF RI Issue 1709 Mojarra deployment fails in Google App Engine -->
+	<context-param>
+		<param-name>com.sun.faces.enableThreading</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<!-- end JSF -->
+
+	<!--
+		Location of the Log4J config file, for initialization and refresh
+		checks. Applied by Log4jConfigListener.
+	-->
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/classes/log4j.properties</param-value>
+	</context-param>
+
+	<!--
+		- Configures Log4J for this web app. 
+	-->
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+
+	<!--
+		- Location of the XML file that defines the root application context.
+		- Applied by ContextLoaderServlet. - - Can be set to different xml
+		files - for different implementations
+	-->
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/applicationContext.xml </param-value>
+	</context-param>
+	<!--
+		- Loads the root application context of this web app at startup, - by
+		default from "/WEB-INF/applicationContext.xml".
+	-->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- JSF-->
+	<!-- Faces Servlet -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!-- Faces Servlet Mapping -->
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>	
+	<!--   End JSF  -->
+
+	<!-- Spring MVC -->
+
+	<!--
+		- Servlet that dispatches request to registered handlers (Controller
+		implementations). - Has its own application context, by default
+		defined in "{servlet-name}-servlet.xml", - i.e.
+		"swagswap-servlet.xml". - - A web app can contain any number of such
+		servlets. - Note that this web app has a shared root application
+		context, serving as parent - of all DispatcherServlet contexts.
+	-->
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/swag/*</url-pattern>
+	</servlet-mapping>
+
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/WEB-INF/jsp/uncaughtException.jsp</location>
+	</error-page>
+
+	<!-- End Spring MVC -->
+	<!--JSF-->
+	<security-constraint>
+		<display-name>Restrict raw XHTML Documents</display-name>
+		<web-resource-collection>
+			<web-resource-name>XHTML</web-resource-name>
+			<url-pattern>*.xhtml</url-pattern>
+		</web-resource-collection>
+		<auth-constraint />
+	</security-constraint>
+	<!-- End JSF -->
+
+	<!-- Spring MVC -->
+	<security-constraint>
+		<web-resource-collection>
+			<url-pattern>/swag/delete/*</url-pattern>
+			<url-pattern>/swag/add/*</url-pattern>
+			<url-pattern>/swag/edit/*</url-pattern>
+			<url-pattern>/swag/rate/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>*</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<!-- End Spring MVC -->
+
+	<!--
+		<security-constraint> <web-resource-collection>
+		<url-pattern>/admin/*</url-pattern> </web-resource-collection>
+		<auth-constraint> <role-name>admin</role-name> </auth-constraint>
+		</security-constraint>
+	-->
+
+</web-app>

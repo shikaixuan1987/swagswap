@@ -210,5 +210,7 @@ public class SwagBean {
 	public void setSelectedRowId(Long selectedRowId) {
 		this.selectedRowId = selectedRowId;
 	}
+	
+
 
 }

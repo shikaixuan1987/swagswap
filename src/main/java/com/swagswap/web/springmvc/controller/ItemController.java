@@ -59,6 +59,9 @@ public class ItemController {
 		return "addEditSwagItem";
 	}
 	
+	/**
+	 * Insert or update SwagItem
+	 */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String saveHandler(@ModelAttribute SwagItem swagItem, Errors errors) {
 		try {
@@ -147,7 +150,7 @@ public class ItemController {
 		}
 		Collection<SwagItem> swagItems = itemService.search(searchCriteria.getSearchString());
 		
-		//put SwagSwaUser (if there is one) into the model
+		//put SwagSwapUser (if there is one) into the model
 		if (swagSwapUserService.isUserLoggedIn()) {
 			//get swagSwapUser using email key from available google user
 			//we've got to create them here if they don't already exist in our DB

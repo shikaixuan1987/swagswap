@@ -13,7 +13,7 @@ public interface ItemService {
 
 	SwagItem get(Long id, boolean loadSwagImage);
 
-	Collection<SwagItem> search(String queryString);
+	List<SwagItem> search(String queryString);
 
 	List<SwagItem> getAll();
 

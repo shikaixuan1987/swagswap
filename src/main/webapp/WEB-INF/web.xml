@@ -14,14 +14,22 @@
 		<param-name>com.sun.faces.resourceUpdateCheckPeriod</param-name>
 		<param-value>-1</param-value>
 	</context-param>
-	
-	<!-- see http://www.mail-archive.com/google-appengine-java@googlegroups.com/msg00020.html -->
-    <context-param>
-        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-        <param-value>client</param-value>
-    </context-param>
 
-	
+	<context-param>
+		<param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+		<param-value>/WEB-INF/jsf/swagcomp.taglib.xml</param-value>
+	</context-param>
+
+	<!--
+		see
+		http://www.mail-archive.com/google-appengine-java@googlegroups.com/msg00020.html
+	-->
+	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>client</param-value>
+	</context-param>
+
+
 	<!-- JSF RI Issue 1709 Mojarra deployment fails in Google App Engine -->
 	<context-param>
 		<param-name>com.sun.faces.enableThreading</param-name>
@@ -75,8 +83,18 @@
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.jsf</url-pattern>
-	</servlet-mapping>	
+	</servlet-mapping>
 	<!--   End JSF  -->
+
+	<filter>
+		<filter-name>Multipart Filter</filter-name>
+		<filter-class>com.swagswap.web.jsf.servlet.SwagServletFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>Multipart Filter</filter-name>
+		<servlet-name>Faces Servlet</servlet-name>
+	</filter-mapping>
+
 
 	<!-- Spring MVC -->
 

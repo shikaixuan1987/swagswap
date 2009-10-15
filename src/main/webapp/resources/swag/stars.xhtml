@@ -16,12 +16,13 @@
 	<composite:attribute name="keyTarget" />
 	<composite:attribute name="ratingTarget" />
 	<composite:attribute name="stars" default="5" />
+	<composite:attribute name="ajax" default="true" />
 </composite:interface>
 
 <composite:implementation>
-	<h:panelGroup rendered="#{! cc.attrs.editable}" >
+	<h:panelGroup rendered="#{! cc.attrs.editable}">
 		<!--   Add JSTL forEach.  When it works -->
-		<h:panelGrid columns="5" cellpadding="0" cellspacing="0"
+		<h:panelGrid columns="#{cc.attrs.stars}" cellpadding="0" cellspacing="0"
 			style="#{cc.attrs.style}">
 			<c:forEach var="i" begin="5" end="#{(cc.attrs.stars * 10)}" step="10">
 				<h:graphicImage value="/images/starOff.gif"
@@ -32,7 +33,7 @@
 		</h:panelGrid>
 	</h:panelGroup>
 	<h:panelGroup rendered="#{cc.attrs.editable}" id="stars">
-		<h:panelGrid columns="5" cellpadding="0" cellspacing="0"
+		<h:panelGrid columns="#{cc.attrs.stars}" cellpadding="0" cellspacing="0"
 			style="#{cc.attrs.style}">
 			<c:forEach var="i" begin="10" end="#{(cc.attrs.stars * 10)}"
 				step="10">

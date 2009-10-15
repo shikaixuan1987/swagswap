@@ -7,7 +7,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-	xmlns:swag="http://java.sun.com/jsf/composite/swag">
+	xmlns:swag="http://java.sun.com/jsf/composite/swag"
+	xmlns:swagcomp="/tags/swagcomp">
 
 <swag:panel title="${title}">
 	<h:panelGrid columns="2" style="vertical-align: middle">
@@ -28,6 +29,8 @@
 				style="margin-right: 5px" />
 			<h:inputText value="#{swagEditBean.editSwagItem.tags[3]}" size="15" />
 		</h:panelGrid>
+		<swag:label value="Image" />
+		<swagcomp:upload value="#{swagEditBean.uploadedFile}" />
 	</h:panelGrid>
 </swag:panel>
 <br />

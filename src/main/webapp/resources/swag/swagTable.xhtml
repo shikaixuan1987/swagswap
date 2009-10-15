@@ -58,7 +58,7 @@
 			<f:facet name="header">
 				<h:outputText value="My Rating" />
 			</f:facet>
-			<swag:stars value="#{row.userRating}" editable="true"
+			<swag:stars value="#{row.userRating}" editable="true" ajax="#{userBean.loggedIn}"
 				key="#{row.swagItem.key}" keyTarget="#{swagBean.selectedRowId}"
 				action="#{swagBean.actionRateSwag}"
 				ratingTarget="#{swagBean.userRating}">

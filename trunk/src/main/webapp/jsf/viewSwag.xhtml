@@ -84,22 +84,20 @@
 
 				</h:panelGrid>
 				<br />
-				<h:panelGroup layout="block" style="width: 100%; border: 1px solid #FF8800;" />
+				<h:panelGroup layout="block"
+					style="width: 100%; border: 1px solid #FF8800;" />
 				<br />
 				<h:panelGroup id="comments">
 					<h:dataTable value="#{swagEditBean.comments}" var="row"
 						width="100%" styleClass="tableBorder" style="border: none;"
-						rowClasses="tableRow1, tableRow2" cellpadding="4" rules="row"
-						columnClasses="commentCol1, commentCol2">
+						rowClasses="tableRow1, tableRow2" cellpadding="4" rules="row">
 						<h:column>
-							<h:panelGroup layout="block" style="height: 30px;">
-								<h:outputText value="#{row.swagSwapUserNickname}"
-									style="font-weight: bold;" />
-								<br />
+							<h:panelGroup layout="block" style="font-weight: bold;">
+								<h:outputText
+									value="Sumitted by #{row.swagSwapUserNickname} on " />
 								<swag:date value="#{row.created}" />
 							</h:panelGroup>
-						</h:column>
-						<h:column>
+							<br />
 							<h:panelGroup layout="block" style="height: 30px;">
 								<h:outputText value="#{row.commentText}" />
 							</h:panelGroup>

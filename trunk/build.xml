@@ -59,7 +59,10 @@
 	<!-- Change if you like e.g. "war" better than "www" for the output -->
 	<property name="war.dir" location="target/${ant.project.name}" />
 
+	<!-- take out gwt until it's working
 	<target name="war" depends="compile,gwtc,copyResources" description="Assemble the application directory">
+	-->
+	<target name="war" depends="compile,copyResources" description="Assemble the application directory">
 		<mkdir dir="${war.dir}/WEB-INF/lib" />
 		<copy todir="${war.dir}/WEB-INF/lib" flatten="true">
 			<fileset dir="${appengine.sdk}/lib/user">

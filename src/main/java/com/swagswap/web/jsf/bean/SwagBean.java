@@ -1,5 +1,6 @@
 package com.swagswap.web.jsf.bean;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -57,7 +58,8 @@ public class SwagBean {
 	}
 
 	public void populateSwagItem() {
-	//TODO This is called each time the view page is rendered.  This isn't desirable.  Refactor.  
+		// TODO This is called each time the view page is rendered. This isn't
+		// desirable. Refactor.
 		if (getSelectedRowId() != null) {
 			SwagItem item = getItemService().get(getSelectedRowId());
 			hackSwagItemList(item);
@@ -112,21 +114,28 @@ public class SwagBean {
 		getItemService().delete(getSelectedRowId());
 	}
 
-	public void actionRateSwag() {
+	public void actionRateSwag() throws IOException {
+
+		if (!getUserBean().isLoggedIn()) {
+			getUserBean().showLogin();
+			return;
+		}
+
 		getSwagSwapUserService().addOrUpdateRating(userBean.getUserEmail(),
 				new SwagItemRating(getSelectedRowId(), getUserRating()));
 		// Force SwagList refresh so new rating is displayed
 		refreshSwagList();
 		populateSwagItem();
 	}
-	
+
 	public void actionAddComment() {
 		String newComment = swagEditBean.getNewComment();
 		if (newComment.trim().length() == 0) {
 			return;
 		}
 		Long itemKey = swagEditBean.getEditSwagItem().getKey();
-		SwagItemComment comment = new SwagItemComment(itemKey, userBean.getUserName(), newComment);
+		SwagItemComment comment = new SwagItemComment(itemKey, userBean
+				.getUserName(), newComment);
 		itemService.addComment(comment);
 		swagEditBean.setComments(itemService.get(itemKey).getComments());
 		swagEditBean.setNewComment("");
@@ -187,7 +196,6 @@ public class SwagBean {
 			wrapperList.add(new SwagItemWrapper(swagItem, getUserBean()
 					.getUserRatingForItem(swagItem)));
 		}
-
 		return wrapperList;
 	}
 
@@ -210,7 +218,5 @@ public class SwagBean {
 	public void setSelectedRowId(Long selectedRowId) {
 		this.selectedRowId = selectedRowId;
 	}
-	
-
 
 }

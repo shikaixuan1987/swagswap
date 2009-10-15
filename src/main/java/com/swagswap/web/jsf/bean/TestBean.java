@@ -8,13 +8,14 @@ import javax.faces.bean.RequestScoped;
 
 public class TestBean {
 	
-	private byte[] uploadedFile;
+	private String uploadedFile;
 
-	public byte[] getUploadedFile() {
+	public String getUploadedFile() {
 		return uploadedFile;
 	}
 
-	public void setUploadedFile(byte[] uploadedFile) {
+	public void setUploadedFile(String uploadedFile) {
+		System.out.println("****  Uploaded file is "+uploadedFile);
 		this.uploadedFile = uploadedFile;
 	}
 	

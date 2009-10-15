@@ -83,6 +83,10 @@ public class UserBean {
 	public Integer getUserRatingForItem(SwagItem swagItem) {
 		// TODO Maybe service should default user rating to zero if it
 		// doesn't exist
+		if (! isLoggedIn()) {
+			return 0;
+		}
+		
 		Integer userItemRating;
 		if (getLoggedInUser().getSwagItemRating(swagItem.getKey()) == null) {
 			userItemRating = 0;

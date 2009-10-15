@@ -2,7 +2,6 @@ package com.swagswap.web.jsf.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -28,6 +27,21 @@ public class SwagEditBean implements Serializable {
 	private SwagItem editSwagItem;
 	private List<SwagItemComment> comments;
 	private String newComment = "";
+	private byte[] uploadedFile;
+
+	public SwagEditBean() {
+		super();
+		initialiseSwagItem();
+	}
+
+	public byte[] getUploadedFile() {
+		return uploadedFile;
+	}
+
+	public void setUploadedFile(byte[] uploadedFile) {
+		this.uploadedFile = uploadedFile;
+		editSwagItem.setImageBytes(uploadedFile);
+	}
 
 	public String getNewComment() {
 		return newComment;
@@ -43,15 +57,6 @@ public class SwagEditBean implements Serializable {
 
 	public void setComments(List<SwagItemComment> comments) {
 		this.comments = comments;
-	}
-
-	public Date getTime() {
-		return new Date();
-	}
-
-	public SwagEditBean() {
-		super();
-		initialiseSwagItem();
 	}
 
 	public SwagItem getEditSwagItem() {

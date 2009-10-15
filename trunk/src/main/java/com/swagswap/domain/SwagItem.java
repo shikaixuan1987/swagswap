@@ -16,7 +16,6 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.commons.collections.FactoryUtils;
 import org.apache.commons.collections.list.LazyList;
-import org.apache.commons.lang.StringUtils;
 
 import com.google.appengine.api.datastore.Text;
 
@@ -90,16 +89,19 @@ public class SwagItem implements Serializable {
 	@Persistent
 	private Date lastUpdated;
 
-	// For info about LazyList see http://mattfleming.com/node/134
 	@Persistent(defaultFetchGroup = "true")
-	private List<String> tags = LazyList.decorate(new ArrayList(), FactoryUtils
-			.instantiateFactory(String.class));
+	private List<String> tags = new ArrayList<String>();
 
 	@Persistent
 	private List<SwagItemComment> comments = new ArrayList<SwagItemComment>();
 
 
 	public SwagItem() {
+		//Add empty strings for the backing form
+		tags.add("");
+		tags.add("");
+		tags.add("");
+		tags.add("");
 	}
 
 	public boolean isNew() {
@@ -110,7 +112,7 @@ public class SwagItem implements Serializable {
 	 * @return whether the swagItem has an image to update
 	 */
 	public boolean hasNewImage() {
-		return ((imageBytes != null && imageBytes.length != 0) || StringUtils.isNotEmpty(imageURL));
+		return (hasNewImageBytes() || hasNewImageURL());
 	}
 
 	// SwagItem has a new image if imageBytes is filled from file upload
@@ -119,7 +121,7 @@ public class SwagItem implements Serializable {
 	}
 
 	public boolean hasNewImageURL() {
-		return StringUtils.isNotEmpty(imageURL);
+		return !"".equals(imageURL);
 	}
 
 	public Long getKey() {

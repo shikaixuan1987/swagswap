@@ -8,6 +8,24 @@
 
 	<property name="appengine.sdk" value="${env.GAE_HOME}" />
 	
+	<!-- GWT-->
+	<property name="gwt.sdk" value="${env.GWT_HOME}" />
+	
+	<!-- SWT on Mac requires the -XstartOFirstThreadFlag. -->
+	<condition property="XstartOnFirstThreadFlag" value="-XstartOnFirstThread" else="-Dgwt.dummy.arg1=">
+		<os family="mac" />
+	</condition>
+
+	<!-- SWT on Mac requires the -d32 flag if the VM is 64-bit. -->
+	<condition property="d32Flag" value="-d32" else="-Dgwt.dummy.arg2=">
+		<and>
+			<os family="mac" />
+			<equals arg1="${sun.arch.data.model}" arg2="64" />
+		</and>
+	</condition>
+	
+	<!--end GWT-->
+	
 	<!-- Check that the SDK value is set and seems sane, so we can give a nicer
 		error if not.  -->
 	<fail message="Please define the GAE_HOME env variable to point to your SDK directory">
@@ -41,7 +59,7 @@
 	<!-- Change if you like e.g. "war" better than "www" for the output -->
 	<property name="war.dir" location="target/${ant.project.name}" />
 
-	<target name="war" depends="compile, copyResources" description="Assemble the application directory">
+	<target name="war" depends="compile,gwtc,copyResources" description="Assemble the application directory">
 		<mkdir dir="${war.dir}/WEB-INF/lib" />
 		<copy todir="${war.dir}/WEB-INF/lib" flatten="true">
 			<fileset dir="${appengine.sdk}/lib/user">
@@ -72,12 +90,29 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
+	
+	<path id="gwt.classpath">
+		<pathelement location="src/main/java" />
+		<pathelement location="${war.dir}/WEB-INF/classes" />
+		<pathelement location="${gwt.sdk}/gwt-user.jar" />
+		<fileset dir="${gwt.sdk}" includes="gwt-dev*.jar" />
+	</path>
 
 	<target name="compile" description="Compile the application servlet code">
 		<mkdir dir="${war.dir}/WEB-INF/classes" />
-		<javac srcdir="src/main/java" destdir="${war.dir}/WEB-INF/classes" debug="true" classpathref="classpath">
+		<javac srcdir="src/main/java" destdir="${war.dir}/WEB-INF/classes"
+			source="1.5" target="1.5" nowarn="true" debug="true" 
+			debuglevel="lines,vars,source">
+			<classpath refid="classpath"/>
+			<classpath refid="gwt.classpath"/>
 			<compilerarg value="-Xlint" />
 		</javac>
+		<!--for GWT xml file-->
+		<copy todir="${war.dir}/WEB-INF/classes">
+		    <fileset dir="src/main/java/">
+		      <include name="**/*.gwt.xml"/>
+		    </fileset>
+		</copy>
 	</target>
 
 	<target name="clean" description="Force a clean slate to rebuild">
@@ -146,6 +181,40 @@
 			</args>
 		</appcfg>
 	</target>
+	
+	<!--GWT-->
+	<target name="gwtc" depends="compile,copyResources" description="GWT compile to JavaScript">
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+			<classpath>
+				<path refid="classpath" />
+				<path refid="gwt.classpath" />
+			</classpath>
+			<!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+			<jvmarg value="-Xmx256M" />
+			<arg value="com.swagswap.web.gwt.SwagSwapGWT" />
+			<!--output to target dir-->
+			<arg value="-war" />
+            <arg file="${war.dir}" />
+			<!--<arg value="-logLevel DEBUG" />-->
+		</java>
+	</target>
+
+	<target name="hosted" depends="compile, copyResources" description="Run hosted mode">
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.HostedMode">
+			<classpath>
+				<path refid="classpath" />
+				<path refid="gwt.classpath" />
+			</classpath>
+			<jvmarg value="-Xmx256M" />
+			<arg value="-startupUrl" />
+			<arg value="SwagSwapGWT.html" />
+			<arg value="com.swagswap.web.gwt.SwagSwapGWT" />
+			<arg value="-war" />
+			<arg file="${war.dir}" />
+		</java>
+	</target>
+
+	<!--end GWT-->
 
 	<path id="test.classpath">
 		<path refid="classpath" />

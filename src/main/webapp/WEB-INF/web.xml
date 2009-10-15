@@ -105,6 +105,20 @@
 	</error-page>
 
 	<!-- End Spring MVC -->
+	
+	<!-- GWT -->
+	<servlet>
+		<servlet-name>itemServiceGWT</servlet-name>
+		<servlet-class>com.swagswap.web.gwt.server.ItemServiceGWTWrapperImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>itemServiceGWT</servlet-name>
+		<url-pattern>/swagswap/itemServiceGWT</url-pattern>
+	</servlet-mapping>
+  
+  	<!-- end GWT -->
+  	
 	<!--JSF-->
 	<security-constraint>
 		<display-name>Restrict raw XHTML Documents</display-name>
@@ -137,5 +151,9 @@
 		<auth-constraint> <role-name>admin</role-name> </auth-constraint>
 		</security-constraint>
 	-->
-
+	
+	<!-- GWT -->
+	<welcome-file-list>
+		<welcome-file>SwagSwapGWT.html</welcome-file>
+	</welcome-file-list>
 </web-app>

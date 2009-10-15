@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -15,8 +14,6 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class SwagSwapUser implements Serializable {
 	private static final long serialVersionUID = 1L;
-	//Have to user commons logging in datanucleus enhansed classes!
-	private static final Logger log = Logger.getLogger(SwagSwapUser.class.getName());
 
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

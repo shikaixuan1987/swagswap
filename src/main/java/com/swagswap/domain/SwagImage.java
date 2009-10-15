@@ -10,7 +10,6 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Blob;
-import com.google.appengine.api.datastore.Key;
 
 /**
  * Used as a vessel to hold the actual image data so that appengine

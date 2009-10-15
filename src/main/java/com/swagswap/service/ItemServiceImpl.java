@@ -71,7 +71,7 @@ public class ItemServiceImpl implements ItemService {
 	}
 	
 	//GAE doesn't support case-insensitive queries (yet)
-	public Collection<SwagItem> search(String queryString) {
+	public List<SwagItem> search(String queryString) {
 		return itemDao.search(queryString);
 	}
 	//  compass wasn't working for me

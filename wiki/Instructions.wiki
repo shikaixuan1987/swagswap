@@ -1,11 +1,16 @@
 This will help you take in swagswap quickly:
 
+=Prerequisites=
+  * [http://code.google.com/appengine/downloads.html Get GAE/J] (latest version)
+  * [http://code.google.com/p/google-web-toolkit/downloads/list?can=1&q=2.0+Milestone+1 Get GWT] (latest 2.0 version)
 
 =Installing and Running=
 
   * When you [http://code.google.com/p/swagswap/source/checkout check out swagswap in eclipse], eclipse the project settings should be recognized.  
-  * In eclipse go to project properties, Libraries, Add Variable, Configure Variables, New and add GAE_HOME with the value pointing to your appengine (1.2.5) installation
-  * You'll also have to set an environment variable on your system called `GAE_HOME` to point to your appengine installation and restart eclipse.  
+  * In eclipse go to project properties, Libraries, Add Variable, Configure Variables, New and add 
+    * GAE_HOME with the value pointing to your appengine (1.2.x) installation
+    * GWT_HOME with the value pointing to your GWT 2.x installation
+  * You'll also have to set an environment variable on your system called `GAE_HOME` and `GWT_HOME` pointing to your installations and restart eclipse.  
   * You might have to adjust the referenced JDK (point to JDK6). 
   * Configure ant task to run in a separate JVM. Right click on the task, Select 'Run As' then select 'External Tools Configuration...'.  Click on the JRE tab.  Select the 'Separate JRE' option and choose your JVM.  Hit 'Apply'.  
   * Start the app with 

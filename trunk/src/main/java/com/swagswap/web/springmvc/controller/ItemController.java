@@ -1,7 +1,6 @@
 package com.swagswap.web.springmvc.controller;
 
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -148,7 +147,7 @@ public class ItemController {
 		if (searchCriteria==null) {
 			model.addAttribute("searchCriteria", new SearchCriteria());
 		}
-		Collection<SwagItem> swagItems = itemService.search(searchCriteria.getSearchString());
+		List<SwagItem> swagItems = itemService.search(searchCriteria.getSearchString());
 		
 		//put SwagSwapUser (if there is one) into the model
 		if (swagSwapUserService.isUserLoggedIn()) {

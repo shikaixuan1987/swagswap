@@ -53,7 +53,7 @@ public class ItemServiceGWTWrapperImpl extends AutoinjectingRemoteServiceServlet
 	}
 
 	@Override
-	public Collection<SwagItem> search(String queryString) {
+	public List<SwagItem> search(String queryString) {
 		return itemService.search(queryString);
 	}
 

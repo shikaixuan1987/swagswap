@@ -1,26 +1,25 @@
 package com.swagswap.web.gwt.client;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
+import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 /**
  * The async counterpart of <code>ItemServiceGWTWrapper</code>.
  */
 public interface ItemServiceGWTWrapperAsync {
 	
-	void get(Long id, AsyncCallback<SwagItem> callback);
+	void get(Long id, AsyncCallback<SwagItemGWTDTO> callback);
 
-	void get(Long id, boolean loadSwagImage, AsyncCallback<SwagItem> callback);
+	void get(Long id, boolean loadSwagImage, AsyncCallback<SwagItemGWTDTO> callback);
 
-	void search(String queryString, AsyncCallback<Collection<SwagItem>> callback);
+	void search(String queryString, AsyncCallback<ArrayList<SwagItemGWTDTO>> callback);
 
-	void getAll(AsyncCallback<List<SwagItem>> callback);
+	void getAll(AsyncCallback<ArrayList<SwagItemGWTDTO>> callback);
 
-	void save(SwagItem swagItem, AsyncCallback callback);
+	void save(SwagItemGWTDTO swagItem, AsyncCallback callback);
 	
 	void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNew, AsyncCallback callback);
 	

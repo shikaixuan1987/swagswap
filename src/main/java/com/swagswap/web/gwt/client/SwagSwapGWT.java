@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.swagswap.domain.SwagItem;
+import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -40,7 +40,7 @@ public class SwagSwapGWT implements EntryPoint {
   public void onModuleLoad() {
     final Button sendButton = new Button("Send");
     final TextBox nameField = new TextBox();
-    nameField.setText("GWT User");
+    nameField.setText("Swag Item to Lookup");
 
     // We can add style names to widgets
     sendButton.addStyleName("sendButton");
@@ -105,10 +105,10 @@ public class SwagSwapGWT implements EntryPoint {
        */
       private void sendNameToServer() {
         sendButton.setEnabled(false);
-        String textToServer = nameField.getText();
-        textToServerLabel.setText(textToServer);
+        String swagItemId = nameField.getText();
+        textToServerLabel.setText(swagItemId);
         serverResponseLabel.setText("");
-        itemService.get(1L, new AsyncCallback<SwagItem>() {
+        itemService.get(Long.valueOf(swagItemId), new AsyncCallback<SwagItemGWTDTO>() {
           public void onFailure(Throwable caught) {
             // Show the RPC error message to the user
             dialogBox.setText("Remote Procedure Call - Failure");
@@ -118,7 +118,7 @@ public class SwagSwapGWT implements EntryPoint {
             closeButton.setFocus(true);
           }
 
-          public void onSuccess(SwagItem result) {
+          public void onSuccess(SwagItemGWTDTO result) {
             dialogBox.setText("Remote Procedure Call");
             serverResponseLabel.removeStyleName("serverResponseLabelError");
             serverResponseLabel.setHTML(result.getName());

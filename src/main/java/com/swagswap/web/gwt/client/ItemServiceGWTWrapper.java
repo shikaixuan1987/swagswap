@@ -1,27 +1,26 @@
 package com.swagswap.web.gwt.client;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
+import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 /**
  * The client side stub for the RPC service.
  */
 @RemoteServiceRelativePath("itemServiceGWT")
 public interface ItemServiceGWTWrapper extends RemoteService {
-	SwagItem get(Long id);
+	SwagItemGWTDTO get(Long id);
 
-	SwagItem get(Long id, boolean loadSwagImage);
+	SwagItemGWTDTO get(Long id, boolean loadSwagImage);
 
-	Collection<SwagItem> search(String queryString);
+	ArrayList<SwagItemGWTDTO> search(String queryString);
 
-	List<SwagItem> getAll();
+	ArrayList<SwagItemGWTDTO> getAll();
 
-	void save(SwagItem swagItem);
+	void save(SwagItemGWTDTO swagItemDto);
 	
 	void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNew);
 	

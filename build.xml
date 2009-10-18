@@ -7,10 +7,10 @@
 	<property environment="env" />
 
 	<property name="appengine.sdk" value="${env.GAE_HOME}" />
-	
+
 	<!-- GWT-->
 	<property name="gwt.sdk" value="${env.GWT_HOME}" />
-	
+
 	<!-- SWT on Mac requires the -XstartOFirstThreadFlag. -->
 	<condition property="XstartOnFirstThreadFlag" value="-XstartOnFirstThread" else="-Dgwt.dummy.arg1=">
 		<os family="mac" />
@@ -23,9 +23,9 @@
 			<equals arg1="${sun.arch.data.model}" arg2="64" />
 		</and>
 	</condition>
-	
+
 	<!--end GWT-->
-	
+
 	<!-- Check that the SDK value is set and seems sane, so we can give a nicer
 		error if not.  -->
 	<fail message="Please define the GAE_HOME env variable to point to your SDK directory">
@@ -93,7 +93,18 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
-	
+
+	<path id="tools.class.path">
+		<pathelement location="${appengine.sdk}/lib/appengine-tools-api.jar" />
+		<!--
+		<fileset dir="${appengine.sdk}/lib/tools">
+			<include name="**/asm-*.jar" />
+			<include name="**/datanucleus-enhancer-*.jar" />
+		</fileset>
+		-->
+	</path>
+
+
 	<path id="gwt.classpath">
 		<pathelement location="src/main/java" />
 		<pathelement location="${war.dir}/WEB-INF/classes" />
@@ -112,9 +123,9 @@
 		</javac>
 		<!--for GWT xml file-->
 		<copy todir="${war.dir}/WEB-INF/classes">
-		    <fileset dir="src/main/java/">
-		      <include name="**/*.gwt.xml"/>
-		    </fileset>
+			<fileset dir="src/main/java/">
+				<include name="**/*.gwt.xml"/>
+			</fileset>
 		</copy>
 	</target>
 
@@ -184,7 +195,7 @@
 			</args>
 		</appcfg>
 	</target>
-	
+
 	<!--GWT-->
 	<target name="gwtc" depends="compile,copyResources" description="GWT compile to JavaScript">
 		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
@@ -197,20 +208,48 @@
 			<arg value="com.swagswap.web.gwt.SwagSwapGWT" />
 			<!--output to target dir-->
 			<arg value="-war" />
-            <arg file="${war.dir}" />
+			<arg file="${war.dir}" />
 			<!--<arg value="-logLevel DEBUG" />-->
 		</java>
+		<!--zip smartGWT dir (see http://forums.smartclient.com/showthread.php?t=5258)-->
+		<zip destfile="${war.dir}/sc.zip" basedir="${war.dir}/swagswap/" includes="sc/**"/>
+		<delete dir="${war.dir}/swagswap/sc" />
 	</target>
 
 	<target name="hosted" depends="compile, copyResources" description="Run hosted mode">
+		<echo>Running GWT Hosted Mode pointing to GAE</echo>
 		<java failonerror="true" fork="true" classname="com.google.gwt.dev.HostedMode">
 			<classpath>
 				<path refid="classpath" />
 				<path refid="gwt.classpath" />
+				<path refid="tools.class.path" />
 			</classpath>
 			<jvmarg value="-Xmx256M" />
+			<!--use appengine server-->
+			<arg value="-noserver" />
 			<arg value="-startupUrl" />
-			<arg value="SwagSwapGWT.html" />
+			<arg value="http://localhost:8080/SwagSwapGWT.html" />
+			<arg value="com.swagswap.web.gwt.SwagSwapGWT" />
+			<arg value="-war" />
+			<arg file="${war.dir}" />
+		</java>
+	</target>
+
+	<target name="hosted_debug" depends="compile, copyResources" description="Run hosted mode">
+		<echo>Running GWT Hosted Mode pointing to GAE</echo>
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.HostedMode">
+			<classpath>
+				<path refid="classpath" />
+				<path refid="gwt.classpath" />
+				<path refid="tools.class.path" />
+			</classpath>
+			<jvmarg value="-Xdebug -Xnoagent -Djava.compiler=NONE" />
+			<jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,address=5006,suspend=y" />
+			<jvmarg value="-Xmx256M" />
+			<!--use appengine server-->
+			<arg value="-noserver" />
+			<arg value="-startupUrl" />
+			<arg value="http://localhost:8080/SwagSwapGWT.html" />
 			<arg value="com.swagswap.web.gwt.SwagSwapGWT" />
 			<arg value="-war" />
 			<arg file="${war.dir}" />
@@ -228,7 +267,6 @@
 		</fileset>
 		<pathelement location="${war.dir}/WEB-INF/classes" />
 		<pathelement location="src/test/resources" />
-
 	</path>
 
 	<target name="compile-tests" depends="war">

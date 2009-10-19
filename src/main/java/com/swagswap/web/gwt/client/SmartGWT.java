@@ -18,7 +18,8 @@ import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VStack;
 import com.smartgwt.client.widgets.tile.TileGrid;
-import com.smartgwt.client.widgets.viewer.CellStyleHandler;
+import com.smartgwt.client.widgets.tile.events.RecordClickEvent;
+import com.smartgwt.client.widgets.tile.events.RecordClickHandler;
 import com.smartgwt.client.widgets.viewer.DetailFormatter;
 import com.smartgwt.client.widgets.viewer.DetailViewerField;
 import com.smartgwt.client.widgets.viewer.DetailViewerRecord;
@@ -29,12 +30,15 @@ public class SmartGWT implements EntryPoint {
 	private final SimpleGwtRPCDSServiceAsync service = GWT
 			.create(SimpleGwtRPCDSService.class);
 
+	final TileGrid tileGrid = new TileGrid();
+	
 	public void onModuleLoad() {
 
+		
 		VStack vStack = new VStack(20);
 		vStack.setWidth100();
 
-		final TileGrid tileGrid = new TileGrid();
+		
 		tileGrid.setTileWidth(150);
 		tileGrid.setTileHeight(205);
 		tileGrid.setHeight(400);
@@ -43,17 +47,24 @@ public class SmartGWT implements EntryPoint {
 		tileGrid.setAutoFetchData(true);
 		tileGrid.setAnimateTileChange(true);
 
-		DetailViewerField pictureField = new DetailViewerField("picture"); 
-		DetailViewerField idField = new DetailViewerField("id");
-		DetailViewerField commonNameField = new DetailViewerField("name");
-		commonNameField.setCellStyle("commonName");
+		DetailViewerField pictureField = new DetailViewerField("imageKey"); 
+		pictureField.setImageWidth(150);
+		pictureField.setImageHeight(125);
+		pictureField.setCellStyle("picture");
 
-		DetailViewerField lifeSpanField = new DetailViewerField("date");
-		lifeSpanField.setCellStyle("lifeSpan");
-		lifeSpanField.setDetailFormatter(new DetailFormatter() {
+		DetailViewerField keyField = new DetailViewerField("key");
+		DetailViewerField name = new DetailViewerField("name");
+//		commonNameField.setCellStyle("commonName");
+		DetailViewerField company = new DetailViewerField("company");
+		DetailViewerField ownerNickName = new DetailViewerField("ownerNickName");
+		DetailViewerField averageRating = new DetailViewerField("averageRating");
+		DetailViewerField numberOfRatings = new DetailViewerField("numberOfRatings");
+		DetailViewerField lastUpdated = new DetailViewerField("lastUpdated");
+//		lifeSpanField.setCellStyle("lifeSpan");
+		lastUpdated.setDetailFormatter(new DetailFormatter() {
 			public String format(Object value, DetailViewerRecord record,
 					DetailViewerField field) {
-				return "date: " + value;
+				return "Last Updated: " + value;
 			}
 		});
 
@@ -73,9 +84,11 @@ public class SmartGWT implements EntryPoint {
 //			}
 //		});
 		
-		tileGrid.setFields(pictureField, idField, commonNameField, lifeSpanField);
+		tileGrid.setFields(pictureField, keyField, name, company, ownerNickName, averageRating, numberOfRatings, lastUpdated);
 
 		vStack.addMember(tileGrid);
+		
+
 
 		final DynamicForm filterForm = new DynamicForm();
 		filterForm.setIsGroup(true);
@@ -167,7 +180,47 @@ public class SmartGWT implements EntryPoint {
 		hLayout.addMember(clearButton);
 		vStack.addMember(hLayout);
 
+		//form
+		final DynamicForm boundForm = new DynamicForm();
+		boundForm.setNumCols(6);
+		boundForm.setDataSource(SimpleGwtRPCDataSource.getInstance());
+		boundForm.setAutoFocus(false);
+
+		TextItem nameItem = new TextItem("name");
+		TextItem companyItem = new TextItem("company");
+
+		boundForm.setFields(nameItem, companyItem);
+
+		vStack.addMember(boundForm);
+
+		tileGrid.addRecordClickHandler(new RecordClickHandler() {
+			public void onRecordClick(RecordClickEvent event) {
+				boundForm.editRecord(event.getRecord());
+			}
+		});
+//
+//		HLayout hLayout = new HLayout(10);
+//		hLayout.setHeight(22);
+
+		IButton button = new IButton("Save");
+		button.setAutoFit(true);
+		button.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				boundForm.saveData();
+				boundForm.clearValues();
+			}
+		});
+		hLayout.addMember(button);
+		vStack.addMember(hLayout);
+		
 		vStack.draw();
 	}
 
+//	public void onClick(ClickEvent event) {
+//		TileRecord record = tileGrid.getSelectedRecord();
+//		PopupPanel popupPanel = new PopupPanel(true);
+//		popupPanel.add(new T)
+//		dialog.setAutoCenter(true);
+//		dialog.animateShow(AnimationEffect.FADE, null, 1000);
+//	}
 }

@@ -1,28 +1,23 @@
 package com.swagswap.web.gwt.client;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
-
-import java.util.List;
-
-/**
- *
- * @author Aleksandras Novikovas
- * @author System Tier
- * @version 1.0
- */
 @RemoteServiceRelativePath ("SimpleGwtRPCDSService") //TODO lowercase this
 public interface SimpleGwtRPCDSService extends RemoteService {
 
-    List<SimpleGwtRPCDSRecord> fetch ();
+    List<SwagItemGWTDTO> fetch ();
 
-    SimpleGwtRPCDSRecord add (SimpleGwtRPCDSRecord record);
+//    SwagItemGWTDTO add (SwagItemGWTDTO swagItemGWTDTO);
+    void add (SwagItemGWTDTO swagItemGWTDTO);
 
-    SimpleGwtRPCDSRecord update (SimpleGwtRPCDSRecord record);
+    void update (SwagItemGWTDTO swagItemGWTDTO);
 
-    void remove (SimpleGwtRPCDSRecord record);
+    void remove (SwagItemGWTDTO swagItemGWTDTO);
     
     public static class Util {
 		private static SimpleGwtRPCDSServiceAsync instance;

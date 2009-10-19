@@ -1,7 +1,9 @@
 package com.swagswap.web.gwt.client;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import java.util.List;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 /**
  *
@@ -11,12 +13,12 @@ import java.util.List;
  */
 public interface SimpleGwtRPCDSServiceAsync {
 
-    public abstract void fetch (AsyncCallback<List<SimpleGwtRPCDSRecord>> asyncCallback);
+    public abstract void fetch (AsyncCallback<List<SwagItemGWTDTO>> asyncCallback);
 
-    public abstract void add (SimpleGwtRPCDSRecord record, AsyncCallback<SimpleGwtRPCDSRecord> asyncCallback);
+    public abstract void add (SwagItemGWTDTO swagItemGWTDTO, AsyncCallback<SwagItemGWTDTO> asyncCallback);
 
-    public abstract void update (SimpleGwtRPCDSRecord record, AsyncCallback<SimpleGwtRPCDSRecord> asyncCallback);
+    public abstract void update (SwagItemGWTDTO swagItemGWTDTO, AsyncCallback<SwagItemGWTDTO> asyncCallback);
 
-    public abstract void remove (SimpleGwtRPCDSRecord record, AsyncCallback<Object> asyncCallback);
+    public abstract void remove (SwagItemGWTDTO swagItemGWTDTO, AsyncCallback<Object> asyncCallback);
 
 }

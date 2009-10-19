@@ -96,7 +96,7 @@ public class ItemServiceGWTWrapperImpl extends AutoinjectingRemoteServiceServlet
 				swagItem.getName(),
 				swagItem.getCompany(),
 				swagItem.getDescription(),
-				swagItem.getImage().getImage().getBytes(),
+				swagItem.getImageKey(),
 				swagItem.getOwnerEmail(),
 				swagItem.getOwnerNickName(),
 				swagItem.getAverageRating(),

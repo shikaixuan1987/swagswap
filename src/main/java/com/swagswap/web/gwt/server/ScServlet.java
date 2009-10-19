@@ -31,7 +31,7 @@ public class ScServlet extends HttpServlet {
 	/**
 	 * This servlet receives all '/sc/*' requests according to a rule defined in
 	 * 'web.xml'. It looks for the necessary resource in 'sc.zip' which should
-	 * be present in the application classpath.
+	 * be present in the application classpath (root of webapp).
 	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {

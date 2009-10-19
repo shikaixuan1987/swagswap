@@ -126,6 +126,7 @@
 		</property>
 	</bean>
 
+	<bean id="adminService" class="com.swagswap.service.AdminServiceImpl" />
 	
 </beans>
 

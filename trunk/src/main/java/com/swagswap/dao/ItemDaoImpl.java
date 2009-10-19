@@ -72,7 +72,7 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 
     // Figured these out from this page:
     // http://code.google.com/p/datanucleus-appengine/source/browse/trunk/tests/org/datanucleus/store/appengine/query/JDOQLQueryTest.java#2178
-	protected List<SwagItem> findByTag(String searchString) {
+	public List<SwagItem> findByTag(String searchString) {
 		Query query = getPersistenceManager().newQuery(
                 "select from " + SwagItem.class.getName()
                 + " where tags.contains(p1) parameters String p1");

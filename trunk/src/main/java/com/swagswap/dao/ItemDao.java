@@ -33,6 +33,7 @@ public interface ItemDao {
 
 	List<SwagItem> getAll();
 
+	List<SwagItem> findByTag(String searchString);
 	/**
 	 * Insert SwagItem and SwagImage (if applicable)
 	 * Note: swagItem ref passed in is updated 
@@ -56,5 +57,6 @@ public interface ItemDao {
 	void delete(Long id);
 
 	void addComment(SwagItemComment swagItemComment);
+
 
 }

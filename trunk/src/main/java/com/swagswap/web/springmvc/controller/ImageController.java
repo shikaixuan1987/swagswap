@@ -26,7 +26,7 @@ public class ImageController {
 	public static final String PATH_TO_DEFAULT_IMAGE = "images/no_photo.jpg";
 	private static byte[] defaultImage;
 
-	private ImageDao imageDao;
+	private ImageDao imageDao; //TODO shouldn't this use imageService?
 
 	@Autowired
 	public ImageController(ImageDao imageDao) {

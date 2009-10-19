@@ -84,6 +84,10 @@ pageTracker._trackPageview();
 <img src="<spring:url value="/images/trading-floor-banner.jpg" htmlEscape="true" />" alt="Swag Swap"/>
 
 <table border="1">
+<google-auth:isAdmin>
+  <br/>
+  <tr><td>Welcome Admin: <a href="/swag/admin/main">Go to Admin Page</a> | <a href="#"  onclick="showTotalUsage();">Show GAE Usage for this page</a> (doesn't work in dev env)</td></tr>
+</google-auth:isAdmin>
 <tr><td>
 <h3>Swagswap Devoxx 2009 Demo application (work in progress)</h3>
 
@@ -94,9 +98,5 @@ pageTracker._trackPageview();
 </ul>
 --<a href="http://www.devoxx.com/display/DV09/Sam+Brodkin">Sam Brodkin</a> and <a href="http://www.devoxx.com/display/DV09/Scott+Stevenson">Scott Stevenson</a>
 </td></tr>
-<google-auth:isAdmin>
-	<br/>
-	<tr>You are an admin so you can <a href="#"  onclick="showTotalUsage();">Show GAE Usage for this page</a> (doesn't work in dev env)</tr>
-</google-auth:isAdmin>
 </table>
 

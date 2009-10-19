@@ -102,6 +102,10 @@ public class ItemServiceImpl implements ItemService {
 	public List<SwagItem> getAll() {
 		return itemDao.getAll();
 	}
+	
+	public List<SwagItem> findByTag(String searchString) {
+		return itemDao.findByTag(searchString);
+	}
 
 	/**
 	 * saves swag item and image (image is saved in dao because it's a child
@@ -204,9 +208,10 @@ public class ItemServiceImpl implements ItemService {
 
 	/**
 	 * 
+	 * public so that it can be used by AdminService
 	 * @return image data from swagItem
 	 */
-	protected byte[] getImageDataFromURL(String imageURL)
+	public byte[] getImageDataFromURL(String imageURL)
 			throws LoadImageFromURLException, ImageTooLargeException {
 		BufferedInputStream bis = null;
 		ByteArrayOutputStream bos = null;

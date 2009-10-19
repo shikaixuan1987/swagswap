@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
+import com.swagswap.exceptions.ImageTooLargeException;
 import com.swagswap.exceptions.LoadImageFromURLException;
 
 public interface ItemService {
@@ -16,6 +17,8 @@ public interface ItemService {
 
 	List<SwagItem> getAll();
 
+	List<SwagItem> findByTag(String searchString);
+	
 	void save(SwagItem swagItem) throws LoadImageFromURLException;
 	
 	void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNew);
@@ -23,5 +26,8 @@ public interface ItemService {
 	void delete(Long id);
 	
 	void addComment(SwagItemComment swagItemComment);
+
+	byte[] getImageDataFromURL(String imageURL) throws LoadImageFromURLException, ImageTooLargeException;
+
 
 }

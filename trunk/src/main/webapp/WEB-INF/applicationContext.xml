@@ -17,7 +17,7 @@
      					http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
 
-	<context:annotation-config/>
+	<context:annotation-config />
 
 	<!--
 		- This bean resolves specific types of exceptions to corresponding
@@ -77,12 +77,14 @@
 		class="org.springframework.context.support.ResourceBundleMessageSource"
 		p:basename="messages"/>
 	-->
-	
-	
+
+
 	<bean id="persistenceManagerFactory"
 		class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean">
-		<!-- <property name="configLocation" value="classpath:kodo.properties"/>  -->
-		
+		<!--
+			<property name="configLocation" value="classpath:kodo.properties"/>
+		-->
+
 		<property name="jdoProperties">
 			<props>
 				<prop key="javax.jdo.PersistenceManagerFactoryClass">
@@ -103,28 +105,48 @@
 		<property name="persistenceManagerFactory" ref="persistenceManagerFactory" />
 	</bean>
 
-	<bean id="swagItemDao" class="com.swagswap.dao.ItemDaoImpl" >
-		<property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
+	<bean id="swagItemDao" class="com.swagswap.dao.ItemDaoImpl">
+		<property name="persistenceManagerFactory" ref="persistenceManagerFactory" />
 	</bean>
-	
-	<bean id="swagImageDao" class="com.swagswap.dao.ImageDaoImpl" >
-		<property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
+
+	<bean id="swagImageDao" class="com.swagswap.dao.ImageDaoImpl">
+		<property name="persistenceManagerFactory" ref="persistenceManagerFactory" />
 	</bean>
-	
-	<bean id="swagSwapUserDao" class="com.swagswap.dao.UserDaoImpl" >
-		<property name="persistenceManagerFactory" ref="persistenceManagerFactory"/>
+
+	<bean id="swagSwapUserDao" class="com.swagswap.dao.UserDaoImpl">
+		<property name="persistenceManagerFactory" ref="persistenceManagerFactory" />
 	</bean>
-	
-	<bean id="swagItemService" class="com.swagswap.service.ItemServiceImpl" />
-	
-	<!-- wrap google UserServiceFactory and don't expose it in the context otherwise. 
-		 swagSwapUserService should be used instead of googleUserService to leave the
-		 possibility open to add OpenId or another security mechanism later -->
-	<bean id="swagSwapUserService" class="com.swagswap.service.SwagSwapUserServiceImpl" >
+
+	<bean id="itemCacheManager" class="com.swagswap.dao.cache.ItemCacheManager">
+		<property name="itemDao" ref="swagItemDao" />
+	</bean>
+
+	<bean id="swagItemService" class="com.swagswap.service.ItemServiceImpl">
+		<!--
+			use Cache Manager -->
+		<property name="itemDao" ref="itemCacheManager" />
+		<!--
+			Use DAO directly 
+			<property name="itemDao" ref="swagItemDao" />
+		-->
+
+	</bean>
+
+
+
+	<!--
+		wrap google UserServiceFactory and don't expose it in the context
+		otherwise. swagSwapUserService should be used instead of
+		googleUserService to leave the possibility open to add OpenId or
+		another security mechanism later
+	-->
+	<bean id="swagSwapUserService" class="com.swagswap.service.SwagSwapUserServiceImpl">
 		<property name="googleUserService">
-			<bean class="com.google.appengine.api.users.UserServiceFactory" factory-method="getUserService"/>
+			<bean class="com.google.appengine.api.users.UserServiceFactory"
+				factory-method="getUserService" />
 		</property>
 	</bean>
+
 
 	<bean id="adminService" class="com.swagswap.service.AdminServiceImpl" />
 	

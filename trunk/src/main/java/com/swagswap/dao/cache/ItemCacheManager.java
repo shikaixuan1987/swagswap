@@ -169,4 +169,9 @@ public class ItemCacheManager implements ItemDao {
 			refreshSwagItems();
 		}
 	}
+
+	public List<SwagItem> findByTag(String searchString) {
+		// TODO Implement this
+		return itemDao.findByTag(searchString);
+	}
 }

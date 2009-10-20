@@ -2,9 +2,8 @@ package com.swagswap.web.jsf.bean;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -35,7 +34,7 @@ public class SwagBean {
 	@ManagedProperty(value = "#{userBean}")
 	private UserBean userBean;
 
-	private Collection<SwagItemWrapper> swagList;
+	// private Collection<SwagItemWrapper> swagList;
 	private String searchString = "Search";
 	private Boolean showClear = false;
 	private Long selectedRowId;
@@ -66,7 +65,6 @@ public class SwagBean {
 			getSwagEditBean().setEditSwagItem(item);
 			getSwagEditBean().setUserRating(
 					getUserBean().getUserRatingForItem(item));
-			getSwagEditBean().setComments(item.getComments());
 		}
 	}
 
@@ -91,18 +89,18 @@ public class SwagBean {
 	}
 
 	public void actionSearch() {
-		if (searchString.length() < 1) {
+		if (searchString.trim().length() < 1) {
 			return;
 		}
-		swagList = convertSwagListToWrapperList(getItemService().search(
-				searchString));
+		swagEditBean.setSwagList(SwagItemWrapper.convertSwagListToWrapperList(
+				getItemService().search(searchString), userBean));
 		showClear = true;
 	}
 
 	public void actionClearSearch() {
-		swagList = null;
 		showClear = false;
 		searchString = "";
+		refreshSwagList();
 	}
 
 	public String actionSaveItem() {
@@ -112,6 +110,12 @@ public class SwagBean {
 
 	public void actionDelete() {
 		getItemService().delete(getSelectedRowId());
+		refreshSwagList();
+	}
+
+	private void refreshSwagList() {
+		// Set swagList to null to force refresh on next get
+		swagEditBean.setSwagList(null);
 	}
 
 	public void actionRateSwag() throws IOException {
@@ -121,15 +125,36 @@ public class SwagBean {
 			return;
 		}
 
-		getSwagSwapUserService().addOrUpdateRating(userBean.getUserEmail(),
+		swagSwapUserService.addOrUpdateRating(userBean.getUserEmail(),
 				new SwagItemRating(getSelectedRowId(), getUserRating()));
-		// Force SwagList refresh so new rating is displayed
-		refreshSwagList();
-		populateSwagItem();
+
+		if (swagEditBean.getSwagList() == null) {
+			// Updating from view item so no list to refresh
+			return;
+		}
+		// Performance enhancement. Only get the updated row from service and
+		// refresh list.
+		// TODO Do we need this with caching?
+		SwagItem refreshedSwagItem = itemService.get(getSelectedRowId());
+		Integer newRating = getUserRating();
+		SwagItemWrapper refreshedItem = new SwagItemWrapper(refreshedSwagItem,
+				newRating);
+
+		ListIterator<SwagItemWrapper> iter = swagEditBean.getSwagList()
+				.listIterator();
+		while (iter.hasNext()) {
+			SwagItemWrapper item = (SwagItemWrapper) iter.next();
+			if (item.getSwagItem().getKey().equals(getSelectedRowId())) {
+				iter.set(refreshedItem);
+				break;
+			}
+
+		}
 	}
 
 	public void actionAddComment() {
 		String newComment = swagEditBean.getNewComment();
+		// TODO Change to Client Validator
 		if (newComment.trim().length() == 0) {
 			return;
 		}
@@ -137,7 +162,6 @@ public class SwagBean {
 		SwagItemComment comment = new SwagItemComment(itemKey, userBean
 				.getUserName(), newComment);
 		itemService.addComment(comment);
-		swagEditBean.setComments(itemService.get(itemKey).getComments());
 		swagEditBean.setNewComment("");
 	}
 
@@ -173,34 +197,18 @@ public class SwagBean {
 		this.userBean = userBean;
 	}
 
-	public Collection<SwagItemWrapper> getSwagList() {
-		if (swagList == null) {
-			swagList = convertSwagListToWrapperList(getItemService().getAll());
+	public List<SwagItemWrapper> getSwagList() {
+		if (swagEditBean.getSwagList() == null) {
+			swagEditBean.setSwagList(SwagItemWrapper
+					.convertSwagListToWrapperList(getItemService().getAll(),
+							userBean));
 		}
-		return swagList;
+
+		return swagEditBean.getSwagList();
 	}
 
-	public void refreshSwagList() {
-		// Set swagList to null to force refresh on next get
-		swagList = null;
-	}
-
-	private Collection<SwagItemWrapper> convertSwagListToWrapperList(
-			Collection<SwagItem> itemList) {
-
-		List<SwagItemWrapper> wrapperList = new ArrayList<SwagItemWrapper>();
-		Iterator<SwagItem> iter = itemList.iterator();
-		while (iter.hasNext()) {
-			SwagItem swagItem = iter.next();
-
-			wrapperList.add(new SwagItemWrapper(swagItem, getUserBean()
-					.getUserRatingForItem(swagItem)));
-		}
-		return wrapperList;
-	}
-
-	public void setSwagList(Collection<SwagItemWrapper> swagList) {
-		this.swagList = swagList;
+	public void setSwagList(List<SwagItemWrapper> swagList) {
+		swagEditBean.setSwagList(swagList);
 	}
 
 	public Boolean getShowClear() {

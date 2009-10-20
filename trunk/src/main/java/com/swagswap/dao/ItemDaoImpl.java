@@ -43,6 +43,8 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 	 */
 	public SwagItem get(Long id, boolean loadSwagImage) {
 		SwagItem swagItem = getPersistenceManager().getObjectById(SwagItem.class, id);
+		//  Had to add this or the comments weren't being loaded in Cache.  Scott.
+		swagItem.getComments();
 		if (loadSwagImage) {
 			swagItem.getImage();
 		}

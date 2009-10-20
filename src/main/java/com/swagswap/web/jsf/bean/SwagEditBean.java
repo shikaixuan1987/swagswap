@@ -2,13 +2,14 @@ package com.swagswap.web.jsf.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import com.swagswap.domain.SwagItem;
-import com.swagswap.domain.SwagItemComment;
+import com.swagswap.web.jsf.model.SwagItemWrapper;
 
 /**
  * @author scott
@@ -25,24 +26,24 @@ public class SwagEditBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private SwagItem editSwagItem;
-	private List<SwagItemComment> comments;
 	private String newComment = "";
-	private byte[] uploadedFile;
+	private List<SwagItemWrapper> swagList;
+	
+	//  Protected as only can be accessed from SwagBean and not from page.
+	protected List<SwagItemWrapper> getSwagList() {
+		return swagList;
+	}
+
+	//  Protected as only can be accessed from SwagBean and not from page.
+	protected void setSwagList(List<SwagItemWrapper> swagList) {
+		this.swagList = swagList;
+	}
 
 	public SwagEditBean() {
 		super();
 		initialiseSwagItem();
 	}
-
-	public byte[] getUploadedFile() {
-		return uploadedFile;
-	}
-
-	public void setUploadedFile(byte[] uploadedFile) {
-		this.uploadedFile = uploadedFile;
-		editSwagItem.setImageBytes(uploadedFile);
-	}
-
+	
 	public String getNewComment() {
 		return newComment;
 	}
@@ -50,15 +51,7 @@ public class SwagEditBean implements Serializable {
 	public void setNewComment(String newComment) {
 		this.newComment = newComment;
 	}
-
-	public List<SwagItemComment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<SwagItemComment> comments) {
-		this.comments = comments;
-	}
-
+	
 	public SwagItem getEditSwagItem() {
 		return editSwagItem;
 	}
@@ -83,5 +76,6 @@ public class SwagEditBean implements Serializable {
 	public void setUserRating(Integer userRating) {
 		this.userRating = userRating;
 	}
+	
 
 }

@@ -46,8 +46,7 @@ public class ItemServiceImpl implements ItemService {
 
 	private static final int IMAGE_WIDTH = 283;
 	private static final int IMAGE_HEIGHT = 212;
-
-	@Autowired
+	
 	private ItemDao itemDao;
 	@Autowired
 	private SwagSwapUserService swagSwapUserService; // for saving users to our
@@ -175,7 +174,7 @@ public class ItemServiceImpl implements ItemService {
 		itemDao.addComment(newComment);
 	}
 
-	public void setSwagItemDao(ItemDao itemDao) {
+	public void setItemDao(ItemDao itemDao) {
 		this.itemDao = itemDao;
 	}
 
@@ -307,7 +306,7 @@ public class ItemServiceImpl implements ItemService {
 		Image oldImage = ImagesServiceFactory.makeImage(imageBytes);
 		Transform resize = ImagesServiceFactory.makeResize(resizedWidth,
 				resizedHeight);
-		Image newImage = imagesService.applyTransform(resize, oldImage);
+		Image newImage = imagesService.applyTransform(resize, oldImage, ImagesService.OutputEncoding.valueOf("JPEG"));
 		return newImage.getImageData();
 	}
 

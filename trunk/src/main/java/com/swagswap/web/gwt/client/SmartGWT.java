@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.types.OperatorId;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
@@ -27,14 +28,13 @@ import com.smartgwt.client.widgets.viewer.DetailViewerRecord;
 public class SmartGWT implements EntryPoint {
 	// private final ItemServiceGWTWrapperAsync itemService = GWT
 	// .create(ItemServiceGWTWrapper.class);
-	private final SimpleGwtRPCDSServiceAsync service = GWT
-			.create(SimpleGwtRPCDSService.class);
+	private final SmartGWTItemServiceWrapperAsync service = GWT
+			.create(SmartGWTItemServiceWrapper.class);
 
 	final TileGrid tileGrid = new TileGrid();
 	
 	public void onModuleLoad() {
 
-		
 		VStack vStack = new VStack(20);
 		vStack.setWidth100();
 
@@ -43,7 +43,7 @@ public class SmartGWT implements EntryPoint {
 		tileGrid.setTileHeight(205);
 		tileGrid.setHeight(400);
 		tileGrid.setShowAllRecords(true);
-		tileGrid.setDataSource(SimpleGwtRPCDataSource.getInstance());
+		tileGrid.setDataSource(SmartGWTRPCDataSource.getInstance());
 		tileGrid.setAutoFetchData(true);
 		tileGrid.setAnimateTileChange(true);
 
@@ -94,7 +94,7 @@ public class SmartGWT implements EntryPoint {
 		filterForm.setIsGroup(true);
 		filterForm.setGroupTitle("Search");
 		filterForm.setNumCols(6);
-		filterForm.setDataSource(SimpleGwtRPCDataSource.getInstance());
+		filterForm.setDataSource(SmartGWTRPCDataSource.getInstance());
 		filterForm.setAutoFocus(false);
 
 		TextItem commonNameItem = new TextItem("name");
@@ -107,7 +107,7 @@ public class SmartGWT implements EntryPoint {
 		lifeSpanItem.setOperator(OperatorId.LESS_THAN);
 
 		SelectItem statusItem = new SelectItem("name");
-		statusItem.setOperator(OperatorId.EQUALS);
+		statusItem.setOperator(OperatorId.CONTAINS); //fuzzy search!
 		statusItem.setAllowEmptyValue(true);
 
 		filterForm.setFields(commonNameItem, lifeSpanItem, statusItem);
@@ -183,7 +183,7 @@ public class SmartGWT implements EntryPoint {
 		//form
 		final DynamicForm boundForm = new DynamicForm();
 		boundForm.setNumCols(6);
-		boundForm.setDataSource(SimpleGwtRPCDataSource.getInstance());
+		boundForm.setDataSource(SmartGWTRPCDataSource.getInstance());
 		boundForm.setAutoFocus(false);
 
 		TextItem nameItem = new TextItem("name");
@@ -213,6 +213,7 @@ public class SmartGWT implements EntryPoint {
 		hLayout.addMember(button);
 		vStack.addMember(hLayout);
 		
+	    RootPanel.get("gwt-tilegrid").add(vStack);
 		vStack.draw();
 	}
 

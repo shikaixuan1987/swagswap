@@ -118,7 +118,7 @@ public class SwagItem implements Serializable {
 	}
 
 	public boolean hasNewImageURL() {
-		return !"".equals(imageURL);
+		return (imageURL !=null && !"".equals(imageURL));
 	}
 
 	public Long getKey() {

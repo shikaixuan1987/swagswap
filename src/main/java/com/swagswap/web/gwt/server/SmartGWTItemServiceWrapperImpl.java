@@ -7,48 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagItemComment;
 import com.swagswap.service.ItemService;
-import com.swagswap.web.gwt.client.SimpleGwtRPCDSService;
+import com.swagswap.web.gwt.client.SmartGWTItemServiceWrapper;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 /**
- * 
- * @author Aleksandras Novikovas
- * @author System Tier
- * @version 1.0
+ * Wraps ItemService to apply the DTO (anti)pattern.  Necessary since annotated
+ * JDO objects (with GAE specific types like Text and Blob) won't serialize for GWT RPC 
  */
-public class SimpleGwtRPCDSServiceImpl extends
-		AutoinjectingRemoteServiceServlet implements SimpleGwtRPCDSService {
+public class SmartGWTItemServiceWrapperImpl extends
+		AutoinjectingRemoteServiceServlet implements SmartGWTItemServiceWrapper {
 	private static final long serialVersionUID = 1L;
 
 	private ItemService itemService;
-
-	// static List<SwagItemGWTDTO> list;
-	//
-	// static int id;
-	// static {
-	// id = 1;
-	// list = new ArrayList<SwagItemGWTDTO> ();
-	// SwagItemGWTDTO swagItemGWTDTO;
-	// swagItemGWTDTO = new SwagItemGWTDTO ();
-	// swagItemGWTDTO.setId (id++);
-	// swagItemGWTDTO.setPicture("picture" + id);
-	// swagItemGWTDTO.setName ("First");
-	// swagItemGWTDTO.setDate (new Date ());
-	// list.add (swagItemGWTDTO);
-	// swagItemGWTDTO = new SwagItemGWTDTO ();
-	// swagItemGWTDTO.setId (id++);
-	// swagItemGWTDTO.setPicture("picture" + id);
-	// swagItemGWTDTO.setName ("Second");
-	// swagItemGWTDTO.setDate (new Date ());
-	// list.add (swagItemGWTDTO);
-	// swagItemGWTDTO = new SwagItemGWTDTO ();
-	// swagItemGWTDTO.setId (id++);
-	// swagItemGWTDTO.setPicture("picture" + id);
-	// swagItemGWTDTO.setName ("Third");
-	// swagItemGWTDTO.setDate (new Date ());
-	// list.add (swagItemGWTDTO);
-	// }
 
 	@Autowired
 	@Required
@@ -60,20 +32,35 @@ public class SimpleGwtRPCDSServiceImpl extends
 		return toDTOList(itemService.getAll());
 	}
 
-	// public SwagItemGWTDTO add (SwagItemGWTDTO swagItemGWTDTO) {
-	public void add(SwagItemGWTDTO swagItemGWTDTO) {
-		itemService.save(toSwagItem(swagItemGWTDTO));
+	//SmartGWT requires the updated item to be returned
+	public SwagItemGWTDTO add(SwagItemGWTDTO swagItemGWTDTO) {
+		SwagItem updatedItem = itemService.save(toSwagItem(swagItemGWTDTO));
+		return toDTO(updatedItem);
 	}
 
 	// TOOD combine these if possible
-	public void update(SwagItemGWTDTO swagItemGWTDTO) {
-		add(swagItemGWTDTO);
+	public SwagItemGWTDTO update(SwagItemGWTDTO swagItemGWTDTO) {
+		return add(swagItemGWTDTO);
 	}
 
 	public void remove(SwagItemGWTDTO swagItemGWTDTO) {
 		itemService.delete(swagItemGWTDTO.getKey());
 	}
 
+	public void save(SwagItemGWTDTO swagItemDto){
+		itemService.save(toSwagItem(swagItemDto));
+	}
+
+	public void updateRating(Long swagItemKey, int computedRatingDifference,
+			boolean isNew) {
+		itemService.updateRating(swagItemKey, computedRatingDifference, isNew);
+	}
+	
+	public void addComment(SwagItemComment swagItemComment) {
+		itemService.addComment(swagItemComment);
+	}
+
+	
 	private ArrayList<SwagItemGWTDTO> toDTOList(List<SwagItem> swagItems) {
 		ArrayList<SwagItemGWTDTO> dtos = new ArrayList<SwagItemGWTDTO>();
 		for (SwagItem swagItem : swagItems) {
@@ -99,6 +86,7 @@ public class SimpleGwtRPCDSServiceImpl extends
 		swagItem.setKey(dto.getKey());
 		swagItem.setName(dto.getName());
 		swagItem.setCompany(dto.getCompany());
+		swagItem.setImageKey(dto.getImageKey());
 		swagItem.setImageBytes(dto.getNewImageBytes());
 		swagItem.setImageURL(dto.getNewImageURL());
 		swagItem.setOwnerEmail(dto.getOwnerEmail());

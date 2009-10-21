@@ -19,22 +19,25 @@ import com.smartgwt.client.widgets.tile.TileRecord;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 /**
- * This is needed by SmartGWT containers
+ * A SmartGWT client helper that makes remote calls to SmartGWTItemServiceWrapper
+ * It conforms to the requirements of SmartGWT components (which are a layer on top
+ * of the SmartClient javascript lib)
+ * 
  * This is inspired by http://code.google.com/p/smartgwt-extensions/source/browse/trunk/src/main/java/com/smartgwt/extensions/gwtrpcds/client/example/SimpleGwtRPCDS.java
  */
-public class SimpleGwtRPCDataSource extends GwtRpcDataSource {
+public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 
 	// TODO is singleton what we want here?
-	private static SimpleGwtRPCDataSource instance = null;
+	private static SmartGWTRPCDataSource instance = null;
 
-	public static SimpleGwtRPCDataSource getInstance() {
+	public static SmartGWTRPCDataSource getInstance() {
 		if (instance == null) {
-			instance = new SimpleGwtRPCDataSource();
+			instance = new SmartGWTRPCDataSource();
 		}
 		return instance;
 	}
 
-	private SimpleGwtRPCDataSource() {
+	private SmartGWTRPCDataSource() {
 		DataSourceField key = new DataSourceIntegerField("key");
 		key.setPrimaryKey(true);
 	    // AutoIncrement on server.
@@ -75,8 +78,8 @@ public class SimpleGwtRPCDataSource extends GwtRpcDataSource {
 		// final int endIndex = (request.getEndRow () ==
 		// null)?-1:request.getEndRow ();
 		final int endIndex = -1;
-		SimpleGwtRPCDSServiceAsync service = GWT
-				.create(SimpleGwtRPCDSService.class);
+		SmartGWTItemServiceWrapperAsync service = GWT
+				.create(SmartGWTItemServiceWrapper.class);
 		service.fetch(new AsyncCallback<List<SwagItemGWTDTO>>() {
 			public void onFailure(Throwable caught) {
 				response.setStatus(RPCResponse.STATUS_FAILURE);
@@ -124,8 +127,8 @@ public class SimpleGwtRPCDataSource extends GwtRpcDataSource {
 		TileRecord rec = new TileRecord(data);
 		SwagItemGWTDTO testRec = new SwagItemGWTDTO();
 		copyValues(rec, testRec);
-		SimpleGwtRPCDSServiceAsync service = GWT
-				.create(SimpleGwtRPCDSService.class);
+		SmartGWTItemServiceWrapperAsync service = GWT
+				.create(SmartGWTItemServiceWrapper.class);
 		service.add(testRec, new AsyncCallback<SwagItemGWTDTO>() {
 			public void onFailure(Throwable caught) {
 				response.setStatus(RPCResponse.STATUS_FAILURE);
@@ -152,8 +155,8 @@ public class SimpleGwtRPCDataSource extends GwtRpcDataSource {
 		TileRecord rec = getEditedRecord(request);
 		SwagItemGWTDTO testRec = new SwagItemGWTDTO();
 		copyValues(rec, testRec);
-		SimpleGwtRPCDSServiceAsync service = GWT
-				.create(SimpleGwtRPCDSService.class);
+		SmartGWTItemServiceWrapperAsync service = GWT
+				.create(SmartGWTItemServiceWrapper.class);
 		service.update(testRec, new AsyncCallback<SwagItemGWTDTO>() {
 			public void onFailure(Throwable caught) {
 				response.setStatus(RPCResponse.STATUS_FAILURE);
@@ -179,8 +182,8 @@ public class SimpleGwtRPCDataSource extends GwtRpcDataSource {
 		final TileRecord rec = new TileRecord(data);
 		SwagItemGWTDTO testRec = new SwagItemGWTDTO();
 		copyValues(rec, testRec);
-		SimpleGwtRPCDSServiceAsync service = GWT
-				.create(SimpleGwtRPCDSService.class);
+		SmartGWTItemServiceWrapperAsync service = GWT
+				.create(SmartGWTItemServiceWrapper.class);
 		service.remove(testRec, new AsyncCallback<Object>() {
 			public void onFailure(Throwable caught) {
 				response.setStatus(RPCResponse.STATUS_FAILURE);
@@ -200,12 +203,12 @@ public class SimpleGwtRPCDataSource extends GwtRpcDataSource {
 	}
 
 	private static void copyValues(TileRecord from, SwagItemGWTDTO to) {
-		to.setKey(Long.valueOf(from.getAttributeAsInt("key")));
+		to.setKey(Long.valueOf(from.getAttribute("key"))); //there is no getAttributeAsLong()
 		to.setName(from.getAttributeAsString("name"));
 		to.setCompany(from.getAttributeAsString("company"));
 		to.setDescription(from.getAttributeAsString("description"));
+		to.setImageKey(from.getAttributeAsString("imageKey"));
 //		to.setSwagImage(from.getAttributeAs("image")); //TODO what do we do about image?
-		to.setName(from.getAttributeAsString("name"));
 		//TODO email?
 		to.setOwnerNickName(from.getAttributeAsString("ownerNickName"));
 		//TODO the rest?

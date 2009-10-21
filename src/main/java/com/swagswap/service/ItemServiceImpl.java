@@ -47,6 +47,8 @@ public class ItemServiceImpl implements ItemService {
 	private static final int IMAGE_WIDTH = 283;
 	private static final int IMAGE_HEIGHT = 212;
 	
+	//There are two possibilities now
+	//@Autowired
 	private ItemDao itemDao;
 	@Autowired
 	private SwagSwapUserService swagSwapUserService; // for saving users to our
@@ -113,10 +115,11 @@ public class ItemServiceImpl implements ItemService {
 	 * 
 	 * @throws IOException
 	 * @throws MalformedURLException
+	 * @return updated SwagItem (needed for SmartGWT impl)
 	 */
 
 	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
-	public void save(SwagItem swagItem) throws LoadImageFromURLException,
+	public SwagItem save(SwagItem swagItem) throws LoadImageFromURLException,
 			ImageTooLargeException, InvalidSwagImageException {
 		if (StringUtils.isEmpty(swagItem.getName())) { // only required field
 			throw new InvalidSwagItemException("name is required");
@@ -148,6 +151,7 @@ public class ItemServiceImpl implements ItemService {
 		// to test transactions, uncomment the throw exception line below
 		// and try this method with and without the annotation
 		// throw new RuntimeException("see if it rolls back");
+		return swagItem;
 	}
 
 	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)

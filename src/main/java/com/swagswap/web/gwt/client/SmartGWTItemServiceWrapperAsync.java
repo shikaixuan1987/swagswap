@@ -3,15 +3,10 @@ package com.swagswap.web.gwt.client;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.swagswap.domain.SwagItemComment;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
-/**
- *
- * @author Aleksandras Novikovas
- * @author System Tier
- * @version 1.0
- */
-public interface SimpleGwtRPCDSServiceAsync {
+public interface SmartGWTItemServiceWrapperAsync {
 
     public abstract void fetch (AsyncCallback<List<SwagItemGWTDTO>> asyncCallback);
 
@@ -21,4 +16,7 @@ public interface SimpleGwtRPCDSServiceAsync {
 
     public abstract void remove (SwagItemGWTDTO swagItemGWTDTO, AsyncCallback<Object> asyncCallback);
 
+	void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNew, AsyncCallback callback);
+	
+	void addComment(SwagItemComment swagItemComment, AsyncCallback callback);
 }

@@ -7,6 +7,9 @@ import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DSProtocol;
 
 /**
+ * These are the comments that came with the class I copied and modified
+ * http://code.google.com/p/smartgwt-extensions/source/browse/trunk/src/main/java/com/smartgwt/extensions/gwtrpcds/client/example/SimpleGwtRPCDS.java
+ * 
  * Data source with ability to communicate with server by GWT RPC.<p/>
  * SmartClient natively supports data protocol "clientCustom". This protocol
  * means that communication with server should be implemented in
@@ -35,11 +38,8 @@ import com.smartgwt.client.types.DSProtocol;
  * </li>
  * </ul>
  *
- * @author Aleksandras Novikovas
- * @author System Tier
- * @version 1.0
  */
-public abstract class GwtRpcDataSource extends DataSource {
+public abstract class AbstractGWTRPCDataSource extends DataSource {
 
     /**
      * Creates new data source which communicates with server by GWT RPC.
@@ -48,7 +48,7 @@ public abstract class GwtRpcDataSource extends DataSource {
      * supported by SmartClient but should be added to smartGWT) and with data
      * format <code>DSDataFormat.CUSTOM</code>.
      */
-    public GwtRpcDataSource () {
+    public AbstractGWTRPCDataSource () {
         setDataProtocol (DSProtocol.CLIENTCUSTOM);
         setDataFormat (DSDataFormat.CUSTOM);
         setClientOnly (false);
@@ -65,7 +65,7 @@ public abstract class GwtRpcDataSource extends DataSource {
         String requestId = request.getRequestId ();
         DSResponse response = new DSResponse ();
         response.setAttribute ("clientContext", request.getAttributeAsObject ("clientContext"));
-        // Asume success
+        // Assume success
         response.setStatus (0);
         switch (request.getOperationType ()) {
             case FETCH:

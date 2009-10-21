@@ -19,7 +19,7 @@ public interface ItemService {
 
 	List<SwagItem> findByTag(String searchString);
 	
-	void save(SwagItem swagItem) throws LoadImageFromURLException;
+	SwagItem save(SwagItem swagItem) throws LoadImageFromURLException;
 	
 	void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNew);
 	

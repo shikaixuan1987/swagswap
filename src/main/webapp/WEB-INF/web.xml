@@ -125,14 +125,10 @@
 	<!-- End Spring MVC -->
 	
 	<!-- GWT -->
+
 	<servlet>
-		<servlet-name>itemServiceGWT</servlet-name>
-		<servlet-class>com.swagswap.web.gwt.server.ItemServiceGWTWrapperImpl</servlet-class>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>simpleGwtRPCDSService</servlet-name>
-		<servlet-class>com.swagswap.web.gwt.server.SimpleGwtRPCDSServiceImpl</servlet-class>
+		<servlet-name>smartGWTItemServiceWrapper</servlet-name>
+		<servlet-class>com.swagswap.web.gwt.server.SmartGWTItemServiceWrapperImpl</servlet-class>
 	</servlet>
 	
 	<!-- SmartGWT static resources servlet -->
@@ -140,15 +136,10 @@
 	    <servlet-name>scServlet</servlet-name>
 	    <servlet-class>com.swagswap.web.gwt.server.ScServlet</servlet-class>
 	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>itemServiceGWT</servlet-name>
-		<url-pattern>/swagswap/itemServiceGWT</url-pattern>
-	</servlet-mapping>
 	
 	<servlet-mapping>
-		<servlet-name>simpleGwtRPCDSService</servlet-name>
-		<url-pattern>/swagswap/SimpleGwtRPCDSService</url-pattern>
+		<servlet-name>smartGWTItemServiceWrapper</servlet-name>
+		<url-pattern>/swagswap/smartGWTItemServiceWrapper</url-pattern>
 	</servlet-mapping>
 	
 	

@@ -127,6 +127,11 @@
 	<!-- GWT -->
 
 	<servlet>
+		<servlet-name>loginService</servlet-name>
+		<servlet-class>com.swagswap.web.gwt.server.LoginServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet>
 		<servlet-name>smartGWTItemServiceWrapper</servlet-name>
 		<servlet-class>com.swagswap.web.gwt.server.SmartGWTItemServiceWrapperImpl</servlet-class>
 	</servlet>
@@ -141,7 +146,12 @@
 		<servlet-name>smartGWTItemServiceWrapper</servlet-name>
 		<url-pattern>/swagswap/smartGWTItemServiceWrapper</url-pattern>
 	</servlet-mapping>
-	
+
+	<!-- login service -->
+	<servlet-mapping>
+		<servlet-name>loginService</servlet-name>
+		<url-pattern>/swagswap/login</url-pattern>
+	</servlet-mapping>
 	
 	<!-- SmartGWT static resources servlet -->
 	<servlet-mapping>

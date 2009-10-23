@@ -1,5 +1,6 @@
 package com.swagswap.web.gwt.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -45,20 +46,24 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
         addField (key);
 
         addField(new DataSourceTextField("name", "Name", 20, true));
-        addField(new DataSourceTextField("company", "Company", 20, true));
-        addField(new DataSourceTextField("description", "Description", 30, true));
+        addField(new DataSourceTextField("company", "Company", 20, false));
+        addField(new DataSourceTextField("description", "Description", 30, false));
 		
 		DataSourceImageField imageField = new DataSourceImageField("imageKey", "Image");
 		imageField.setImageURLPrefix("/swag/showImage/");
 		addField(imageField);
 		
 		//do we want this exposed?
-		addField(new DataSourceTextField("ownerEmail", "Owner", 20, true));
-		addField(new DataSourceTextField("ownerNickName", "Owner Nick Name", 20, true));
-		addField(new DataSourceFloatField("averageRating", "Avg Rating", 5, true));
-		addField(new DataSourceIntegerField("numberOfRatings", "No. Ratings", 5, true));
-		addField(new DataSourceDateField("created", "Created", 10, true));
-		addField(new DataSourceDateField("lastUpdated", "Updated", 10, true));
+		addField(new DataSourceTextField("ownerEmail", "Owner", 20, false));
+		addField(new DataSourceTextField("ownerNickName", "Owner Nick Name", 20, false));
+		addField(new DataSourceFloatField("averageRating", "Avg Rating", 5, false));
+		addField(new DataSourceIntegerField("numberOfRatings", "No. Ratings", 5, false));
+		addField(new DataSourceDateField("created", "Created", 10, false));
+		addField(new DataSourceDateField("lastUpdated", "Updated", 10, false));
+		addField(new DataSourceTextField("tag1", "Tag 1", 10, false));
+		addField(new DataSourceTextField("tag2", "Tag 2", 10, false));
+		addField(new DataSourceTextField("tag3", "Tag 3", 10, false));
+		addField(new DataSourceTextField("tag4", "Tag 4", 10, false));
 		
 		//TODO add tags and comments
 	}
@@ -211,7 +216,12 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 //		to.setSwagImage(from.getAttributeAs("image")); //TODO what do we do about image?
 		//TODO email?
 		to.setOwnerNickName(from.getAttributeAsString("ownerNickName"));
-		//TODO the rest?
+		ArrayList<String> tags = new ArrayList<String>();
+		tags.add((from.getAttributeAsString("tag1")==null)?"":from.getAttributeAsString("tag1"));
+		tags.add((from.getAttributeAsString("tag2")==null)?"":from.getAttributeAsString("tag2"));
+		tags.add((from.getAttributeAsString("tag3")==null)?"":from.getAttributeAsString("tag3"));
+		tags.add((from.getAttributeAsString("tag4")==null)?"":from.getAttributeAsString("tag4"));
+		to.setTags(tags);
 	}
 
 	private static void copyValues(SwagItemGWTDTO from, TileRecord to) {
@@ -226,6 +236,10 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		to.setAttribute("numberOfRatings", from.getNumberOfRatings());
 		to.setAttribute("created", from.getCreated());
 		to.setAttribute("lastUpdated", from.getLastUpdated());
+		to.setAttribute("tag1", from.getTags().get(0));
+		to.setAttribute("tag2", from.getTags().get(1));
+		to.setAttribute("tag3", from.getTags().get(2));
+		to.setAttribute("tag4", from.getTags().get(3));
 	}
 
 	private TileRecord getEditedRecord(DSRequest request) {

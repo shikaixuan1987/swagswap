@@ -21,7 +21,7 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.web-3.0.0.M4.jar" sourcepath="D:/downloads/spring-framework-3.0.0.M4/src/org.springframework.web-sources-3.0.0.M4.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/org.springframework.web.servlet-3.0.0.M4.jar"/>
 	<classpathentry kind="lib" path="src/test/lib/junit.jar"/>
-	<classpathentry kind="var" path="GAE_HOME/lib/user/appengine-api-1.0-sdk-1.2.6.jar"/>
+	<classpathentry kind="var" path="GAE_HOME/lib/user/appengine-api-1.0-sdk-1.2.5.jar"/>
 	<classpathentry kind="var" path="GAE_HOME/lib/user/orm/jdo2-api-2.3-eb.jar"/>
 	<classpathentry kind="var" path="GAE_HOME/lib/impl/appengine-local-runtime.jar"/>
 	<classpathentry kind="var" path="GAE_HOME/lib/impl/appengine-api-stubs.jar"/>
@@ -38,7 +38,6 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jsf-impl.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jmimemagic-0.1.0.jar"/>
 	<classpathentry kind="var" path="GWT_HOME/gwt-user.jar"/>
-	<classpathentry kind="var" path="GWT_HOME/gwt-dev.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/smartgwt.jar"/>
 	<classpathentry kind="var" path="GWT_HOME"/>
 	<classpathentry kind="output" path="bin"/>

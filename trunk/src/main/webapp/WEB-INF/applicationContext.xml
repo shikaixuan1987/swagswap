@@ -124,11 +124,11 @@
 	<bean id="swagItemService" class="com.swagswap.service.ItemServiceImpl">
 		<!--
 			use Cache Manager -->
-		<property name="itemDao" ref="itemCacheManager" />
 		<!--
+		<property name="itemDao" ref="itemCacheManager" />
 			Use DAO directly 
-			<property name="itemDao" ref="swagItemDao" />
 		-->
+			<property name="itemDao" ref="swagItemDao" />
 
 	</bean>
 

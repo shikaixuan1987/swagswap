@@ -46,10 +46,10 @@ public class SmartGWTItemServiceWrapperImpl extends
 	public void remove(SwagItemGWTDTO swagItemGWTDTO) {
 		itemService.delete(swagItemGWTDTO.getKey());
 	}
-
-	public void save(SwagItemGWTDTO swagItemDto){
-		itemService.save(toSwagItem(swagItemDto));
-	}
+//
+//	public void save(SwagItemGWTDTO swagItemDto){
+//		itemService.save(toSwagItem(swagItemDto));
+//	}
 
 	public void updateRating(Long swagItemKey, int computedRatingDifference,
 			boolean isNew) {
@@ -86,6 +86,7 @@ public class SmartGWTItemServiceWrapperImpl extends
 		swagItem.setKey(dto.getKey());
 		swagItem.setName(dto.getName());
 		swagItem.setCompany(dto.getCompany());
+		swagItem.setDescription(dto.getDescription());
 		swagItem.setImageKey(dto.getImageKey());
 		swagItem.setImageBytes(dto.getNewImageBytes());
 		swagItem.setImageURL(dto.getNewImageURL());
@@ -97,12 +98,22 @@ public class SmartGWTItemServiceWrapperImpl extends
 	}
 
 	public SwagItemGWTDTO toDTO(SwagItem swagItem) {
+		ArrayList<String> paddedTags = toCopiedArrayList(swagItem.getTags());
+		padTags(paddedTags);
 		return new SwagItemGWTDTO(swagItem.getKey(), swagItem.getName(),
 				swagItem.getCompany(), swagItem.getDescription(), swagItem.getImageKey(), swagItem
 						.getOwnerEmail(), swagItem.getOwnerNickName(), swagItem
 						.getAverageRating(), swagItem.getNumberOfRatings(),
 				swagItem.getCreated(), swagItem.getLastUpdated(),
-				toCopiedArrayList(swagItem.getTags()),
+				paddedTags,
 				toCopiedArrayList(swagItem.getComments()));
+	}
+
+	//always want 4 tags present for backing form so add empty strings on the end to get the count up to 4
+	protected void padTags(ArrayList<String> tagsArrayList) {
+		int numberOfEmptiesToAdd = 4 - tagsArrayList.size();
+		for (int i = 0; i < numberOfEmptiesToAdd; i++) {
+			tagsArrayList.add("");
+		}
 	}
 }

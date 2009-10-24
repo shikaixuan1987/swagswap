@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 
 import net.sf.jmimemagic.Magic;
@@ -17,11 +18,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.appengine.api.datastore.Blob;
-import com.google.appengine.api.images.Image;
-import com.google.appengine.api.images.ImagesService;
-import com.google.appengine.api.images.ImagesServiceFactory;
-import com.google.appengine.api.images.Transform;
 import com.google.appengine.api.users.User;
+import com.swagswap.dao.ImageDao;
 import com.swagswap.dao.ItemDao;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
@@ -40,16 +38,13 @@ import com.swagswap.exceptions.LoadImageFromURLException;
 public class ItemServiceImpl implements ItemService {
 
 	private static final Logger log = Logger.getLogger(ItemServiceImpl.class);
-
-	private static final int THUMBNAIL_WIDTH = 66;
-	private static final int THUMBNAIL_HEIGHT = 50;
-
-	private static final int IMAGE_WIDTH = 283;
-	private static final int IMAGE_HEIGHT = 212;
 	
 	//There are two possibilities now
 	//@Autowired
 	private ItemDao itemDao;
+	
+	private ImageDao imageDao;
+
 	@Autowired
 	private SwagSwapUserService swagSwapUserService; // for saving users to our
 	// app
@@ -103,6 +98,7 @@ public class ItemServiceImpl implements ItemService {
 	public List<SwagItem> getAll() {
 		return itemDao.getAll();
 	}
+	
 	
 	public List<SwagItem> findByTag(String searchString) {
 		return itemDao.findByTag(searchString);
@@ -181,6 +177,10 @@ public class ItemServiceImpl implements ItemService {
 	public void setItemDao(ItemDao itemDao) {
 		this.itemDao = itemDao;
 	}
+	
+	public void setImageDao(ImageDao imageDao) {
+		this.imageDao = imageDao;
+	}
 
 	// for tests
 	public void setSwagSwapUserService(SwagSwapUserService swagSwapUserService) {
@@ -206,7 +206,7 @@ public class ItemServiceImpl implements ItemService {
 		}
 		checkImageMimeType(newImageData);
 		//  Resize the image before saving
-		swagItem.getImage().setImage(new Blob(getResizedImageBytes(newImageData)));
+		swagItem.getImage().setImage(new Blob(imageDao.getResizedImageBytes(newImageData)));
 	}
 
 	/**
@@ -295,23 +295,6 @@ public class ItemServiceImpl implements ItemService {
 		}
 	}
 
-	private byte[] getResizedImageBytes(byte[] imageBytes) {
-		return resizeImage(imageBytes, IMAGE_WIDTH, IMAGE_HEIGHT);
-	}
 
-	private byte[] getThumbnailBytes(byte[] imageBytes) {
-		return resizeImage(imageBytes, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
-	}
-
-	private byte[] resizeImage(byte[] imageBytes, int resizedWidth,
-			int resizedHeight) {
-
-		ImagesService imagesService = ImagesServiceFactory.getImagesService();
-		Image oldImage = ImagesServiceFactory.makeImage(imageBytes);
-		Transform resize = ImagesServiceFactory.makeResize(resizedWidth,
-				resizedHeight);
-		Image newImage = imagesService.applyTransform(resize, oldImage, ImagesService.OutputEncoding.valueOf("JPEG"));
-		return newImage.getImageData();
-	}
 
 }

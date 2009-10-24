@@ -43,6 +43,7 @@ public class ItemServiceImpl implements ItemService {
 	//@Autowired
 	private ItemDao itemDao;
 	
+	@Autowired
 	private ImageDao imageDao;
 
 	@Autowired

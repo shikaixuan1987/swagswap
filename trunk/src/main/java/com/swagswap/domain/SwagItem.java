@@ -149,8 +149,9 @@ public class SwagItem implements Serializable {
 		return (description == null) ? "" : description.getValue();
 	}
 
+	//creating a new Text(null) causes a datanucleus Exception
 	public void setDescription(String description) {
-		this.description = new Text(description);
+		this.description = new Text((description == null) ? "" : description);
 	}
 
 	public SwagImage getImage() {

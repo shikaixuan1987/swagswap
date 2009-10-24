@@ -60,6 +60,28 @@ public class ImageController {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	/**
+	 * Stream SwagImage.image from database or show defaultImage if there is none
+	 */
+	@RequestMapping(value = "/showThumbnail/{key}", method = RequestMethod.GET)
+	public void streamThumbnailContent(@PathVariable("key") String key,
+					HttpServletRequest req, OutputStream outputStream) throws IOException {
+		SwagImage swagImage = imageDao.get(key);
+		byte[] swagImageBytes;
+		//if there's not image, return default image
+		if (swagImage.getImage()==null) {
+			swagImageBytes=imageDao.getThumbnailBytes(getDefaultImage(req.getRequestURL().toString()));
+		}
+		else {
+			swagImageBytes = imageDao.getThumbnailBytes(imageDao.get(key).getImage().getBytes());
+		}
+		try {
+			outputStream.write(swagImageBytes, 0, swagImageBytes.length);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	/**
 	 * This is the only way I can get the base URL to this app

@@ -50,7 +50,7 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
         addField(new DataSourceTextField("description", "Description", 30, false));
 		
 		DataSourceImageField imageField = new DataSourceImageField("imageKey", "Image");
-		imageField.setImageURLPrefix("/swag/showImage/");
+		imageField.setImageURLPrefix("/swag/showThumbnail/");
 		addField(imageField);
 		
 		//do we want this exposed?
@@ -208,7 +208,8 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 	}
 
 	private static void copyValues(TileRecord from, SwagItemGWTDTO to) {
-		to.setKey(Long.valueOf(from.getAttribute("key"))); //there is no getAttributeAsLong()
+		//key is null if adding
+		to.setKey((from.getAttributeAsString("key")==null)?null:Long.valueOf(from.getAttribute("key")));
 		to.setName(from.getAttributeAsString("name"));
 		to.setCompany(from.getAttributeAsString("company"));
 		to.setDescription(from.getAttributeAsString("description"));

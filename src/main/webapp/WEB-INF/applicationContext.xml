@@ -132,8 +132,6 @@
 
 	</bean>
 
-
-
 	<!--
 		wrap google UserServiceFactory and don't expose it in the context
 		otherwise. swagSwapUserService should be used instead of

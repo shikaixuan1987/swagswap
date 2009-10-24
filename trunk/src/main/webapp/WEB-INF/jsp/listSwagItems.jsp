@@ -76,7 +76,7 @@
 	--%>
 	<c:if test="${not empty currentObject.imageKey}">
 		<display:column title="Image">
-			<img border="0" alt="Image" height="100" width="100" src="<c:url value='/swag/showImage/${currentObject.imageKey}'/>"/>
+			<img border="0" alt="Image" height="50" width="66" src="<c:url value='/swag/showThumbnail/${currentObject.imageKey}'/>"/>
 		</display:column>
 	</c:if>
 	<display:column sortable="true" title="Owner" property="ownerNickName" />

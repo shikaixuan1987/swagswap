@@ -1,0 +1,60 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<composite:interface>
+	<composite:attribute name="tableSize" />
+</composite:interface>
+
+<composite:implementation>
+	<br />
+	<h:panelGroup layout="block" width="100%" style="text-align: center">
+		<h:panelGroup styleClass="scroller">
+			<h:commandLink value="&lt;&lt;" action="#{swagBean.actionPage}"
+				styleClass="scrollerLink" disabled="true">
+				<f:setPropertyActionListener value="first" target="#{swagBean.page}" />
+				<f:ajax render="@form" />
+			</h:commandLink>
+		</h:panelGroup>
+		<h:panelGroup styleClass="scroller">
+			<h:commandLink value="&lt;" action="#{swagBean.actionPage}">
+				<f:setPropertyActionListener value="prev" target="#{swagBean.page}" />
+				<f:ajax render="@form" />
+			</h:commandLink>
+		</h:panelGroup>
+		<ui:repeat value="#{swagBean.swagList}" step="#{swagBean.rowsPerPage}"
+			varStatus="index">
+			<h:panelGroup styleClass="scroller">
+				<h:commandLink
+					value="${fn:substringBefore((index.index + index.step) / index.step, '.')}"
+					action="#{swagBean.actionPage}" style="margin-right: 5px">
+					<f:setPropertyActionListener
+						value="${fn:substringBefore((index.index + index.step) / index.step, '.')}"
+						target="#{swagBean.page}" />
+					<f:ajax render="@form" />
+				</h:commandLink>
+			</h:panelGroup>
+		</ui:repeat>
+		<h:panelGroup styleClass="scroller">
+			<h:commandLink value="&gt;" action="#{swagBean.actionPage}"
+				style="margin-right: 5px">
+				<f:setPropertyActionListener value="next" target="#{swagBean.page}" />
+				<f:ajax render="@form" />
+			</h:commandLink>
+		</h:panelGroup>
+		<h:panelGroup styleClass="scroller">
+			<h:commandLink value="&gt;&gt;" action="#{swagBean.actionPage}"
+				style="margin-right: 5px">
+				<f:setPropertyActionListener value="last" target="#{swagBean.page}" />
+				<f:ajax render="@form" />
+			</h:commandLink>
+		</h:panelGroup>
+	</h:panelGroup>
+</composite:implementation>
+</html>

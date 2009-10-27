@@ -1,5 +1,6 @@
 package com.swagswap.service;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
@@ -93,6 +94,9 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	public void addOrUpdateRating(String email, SwagItemRating newSwagItemRating) throws InvalidSwagItemRatingException {
 		if (newSwagItemRating.getSwagItemKey() == null || newSwagItemRating.getUserRating() == null) {
 			throw new InvalidSwagItemRatingException(newSwagItemRating);
+		}
+		if (StringUtils.isEmpty(email)) {
+			throw new AccessDeniedException("Can't rate an item when not logged in");
 		}
 		SwagSwapUser swagSwapUser = findByEmailOrCreate(email);
 		swagSwapUser.getSwagItemRatings();

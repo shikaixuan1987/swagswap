@@ -145,6 +145,9 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 		if (updatedItem.hasNewImage()) {
 			orig.getImage().setImage(updatedItem.getImage().getImage());
 		}
+		//Tricky, this is for smartGWT impl that needs an updated average rating
+		updatedItem.setAverageRating(orig.getAverageRating());
+		updatedItem.setNumberOfRatings(orig.getNumberOfRatings());
 	}
 	
 	/**

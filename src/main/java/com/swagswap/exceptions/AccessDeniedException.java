@@ -1,19 +1,24 @@
 package com.swagswap.exceptions;
 
-import com.swagswap.domain.SwagItem;
+
 
 public class AccessDeniedException extends RuntimeException {
 	
 	private static final long serialVersionUID = 1L;
 
+	//Needed for GWT compilation
+	public AccessDeniedException() {
+		super();
+	}
+	
 	public AccessDeniedException(String msg) {
 		super(msg);
 	}
 
-	public AccessDeniedException(SwagItem swagItem, String emailRequestingPermision) {
-		this("Access denied to " + swagItem.getName() 
+	public AccessDeniedException(String itemName, String itemOwnerEmail, String emailRequestingPermision) {
+		this("Access denied to " + itemName 
 				+ " for " + emailRequestingPermision + ". owner is " 
-				+ swagItem.getOwnerEmail()
+				+ itemOwnerEmail
 				);
 	}
 

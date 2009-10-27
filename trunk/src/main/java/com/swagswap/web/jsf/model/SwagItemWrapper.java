@@ -11,7 +11,7 @@ import com.swagswap.web.jsf.bean.UserBean;
 /**
  * @author scott
  * 
- *        Wrapper class for SwagItem to make list processing simpler in JSF
+ *         Wrapper class for SwagItem to make list processing simpler in JSF
  */
 public class SwagItemWrapper implements Serializable {
 
@@ -38,7 +38,7 @@ public class SwagItemWrapper implements Serializable {
 	public void setUserRating(Integer userRating) {
 		this.userRating = userRating;
 	}
-	
+
 	public static List<SwagItemWrapper> convertSwagListToWrapperList(
 			List<SwagItem> itemList, UserBean userBean) {
 
@@ -46,13 +46,14 @@ public class SwagItemWrapper implements Serializable {
 		Iterator<SwagItem> iter = itemList.iterator();
 		while (iter.hasNext()) {
 			SwagItem swagItem = iter.next();
-
-			wrapperList.add(new SwagItemWrapper(swagItem,userBean
-					.getUserRatingForItem(swagItem)));
+			// Set image to null. Not required in Swag Table and affects
+			// performance.
+			swagItem.setImage(null);
+			wrapperList.add(new SwagItemWrapper(swagItem, userBean
+					.getUserRatingForItem(swagItem.getKey())));
 		}
 		return wrapperList;
 	}
-
 
 	private SwagItem swagItem;
 	private Integer userRating;

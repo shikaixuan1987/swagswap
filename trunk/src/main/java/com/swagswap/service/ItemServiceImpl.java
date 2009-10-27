@@ -44,6 +44,9 @@ public class ItemServiceImpl implements ItemService {
 	private ItemDao itemDao;
 	
 	@Autowired
+	private ImageService imageService; 
+
+	@Autowired
 	private ImageDao imageDao;
 
 	@Autowired
@@ -120,7 +123,7 @@ public class ItemServiceImpl implements ItemService {
 			ImageTooLargeException, InvalidSwagImageException {
 		if (StringUtils.isEmpty(swagItem.getName())) { // only required field
 			throw new InvalidSwagItemException("name is required");
-		}
+		}		
 		if (swagItem.isNew()) {
 			String currentUserEmail = swagSwapUserService.getCurrentUser()
 					.getEmail();
@@ -178,10 +181,6 @@ public class ItemServiceImpl implements ItemService {
 	public void setItemDao(ItemDao itemDao) {
 		this.itemDao = itemDao;
 	}
-	
-	public void setImageDao(ImageDao imageDao) {
-		this.imageDao = imageDao;
-	}
 
 	// for tests
 	public void setSwagSwapUserService(SwagSwapUserService swagSwapUserService) {
@@ -207,7 +206,7 @@ public class ItemServiceImpl implements ItemService {
 		}
 		checkImageMimeType(newImageData);
 		//  Resize the image before saving
-		swagItem.getImage().setImage(new Blob(imageDao.getResizedImageBytes(newImageData)));
+		swagItem.getImage().setImage(new Blob(imageService.getResizedImageBytes(newImageData)));
 	}
 
 	/**

@@ -13,47 +13,51 @@
 </composite:interface>
 
 <composite:implementation>
-	<br />
-	<h:panelGroup layout="block" width="100%" style="text-align: center">
-		<h:panelGroup styleClass="scroller">
+	<h:panelGroup layout="block" width="100%"
+		style="text-align: center; margin-top: 5px;">
+		<h:panelGroup layout="block" styleClass="scroller" width="100%">
 			<h:commandLink value="&lt;&lt;" action="#{swagBean.actionPage}"
-				styleClass="scrollerLink" disabled="true">
+				disabled="#{swagBean.firstRow == 0}" title="First">
 				<f:setPropertyActionListener value="first" target="#{swagBean.page}" />
 				<f:ajax render="@form" />
 			</h:commandLink>
-		</h:panelGroup>
-		<h:panelGroup styleClass="scroller">
-			<h:commandLink value="&lt;" action="#{swagBean.actionPage}">
+			<h:commandLink value="&lt;" action="#{swagBean.actionPage}"
+				disabled="#{swagBean.firstRow == 0}" title="Previous">
 				<f:setPropertyActionListener value="prev" target="#{swagBean.page}" />
 				<f:ajax render="@form" />
 			</h:commandLink>
-		</h:panelGroup>
-		<ui:repeat value="#{swagBean.swagList}" step="#{swagBean.rowsPerPage}"
-			varStatus="index">
-			<h:panelGroup styleClass="scroller">
-				<h:commandLink
-					value="${fn:substringBefore((index.index + index.step) / index.step, '.')}"
-					action="#{swagBean.actionPage}" style="margin-right: 5px">
-					<f:setPropertyActionListener
+			<ui:repeat value="#{swagBean.swagList}"
+				step="#{swagBean.rowsPerPage}" varStatus="index">
+				<h:panelGroup>
+					<h:commandLink
 						value="${fn:substringBefore((index.index + index.step) / index.step, '.')}"
-						target="#{swagBean.page}" />
-					<f:ajax render="@form" />
-				</h:commandLink>
-			</h:panelGroup>
-		</ui:repeat>
-		<h:panelGroup styleClass="scroller">
+						action="#{swagBean.actionPage}"
+						disabled="#{index.index == swagBean.firstRow}">
+						<f:setPropertyActionListener
+							value="${fn:substringBefore((index.index + index.step) / index.step, '.')}"
+							target="#{swagBean.page}" />
+						<f:ajax render="@form" />
+					</h:commandLink>
+				</h:panelGroup>
+			</ui:repeat>
 			<h:commandLink value="&gt;" action="#{swagBean.actionPage}"
-				style="margin-right: 5px">
+				title="Next"
+				disabled="#{(swagBean.firstRow + swagBean.rowsPerPage) > swagBean.tableSize}">
 				<f:setPropertyActionListener value="next" target="#{swagBean.page}" />
 				<f:ajax render="@form" />
 			</h:commandLink>
-		</h:panelGroup>
-		<h:panelGroup styleClass="scroller">
 			<h:commandLink value="&gt;&gt;" action="#{swagBean.actionPage}"
-				style="margin-right: 5px">
+				title="Prev"
+				disabled="#{(swagBean.firstRow + swagBean.rowsPerPage) > swagBean.tableSize}">
 				<f:setPropertyActionListener value="last" target="#{swagBean.page}" />
 				<f:ajax render="@form" />
 			</h:commandLink>
+		</h:panelGroup>
+		<h:panelGroup
+			style="width: 100%; text-align: center; font-weight: bold; font-size: 10px; margin-top: 5px;"
+			layout="block">
+			<h:outputText
+				value="Items #{swagBean.firstRow + 1} to #{swagBean.lastRow} of #{swagBean.tableSize}" />
 		</h:panelGroup>
 	</h:panelGroup>
 </composite:implementation>

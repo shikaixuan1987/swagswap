@@ -147,6 +147,8 @@
 
 
 	<bean id="adminService" class="com.swagswap.service.AdminServiceImpl" />
+			
+	<bean id="imageService" class="com.swagswap.service.ImageServiceImpl" />
 	
 </beans>
 

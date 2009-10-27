@@ -292,7 +292,11 @@ public class ItemServiceImpl implements ItemService {
 		// (again, if this happened the webapp messed up or someone's trying to
 		// hack us)
 		if (!user.getEmail().equals(swagItemToCheck.getOwnerEmail())) {
-			throw new AccessDeniedException(swagItemToCheck, user.getEmail());
+			throw new AccessDeniedException(
+					swagItemToCheck.getName(),
+					swagItemToCheck.getOwnerEmail(),
+					user.getEmail()
+					);
 		}
 	}
 

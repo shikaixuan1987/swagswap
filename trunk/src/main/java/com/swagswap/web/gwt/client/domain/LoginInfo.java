@@ -1,53 +1,95 @@
 package com.swagswap.web.gwt.client.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
-// from http://code.google.com/webtoolkit/tutorials/1.6/appengine.html
+import com.swagswap.domain.SwagItemRating;
+
+// inspired by http://code.google.com/webtoolkit/tutorials/1.6/appengine.html
+
+/**
+ * Wraps SwagSwapUser since that contains JDO backed Sets that can't be serialzed by GWT
+ */
 public class LoginInfo implements Serializable {
 
-  private boolean loggedIn = false;
-  private String loginUrl;
-  private String logoutUrl;
-  private String emailAddress;
-  private String nickname;
+	private boolean loggedIn = false;
+	private String loginUrl;
+	private String logoutUrl;
+	private String email;
+	private String nickName;
+	private Set<SwagItemRating> swagItemRatings = new HashSet<SwagItemRating>();
+	private SwagItemGWTDTO currentSwagItem; //for remembering which one they were editing
 
-  public boolean isLoggedIn() {
-    return loggedIn;
-  }
+	public boolean isLoggedIn() {
+		return loggedIn;
+	}
 
-  public void setLoggedIn(boolean loggedIn) {
-    this.loggedIn = loggedIn;
-  }
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
+	}
 
-  public String getLoginUrl() {
-    return loginUrl;
-  }
+	public String getLoginUrl() {
+		return loginUrl;
+	}
 
-  public void setLoginUrl(String loginUrl) {
-    this.loginUrl = loginUrl;
-  }
+	public void setLoginUrl(String loginUrl) {
+		this.loginUrl = loginUrl;
+	}
 
-  public String getLogoutUrl() {
-    return logoutUrl;
-  }
+	public String getLogoutUrl() {
+		return logoutUrl;
+	}
 
-  public void setLogoutUrl(String logoutUrl) {
-    this.logoutUrl = logoutUrl;
-  }
+	public void setLogoutUrl(String logoutUrl) {
+		this.logoutUrl = logoutUrl;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
 
-  public String getEmailAddress() {
-    return emailAddress;
-  }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-  public void setEmailAddress(String emailAddress) {
-    this.emailAddress = emailAddress;
-  }
+	public String getNickName() {
+		return nickName;
+	}
 
-  public String getNickname() {
-    return nickname;
-  }
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
 
-  public void setNickname(String nickname) {
-    this.nickname = nickname;
-  }
+	public Set<SwagItemRating> getSwagItemRatings() {
+		return swagItemRatings;
+	}
+
+	public void setSwagItemRatings(Set<SwagItemRating> swagItemRatings) {
+		this.swagItemRatings = swagItemRatings;
+	}
+	
+	/**
+	 * 
+	 * @param swagItemKey
+	 * @return SwagItem by key or null if not found
+	 */
+	public SwagItemRating getSwagItemRating(Long swagItemKey) {
+		for (SwagItemRating rating:swagItemRatings) {
+			if (swagItemKey.equals(rating.getSwagItemKey())) {
+				return rating;
+			}
+		}
+		return null;
+	}
+
+	public SwagItemGWTDTO getCurrentSwagItem() {
+		return currentSwagItem;
+	}
+
+	public void setCurrentSwagItem(SwagItemGWTDTO currentSwagItem) {
+		this.currentSwagItem=currentSwagItem;
+		
+	}
+
 }

@@ -204,13 +204,17 @@
 				<path refid="gwt.classpath" />
 			</classpath>
 			<!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
-			<jvmarg value="-Xmx256M" />
+			<jvmarg value="-Xmx320M" />
 			<arg value="com.swagswap.web.gwt.SwagSwapGWT" />
 			<!--output to target dir-->
 			<arg value="-war" />
 			<arg file="${war.dir}" />
 			<!--<arg value="-logLevel DEBUG" />-->
 		</java>
+		<antcall target="createZippedSmartGWTResources" />
+	</target>
+	
+	<target name="createZippedSmartGWTResources">
 		<!--zip smartGWT dir (see http://forums.smartclient.com/showthread.php?t=5258)-->
 		<zip destfile="${war.dir}/sc.zip" basedir="${war.dir}/swagswap/" includes="sc/**"/>
 		<delete dir="${war.dir}/swagswap/sc" />

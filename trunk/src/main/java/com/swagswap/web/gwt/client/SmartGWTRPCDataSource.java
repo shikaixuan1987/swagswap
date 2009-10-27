@@ -123,7 +123,7 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 			}
 		});
 	}
-
+	
 	@Override
 	protected void executeAdd(final String requestId, final DSRequest request,
 			final DSResponse response) {
@@ -162,23 +162,42 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		copyValues(rec, testRec);
 		SmartGWTItemServiceWrapperAsync service = GWT
 				.create(SmartGWTItemServiceWrapper.class);
-		service.update(testRec, new AsyncCallback<SwagItemGWTDTO>() {
-			public void onFailure(Throwable caught) {
-				response.setStatus(RPCResponse.STATUS_FAILURE);
-				processResponse(requestId, response);
-			}
-
-			public void onSuccess(SwagItemGWTDTO result) {
-				TileRecord[] list = new TileRecord[1];
-				TileRecord updRec = new TileRecord();
-				copyValues(result, updRec);
-				list[0] = updRec;
-				response.setData(list);
-				processResponse(requestId, response);
-			}
-		});
+		
+		//Just do a fetch
+		if (testRec.isFetchOnly()) {
+			service.fetch(testRec.getKey(),new UpdateOrFetchCallback(requestId, response));
+		}
+		else { //really do an update
+			service.update(testRec, new UpdateOrFetchCallback(requestId, response));
+		}
+		
 	}
 
+	final class UpdateOrFetchCallback implements AsyncCallback<SwagItemGWTDTO> {
+		private final String requestId;
+		private final DSResponse response;
+
+		private UpdateOrFetchCallback(String requestId, DSResponse response) {
+			this.requestId = requestId;
+			this.response = response;
+		}
+
+		public void onFailure(Throwable caught) {
+			throw new RuntimeException(caught);
+			// response.setStatus(RPCResponse.STATUS_FAILURE);
+			// processResponse(requestId, response);
+		}
+
+		public void onSuccess(SwagItemGWTDTO result) {
+			TileRecord[] list = new TileRecord[1];
+			TileRecord updRec = new TileRecord();
+			copyValues(result, updRec);
+			list[0] = updRec;
+			response.setData(list);
+			processResponse(requestId, response);
+		}
+	}
+	
 	@Override
 	protected void executeRemove(final String requestId,
 			final DSRequest request, final DSResponse response) {
@@ -207,13 +226,14 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		});
 	}
 
-	private static void copyValues(TileRecord from, SwagItemGWTDTO to) {
+	public static void copyValues(TileRecord from, SwagItemGWTDTO to) {
 		//key is null if adding
-		to.setKey((from.getAttributeAsString("key")==null)?null:Long.valueOf(from.getAttribute("key")));
+		to.setKey((from.getAttributeAsString("key")==null)?null:Long.valueOf(from.getAttributeAsString("key")));
 		to.setName(from.getAttributeAsString("name"));
 		to.setCompany(from.getAttributeAsString("company"));
 		to.setDescription(from.getAttributeAsString("description"));
 		to.setImageKey(from.getAttributeAsString("imageKey"));
+		to.setIsFetchOnly(from.getAttributeAsBoolean("isFetchOnly"));
 //		to.setSwagImage(from.getAttributeAs("image")); //TODO what do we do about image?
 		//TODO email?
 		to.setOwnerNickName(from.getAttributeAsString("ownerNickName"));
@@ -225,7 +245,7 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		to.setTags(tags);
 	}
 
-	private static void copyValues(SwagItemGWTDTO from, TileRecord to) {
+	public static void copyValues(SwagItemGWTDTO from, TileRecord to) {
 		to.setAttribute("key", from.getKey());
 		to.setAttribute("name", from.getName());
 		to.setAttribute("company", from.getCompany());

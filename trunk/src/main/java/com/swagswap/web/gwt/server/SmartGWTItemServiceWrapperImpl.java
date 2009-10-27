@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
+import com.swagswap.exceptions.AccessDeniedException;
 import com.swagswap.service.ItemService;
 import com.swagswap.web.gwt.client.SmartGWTItemServiceWrapper;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
@@ -28,18 +29,25 @@ public class SmartGWTItemServiceWrapperImpl extends
 		this.itemService = itemService;
 	}
 
+	/**
+	 * fetch all
+	 */
 	public List<SwagItemGWTDTO> fetch() {
 		return toDTOList(itemService.getAll());
 	}
+	
+	public SwagItemGWTDTO fetch(Long key) {
+		return toDTO(itemService.get(key));
+	}
 
 	//SmartGWT requires the updated item to be returned
-	public SwagItemGWTDTO add(SwagItemGWTDTO swagItemGWTDTO) {
+	public SwagItemGWTDTO add(SwagItemGWTDTO swagItemGWTDTO) throws AccessDeniedException {
 		SwagItem updatedItem = itemService.save(toSwagItem(swagItemGWTDTO));
 		return toDTO(updatedItem);
 	}
 
 	// TOOD combine these if possible
-	public SwagItemGWTDTO update(SwagItemGWTDTO swagItemGWTDTO) {
+	public SwagItemGWTDTO update(SwagItemGWTDTO swagItemGWTDTO) throws AccessDeniedException {
 		return add(swagItemGWTDTO);
 	}
 

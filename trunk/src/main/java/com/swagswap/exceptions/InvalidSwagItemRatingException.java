@@ -6,6 +6,10 @@ public class InvalidSwagItemRatingException extends RuntimeException {
 	
 	private static final long serialVersionUID = 1L;
 
+	public InvalidSwagItemRatingException() {
+		super();
+	}
+	
 	public InvalidSwagItemRatingException(String msg) {
 		super(msg);
 	}

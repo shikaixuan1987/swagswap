@@ -33,9 +33,16 @@ public class SwagItemGWTDTO implements IsSerializable {
 	private Date lastUpdated;
 	private ArrayList<String> tags = new ArrayList<String>();
 	private ArrayList<SwagItemComment> comments = new ArrayList<SwagItemComment>();
+	private boolean isFetchOnly;
 
 
 	public SwagItemGWTDTO() {
+		this(false);
+	}
+	
+	//For SmartGWT fetch(item) adaptation
+	public SwagItemGWTDTO(boolean isFetchOnly) {
+		this.isFetchOnly=isFetchOnly;
 		//Add empty strings for the backing form
 		tags.add("");
 		tags.add("");
@@ -108,15 +115,15 @@ public class SwagItemGWTDTO implements IsSerializable {
 		return newImageBytes;
 	}
 
-	public void setImageBytes(byte[] newImageBytes) {
-		this.newImageBytes = newImageBytes;
+	public void setNewImageURL(String newImageURL) {
+		this.newImageURL = newImageURL;
 	}
 
 	public String getNewImageURL() {
 		return newImageURL;
 	}
 
-	public void setImageURL(String newImageURL) {
+	public void setNewImagURL(String newImageURL) {
 		this.newImageURL = newImageURL;
 	}
 
@@ -182,6 +189,14 @@ public class SwagItemGWTDTO implements IsSerializable {
 
 	public void setComments(ArrayList<SwagItemComment> comments) {
 		this.comments = comments;
+	}
+
+	public boolean isFetchOnly() {
+		return this.isFetchOnly;
+	}
+	
+	public void setIsFetchOnly(boolean isFetchOnly) {
+		this.isFetchOnly = isFetchOnly;
 	}
 	
 }

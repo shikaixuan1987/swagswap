@@ -1,168 +1,47 @@
 package com.swagswap.web.jsf.bean;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 
-import com.swagswap.domain.SwagItem;
-import com.swagswap.domain.SwagItemComment;
-import com.swagswap.domain.SwagItemRating;
-import com.swagswap.service.ItemService;
-import com.swagswap.service.SwagSwapUserService;
+import org.apache.log4j.Logger;
+
 import com.swagswap.web.jsf.model.SwagItemWrapper;
 
 @ManagedBean(name = "swagBean")
-@RequestScoped
-public class SwagBean {
+@ViewScoped
+public class SwagBean implements Serializable {
 
-	// Inject the swagItemService Spring Bean
-	@ManagedProperty(value = "#{swagItemService}")
-	private ItemService itemService;
+	private static final long serialVersionUID = 1L;
 
-	// Inject the swagSwapUserService Spring Bean
-	@ManagedProperty(value = "#{swagSwapUserService}")
-	private SwagSwapUserService swagSwapUserService;
+	private static final Logger log = Logger.getLogger(SwagBean.class);
 
-	@ManagedProperty(value = "#{swagEditBean}")
-	private SwagEditBean swagEditBean;
+	private static final Integer rowsPerPage = 5;
+	
+	private String page = "1";
 
-	@ManagedProperty(value = "#{userBean}")
-	private UserBean userBean;
-
-	// private Collection<SwagItemWrapper> swagList;
 	private String searchString = "Search";
 	private Boolean showClear = false;
 	private Long selectedRowId;
-	private Integer userRating;
-
-	public Integer getUserRating() {
-		return userRating;
-	}
-
-	public void setUserRating(Integer userRating) {
-		this.userRating = userRating;
-	}
-
-	public SwagSwapUserService getSwagSwapUserService() {
-		return swagSwapUserService;
-	}
-
-	public void setSwagSwapUserService(SwagSwapUserService swagSwapUserService) {
-		this.swagSwapUserService = swagSwapUserService;
-	}
-
-	public void populateSwagItem() {
-		// TODO This is called each time the view page is rendered. This isn't
-		// desirable. Refactor.
-		if (getSelectedRowId() != null) {
-			SwagItem item = getItemService().get(getSelectedRowId());
-			hackSwagItemList(item);
-			getSwagEditBean().setEditSwagItem(item);
-			getSwagEditBean().setUserRating(
-					getUserBean().getUserRatingForItem(item));
-		}
-	}
-
-	private void hackSwagItemList(SwagItem item) {
-		// hack Item to add empty Strings to List
-		List<String> tagList = new ArrayList<String>();
-		if (item != null) {
-			if (item.getTags() == null) {
-				for (int i = 0; i < 4; i++) {
-					tagList.add("");
-				}
-				item.setTags(tagList);
-			} else {
-				for (int i = 0; i < 4; i++) {
-					if (item.getTags().get(i) == null) {
-						item.getTags().set(i, "");
-					}
-				}
-
-			}
-		}
-	}
-
-	public void actionSearch() {
-		if (searchString.trim().length() < 1) {
-			return;
-		}
-		swagEditBean.setSwagList(SwagItemWrapper.convertSwagListToWrapperList(
-				getItemService().search(searchString), userBean));
-		showClear = true;
-	}
+	private List<SwagItemWrapper> swagList;
+	private Integer firstRow = 0;
 
 	public void actionClearSearch() {
 		showClear = false;
 		searchString = "";
 		refreshSwagList();
 	}
-
-	public String actionSaveItem() {
-		getItemService().save(getSwagEditBean().getEditSwagItem());
-		return "allSwag?faces-redirect=true";
+	
+	public int getRowsPerPage() {
+		return rowsPerPage;
 	}
 
-	public void actionDelete() {
-		getItemService().delete(getSelectedRowId());
-		refreshSwagList();
-	}
-
-	private void refreshSwagList() {
-		// Set swagList to null to force refresh on next get
-		swagEditBean.setSwagList(null);
-	}
-
-	public void actionRateSwag() throws IOException {
-
-		if (!getUserBean().isLoggedIn()) {
-			getUserBean().showLogin();
-			return;
-		}
-
-		swagSwapUserService.addOrUpdateRating(userBean.getUserEmail(),
-				new SwagItemRating(getSelectedRowId(), getUserRating()));
-
-		if (swagEditBean.getSwagList() == null) {
-			// Updating from view item so no list to refresh
-			return;
-		}
-		// Performance enhancement. Only get the updated row from service and
-		// refresh list.
-		// TODO Do we need this with caching?
-		SwagItem refreshedSwagItem = itemService.get(getSelectedRowId());
-		Integer newRating = getUserRating();
-		SwagItemWrapper refreshedItem = new SwagItemWrapper(refreshedSwagItem,
-				newRating);
-
-		ListIterator<SwagItemWrapper> iter = swagEditBean.getSwagList()
-				.listIterator();
-		while (iter.hasNext()) {
-			SwagItemWrapper item = (SwagItemWrapper) iter.next();
-			if (item.getSwagItem().getKey().equals(getSelectedRowId())) {
-				iter.set(refreshedItem);
-				break;
-			}
-
-		}
-	}
-
-	public void actionAddComment() {
-		String newComment = swagEditBean.getNewComment();
-		// TODO Change to Client Validator
-		if (newComment.trim().length() == 0) {
-			return;
-		}
-		Long itemKey = swagEditBean.getEditSwagItem().getKey();
-		SwagItemComment comment = new SwagItemComment(itemKey, userBean
-				.getUserName(), newComment);
-		itemService.addComment(comment);
-		swagEditBean.setNewComment("");
+	public void refreshSwagList() {
+		// Set swagList to null to force refresh on next request
+		swagList = null;
 	}
 
 	public String getSearchString() {
@@ -173,42 +52,12 @@ public class SwagBean {
 		this.searchString = searchString;
 	}
 
-	public ItemService getItemService() {
-		return itemService;
-	}
-
-	public void setItemService(ItemService itemService) {
-		this.itemService = itemService;
-	}
-
-	public SwagEditBean getSwagEditBean() {
-		return swagEditBean;
-	}
-
-	public void setSwagEditBean(SwagEditBean swagEditBean) {
-		this.swagEditBean = swagEditBean;
-	}
-
-	public UserBean getUserBean() {
-		return userBean;
-	}
-
-	public void setUserBean(UserBean userBean) {
-		this.userBean = userBean;
-	}
-
 	public List<SwagItemWrapper> getSwagList() {
-		if (swagEditBean.getSwagList() == null) {
-			swagEditBean.setSwagList(SwagItemWrapper
-					.convertSwagListToWrapperList(getItemService().getAll(),
-							userBean));
-		}
-
-		return swagEditBean.getSwagList();
+		return swagList;
 	}
 
 	public void setSwagList(List<SwagItemWrapper> swagList) {
-		swagEditBean.setSwagList(swagList);
+		this.swagList = swagList;
 	}
 
 	public Boolean getShowClear() {
@@ -219,12 +68,79 @@ public class SwagBean {
 		this.showClear = showClear;
 	}
 
+	public Integer getFirstRow() {
+		return firstRow;
+	}
+
+	public void setFirstRow(Integer firstRow) {
+		this.firstRow = firstRow;
+	}
+	
+	public int getTableSize() {
+		return (swagList == null ? 0 : swagList.size());
+	}
+	
+	public int getLastRow() {
+		return (swagList.size() < (firstRow + rowsPerPage)) ? swagList.size() : firstRow + rowsPerPage;
+	}
+
 	public Long getSelectedRowId() {
 		return selectedRowId;
 	}
 
 	public void setSelectedRowId(Long selectedRowId) {
 		this.selectedRowId = selectedRowId;
+	}
+
+	public SwagItemWrapper getSelectedRow() {
+		// Can't use component binding on dataTable as it's not Serializable
+		SwagItemWrapper selectedRow = null;
+		if (swagList != null) {
+			Iterator<SwagItemWrapper> iter = swagList.iterator();
+			while (iter.hasNext()) {
+				SwagItemWrapper item = (SwagItemWrapper) iter.next();
+				if (item.getSwagItem().getKey().equals(selectedRowId)) {
+					selectedRow = item;
+				}
+			}
+		}
+		return selectedRow;
+	}
+	
+	public void actionPage() {
+		
+		if (page.equals("last")) {
+			firstRow = new Double((Math.floor(getTableSize() / rowsPerPage) * rowsPerPage)).intValue();
+			return;
+		}
+		if (page.equals("first")) {
+			firstRow = 0;
+			return;
+		}
+		if (page.equals("prev")) {
+			firstRow = firstRow - rowsPerPage;
+			return;
+		}
+		if (page.equals("next")) {
+			firstRow = firstRow + rowsPerPage;
+			return;
+		}
+		
+		int pageInt = Integer.parseInt(page);
+		if (pageInt == -1) {
+			// last page
+			
+			return;
+		}
+		firstRow = pageInt * rowsPerPage - rowsPerPage;
+	}
+	
+	public String getPage() {
+		return page;
+	}
+
+	public void setPage(String page) {
+		this.page = page;
 	}
 
 }

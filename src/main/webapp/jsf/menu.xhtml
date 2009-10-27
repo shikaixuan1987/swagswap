@@ -14,10 +14,10 @@
 		style="padding-left: 10px; height: 100%; font-weight: bold; font-style: italic;"
 		layout="block">
 		<h:panelGroup layout="block" style="height: 50px; margin-top: 50px;" />
-		<h:commandLink value="Home" action="home?faces-redirect=true" />
+		<h:link value="Home" outcome="home" />
 		<br />
 		<br />
-		<h:commandLink value="All Swag" action="allSwag?faces-redirect=true" />
+		<h:link value="All Swag" outcome="allSwag" />
 		<br />
 		<br />
 		<h:outputText value="My Swag" />
@@ -26,7 +26,7 @@
 		<h:outputText value="Top Rated Swag" />
 		<br />
 		<br />
-		<h:commandLink value="Add Swag" action="addSwag?faces-redirect=true" />
+		<h:link value="Add Swag" outcome="addSwag" />
 	</h:panelGroup>
 </h:form>
 </html>

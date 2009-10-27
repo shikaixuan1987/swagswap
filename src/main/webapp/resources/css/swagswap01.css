@@ -27,14 +27,14 @@ html,body {
 
 /*  Menu Column  */
 .mainCol1 {
-	width: 20%;
+	width: 15%;
 	/*background-color: #EEEEEE;*/
 	vertical-align: top;
 }
 
 /*  Content Column  */
 .mainCol2 {
-	width: 80%;
+	width: 75%;
 	vertical-align: top;
 	padding-right: 100px;
 }
@@ -157,4 +157,17 @@ html,body {
 .commentCol2 {
 	width: 80%;
 }
+
+.scroller {
+	border: 2px solid #FF8800;
+	padding: 5px;
+		font-size: 10px;
+		font-weight: bold;
+}
+
+.scroller span {color: #666666; margin: 5px; 	font-size: 12px; }
+.scroller A:link {text-decoration: none; color: black; margin: 5px;}
+.scroller A:visited {text-decoration: none; color: black; margin: 5px; }
+.scroller A:active{text-decoration: none; color: black; margin: 5px; }
+.scroller A:hover {text-decoration: none; color: black; margin: 5px;  font-weight: bold; background-color: #F1F1F1;}
 

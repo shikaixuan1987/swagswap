@@ -15,7 +15,7 @@
     <google-auth:isLoggedIn>
       <tr>
         <td><a href="/swag/search">Back</a></td>
-        <td>Your Rating:</td>
+        <td>My Rating:</td>
         <td><swagItemRating:showRatingStars rateFormName="rateForm"
           userRating="${userRating}" /></td>
         <td width="30%"></td>

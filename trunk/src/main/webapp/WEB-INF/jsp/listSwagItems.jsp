@@ -47,7 +47,7 @@
 		</display:column>
 
 	<%-- Ratings --%>
-	<display:column title="Your Rating" >
+	<display:column title="My Rating" >
 		<google-auth:isLoggedIn>
 		<%-- HTML anchor to compensate for web 1.0 implementation --%>
 		<a name="${currentObject.key}"></a>

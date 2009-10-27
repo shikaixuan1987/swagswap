@@ -80,7 +80,7 @@ public class UserBean {
 				.createLogoutURL(getCurrentURL()));
 	}
 
-	public Integer getUserRatingForItem(SwagItem swagItem) {
+	public Integer getUserRatingForItem(Long key) {
 		// TODO Maybe service should default user rating to zero if it
 		// doesn't exist
 		if (! isLoggedIn()) {
@@ -88,11 +88,11 @@ public class UserBean {
 		}
 		
 		Integer userItemRating;
-		if (getLoggedInUser().getSwagItemRating(swagItem.getKey()) == null) {
+		if (getLoggedInUser().getSwagItemRating(key) == null) {
 			userItemRating = 0;
 		} else {
 			userItemRating = getLoggedInUser().getSwagItemRating(
-					swagItem.getKey()).getUserRating();
+					key).getUserRating();
 		}
 		// Temporary hack
 		if (userItemRating == null) {

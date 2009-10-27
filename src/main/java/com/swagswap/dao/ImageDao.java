@@ -8,12 +8,6 @@ public interface ImageDao {
 	
 	List<SwagImage> getAll();
 	
-	SwagImage get(String key);
-
-	byte[] getResizedImageBytes(byte[] imageBytes); 
-	
-	byte[] getThumbnailBytes(byte[] imageBytes);
-
-	
+	SwagImage get(String key);	
 	
 }

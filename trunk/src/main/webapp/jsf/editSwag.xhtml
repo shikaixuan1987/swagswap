@@ -16,14 +16,15 @@
 	<ui:define name="content">
 		<h:form enctype="multipart/form-data">
 			<f:metadata>
-				<f:viewParam name="rowId" value="#{swagBean.selectedRowId}" />
+				<f:viewParam name="selectedRowId"
+					value="#{swagEditBean.selectedRowId}" />
 				<f:event type="preRenderView"
-					listener="#{swagBean.populateSwagItem}" />
+					listener="#{actionBean.populateSwagItem}" />
 			</f:metadata>
 			<swag:panel height="160px" title="Current Image"
 				style="text-align: center; vertical-align: middle;">
 				<h:graphicImage
-					value="/swag/showImage/#{swagEditBean.editSwagItem.image.encodedKey}"
+					value="/swag/showImage/#{swagEditBean.editSwagItem.swagItem.image.encodedKey}"
 					style="height: 150px; width: 200px;" />
 			</swag:panel>
 			<br />

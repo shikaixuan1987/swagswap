@@ -11,11 +11,18 @@
 <ui:composition template="template.xhtml">
 	<ui:param name="title" value="All Swag" />
 	<ui:define name="content">
-			<ui:include src="searchPanel.xhtml">
-				<ui:param name="bean" value="#{swagBean}" />
-			</ui:include>
-			<br />
-			<swag:swagTable value="#{swagBean.swagList}" bean="#{swagBean}" />
+		<h:form>
+			<f:metadata>
+				<f:viewParam name="selectedRowId" value="#{swagBean.selectedRowId}" />
+				<f:event type="preRenderView"
+					listener="#{actionBean.populateSwagList}" />
+			</f:metadata>
+		</h:form>
+		<ui:include src="searchPanel.xhtml">
+			<ui:param name="bean" value="#{swagBean}" />
+		</ui:include>
+		<br />
+		<swag:swagTable value="#{swagBean.swagList}" bean="#{swagBean}" />
 	</ui:define>
 </ui:composition>
 </html>

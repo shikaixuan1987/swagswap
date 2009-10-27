@@ -10,7 +10,6 @@
 
 <composite:interface>
 	<composite:attribute name="value" required="true" />
-	<composite:attribute name="bean" required="true" />
 </composite:interface>
 
 <composite:implementation>
@@ -19,9 +18,9 @@
 			styleClass="tableBorder" rules="all"
 			rowClasses="tableRow1, tableRow2"
 			columnClasses="tableCol1, tableCol2, tableCol4, tableCol7, tableCol5, tableCol6, tableCol5,  tableCol8"
-			onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
-			onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-			cellpadding="4">
+			onRowMouseOver="window.alert('over');"
+			onRowMouseOut="window.alert('out);" cellpadding="4"
+			rows="#{swagBean.rowsPerPage}" first="#{swagBean.firstRow}">
 			<h:column headerClass="tableHeader">
 				<f:facet name="header">
 					<h:outputText value="" />
@@ -29,7 +28,7 @@
 				<h:panelGroup layout="block"
 					style="text-align:center; width:100%; background-color:white;">
 					<h:graphicImage
-						value="/swag/showImage/#{row.swagItem.image.encodedKey}"
+						value="/swag/showThumbnail/#{row.swagItem.imageKey}"
 						style="height: 50px; width: 66px;" />
 				</h:panelGroup>
 			</h:column>
@@ -60,11 +59,8 @@
 				<f:facet name="header">
 					<h:outputText value="My Rating" />
 				</f:facet>
-				<swag:stars value="#{row.userRating}" editable="true"
-					ajax="#{userBean.loggedIn}" key="#{row.swagItem.key}"
-					keyTarget="#{swagBean.selectedRowId}"
-					action="#{swagBean.actionRateSwag}"
-					ratingTarget="#{swagBean.userRating}">
+				<swag:stars value="#{row.userRating}" 
+					key="#{row.swagItem.key}" keyTarget="#{swagBean.selectedRowId}">
 				</swag:stars>
 			</h:column>
 			<h:column headerClass="tableHeader">
@@ -78,7 +74,7 @@
 					<h:outputText value="Average Rating" />
 				</f:facet>
 				<h:panelGroup id="averageRating">
-					<swag:stars value="#{row.swagItem.averageRating}" />
+					<swag:stars value="#{row.swagItem.averageRating}" disabled="true" />
 				</h:panelGroup>
 			</h:column>
 
@@ -88,19 +84,24 @@
 				</f:facet>
 				<h:panelGrid cellPadding="0" cellspacing="0" columns="3">
 					<h:button image="/images/view.gif" outcome="viewSwag">
-						<f:param name="rowId" value="#{row.swagItem.key}" />
+						<f:param name="selectedRowId" value="#{row.swagItem.key}" />
 					</h:button>
 					<h:button image="/images/edit.gif" outcome="editSwag">
-						<f:param name="rowId" value="#{row.swagItem.key}" />
+						<f:param name="selectedRowId" value="#{row.swagItem.key}" />
 					</h:button>
 					<h:commandButton image="/images/delete.gif"
-						action="#{swagBean.actionDelete}">
+						action="#{actionBean.actionDelete}">
 						<f:setPropertyActionListener value="#{row.swagItem.key}"
 							target="#{swagBean.selectedRowId}" />
+						<f:ajax render="@form" />
 					</h:commandButton>
 				</h:panelGrid>
 			</h:column>
+			<f:facet name="footer">
+				<swag:tableScroller />
+			</f:facet>
 		</h:dataTable>
+
 	</h:form>
 </composite:implementation>
 

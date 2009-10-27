@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.swagswap.dao.ImageDao;
 import com.swagswap.domain.SwagImage;
+import com.swagswap.service.ImageService;
 
 @Controller
 public class ImageController {
@@ -27,6 +27,9 @@ public class ImageController {
 	private static byte[] defaultImage;
 
 	private ImageDao imageDao; //TODO shouldn't this use imageService?
+	
+	@Autowired
+	private ImageService imageService; 
 
 	@Autowired
 	public ImageController(ImageDao imageDao) {
@@ -71,10 +74,10 @@ public class ImageController {
 		byte[] swagImageBytes;
 		//if there's not image, return default image
 		if (swagImage.getImage()==null) {
-			swagImageBytes=imageDao.getThumbnailBytes(getDefaultImage(req.getRequestURL().toString()));
+			swagImageBytes=imageService.getThumbnailBytes(getDefaultImage(req.getRequestURL().toString()));
 		}
 		else {
-			swagImageBytes = imageDao.getThumbnailBytes(imageDao.get(key).getImage().getBytes());
+			swagImageBytes = imageService.getThumbnailBytes(imageDao.get(key).getImage().getBytes());
 		}
 		try {
 			outputStream.write(swagImageBytes, 0, swagImageBytes.length);

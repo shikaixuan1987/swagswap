@@ -12,6 +12,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.ImageStyle;
 import com.smartgwt.client.types.OperatorId;
@@ -24,6 +25,7 @@ import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.events.ItemChangedEvent;
 import com.smartgwt.client.widgets.form.events.ItemChangedHandler;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
+import com.smartgwt.client.widgets.form.fields.HiddenItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.StaticTextItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
@@ -43,30 +45,30 @@ import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 public class SmartGWT implements EntryPoint {
 
+	//services
+	private final SmartGWTItemServiceWrapperAsync itemService = GWT
+		.create(SmartGWTItemServiceWrapper.class);
+	private LoginServiceAsync loginService = GWT.create(LoginService.class);
+	
+	//client state
 	private LoginInfo loginInfo; //null if they're not logged in
 
-	private final SmartGWTItemServiceWrapperAsync service = GWT
-			.create(SmartGWTItemServiceWrapper.class);
-
+	//global GUI objects TODO: can scope be reduced?
 	final TileGrid tileGrid = new TileGrid();
-
 	private VStack boundFormVStack;
 	private DynamicForm boundSwagForm;
-
-	private LoginServiceAsync loginService = GWT.create(LoginService.class);
-
-	private List<Img> starImages = new ArrayList<Img>();
-
 	private Img currentSwagImage;
-
+	private List<Img> starImages = new ArrayList<Img>();
 	private StarClickHandler starClickHandler1;
 	private StarClickHandler starClickHandler2;
 	private StarClickHandler starClickHandler3;
 	private StarClickHandler starClickHandler4;
 	private StarClickHandler starClickHandler5;
-
 	private HStack starHStack;
 	
+	/**
+	 * Check login status and build GUI
+	 */
 	public void onModuleLoad() {
 		// get better exception handling
 		setUncaughtExceptionHandler();
@@ -104,26 +106,31 @@ public class SmartGWT implements EntryPoint {
 	}
 	
 	public void buildGUI() {
-		final VStack vStack = new VStack(20);
-		vStack.setShowEdges(true);
-		vStack.setWidth100();
-		addLoginLogoutPanel(vStack);
-		HStack searchSortHStack= new HStack();
-		searchSortHStack.setHeight(25);
-		final DynamicForm filterForm = addSearchPanel(searchSortHStack);
-		final DynamicForm sortForm = addSortPanel(searchSortHStack);
-		vStack.addMember(searchSortHStack);
+		final VStack mainStack = new VStack(20);
+		mainStack.setShowEdges(true);
+		mainStack.setWidth100();
+		
+		
+		HStack menuHStack= new HStack();
+		menuHStack.setHeight(25);
+//		searchSortHStack.setWidth100();
+		addSearchPanel(menuHStack);
+		addSortPanel(menuHStack);
+		addLoginLogoutPanel(menuHStack);
+		mainStack.addMember(menuHStack);
+		
 //		HLayout hLayout = addFilterButton(vStack, filterForm, sortForm);
+		
 		HStack itemsAndEditHStack = new HStack();
 		addItemsPanel(itemsAndEditHStack);
 		addEditForm(itemsAndEditHStack);
-		vStack.addMember(itemsAndEditHStack);
+		mainStack.addMember(itemsAndEditHStack);
 
-		RootPanel.get("gwt-tilegrid").add(vStack);
-		vStack.draw();
+		RootPanel.get("gwt-tilegrid").add(mainStack); //anchored on GWT html page
+		mainStack.draw();
 	}
 
-	private HLayout addFilterButton(final VStack vStack,
+/*	private HLayout addFilterButton(final VStack vStack,
 			final DynamicForm filterForm, final DynamicForm sortForm) {
 		HLayout hLayout = new HLayout(10);
 		hLayout.setHeight(22);
@@ -150,22 +157,21 @@ public class SmartGWT implements EntryPoint {
 		hLayout.addMember(clearButton);
 		vStack.addMember(hLayout);
 		return hLayout;
-	}
+	}*/
 
-	private DynamicForm addSortPanel(final HStack hStack) {
+	private void addSortPanel(final HStack hStack) {
 		final DynamicForm sortForm = new DynamicForm();
-		sortForm.setIsGroup(true);
-		sortForm.setGroupTitle("Sort");
 		sortForm.setAutoFocus(false);
-		sortForm.setNumCols(6);
+		sortForm.setNumCols(4);
+		sortForm.setWrapItemTitles(false);
 
-		SelectItem sortItem = new SelectItem();
-		sortItem.setName("sortBy");
-		sortItem.setTitle("Sort By");
+		SelectItem sortItem = new SelectItem("sortBy", "Sort By");
 
 		LinkedHashMap valueMap = new LinkedHashMap();
-		valueMap.put("id", "Id");
 		valueMap.put("name", "Name");
+		valueMap.put("company", "Company");
+		valueMap.put("averageRating", "Avg Rating");
+		valueMap.put("ownerNickName", "Owner");
 		valueMap.put("date", "Date");
 
 		sortItem.setValueMap(valueMap);
@@ -187,32 +193,40 @@ public class SmartGWT implements EntryPoint {
 			}
 		});
 		hStack.addMember(sortForm);
-		return sortForm;
 	}
 
-	private DynamicForm addSearchPanel(final HStack hStack) {
+	private void addSearchPanel(final HStack hStack) {
 		final DynamicForm filterForm = new DynamicForm();
-		filterForm.setIsGroup(true);
-		filterForm.setGroupTitle("Search");
-		filterForm.setNumCols(6);
+		filterForm.setNumCols(2);
 		filterForm.setDataSource(SmartGWTRPCDataSource.getInstance());
 		filterForm.setAutoFocus(false);
+		filterForm.setOperator(OperatorId.OR);
 
-		TextItem nameItem = new TextItem("name");
-		SelectItem companyItem = new SelectItem("company");
-		companyItem.setOperator(OperatorId.CONTAINS); // fuzzy search!
-		companyItem.setAllowEmptyValue(true);
+		TextItem nameItem = new TextItem("name", "Search");
+		nameItem.setOperator(OperatorId.ICONTAINS); // case insensitive
+		final HiddenItem companyItem = new HiddenItem("company");
+		companyItem.setOperator(OperatorId.ICONTAINS);
+		final HiddenItem ownerItem = new HiddenItem("ownerNickName");
+		ownerItem.setOperator(OperatorId.ICONTAINS);
 
-		filterForm.setFields(nameItem, companyItem);
-
+		filterForm.setFields(nameItem,companyItem,ownerItem);
+		
 		filterForm.addItemChangedHandler(new ItemChangedHandler() {
 			public void onItemChanged(ItemChangedEvent event) {
-				tileGrid.fetchData(filterForm.getValuesAsCriteria());
+				String searchTerm = filterForm.getValueAsString("name");
+				companyItem.setValue(searchTerm);
+				ownerItem.setValue(searchTerm);
+				if (searchTerm==null) {
+					tileGrid.fetchData();
+				}
+				else {
+					Criteria criteria = filterForm.getValuesAsCriteria();
+					tileGrid.fetchData(criteria);
+				}
 			}
 		});
 
 		hStack.addMember(filterForm);
-		return filterForm;
 	}
 
 	private void addItemsPanel(final HStack hStack) {
@@ -233,16 +247,15 @@ public class SmartGWT implements EntryPoint {
 		pictureField.setCellStyle("picture");
 
 		DetailViewerField name = new DetailViewerField("name");
-		// commonNameField.setCellStyle("commonName");
 		DetailViewerField company = new DetailViewerField("company");
 		DetailViewerField ownerNickName = new DetailViewerField("ownerNickName");
 		DetailViewerField averageRating = new DetailViewerField("averageRating");
+		//show stars in tile
 		averageRating.setDetailFormatter(new DetailFormatter() {
 			public String format(Object value, DetailViewerRecord record,
 					DetailViewerField field) {
 					int averageRating = record.getAttributeAsInt("averageRating");
 					int numberOfRatings = record.getAttributeAsInt("numberOfRatings");
-					
 				return createStarsHTMLString(averageRating) + " / " + numberOfRatings;
 			}
 		});
@@ -260,17 +273,16 @@ public class SmartGWT implements EntryPoint {
 		return s.toString();
 	}
 	
-	private void addLoginLogoutPanel(final VStack vStack) {
+	private void addLoginLogoutPanel(final HStack hStack) {
 		HStack loginPanel = new HStack();
 		loginPanel.setWidth100();
-		loginPanel.setHeight(10);
+//		loginPanel.setHeight(10);
 		HStack logoutPanel = new HStack();
 		logoutPanel.setWidth100();
-		logoutPanel.setHeight(10);
-		logoutPanel.setPadding(20);
+//		logoutPanel.setHeight(10);
 		Anchor signInLink = new Anchor("Sign In");
 		Anchor signOutLink = new Anchor("Sign Out");
-		Label addLink = new Label(" Add Swag");
+		Label addLink = new Label("Add Swag");
 		addLink.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				currentSwagImage.setSrc("/images/no_photo.jpg");
@@ -281,18 +293,18 @@ public class SmartGWT implements EntryPoint {
 		});
 
 		if (loginInfo.isLoggedIn()) {
+			logoutPanel.addMember(addLink);
 			signOutLink.setHref(loginInfo.getLogoutUrl());
 			logoutPanel.addMember(signOutLink);
 			Label welcomeLabel = new Label("Welcome: "
 					+ loginInfo.getNickName());
 			welcomeLabel.setWrap(false);
 			logoutPanel.addMember(welcomeLabel);
-			logoutPanel.addMember(addLink);
-			vStack.addMember(logoutPanel);
+			hStack.addMember(logoutPanel);
 		} else { //not logged in
 			signInLink.setHref(loginInfo.getLoginUrl());
 			loginPanel.addMember(signInLink);
-			vStack.addMember(loginPanel);
+			hStack.addMember(loginPanel);
 		}
 	}
 	
@@ -311,11 +323,11 @@ public class SmartGWT implements EntryPoint {
 			starImages.add(new Img("/images/starOff.gif",12,12));
 		}
 		
-		starClickHandler1 = new StarClickHandler(1);
-		starClickHandler2 = new StarClickHandler(2);
-		starClickHandler3 = new StarClickHandler(3);
-		starClickHandler4 = new StarClickHandler(4);
-		starClickHandler5 = new StarClickHandler(5);
+		starClickHandler1 = new StarClickHandler();
+		starClickHandler2 = new StarClickHandler();
+		starClickHandler3 = new StarClickHandler();
+		starClickHandler4 = new StarClickHandler();
+		starClickHandler5 = new StarClickHandler();
 		
 		starImages.get(0).addClickHandler(starClickHandler1);
 		starImages.get(1).addClickHandler(starClickHandler2);
@@ -416,11 +428,11 @@ public class SmartGWT implements EntryPoint {
 		currentSwagImage.setHeight(212);
 		
 		Long currentKey = Long.valueOf(tileRecord.getAttribute("key"));
-		starClickHandler1.setSwagItemKey(currentKey);
-		starClickHandler2.setSwagItemKey(currentKey);
-		starClickHandler3.setSwagItemKey(currentKey);
-		starClickHandler4.setSwagItemKey(currentKey);
-		starClickHandler5.setSwagItemKey(currentKey);
+		starClickHandler1.setSwagItemRating(new SwagItemRating(currentKey,1));
+		starClickHandler2.setSwagItemRating(new SwagItemRating(currentKey,2));
+		starClickHandler3.setSwagItemRating(new SwagItemRating(currentKey,3));
+		starClickHandler4.setSwagItemRating(new SwagItemRating(currentKey,4));
+		starClickHandler5.setSwagItemRating(new SwagItemRating(currentKey,5));
 		
 		updateUserRatingStars(currentKey);
 		
@@ -430,9 +442,9 @@ public class SmartGWT implements EntryPoint {
 
 	//handle current userRating star colors
 	private void updateUserRatingStars(Long currentKey) {
-		Integer userRating = (loginInfo.getSwagItemRating(currentKey)!=null)
-								?loginInfo.getSwagItemRating(currentKey).getUserRating()
-								:0;
+		SwagItemRating swagItemRatingForKey = loginInfo.getSwagItemRating(currentKey);
+		Integer userRating = (swagItemRatingForKey==null) ? 0 : swagItemRatingForKey.getUserRating();
+		
 		for (int i = 0; i < 5; i++) {
 			if (i<userRating) {
 				starImages.get(i).setSrc("/images/starOn.gif");
@@ -445,11 +457,8 @@ public class SmartGWT implements EntryPoint {
 	
 	public class StarClickHandler implements ClickHandler {
 		private SwagItemRating newRating;
-		public StarClickHandler(int rating) {
-			this.newRating=new SwagItemRating(null,rating); //key is set later
-		}
-		public void setSwagItemKey(Long swagItemKey) {
-			newRating.setSwagItemKey(swagItemKey);
+		public void setSwagItemRating(SwagItemRating swagItemRating) {
+			newRating = swagItemRating;
 		}
 		@Override
 		public void onClick(ClickEvent event) {
@@ -467,7 +476,10 @@ public class SmartGWT implements EntryPoint {
 						@Override
 						public void onSuccess(Object result) {
 							//refresh client side userRating
-							loginInfo.getSwagItemRatings().remove(newRating);
+							SwagItemRating previousRating = loginInfo.getSwagItemRating(newRating.getSwagItemKey());
+							if (previousRating!=null) {
+								loginInfo.getSwagItemRatings().remove(previousRating);
+							}
 							loginInfo.getSwagItemRatings().add(newRating);
 							
 							//update stars
@@ -477,7 +489,6 @@ public class SmartGWT implements EntryPoint {
 							//kludge to execute a fetch threw saveData()
 							boundSwagForm.getField("isFetchOnly").setValue(true);
 							boundSwagForm.saveData();
-							
 						}
 				}
 				);

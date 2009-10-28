@@ -76,12 +76,12 @@ public class ItemCacheManager implements ItemDao {
 	}
 
 	public List<SwagItem> getAll() {
-
+		//  TODO.  Look at this.  Scott.
 		if (keyList == null || cache.isEmpty()) {
 			log.info("Cache is empty.  Refresh cache");
 			refreshSwagItems();
 		}
-
+		
 		List<SwagItem> swagList = new ArrayList<SwagItem>();
 		Map<Long, SwagItem> allItems = cache.getAll(keyList);
 		Iterator<SwagItem> iter = allItems.values().iterator();
@@ -114,11 +114,17 @@ public class ItemCacheManager implements ItemDao {
 		}
 	}
 
-	public SwagItem get(Long id) {
+	public SwagItem get(Long id) {		
 		return get(id, false);
 	}
 
 	public SwagItem get(Long id, boolean loadSwagImage) {
+		//  TODO.  Look at this.  Scott.
+		if (keyList == null || cache.isEmpty()) {
+			log.info("Cache is empty.  Refresh cache");
+			refreshSwagItems();
+		}
+		
 		// TODO More efficient to use try/catch than containsKey test
 		if (cache.containsKey(id)) {
 			// returned cached swagItem
@@ -132,10 +138,11 @@ public class ItemCacheManager implements ItemDao {
 	}
 
 	public void insert(SwagItem swagItem) {
-		// Insert using DAO
 		itemDao.insert(swagItem);
-		// Refresh cache from DAO as we don't have the key
-		refreshSwagItems();
+		//  Add new item to cache and keyList
+		cache.put(swagItem.getKey(), swagItem);
+		keyList.add(swagItem.getKey());
+
 	}
 
 	public List<SwagItem> search(String searchString) {

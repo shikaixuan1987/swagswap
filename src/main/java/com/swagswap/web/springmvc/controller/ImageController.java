@@ -41,7 +41,6 @@ public class ImageController {
 	@RequestMapping(value = "/showImage/{key}", method = RequestMethod.GET)
 	public void streamImageContent(@PathVariable("key") String key,
 					HttpServletRequest req, OutputStream outputStream) throws IOException {
-		long startTime = new Date().getTime();
 		SwagImage swagImage = imageService.get(key);
 		byte[] swagImageBytes;
 		//if there's no image, return default image
@@ -56,7 +55,6 @@ public class ImageController {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		System.out.println("*****  IMAGE CONTROLLER.  CACHE.  TOTAL TIME TO GET IMAGE IS "+(new Date().getTime()-startTime));
 	}
 	
 	/**
@@ -65,7 +63,6 @@ public class ImageController {
 	@RequestMapping(value = "/showThumbnail/{key}", method = RequestMethod.GET)
 	public void streamThumbnailContent(@PathVariable("key") String key,
 					HttpServletRequest req, OutputStream outputStream) throws IOException {
-		long startTime = new Date().getTime();
 
 		byte[] swagImageBytes  = imageService.getThumbnailBytes(key);
 		//if there's no image, return default image
@@ -78,7 +75,6 @@ public class ImageController {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		System.out.println("*****  IMAGE CONTROLLER.  CACHE.  TOTAL TIME TO GET THUMBNAIL IS "+(new Date().getTime()-startTime));
 	}
 
 }

@@ -117,19 +117,17 @@
 		<property name="persistenceManagerFactory" ref="persistenceManagerFactory" />
 	</bean>
 
-	<bean id="itemCacheManager" class="com.swagswap.dao.cache.ItemCacheManager">
-		<property name="itemDao" ref="swagItemDao" />
-	</bean>
-
 	<bean id="swagItemService" class="com.swagswap.service.ItemServiceImpl">
-		<!--
-			use Cache Manager -->
-		<!--
-		<property name="itemDao" ref="itemCacheManager" />
-			Use DAO directly 
-		-->
-			<property name="itemDao" ref="swagItemDao" />
-
+		 <!--<property name="itemDao" ref="swagItemDao" />  -->
+		  <property name="itemDao" ref="itemCacheManager" /> 
+		 <!-- <property name="imageDao" ref="swagImageDao" />  -->
+		 <property name="imageDao" ref="imageCacheManager" />
+	</bean>
+	
+	
+	<bean id="imageService" class="com.swagswap.service.ImageServiceImpl">
+		 <!-- <property name="imageDao" ref="swagImageDao" />  -->
+		 <property name="imageDao" ref="imageCacheManager" />  
 	</bean>
 
 	<!--
@@ -147,8 +145,16 @@
 
 
 	<bean id="adminService" class="com.swagswap.service.AdminServiceImpl" />
-			
-	<bean id="imageService" class="com.swagswap.service.ImageServiceImpl" />
-	
+
+	<bean id="swagCacheManager" class="com.swagswap.dao.cache.SwagCacheManagerImpl" />
+
+	<bean id="itemCacheManager" class="com.swagswap.dao.cache.ItemCacheManager" >
+		<property name="itemDao" ref="swagItemDao" />
+	</bean>
+
+	<bean id="imageCacheManager" class="com.swagswap.dao.cache.ImageCacheManager" >
+		<property name="imageDao" ref="swagImageDao" />
+	</bean>
+
 </beans>
 

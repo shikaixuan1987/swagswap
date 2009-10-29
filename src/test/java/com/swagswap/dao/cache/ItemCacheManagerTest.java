@@ -11,18 +11,20 @@ import com.swagswap.common.LocalDatastoreTestCase;
 import com.swagswap.dao.ItemDaoImpl;
 import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
+import com.swagswap.service.ItemServiceImpl;
 
 public class ItemCacheManagerTest extends LocalDatastoreTestCase {
 
 	private ItemCacheManager itemCacheManager;
+	ItemDaoImpl itemDao = new ItemDaoImpl();
+	ItemServiceImpl itemService = new ItemServiceImpl();
 
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 		if (itemCacheManager == null) {
-			ItemDaoImpl itemDao = new ItemDaoImpl();
 			itemDao.setPersistenceManagerFactory(PMF);
-			itemCacheManager = new ItemCacheManager(itemDao);
+			itemCacheManager = new ItemCacheManager(itemDao, new SwagCacheManagerImpl());
 		}
 	}
 
@@ -32,6 +34,18 @@ public class ItemCacheManagerTest extends LocalDatastoreTestCase {
 		itemCacheManager.insert(swagItem);
 
 		assertNumberOfItemsAndImages(1, 1);
+	}
+	
+	public void testInsertGetImageKey() {
+
+		SwagItem swagItem = Fixture.createSwagItem();
+		itemCacheManager.insert(swagItem);
+
+		assertNumberOfItemsAndImages(1, 1);
+		
+		SwagItem retrieved = itemCacheManager.get(swagItem.getKey(), true);
+		SwagItem retrieved2 = itemDao.get(swagItem.getKey(), true);
+		assertNotEquals("", retrieved.getImageKey());
 	}
 
 	public void testUpdate() {

@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Date;
 import java.util.List;
 
 import net.sf.jmimemagic.Magic;
@@ -39,15 +38,12 @@ public class ItemServiceImpl implements ItemService {
 
 	private static final Logger log = Logger.getLogger(ItemServiceImpl.class);
 	
-	//There are two possibilities now
-	//@Autowired
+
 	private ItemDao itemDao;
+	private ImageDao imageDao;
 	
 	@Autowired
-	private ImageService imageService; 
-
-	@Autowired
-	private ImageDao imageDao;
+	private ImageService imageService;
 
 	@Autowired
 	private SwagSwapUserService swagSwapUserService; // for saving users to our
@@ -59,7 +55,7 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	// for unit tests
-	protected ItemServiceImpl(ItemDao itemDao) {
+	protected ItemServiceImpl(ItemDao itemDao, ImageDao imageDao) {
 		this.itemDao = itemDao;
 	}
 
@@ -181,6 +177,10 @@ public class ItemServiceImpl implements ItemService {
 	public void setItemDao(ItemDao itemDao) {
 		this.itemDao = itemDao;
 	}
+	
+	public void setImageDao(ImageDao imageDao) {
+		this.imageDao = imageDao;
+	}
 
 	// for tests
 	public void setSwagSwapUserService(SwagSwapUserService swagSwapUserService) {
@@ -207,6 +207,9 @@ public class ItemServiceImpl implements ItemService {
 		checkImageMimeType(newImageData);
 		//  Resize the image before saving
 		swagItem.getImage().setImage(new Blob(imageService.getResizedImageBytes(newImageData)));
+		//  Delete old image from cache so it is refreshed
+		imageDao.deleteImageFromCache(swagItem.getImage().getEncodedKey());
+		
 	}
 
 	/**

@@ -3,7 +3,6 @@ package com.swagswap.web.jsf.bean;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -85,14 +84,11 @@ public class ActionBean {
 	}
 
 	public void populateSwagList() {
-		System.out.println("****  Populate SwagList");
 		List<SwagItemWrapper> swagList = swagBean.getSwagList();
-		if (swagList == null) {
+		if (swagList == null) {	
 			swagBean.setSwagList((SwagItemWrapper.convertSwagListToWrapperList(
 					itemService.getAll(), userBean)));
-		}
-		
-
+		} 
 	}
 
 	public void actionDelete() {
@@ -101,14 +97,11 @@ public class ActionBean {
 	}
 
 	public void actionRateSwag() throws IOException {
-		System.out.println("****  ActionBean.  Action Rate Swag "+swagEditBean.getEditSwagItem());
 		//  TODO  temporary hack until I figure out how ot pass action to Stars component
 		if ((SwagItemWrapper) swagBean.getSelectedRow() == null) {
-			System.out.println("****  ActionBean.  Action Rate Swag.  Table value is null. Rating from View ");
 			rate(swagEditBean.getEditSwagItem());
 			return;
 		}
-		System.out.println("****  ActionBean.  Action Rate Swag.  Table value is not null. Rating from Table ");
 		actionRateSwagFromTable();
 	}
 
@@ -142,10 +135,6 @@ public class ActionBean {
 		// Get item from service for recalculated average rating
 		ratedItem
 				.setSwagItem(itemService.get(ratedItem.getSwagItem().getKey()));
-
-		log.error("****  Elapsed time caching is "
-				+ ((new Date().getTime()) - startTime));
-
 	}
 
 	public void setSwagEditBean(SwagEditBean swagEditBean) {

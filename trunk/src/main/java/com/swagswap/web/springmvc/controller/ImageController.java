@@ -1,10 +1,8 @@
 package com.swagswap.web.springmvc.controller;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URL;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,29 +14,24 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.swagswap.dao.ImageDao;
 import com.swagswap.domain.SwagImage;
 import com.swagswap.service.ImageService;
 
 @Controller
 public class ImageController {
 	private static final Logger log = Logger.getLogger(ImageController.class);
-	public static final String PATH_TO_DEFAULT_IMAGE = "images/no_photo.jpg";
-	private static byte[] defaultImage;
-
-	private ImageDao imageDao; //TODO shouldn't this use imageService?
 	
 	@Autowired
 	private ImageService imageService; 
 
 	@Autowired
-	public ImageController(ImageDao imageDao) {
-		this.imageDao = imageDao;
+	public ImageController(ImageService imageService) {
+		this.imageService = imageService;
 	}
 
 	@RequestMapping("/imageList")
 	public String showImageList(ModelMap model) {
-		model.addAttribute("images", this.imageDao.getAll());
+		model.addAttribute("images", imageService.getAll());
 		return "imageList";
 	}
 	
@@ -48,20 +41,22 @@ public class ImageController {
 	@RequestMapping(value = "/showImage/{key}", method = RequestMethod.GET)
 	public void streamImageContent(@PathVariable("key") String key,
 					HttpServletRequest req, OutputStream outputStream) throws IOException {
-		SwagImage swagImage = imageDao.get(key);
+		long startTime = new Date().getTime();
+		SwagImage swagImage = imageService.get(key);
 		byte[] swagImageBytes;
-		//if there's not image, return default image
+		//if there's no image, return default image
 		if (swagImage.getImage()==null) {
-			swagImageBytes=getDefaultImage(req.getRequestURL().toString());
+			swagImageBytes=imageService.getDefaultImageBytes(req.getRequestURL().toString());
 		}
 		else {
-			swagImageBytes = imageDao.get(key).getImage().getBytes();
+			swagImageBytes = swagImage.getImage().getBytes();
 		}
 		try {
 			outputStream.write(swagImageBytes, 0, swagImageBytes.length);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		System.out.println("*****  IMAGE CONTROLLER.  CACHE.  TOTAL TIME TO GET IMAGE IS "+(new Date().getTime()-startTime));
 	}
 	
 	/**
@@ -70,69 +65,20 @@ public class ImageController {
 	@RequestMapping(value = "/showThumbnail/{key}", method = RequestMethod.GET)
 	public void streamThumbnailContent(@PathVariable("key") String key,
 					HttpServletRequest req, OutputStream outputStream) throws IOException {
-		SwagImage swagImage = imageDao.get(key);
-		byte[] swagImageBytes;
-		//if there's not image, return default image
-		if (swagImage.getImage()==null) {
-			swagImageBytes=imageService.getThumbnailBytes(getDefaultImage(req.getRequestURL().toString()));
+		long startTime = new Date().getTime();
+
+		byte[] swagImageBytes  = imageService.getThumbnailBytes(key);
+		//if there's no image, return default image
+		if (swagImageBytes == null) {
+			swagImageBytes=imageService.getDefaultImageBytes(req.getRequestURL().toString());
 		}
-		else {
-			swagImageBytes = imageService.getThumbnailBytes(imageDao.get(key).getImage().getBytes());
-		}
+		
 		try {
 			outputStream.write(swagImageBytes, 0, swagImageBytes.length);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		System.out.println("*****  IMAGE CONTROLLER.  CACHE.  TOTAL TIME TO GET THUMBNAIL IS "+(new Date().getTime()-startTime));
 	}
-
-	/**
-	 * This is the only way I can get the base URL to this app
-	 * @param req
-	 * @return
-	 */
-	protected String constructDefaultImageURL(String requestURL) {
-		String baseURL = requestURL.substring(0,requestURL.lastIndexOf("/swag"));
-		return baseURL + "/" + PATH_TO_DEFAULT_IMAGE;
-	}
-
-	/**
-	 * Lazy load default image for use if SwagItem isn't created with an image
-	 * ImageIO had a nice way to do it but it is blacklisted on appengine :(
-	 * @param requestURL to construct the full image URL 
-	 */
-	private byte[] getDefaultImage(String requestURL) {
-		if (defaultImage != null && defaultImage.length != 0) {
-			return defaultImage;
-		}
-		String defaultImageURLString = constructDefaultImageURL(requestURL);
-		ByteArrayOutputStream bas = null;
-
-		//create defaultImage byte[] from URL
-		//ouch this would have been easier with ImageIO!
-		try {
-			URL defaultImageURL = new URL(defaultImageURLString);
-			BufferedInputStream bis = new BufferedInputStream(defaultImageURL.openStream());
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			int i;
-			while ((i = bis.read()) != -1) {
-				baos.write(i);
-			}
-			defaultImage = baos.toByteArray();
-			return defaultImage;
-		} catch (IOException e) {
-			log.error("couldn't load defaultImage at " + defaultImageURLString, e);
-			return null;
-		} finally {
-			try {
-				if (bas != null)
-					bas.close();
-			} catch (IOException e) {
-				// ignore
-			}
-		}
-	}
-	
-
 
 }

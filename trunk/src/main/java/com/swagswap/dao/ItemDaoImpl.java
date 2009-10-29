@@ -1,6 +1,5 @@
 package com.swagswap.dao;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +12,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
-import com.google.appengine.api.datastore.Blob;
 import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
@@ -150,6 +148,7 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 		updatedItem.setNumberOfRatings(orig.getNumberOfRatings());
 	}
 	
+
 	/**
 	 * 
 	 * @param calculatedNewRating the new rating for the swagItem. 

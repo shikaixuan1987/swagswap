@@ -14,6 +14,8 @@ public class Fixture {
 				new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
 		SwagItem swagItem = createSwagItemNoImage();
 		swagItem.setImage(image);
+		//  Added by SS to test image Key problem
+		swagItem.setImageKey("123456");
 		return swagItem;
 	}
 

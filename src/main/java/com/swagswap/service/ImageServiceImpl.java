@@ -1,52 +1,107 @@
 package com.swagswap.service;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
-import com.google.appengine.api.images.Image;
-import com.google.appengine.api.images.ImagesService;
-import com.google.appengine.api.images.ImagesServiceFactory;
-import com.google.appengine.api.images.Transform;
+import com.swagswap.dao.ImageDao;
+import com.swagswap.domain.SwagImage;
 
 /**
- * For Resizing images
+ * Image Service
  * 
  * @author scott
  * 
  */
 public class ImageServiceImpl implements ImageService {
 
-	private static final Logger log = Logger
-			.getLogger(ImageServiceImpl.class);
-	
-	private static final int THUMBNAIL_WIDTH = 66;
-	private static final int THUMBNAIL_HEIGHT = 50;
+	private static final Logger log = Logger.getLogger(ImageServiceImpl.class);
+	public static final String PATH_TO_DEFAULT_IMAGE = "images/no_photo.jpg";
 
-	private static final int IMAGE_WIDTH = 283;
-	private static final int IMAGE_HEIGHT = 212;
+	private static byte[] defaultImage;
+
+	private ImageDao imageDao;
 
 	public ImageServiceImpl() {
 	}
 
-
-	public byte[] getResizedImageBytes(byte[] imageBytes) {
-		return resizeImage(imageBytes, IMAGE_WIDTH, IMAGE_HEIGHT);
+	public void setImageDao(ImageDao imageDao) {
+		this.imageDao = imageDao;
 	}
 
-	public byte[] getThumbnailBytes(byte[] imageBytes) {
-		return resizeImage(imageBytes, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
+	public List<SwagImage> getAll() {
+		return imageDao.getAll();
 	}
 
-	private byte[] resizeImage(byte[] imageBytes, int resizedWidth,
-			int resizedHeight) {
-
-		ImagesService imagesService = ImagesServiceFactory.getImagesService();
-		Image oldImage = ImagesServiceFactory.makeImage(imageBytes);
-		Transform resize = ImagesServiceFactory.makeResize(resizedWidth,
-				resizedHeight);
-		Image newImage = imagesService.applyTransform(resize, oldImage,
-				ImagesService.OutputEncoding.valueOf("JPEG"));
-		return newImage.getImageData();
+	public SwagImage get(String key) {
+		return imageDao.get(key);
 	}
-	
-	
+
+	public byte[] getResizedImageBytes(byte[] originalImageBytes) {
+		return imageDao.getResizedImageBytes(originalImageBytes);
+	}
+
+	public byte[] getThumbnailBytes(String key) {
+		return imageDao.getThumbnailBytes(key);
+	}
+
+	/**
+	 * This is the only way I can get the base URL to this app
+	 * 
+	 * @param req
+	 * @return
+	 */
+	private String constructDefaultImageURL(String requestURL) {
+		String baseURL = requestURL.substring(0, requestURL
+				.lastIndexOf("/swag"));
+		return baseURL + "/" + PATH_TO_DEFAULT_IMAGE;
+	}
+
+	/**
+	 * Lazy load default image for use if SwagItem isn't created with an image
+	 * ImageIO had a nice way to do it but it is blacklisted on appengine :(
+	 * 
+	 * @param requestURL
+	 *            to construct the full image URL
+	 */
+	public byte[] getDefaultImageBytes(String requestURL) {
+
+		if (defaultImage != null && defaultImage.length != 0) {
+			return defaultImage;
+		}
+
+		String defaultImageURLString = constructDefaultImageURL(requestURL);
+		ByteArrayOutputStream bas = null;
+
+		// create defaultImage byte[] from URL
+		// ouch this would have been easier with ImageIO!
+		try {
+			URL defaultImageURL = new URL(defaultImageURLString);
+			BufferedInputStream bis = new BufferedInputStream(defaultImageURL
+					.openStream());
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			int i;
+			while ((i = bis.read()) != -1) {
+				baos.write(i);
+			}
+			defaultImage = baos.toByteArray();
+			return defaultImage;
+		} catch (IOException e) {
+			log.error("couldn't load defaultImage at " + defaultImageURLString,
+					e);
+			return null;
+		} finally {
+			try {
+				if (bas != null)
+					bas.close();
+			} catch (IOException e) {
+				// ignore
+			}
+		}
+	}
+
 }

@@ -1,8 +1,19 @@
 package com.swagswap.service;
 
+import java.util.List;
+
+import com.swagswap.domain.SwagImage;
+
 public interface ImageService {
+
+	List<SwagImage> getAll();
+
+	SwagImage get(String key);
+
+	byte[] getResizedImageBytes(byte[] originalImageBytes);
+
+	byte[] getThumbnailBytes(String key);
 	
-	byte[] getResizedImageBytes(byte[] imageBytes); 
-	byte[] getThumbnailBytes(byte[] imageBytes);
+	byte[] getDefaultImageBytes(String requestURL);
 
 }

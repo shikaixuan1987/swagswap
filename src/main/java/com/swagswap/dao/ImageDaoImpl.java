@@ -20,6 +20,12 @@ public class ImageDaoImpl extends JdoDaoSupport implements ImageDao {
 
 	private static final Logger log = Logger.getLogger(ImageDaoImpl.class);
 
+	private static final int THUMBNAIL_WIDTH = 66;
+	private static final int THUMBNAIL_HEIGHT = 50;
+
+	private static final int IMAGE_WIDTH = 283;
+	private static final int IMAGE_HEIGHT = 212;
+
 	@SuppressWarnings("unchecked")
 	public List<SwagImage> getAll() {
 		PersistenceManager pm = getPersistenceManager();
@@ -40,5 +46,34 @@ public class ImageDaoImpl extends JdoDaoSupport implements ImageDao {
 		return swagImage;
 	}
 
+	public byte[] getResizedImageBytes(byte[] originalImageBytes) {
+		return resizeImage(originalImageBytes, IMAGE_WIDTH,
+				IMAGE_HEIGHT);
+	}
+
+	public byte[] getThumbnailBytes(String key) {
+		SwagImage image = get(key);
+		if (image == null || image.getImage() == null) {
+			return null;
+		}
+		return resizeImage(image.getImage().getBytes(), THUMBNAIL_WIDTH,
+				THUMBNAIL_HEIGHT);
+	}
+
+	private byte[] resizeImage(byte[] imageBytes, int resizedWidth,
+			int resizedHeight) {
+
+		ImagesService imagesService = ImagesServiceFactory.getImagesService();
+		Image oldImage = ImagesServiceFactory.makeImage(imageBytes);
+		Transform resize = ImagesServiceFactory.makeResize(resizedWidth,
+				resizedHeight);
+		Image newImage = imagesService.applyTransform(resize, oldImage,
+				ImagesService.OutputEncoding.valueOf("JPEG"));
+		return newImage.getImageData();
+	}
+	
+	public void deleteImageFromCache(String imageKey) {
+		// Not required for DAO.  Used for cache implementation	
+	}
 
 }

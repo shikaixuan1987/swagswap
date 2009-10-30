@@ -123,7 +123,7 @@
 	</error-page>
 
 	<!-- End Spring MVC -->
-	
+
 	<!-- GWT -->
 
 	<servlet>
@@ -133,15 +133,16 @@
 
 	<servlet>
 		<servlet-name>smartGWTItemServiceWrapper</servlet-name>
-		<servlet-class>com.swagswap.web.gwt.server.SmartGWTItemServiceWrapperImpl</servlet-class>
+		<servlet-class>
+			com.swagswap.web.gwt.server.SmartGWTItemServiceWrapperImpl</servlet-class>
 	</servlet>
-	
+
 	<!-- SmartGWT static resources servlet -->
 	<servlet>
-	    <servlet-name>scServlet</servlet-name>
-	    <servlet-class>com.swagswap.web.gwt.server.ScServlet</servlet-class>
+		<servlet-name>scServlet</servlet-name>
+		<servlet-class>com.swagswap.web.gwt.server.ScServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>smartGWTItemServiceWrapper</servlet-name>
 		<url-pattern>/swagswap/smartGWTItemServiceWrapper</url-pattern>
@@ -152,20 +153,20 @@
 		<servlet-name>loginService</servlet-name>
 		<url-pattern>/swagswap/login</url-pattern>
 	</servlet-mapping>
-	
+
 	<!-- SmartGWT static resources servlet -->
 	<servlet-mapping>
-	    <servlet-name>scServlet</servlet-name>
-	    <url-pattern>/sc/*</url-pattern>
+		<servlet-name>scServlet</servlet-name>
+		<url-pattern>/sc/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
-	    <servlet-name>scServlet</servlet-name>
-	    <url-pattern>/swagswap/sc/*</url-pattern>
+		<servlet-name>scServlet</servlet-name>
+		<url-pattern>/swagswap/sc/*</url-pattern>
 	</servlet-mapping>
-  
-  	<!-- end GWT -->
-  	
+
+	<!-- end GWT -->
+
 	<!--JSF-->
 	<security-constraint>
 		<display-name>Restrict raw XHTML Documents</display-name>
@@ -176,6 +177,15 @@
 		<auth-constraint />
 	</security-constraint>
 	<!-- End JSF -->
+
+	<security-constraint>
+		<web-resource-collection>
+			<url-pattern>/jsf/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>*</role-name>
+		</auth-constraint>
+	</security-constraint>
 
 	<!-- Spring MVC -->
 	<security-constraint>
@@ -189,14 +199,14 @@
 			<role-name>*</role-name>
 		</auth-constraint>
 	</security-constraint>
-    <security-constraint>
-        <web-resource-collection>
-            <url-pattern>/swag/admin/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>admin</role-name>
-        </auth-constraint>
-    </security-constraint>
+	<security-constraint>
+		<web-resource-collection>
+			<url-pattern>/swag/admin/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
 
 	<!-- End Spring MVC -->
 
@@ -206,10 +216,9 @@
 		<auth-constraint> <role-name>admin</role-name> </auth-constraint>
 		</security-constraint>
 	-->
-	
-	<!-- GWT 
-	<welcome-file-list>
-		<welcome-file>SwagSwapGWT.html</welcome-file>
-	</welcome-file-list>
+
+	<!--
+		GWT <welcome-file-list> <welcome-file>SwagSwapGWT.html</welcome-file>
+		</welcome-file-list>
 	-->
 </web-app>

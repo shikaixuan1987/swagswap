@@ -167,20 +167,19 @@
 
 	<!-- end GWT -->
 
-	<!--JSF-->
-	<security-constraint>
-		<display-name>Restrict raw XHTML Documents</display-name>
-		<web-resource-collection>
-			<web-resource-name>XHTML</web-resource-name>
-			<url-pattern>*.xhtml</url-pattern>
-		</web-resource-collection>
-		<auth-constraint />
-	</security-constraint>
-	<!-- End JSF -->
+	<!--
+		JSF End JSF <security-constraint> <display-name>Restrict raw XHTML
+		Documents</display-name> <web-resource-collection>
+		<web-resource-name>XHTML</web-resource-name>
+		<url-pattern>*.xhtml</url-pattern> </web-resource-collection>
+		<auth-constraint /> </security-constraint>
+	-->
 
 	<security-constraint>
 		<web-resource-collection>
-			<url-pattern>/jsf/*</url-pattern>
+			<url-pattern>/jsf/addSwag.jsf</url-pattern>
+			<url-pattern>/jsf/editSwag.jsf</url-pattern>
+			<url-pattern>/jsf/mySwag.jsf</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name>

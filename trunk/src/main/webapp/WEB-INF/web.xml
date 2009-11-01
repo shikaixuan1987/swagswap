@@ -216,8 +216,8 @@
 		</security-constraint>
 	-->
 
-	<!--
-		GWT <welcome-file-list> <welcome-file>SwagSwapGWT.html</welcome-file>
+	
+		<welcome-file-list> <welcome-file>welcome.html</welcome-file>
 		</welcome-file-list>
-	-->
+	
 </web-app>

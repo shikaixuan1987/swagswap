@@ -118,16 +118,14 @@
 	</bean>
 
 	<bean id="swagItemService" class="com.swagswap.service.ItemServiceImpl">
-		 <!--<property name="itemDao" ref="swagItemDao" />  -->
+		<!-- <property name="itemDao" ref="swagItemDao" />   -->
 		  <property name="itemDao" ref="itemCacheManager" /> 
-		 <!-- <property name="imageDao" ref="swagImageDao" />  -->
-		 <property name="imageDao" ref="imageCacheManager" />
 	</bean>
 	
 	
 	<bean id="imageService" class="com.swagswap.service.ImageServiceImpl">
-		 <!-- <property name="imageDao" ref="swagImageDao" />  -->
-		 <property name="imageDao" ref="imageCacheManager" />  
+		 <!--<property name="imageDao" ref="swagImageDao" />  --> 
+		  <property name="imageDao" ref="imageCacheManager" /> 
 	</bean>
 
 	<!--

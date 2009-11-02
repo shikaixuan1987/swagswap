@@ -73,6 +73,7 @@ public class ImageDaoImpl extends JdoDaoSupport implements ImageDao {
 	}
 	
 	public void deleteImageFromCache(String imageKey) {
+	//TODO scott can you move this to the cachmanager so that the service doesn't know about this?
 		// Not required for DAO.  Used for cache implementation	
 	}
 

@@ -92,10 +92,9 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 		Cache cache = swagCacheManager.getCache();
 		if (cache.containsKey(id)) {
 			SwagItem item = ((SwagItem) cache.get(id));
-			//  And delete imageKey from Cache
+			// And delete imageKey from Cache
 			String imageKey = item.getImageKey();
 			if (cache.containsKey(imageKey)) {
-				System.out.println("****  Deleted Item also has image removed");
 				cache.remove(imageKey);
 			}
 			cache.remove(id);
@@ -141,7 +140,12 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 	}
 
 	public void update(SwagItem updatedItem) {
-		// update using DAO
+
+		Cache cache = swagCacheManager.getCache();
+		if (cache.containsKey(updatedItem.getKey())) {
+			cache.remove(updatedItem.getImageKey());
+		}
+
 		itemDao.update(updatedItem);
 		// Refresh affected item
 		refreshItemInCache(updatedItem.getKey());

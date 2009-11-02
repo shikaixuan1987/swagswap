@@ -92,13 +92,16 @@ public class SmartGWTItemServiceWrapperImpl extends
 	public SwagItem toSwagItem(SwagItemGWTDTO dto) {
 		SwagItem swagItem = new SwagItem();
 		swagItem.setKey(dto.getKey());
+		swagItem.setOwnerID(dto.getOwnerID());
+		swagItem.setOwnerNickName(dto.getOwnerNickName());
 		swagItem.setName(dto.getName());
 		swagItem.setCompany(dto.getCompany());
 		swagItem.setDescription(dto.getDescription());
 		swagItem.setImageKey(dto.getImageKey());
-		swagItem.setImageBytes(dto.getNewImageBytes());
+		swagItem.setCreated((dto.getCreated()));
+		swagItem.setLastUpdated((dto.getLastUpdated()));
+//		swagItem.setImageBytes(dto.getNewImageBytes());
 		swagItem.setImageURL(dto.getNewImageURL());
-		swagItem.setOwnerEmail(dto.getOwnerEmail());
 		// no need for
 		// image,averageRating,numberOfRatings,created,lastUpdated,comments
 		swagItem.setTags(dto.getTags());
@@ -110,7 +113,7 @@ public class SmartGWTItemServiceWrapperImpl extends
 		padTags(paddedTags);
 		return new SwagItemGWTDTO(swagItem.getKey(), swagItem.getName(),
 				swagItem.getCompany(), swagItem.getDescription(), swagItem.getImageKey(), swagItem
-						.getOwnerEmail(), swagItem.getOwnerNickName(), swagItem
+						.getOwnerID(), swagItem.getOwnerNickName(), swagItem
 						.getAverageRating(), swagItem.getNumberOfRatings(),
 				swagItem.getCreated(), swagItem.getLastUpdated(),
 				paddedTags,

@@ -61,7 +61,7 @@ public class SwagItemWrapper implements Serializable {
 		SwagSwapUser user = null;
 		SwagSwapUserService userService = userBean.getSwagSwapUserService();
 		if (userService.isUserLoggedIn()) {
-			user = userService.findByEmail(userService.getCurrentUser().getEmail());
+			user = userService.findByEmail();
 		}
 		List<SwagItemWrapper> wrapperList = new ArrayList<SwagItemWrapper>(itemList.size());
 		Iterator<SwagItem> iter = itemList.iterator();

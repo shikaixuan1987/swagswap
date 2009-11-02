@@ -14,8 +14,6 @@ public class Fixture {
 				new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
 		SwagItem swagItem = createSwagItemNoImage();
 		swagItem.setImage(image);
-		//  Added by SS to test image Key problem
-		swagItem.setImageKey("123456");
 		return swagItem;
 	}
 
@@ -23,7 +21,7 @@ public class Fixture {
 		SwagItem swagItem = new SwagItem();
 		swagItem.setName("name");
 		swagItem.setDescription("description");
-		swagItem.setOwnerEmail("owner");
+		swagItem.setOwnerID("1");
 
 		ArrayList<String> tags = new ArrayList<String>();
 		tags.add("orange");
@@ -42,7 +40,7 @@ public class Fixture {
 		SwagItem swagItem = createSwagItem(); // use swagItem for convenience
 		return new SwagItemGWTDTO(swagItem.getKey(), swagItem.getName(),
 				swagItem.getCompany(), swagItem.getDescription(), swagItem
-						.getImageKey(), swagItem.getOwnerEmail(), swagItem
+						.getImageKey(), swagItem.getOwnerID(), swagItem
 						.getOwnerNickName(), swagItem.getAverageRating(),
 				swagItem.getNumberOfRatings(), swagItem.getCreated(),
 				swagItem.getLastUpdated(), (ArrayList)swagItem.getTags(), (ArrayList)swagItem.getComments()

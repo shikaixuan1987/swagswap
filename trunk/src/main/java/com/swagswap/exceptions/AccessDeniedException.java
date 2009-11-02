@@ -15,10 +15,10 @@ public class AccessDeniedException extends RuntimeException {
 		super(msg);
 	}
 
-	public AccessDeniedException(String itemName, String itemOwnerEmail, String emailRequestingPermision) {
+	public AccessDeniedException(String itemName, String itemOwnerID, String iDRequestingPermision) {
 		this("Access denied to " + itemName 
-				+ " for " + emailRequestingPermision + ". owner is " 
-				+ itemOwnerEmail
+				+ " for " + iDRequestingPermision + ". owner is " 
+				+ itemOwnerID
 				);
 	}
 

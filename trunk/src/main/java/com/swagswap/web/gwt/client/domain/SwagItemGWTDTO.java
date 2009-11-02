@@ -23,9 +23,9 @@ public class SwagItemGWTDTO implements IsSerializable {
 	//not needed here
 	//private String imageKey;
 	private String imageKey; //existing image key
-	private byte[] newImageBytes;
 	private String newImageURL;
-	private String ownerEmail;
+	private byte[] newImageBytes;
+	private String ownerID;
 	private String ownerNickName;
 	private Float averageRating = 0F;
 	private Integer numberOfRatings = 0;
@@ -33,6 +33,7 @@ public class SwagItemGWTDTO implements IsSerializable {
 	private Date lastUpdated;
 	private ArrayList<String> tags = new ArrayList<String>();
 	private ArrayList<SwagItemComment> comments = new ArrayList<SwagItemComment>();
+	
 	private boolean isFetchOnly;
 
 
@@ -52,7 +53,7 @@ public class SwagItemGWTDTO implements IsSerializable {
 	
 	public SwagItemGWTDTO(Long key, String name, String company,
 			String description, String imageKey,
-			String ownerEmail, String ownerNickName, Float averageRating,
+			String ownerID, String ownerNickName, Float averageRating,
 			Integer numberOfRatings, Date created, Date lastUpdated,
 			ArrayList<String> tags, ArrayList<SwagItemComment> comments) {
 		this();
@@ -61,7 +62,7 @@ public class SwagItemGWTDTO implements IsSerializable {
 		this.company = company;
 		this.description = description;
 		this.imageKey = imageKey;
-		this.ownerEmail = ownerEmail;
+		this.ownerID = ownerID;
 		this.ownerNickName = ownerNickName;
 		this.averageRating = averageRating;
 		this.numberOfRatings = numberOfRatings;
@@ -115,6 +116,10 @@ public class SwagItemGWTDTO implements IsSerializable {
 		return newImageBytes;
 	}
 
+	public void setNewImageBytes(byte[] newImageBytes) {
+		this.newImageBytes = newImageBytes;
+	}
+
 	public void setNewImageURL(String newImageURL) {
 		this.newImageURL = newImageURL;
 	}
@@ -127,12 +132,12 @@ public class SwagItemGWTDTO implements IsSerializable {
 		this.newImageURL = newImageURL;
 	}
 
-	public String getOwnerEmail() {
-		return ownerEmail;
+	public String getOwnerID() {
+		return ownerID;
 	}
 
-	public void setOwnerEmail(String ownerEmail) {
-		this.ownerEmail = ownerEmail;
+	public void setOwnerID(String ownerID) {
+		this.ownerID = ownerID;
 	}
 
 	public String getOwnerNickName() {

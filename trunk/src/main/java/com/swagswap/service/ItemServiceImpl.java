@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.users.User;
 import com.swagswap.dao.ImageDao;
 import com.swagswap.dao.ItemDao;
@@ -191,11 +189,9 @@ public class ItemServiceImpl implements ItemService {
 			throw new InvalidSwagItemException("name is required");
 		}
 		if (swagItem.isNew()) {
-			String currentUserEmail = swagSwapUserService.getCurrentUser()
-					.getEmail();
-			swagItem.setOwnerEmail(currentUserEmail);
-			String currentUserNickName = swagSwapUserService.getCurrentUser()
-					.getNickname();
+			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmailOrCreate();
+			swagItem.setOwnerID(swagSwapUser.getGoogleID());
+			String currentUserNickName = swagSwapUser.getNickName();
 			swagItem.setOwnerNickName(currentUserNickName);
 
 			populateSwagImage(swagItem);
@@ -342,7 +338,7 @@ public class ItemServiceImpl implements ItemService {
 			log.error(e);
 			throw new InvalidSwagImageException(e);
 		}
-		if (!(("image/gif".equals(mimeType)) || ("image/png".equals(mimeType)) || ("image/jpeg"
+		if (!(("text/html".equals(mimeType)) ||("image/gif".equals(mimeType)) || ("image/png".equals(mimeType)) || ("image/jpeg"
 				.equals(mimeType)))) {
 			throw new InvalidSwagImageException(mimeType);
 		}
@@ -365,9 +361,12 @@ public class ItemServiceImpl implements ItemService {
 		// Their email doesn't match the swagItem
 		// (again, if this happened the webapp messed up or someone's trying to
 		// hack us)
-		if (!user.getEmail().equals(swagItemToCheck.getOwnerEmail())) {
-			throw new AccessDeniedException(swagItemToCheck.getName(),
-					swagItemToCheck.getOwnerEmail(), user.getEmail());
+		if (!user.getUserId().equals(swagItemToCheck.getOwnerID())) {
+			throw new AccessDeniedException(
+					swagItemToCheck.getName(),
+					swagItemToCheck.getOwnerID(),
+					user.getUserId()
+					);
 		}
 	}
 

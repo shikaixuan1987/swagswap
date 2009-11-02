@@ -14,9 +14,11 @@ import com.swagswap.domain.SwagItemRating;
 public class LoginInfo implements Serializable {
 
 	private boolean loggedIn = false;
+	private boolean isUserAdmin = false;
 	private String loginUrl;
 	private String logoutUrl;
 	private String email;
+	private String ID;
 	private String nickName;
 	private Set<SwagItemRating> swagItemRatings = new HashSet<SwagItemRating>();
 	private SwagItemGWTDTO currentSwagItem; //for remembering which one they were editing
@@ -33,6 +35,14 @@ public class LoginInfo implements Serializable {
 		return loginUrl;
 	}
 
+	public boolean isUserAdmin() {
+		return isUserAdmin;
+	}
+	
+	public void setIsUserAdmin(boolean isUserAdmin) {
+		this.isUserAdmin = isUserAdmin;
+	}
+	
 	public void setLoginUrl(String loginUrl) {
 		this.loginUrl = loginUrl;
 	}
@@ -51,6 +61,14 @@ public class LoginInfo implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getID() {
+		return ID;
+	}
+
+	public void setID(String ID) {
+		this.ID=ID;
 	}
 
 	public String getNickName() {
@@ -91,5 +109,7 @@ public class LoginInfo implements Serializable {
 		this.currentSwagItem=currentSwagItem;
 		
 	}
+
+
 
 }

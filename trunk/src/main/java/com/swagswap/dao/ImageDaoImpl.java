@@ -23,8 +23,8 @@ public class ImageDaoImpl extends JdoDaoSupport implements ImageDao {
 	private static final int THUMBNAIL_WIDTH = 66;
 	private static final int THUMBNAIL_HEIGHT = 50;
 
-	private static final int IMAGE_WIDTH = 283;
-	private static final int IMAGE_HEIGHT = 212;
+	private static final int IMAGE_WIDTH = 300;
+	private static final int IMAGE_HEIGHT = 225;
 
 	@SuppressWarnings("unchecked")
 	public List<SwagImage> getAll() {

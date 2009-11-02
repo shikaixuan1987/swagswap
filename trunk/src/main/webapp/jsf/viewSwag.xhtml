@@ -17,6 +17,7 @@
 			<f:metadata>
 				<f:viewParam name="selectedRowId"
 					value="#{swagEditBean.selectedRowId}" />
+				<f:viewParam name="lastPage" value="#{swagEditBean.lastPage}" />
 				<f:event type="preRenderView"
 					listener="#{actionBean.populateSwagItem}" />
 			</f:metadata>
@@ -54,7 +55,8 @@
 							<h:outputText
 								value="#{swagEditBean.editSwagItem.swagItem.numberOfRatings}" />
 							<swag:label value="Added By" />
-							<h:outputText value="#{swagEditBean.editSwagItem.swagItem.ownerNickName}" />
+							<h:outputText
+								value="#{swagEditBean.editSwagItem.swagItem.ownerNickName}" />
 							<swag:label value="Created" />
 							<swag:date value="#{swagEditBean.editSwagItem.swagItem.created}" />
 							<swag:label value="Last Updated" />
@@ -90,7 +92,8 @@
 							action="#{actionBean.actionAddComment}"
 							disabled="#{!swagSwapUserService.userLoggedIn}">
 						</h:commandButton>
-						<h:button value="Back" style="margin-left: 5px;" outcome="allSwag" />
+						<h:commandButton value="Back" style="margin-left: 5px;"
+							action="#{actionBean.actionBack}" immediate="true" />
 					</h:panelGroup>
 
 

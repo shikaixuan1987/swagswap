@@ -18,6 +18,8 @@
 			<f:metadata>
 				<f:viewParam name="selectedRowId"
 					value="#{swagEditBean.selectedRowId}" />
+				<f:viewParam name="lastPage"
+					value="#{swagEditBean.lastPage}" />
 				<f:event type="preRenderView"
 					listener="#{actionBean.populateSwagItem}" />
 			</f:metadata>

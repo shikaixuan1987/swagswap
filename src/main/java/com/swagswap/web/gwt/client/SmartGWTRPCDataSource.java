@@ -9,9 +9,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.DataSourceField;
+import com.smartgwt.client.data.fields.DataSourceBinaryField;
 import com.smartgwt.client.data.fields.DataSourceDateField;
 import com.smartgwt.client.data.fields.DataSourceFloatField;
 import com.smartgwt.client.data.fields.DataSourceImageField;
+import com.smartgwt.client.data.fields.DataSourceImageFileField;
 import com.smartgwt.client.data.fields.DataSourceIntegerField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.rpc.RPCResponse;
@@ -54,7 +56,7 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		addField(imageField);
 		
 		//do we want this exposed?
-		addField(new DataSourceTextField("ownerEmail", "Owner", 20, false));
+		addField(new DataSourceTextField("ownerID", "Owner", 20, false));
 		addField(new DataSourceTextField("ownerNickName", "Owner Nick Name", 20, false));
 		addField(new DataSourceFloatField("averageRating", "Avg Rating", 5, false));
 		addField(new DataSourceIntegerField("numberOfRatings", "No. Ratings", 5, false));
@@ -64,7 +66,7 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		addField(new DataSourceTextField("tag2", "Tag 2", 10, false));
 		addField(new DataSourceTextField("tag3", "Tag 3", 10, false));
 		addField(new DataSourceTextField("tag4", "Tag 4", 10, false));
-		
+		addField(new DataSourceImageFileField("newImageBytes", "New Swag Image", 20, false));
 		//TODO add tags and comments
 	}
 
@@ -134,6 +136,11 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		copyValues(rec, testRec);
 		SmartGWTItemServiceWrapperAsync service = GWT
 				.create(SmartGWTItemServiceWrapper.class);
+		
+		//get newImageBytes
+		//TODO figure out where request.getUploadedFile is
+//		Object newImageBytes = request.getAttribute("newImageBytes");
+		
 		service.add(testRec, new AsyncCallback<SwagItemGWTDTO>() {
 			public void onFailure(Throwable caught) {
 				response.setStatus(RPCResponse.STATUS_FAILURE);
@@ -229,10 +236,15 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 	public static void copyValues(TileRecord from, SwagItemGWTDTO to) {
 		//key is null if adding
 		to.setKey((from.getAttributeAsString("key")==null)?null:Long.valueOf(from.getAttributeAsString("key")));
+		to.setOwnerID(from.getAttributeAsString("ownerID"));
 		to.setName(from.getAttributeAsString("name"));
 		to.setCompany(from.getAttributeAsString("company"));
 		to.setDescription(from.getAttributeAsString("description"));
 		to.setImageKey(from.getAttributeAsString("imageKey"));
+		to.setAverageRating(from.getAttributeAsFloat("averageRating"));
+		to.setNumberOfRatings(from.getAttributeAsInt("numberOfRatings"));
+		to.setCreated(from.getAttributeAsDate("created"));
+		to.setLastUpdated(from.getAttributeAsDate("lastUpdated"));
 		to.setIsFetchOnly(from.getAttributeAsBoolean("isFetchOnly"));
 //		to.setSwagImage(from.getAttributeAs("image")); //TODO what do we do about image?
 		//TODO email?
@@ -242,17 +254,19 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		tags.add((from.getAttributeAsString("tag2")==null)?"":from.getAttributeAsString("tag2"));
 		tags.add((from.getAttributeAsString("tag3")==null)?"":from.getAttributeAsString("tag3"));
 		tags.add((from.getAttributeAsString("tag4")==null)?"":from.getAttributeAsString("tag4"));
+//		to.setNewImageBytes((byte[])from.getAttributeAsObject("newImageBytes")); //TODO we may have to make a new attr for this
 		to.setTags(tags);
+		to.setNewImageURL(from.getAttributeAsString("newImageURL"));
 	}
 
 	public static void copyValues(SwagItemGWTDTO from, TileRecord to) {
 		to.setAttribute("key", from.getKey());
+		to.setAttribute("ownerID", from.getOwnerID());
+		to.setAttribute("ownerNickName", from.getOwnerNickName());
 		to.setAttribute("name", from.getName());
 		to.setAttribute("company", from.getCompany());
 		to.setAttribute("description", from.getDescription());
 		to.setAttribute("imageKey", from.getImageKey());
-		to.setAttribute("ownerEmail", from.getOwnerEmail());
-		to.setAttribute("ownerNickName", from.getOwnerNickName());
 		to.setAttribute("averageRating", from.getAverageRating());
 		to.setAttribute("numberOfRatings", from.getNumberOfRatings());
 		to.setAttribute("created", from.getCreated());
@@ -261,6 +275,7 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		to.setAttribute("tag2", from.getTags().get(1));
 		to.setAttribute("tag3", from.getTags().get(2));
 		to.setAttribute("tag4", from.getTags().get(3));
+		//newImageURL not needed here
 	}
 
 	private TileRecord getEditedRecord(DSRequest request) {

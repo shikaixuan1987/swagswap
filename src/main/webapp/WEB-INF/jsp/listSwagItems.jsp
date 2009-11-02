@@ -34,7 +34,7 @@
 				<img border="0" alt="View/Comment/Rate" src="<%=request.getContextPath()%>/images/view.gif"/>
 			</a>
 			<%-- Users can only edit their own items --%>
-			<google-auth:isAllowed swagItemOwnerEmail="${currentObject.ownerEmail}">
+			<google-auth:isAllowed swagItemOwnerID="${currentObject.ownerID}">
 				
 				<a href="<c:url value='/swag/edit/${currentObject.key}'/>"> 
 					<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/>

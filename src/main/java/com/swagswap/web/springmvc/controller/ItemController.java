@@ -64,6 +64,9 @@ public class ItemController {
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String saveHandler(@ModelAttribute SwagItem swagItem, Errors errors) {
 		try {
+			//insert user
+			swagSwapUserService.findByEmailOrCreate();
+			
 			itemService.save(swagItem);
 		}
 		catch (LoadImageFromURLException e) {
@@ -91,9 +94,7 @@ public class ItemController {
 		if (swagSwapUserService.isUserLoggedIn()) {
 			//get swagSwapUser using email key from available google user
 			//we've got to create them here if they don't already exist in our DB
-			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmailOrCreate(
-				swagSwapUserService.getCurrentUser().getEmail()
-				);
+			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmailOrCreate();
 			//see if the already have a rating for this item
 			SwagItemRating rating = swagSwapUser.getSwagItemRating(key);
 			if (null!=rating) {
@@ -153,9 +154,7 @@ public class ItemController {
 		if (swagSwapUserService.isUserLoggedIn()) {
 			//get swagSwapUser using email key from available google user
 			//we've got to create them here if they don't already exist in our DB
-			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmailOrCreate(
-					swagSwapUserService.getCurrentUser().getEmail()
-					);
+			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmailOrCreate();
 			model.addAttribute("swagSwapUser", swagSwapUser);
 		}
 		//add backing object for each possible new rating

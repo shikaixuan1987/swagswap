@@ -1,6 +1,7 @@
 package com.swagswap.web.gwt.client;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -14,8 +15,11 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.Encoding;
 import com.smartgwt.client.types.ImageStyle;
 import com.smartgwt.client.types.OperatorId;
+import com.smartgwt.client.types.Visibility;
+import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Img;
 import com.smartgwt.client.widgets.Label;
@@ -24,11 +28,17 @@ import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.events.ItemChangedEvent;
 import com.smartgwt.client.widgets.form.events.ItemChangedHandler;
+import com.smartgwt.client.widgets.form.events.SubmitValuesEvent;
+import com.smartgwt.client.widgets.form.events.SubmitValuesHandler;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
 import com.smartgwt.client.widgets.form.fields.HiddenItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.StaticTextItem;
+import com.smartgwt.client.widgets.form.fields.SubmitItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
+import com.smartgwt.client.widgets.form.fields.UploadItem;
+import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
+import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.HStack;
 import com.smartgwt.client.widgets.layout.VStack;
@@ -65,6 +75,8 @@ public class SmartGWT implements EntryPoint {
 	private StarClickHandler starClickHandler4;
 	private StarClickHandler starClickHandler5;
 	private HStack starHStack;
+	private DynamicForm uploadForm;
+	private HLayout saveCancelButtonsLayout;
 	
 	/**
 	 * Check login status and build GUI
@@ -123,6 +135,7 @@ public class SmartGWT implements EntryPoint {
 		
 		HStack itemsAndEditHStack = new HStack();
 		addItemsPanel(itemsAndEditHStack);
+//		addImageUpload(itemsAndEditHStack);
 		addEditForm(itemsAndEditHStack);
 		mainStack.addMember(itemsAndEditHStack);
 
@@ -260,10 +273,100 @@ public class SmartGWT implements EntryPoint {
 			}
 		});
 		DetailViewerField lastUpdated = new DetailViewerField("lastUpdated");
+		//TODO format date
+//		lastUpdated.setDetailFormatter(new DetailFormatter() {
+//			public String format(Object value, DetailViewerRecord record,
+//					DetailViewerField field) {
+//					Date lastUpdated = record.getAttributeAsDate("lastUpdated");
+//					SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy HH:MM");
+//				return formatter.format(lastUpdated);
+//			}
+//		});
 		tileGrid.setFields(pictureField, name, company ,ownerNickName, averageRating, lastUpdated);
 		hStack.addMember(tileGrid);
 	}
 	
+/*	public void addImageUploadForm(HStack hStack) {
+//		Img img = new Img("file://c:/photos/june2009/Image008.jpg");
+		Image img = new Image("file://c:/photos/june2009/Image008.jpg");
+		URL imageUrl = new 
+//        hStack.addMember(img);
+	}*/
+	
+	public void addImageUpload(HStack hStack) {
+		//create a hidden frame
+		Canvas iframe = new Canvas();
+		iframe.setID("fileUploadFrame");
+		iframe.setContents("<IFRAME NAME=\"fileUploadFrame\" style=\"width:0;height:0;border:0\"></IFRAME>");
+		iframe.setVisibility(Visibility.VISIBLE); //Could not get the IFRAME in the page with Visibility HIDDEN
+		uploadForm = new DynamicForm();
+		uploadForm.setNumCols(4);
+		uploadForm.setTarget("fileUploadFrame"); //set target of FORM to the IFRAME
+		uploadForm.setEncoding(Encoding.MULTIPART);
+		uploadForm.setAction(GWT.getModuleBaseURL()+"TODO-fileuploadservlet");
+
+		//creates a HTML formitem with a textfield and a browse button
+		final UploadItem uploadItem = new UploadItem("filename","Select a file");
+		uploadItem.setWidth(300);
+		uploadItem.addChangedHandler(new ChangedHandler() {
+			
+			public void onChanged(ChangedEvent event) {
+				//The item shows the whole (long) path, so set caret at end 
+				//so user can verify his chosen filename
+				String filename = (String)uploadItem.getValue();
+				if (filename != null) uploadItem.setSelectionRange(filename.length(), filename.length());
+				
+				//Unfortunately UploadItem does not throw a ChangedEvent :(
+			}
+		});
+
+		SubmitItem submitItem = new SubmitItem("upload", "Upload");
+		submitItem.setStartRow(false);
+		submitItem.setEndRow(false);
+
+		uploadForm.setItems(uploadItem, submitItem);
+
+		uploadForm.addSubmitValuesHandler(new SubmitValuesHandler() {
+			
+			public void onSubmitValues(SubmitValuesEvent event) {
+				//maybe do some filename verification
+				//String filename = (String)uploadItem.getValue();
+				uploadForm.submitForm();
+			}
+		});
+
+		hStack.addMember(uploadForm);
+		hStack.addMember(iframe);
+	}
+	
+/*	public void addImageUploadForm(HStack hStack) {
+		FormPanel imageUploadForm = new FormPanel();
+		imageUploadForm.setAction("/imageUploadServlet"); // onze image fileupload servlet in het server project
+		
+		// Because we're going to add a FileUpload widget, we'll need to set the
+		// form to use the POST method, and multipart MIME encoding.
+		imageUploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
+		imageUploadForm.setMethod(FormPanel.METHOD_POST);
+		
+		final FileUpload afbeeldingImageValue = new FileUpload();
+		afbeeldingImageValue.setName("uploadFormElement");
+		
+		imageUploadForm.setWidget(afbeeldingImageValue);
+		
+		imageUploadForm.addFormHandler(new FormHandler() {
+			public void onSubmit(FormSubmitEvent event) {
+				if (afbeeldingImageValue.getFilename().contains(" ")) {
+					Window.alert("Er mag geen spaties zijn in de naam.");
+					event.setCancelled(true);
+				}
+			}
+			public void onSubmitComplete(FormSubmitCompleteEvent event) {
+				// TODO: Maybe we can try to refresh here, so that the picture is available right away, instead of after a second visit.
+			}
+		});
+		hStack.addMember(imageUploadForm);
+	}
+*/	
 	public String createStarsHTMLString(float rating) {
 		int roundedRating = Math.round(rating);
 		StringBuilder s = new StringBuilder();
@@ -318,36 +421,7 @@ public class SmartGWT implements EntryPoint {
 		boundSwagForm.setDataSource(SmartGWTRPCDataSource.getInstance());
 		boundSwagForm.setAutoFocus(false);
 
-		//add five stars
-		for (int i = 0; i < 5; i++) {
-			starImages.add(new Img("/images/starOff.gif",12,12));
-		}
-		
-		starClickHandler1 = new StarClickHandler();
-		starClickHandler2 = new StarClickHandler();
-		starClickHandler3 = new StarClickHandler();
-		starClickHandler4 = new StarClickHandler();
-		starClickHandler5 = new StarClickHandler();
-		
-		starImages.get(0).addClickHandler(starClickHandler1);
-		starImages.get(1).addClickHandler(starClickHandler2);
-		starImages.get(2).addClickHandler(starClickHandler3);
-		starImages.get(3).addClickHandler(starClickHandler4);
-		starImages.get(4).addClickHandler(starClickHandler5);
-		
-		starHStack = new HStack();
-//		starHStack.setBorder("2px solid blue");
-		starHStack.setHeight(25);
-		starHStack.setAlign(Alignment.RIGHT);
-		starHStack.addMember(new Label("My Rating: "));
-		starHStack.addMember(starImages.get(0));
-		starHStack.addMember(starImages.get(1));
-		starHStack.addMember(starImages.get(2));
-		starHStack.addMember(starImages.get(3));
-		starHStack.addMember(starImages.get(4));
-		boundFormVStack.addMember(starHStack);
-		
-		//end stars
+		addStarRatings();
 		
 		TextItem nameItem = new TextItem("name");
 		TextItem companyItem = new TextItem("company");
@@ -357,14 +431,15 @@ public class SmartGWT implements EntryPoint {
 		TextItem tag3Item = new TextItem("tag3");
 		TextItem tag4Item = new TextItem("tag4");
 		
-		
 		StaticTextItem isFetchOnlyItem = new StaticTextItem("isFetchOnly");
 		isFetchOnlyItem.setVisible(false);
 		StaticTextItem imageKeyItem = new StaticTextItem("imageKey");
 		imageKeyItem.setVisible(false);
+		
+		TextItem newImageURLItem = new TextItem("newImageURL");
 
 		boundSwagForm.setFields(nameItem, companyItem, descriptionItem, tag1Item,
-				tag2Item, tag3Item, tag4Item, isFetchOnlyItem, imageKeyItem);
+				tag2Item, tag3Item, tag4Item, isFetchOnlyItem, imageKeyItem, newImageURLItem);
 		boundFormVStack.addMember(boundSwagForm);
 		
 		currentSwagImage = new Img("/images/no_photo.jpg");  
@@ -396,6 +471,8 @@ public class SmartGWT implements EntryPoint {
 		saveButton.setAutoFit(true);
 		saveButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				//TODO
+				//uploadForm.submitForm();
 				boundSwagForm.saveData();
 				if (boundSwagForm.hasErrors()) {
 					Window.alert("" + boundSwagForm.getErrors());
@@ -413,15 +490,59 @@ public class SmartGWT implements EntryPoint {
 				boundFormVStack.hide();
 			}
 		});
-		HLayout hLayout = new HLayout();
-		hLayout.addMember(saveButton);
-		hLayout.addMember(cancelButton);
-		boundFormVStack.addMember(hLayout);
+		saveCancelButtonsLayout = new HLayout();
+		saveCancelButtonsLayout.addMember(saveButton);
+		saveCancelButtonsLayout.addMember(cancelButton);
+		boundFormVStack.addMember(saveCancelButtonsLayout);
 		boundFormVStack.hide();
 		hStack.addMember(boundFormVStack);
 	}
+
+	private void addStarRatings() {
+		//add five stars
+		for (int i = 0; i < 5; i++) {
+			starImages.add(new Img("/images/starOff.gif",12,12));
+		}
+		
+		starClickHandler1 = new StarClickHandler();
+		starClickHandler2 = new StarClickHandler();
+		starClickHandler3 = new StarClickHandler();
+		starClickHandler4 = new StarClickHandler();
+		starClickHandler5 = new StarClickHandler();
+		
+		starImages.get(0).addClickHandler(starClickHandler1);
+		starImages.get(1).addClickHandler(starClickHandler2);
+		starImages.get(2).addClickHandler(starClickHandler3);
+		starImages.get(3).addClickHandler(starClickHandler4);
+		starImages.get(4).addClickHandler(starClickHandler5);
+		
+		starHStack = new HStack();
+//		starHStack.setBorder("2px solid blue");
+		starHStack.setHeight(25);
+		starHStack.setAlign(Alignment.RIGHT);
+		starHStack.addMember(new Label("My Rating: "));
+		starHStack.addMember(starImages.get(0));
+		starHStack.addMember(starImages.get(1));
+		starHStack.addMember(starImages.get(2));
+		starHStack.addMember(starImages.get(3));
+		starHStack.addMember(starImages.get(4));
+		boundFormVStack.addMember(starHStack);
+		
+		//end stars
+	}
 	
 	private void prepareAndShowEditForm(TileRecord tileRecord) {
+		// make read only if they don't have permission
+		String currentSwagItemOwner = tileRecord.getAttribute("ownerID");
+		String currentUserId = loginInfo.getID();
+		if (loginInfo.isUserAdmin() || currentSwagItemOwner.equals(currentUserId)) {
+			boundSwagForm.enable();
+			saveCancelButtonsLayout.show();
+		}
+		else {
+			boundSwagForm.disable();
+			saveCancelButtonsLayout.hide();
+		}
 		boundSwagForm.editRecord(tileRecord);
 		currentSwagImage.setSrc("/swag/showImage/" + tileRecord.getAttribute("imageKey"));  
 		currentSwagImage.setWidth(283);
@@ -440,7 +561,10 @@ public class SmartGWT implements EntryPoint {
 		boundFormVStack.show();
 	}
 
-	//handle current userRating star colors
+	/**
+	 * handle current userRating star colors
+	 * @param currentKey
+	 */
 	private void updateUserRatingStars(Long currentKey) {
 		SwagItemRating swagItemRatingForKey = loginInfo.getSwagItemRating(currentKey);
 		Integer userRating = (swagItemRatingForKey==null) ? 0 : swagItemRatingForKey.getUserRating();

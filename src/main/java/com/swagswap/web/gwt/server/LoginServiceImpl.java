@@ -41,10 +41,10 @@ public class LoginServiceImpl extends AutoinjectingRemoteServiceServlet
 
 		if (swagSwapUserService.isUserLoggedIn()) {
 			loginInfo.setLoggedIn(true);
+			loginInfo.setIsUserAdmin(swagSwapUserService.isUserAdmin());
 			loginInfo.setLogoutUrl(swagSwapUserService
 					.createLogoutURL(requestUri));
-			SwagSwapUser user = swagSwapUserService
-					.findByEmailOrCreate(swagSwapUserService.getCurrentUser().getEmail());
+			SwagSwapUser user = swagSwapUserService.findByEmailOrCreate();
 			// Need a DTO for SwagSwapUser because you can't use JDO attached
 			// Set or you get Exception
 			// Type 'org.datanucleus.sco.backed.Set' was not included in the set
@@ -54,7 +54,7 @@ public class LoginServiceImpl extends AutoinjectingRemoteServiceServlet
 			
 			//hosted mode not setting email correctly so use nickName instead
 			loginInfo.setEmail(user.getEmail());
-			
+			loginInfo.setID(user.getGoogleID());
 			loginInfo.setNickName(user.getNickName());
 			Set<SwagItemRating> swagItemRatings = user.getSwagItemRatings();
 			loginInfo.setSwagItemRatings(toCopiedSet(swagItemRatings));

@@ -31,8 +31,7 @@ public class UserBean {
 	}
 
 	public SwagSwapUser getLoggedInUser() {
-		return swagSwapUserService.findByEmail((swagSwapUserService
-				.getCurrentUser().getEmail()));
+		return swagSwapUserService.findByEmail();
 	}
 
 	private String getCurrentURL() {

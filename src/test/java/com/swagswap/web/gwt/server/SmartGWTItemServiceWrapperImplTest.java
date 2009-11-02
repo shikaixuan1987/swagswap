@@ -26,7 +26,7 @@ public class SmartGWTItemServiceWrapperImplTest extends TestCase {
 		assertEquals(swagItem.getName(),swagItemGWTDTO.getName());
 		assertEquals(swagItem.getCompany(),swagItemGWTDTO.getCompany());
 		assertEquals(swagItem.getDescription(),swagItemGWTDTO.getDescription());
-		assertEquals(swagItem.getOwnerEmail(),swagItemGWTDTO.getOwnerEmail());
+		assertEquals(swagItem.getOwnerID(),swagItemGWTDTO.getOwnerID());
 		assertEquals(swagItem.getOwnerNickName(),swagItemGWTDTO.getOwnerNickName());
 		assertEquals(swagItem.getAverageRating(),swagItemGWTDTO.getAverageRating());
 		assertEquals(swagItem.getNumberOfRatings(),swagItemGWTDTO.getNumberOfRatings());
@@ -45,7 +45,7 @@ public class SmartGWTItemServiceWrapperImplTest extends TestCase {
 		assertEquals(swagItemGWTDTO.getName(),swagItem.getName());
 		assertEquals(swagItemGWTDTO.getCompany(),swagItem.getCompany());
 		assertEquals(swagItemGWTDTO.getDescription(),swagItem.getDescription());
-		assertEquals(swagItemGWTDTO.getOwnerEmail(),swagItem.getOwnerEmail());
+		assertEquals(swagItemGWTDTO.getOwnerID(),swagItem.getOwnerID());
 		assertEquals(swagItemGWTDTO.getOwnerNickName(),swagItem.getOwnerNickName());
 		assertEquals(swagItemGWTDTO.getAverageRating(),swagItem.getAverageRating());
 		assertEquals(swagItemGWTDTO.getNumberOfRatings(),swagItem.getNumberOfRatings());

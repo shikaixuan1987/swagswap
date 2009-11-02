@@ -19,6 +19,10 @@ public class SwagSwapUser implements Serializable {
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long key;
 	
+	// store ID from google account so that it's available anywhere in the services
+	@Persistent
+	private String googleID; 
+	
 	//Never displayed. Used as identifier and to communicate with the user
 	@Persistent
 	private String email;
@@ -37,8 +41,9 @@ public class SwagSwapUser implements Serializable {
 	public SwagSwapUser() {
 	}
 	
-	public SwagSwapUser(String email, String nickName) {
+	public SwagSwapUser(String email, String googleID, String nickName) {
 		this.email=email;
+		this.googleID=googleID;
 		this.nickName=nickName;
 	}
 	
@@ -72,6 +77,15 @@ public class SwagSwapUser implements Serializable {
 	public void setKey(Long key) {
 		this.key = key;
 	}
+	
+	public String getGoogleID() {
+		return googleID;
+	}
+
+	public void setGoogleID(String googleID) {
+		this.googleID = googleID;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -104,6 +118,7 @@ public class SwagSwapUser implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((googleID == null) ? 0 : googleID.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((joined == null) ? 0 : joined.hashCode());
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
@@ -125,6 +140,11 @@ public class SwagSwapUser implements Serializable {
 			if (other.email != null)
 				return false;
 		} else if (!email.equals(other.email))
+			return false;
+		if (googleID == null) {
+			if (other.googleID != null)
+				return false;
+		} else if (!googleID.equals(other.googleID))
 			return false;
 		if (joined == null) {
 			if (other.joined != null)
@@ -151,7 +171,7 @@ public class SwagSwapUser implements Serializable {
 
 	@Override
 	public String toString() {
-		return "SwagSwapUser [email=" + email + ", joined=" + joined + ", key="
+		return "SwagSwapUser [googleID=" + googleID + ", email=" + email + ", joined=" + joined + ", key="
 				+ key + ", nickName=" + nickName + ", swagItemRatings="
 				+ swagItemRatings + "]";
 	}

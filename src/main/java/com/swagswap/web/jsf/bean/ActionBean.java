@@ -140,8 +140,7 @@ public class ActionBean {
 			swagBean.setCommentedTable(commentedTable);
 
 			// Rated
-			SwagSwapUser user = swagSwapUserService.findByEmail(swagSwapUserService
-					.getCurrentUser().getEmail());
+			SwagSwapUser user = swagSwapUserService.findByEmail();
 			SwagTable ratedTable = new SwagTableImpl((SwagItemWrapper
 					.convertSwagListToWrapperList(itemService.filterByRated(
 							swagList, user),

@@ -1,4 +1,4 @@
-if (!window["busystatus"]) {
+if (!window["ajaxStatus"]) {
 	var busystatus = {};
 }
 busystatus.onStatusChange = function onStatusChange(data) {

@@ -2,7 +2,6 @@ package com.swagswap.web.jsf.bean;
 
 import java.io.Serializable;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -19,15 +18,103 @@ public class SwagBean implements Serializable {
 
 	private static final Logger log = Logger.getLogger(SwagBean.class);
 
-	private static final Integer rowsPerPage = 5;
-	
-	private String page = "1";
-
 	private String searchString = "Search";
 	private Boolean showClear = false;
 	private Long selectedRowId;
-	private List<SwagItemWrapper> swagList;
-	private Integer firstRow = 0;
+	private String filter = "";
+	private Integer totalItems = 0;
+	
+	//  Used for View all 
+	private SwagTable swagTable;
+	//  Used for MySwag
+	private SwagTable createdTable;
+	private SwagTable commentedTable;
+	private SwagTable ratedTable;
+	
+	public Integer getTotalItems() {
+		return totalItems;
+	}
+
+	public void setTotalItems(Integer totalItems) {
+		this.totalItems = totalItems;
+	}
+	
+	public String getFilter() {
+		return filter;
+	}
+
+	public void setFilter(String filter) {
+		this.filter = filter;
+	}
+
+	public SwagTable getCreatedTable() {
+		return createdTable;
+	}
+
+	public void setCreatedTable(SwagTable createdTable) {
+		this.createdTable = createdTable;
+	}
+
+	public SwagTable getCommentedTable() {
+		return commentedTable;
+	}
+
+	public void setCommentedTable(SwagTable commentedTable) {
+		this.commentedTable = commentedTable;
+	}
+
+	public SwagTable getRatedTable() {
+		return ratedTable;
+	}
+
+	public void setRatedTable(SwagTable ratedTable) {
+		this.ratedTable = ratedTable;
+	}
+
+	public Integer getCreatedItems() {
+		return createdItems;
+	}
+
+	public void setCreatedItems(Integer createdItems) {
+		this.createdItems = createdItems;
+	}
+
+	public Integer getCommentedItems() {
+		return commentedItems;
+	}
+
+	public void setCommentedItems(Integer commentedItems) {
+		this.commentedItems = commentedItems;
+	}
+
+	private Integer createdItems = 0;
+	private Integer ratedItems = 0;
+	private Integer commentedItems = 0;
+
+	public Integer getRatedItems() {
+		return ratedItems;
+	}
+
+	public void setRatedItems(Integer ratedItems) {
+		this.ratedItems = ratedItems;
+	}
+
+	public SwagTable getSwagTable() {
+		if (filter.equals("CREATE")) {
+			return createdTable;
+		}
+		if (filter.equals("RATE")) {
+			return ratedTable;
+		}
+		if (filter.equals("COMMENT")) {
+			return commentedTable;
+		}
+		return swagTable;
+	}
+
+	public void setSwagTable(SwagTable swagTable) {
+		this.swagTable = swagTable;
+	}
 
 	public void actionClearSearch() {
 		showClear = false;
@@ -35,13 +122,9 @@ public class SwagBean implements Serializable {
 		refreshSwagList();
 	}
 	
-	public int getRowsPerPage() {
-		return rowsPerPage;
-	}
-
 	public void refreshSwagList() {
 		// Set swagList to null to force refresh on next request
-		swagList = null;
+		getSwagTable().setSwagList(null);
 	}
 
 	public String getSearchString() {
@@ -52,36 +135,12 @@ public class SwagBean implements Serializable {
 		this.searchString = searchString;
 	}
 
-	public List<SwagItemWrapper> getSwagList() {
-		return swagList;
-	}
-
-	public void setSwagList(List<SwagItemWrapper> swagList) {
-		this.swagList = swagList;
-	}
-
 	public Boolean getShowClear() {
 		return showClear;
 	}
 
 	public void setShowClear(Boolean showClear) {
 		this.showClear = showClear;
-	}
-
-	public Integer getFirstRow() {
-		return firstRow;
-	}
-
-	public void setFirstRow(Integer firstRow) {
-		this.firstRow = firstRow;
-	}
-	
-	public int getTableSize() {
-		return (swagList == null ? 0 : swagList.size());
-	}
-	
-	public int getLastRow() {
-		return (swagList.size() < (firstRow + rowsPerPage)) ? swagList.size() : firstRow + rowsPerPage;
 	}
 
 	public Long getSelectedRowId() {
@@ -95,8 +154,8 @@ public class SwagBean implements Serializable {
 	public SwagItemWrapper getSelectedRow() {
 		// Can't use component binding on dataTable as it's not Serializable
 		SwagItemWrapper selectedRow = null;
-		if (swagList != null) {
-			Iterator<SwagItemWrapper> iter = swagList.iterator();
+		if (getSwagTable() != null) {
+			Iterator<SwagItemWrapper> iter = getSwagTable().getSwagList().iterator();
 			while (iter.hasNext()) {
 				SwagItemWrapper item = (SwagItemWrapper) iter.next();
 				if (item.getSwagItem().getKey().equals(selectedRowId)) {
@@ -106,41 +165,6 @@ public class SwagBean implements Serializable {
 		}
 		return selectedRow;
 	}
-	
-	public void actionPage() {
-		
-		if (page.equals("last")) {
-			firstRow = new Double((Math.floor(getTableSize() / rowsPerPage) * rowsPerPage)).intValue();
-			return;
-		}
-		if (page.equals("first")) {
-			firstRow = 0;
-			return;
-		}
-		if (page.equals("prev")) {
-			firstRow = firstRow - rowsPerPage;
-			return;
-		}
-		if (page.equals("next")) {
-			firstRow = firstRow + rowsPerPage;
-			return;
-		}
-		
-		int pageInt = Integer.parseInt(page);
-		if (pageInt == -1) {
-			// last page
-			
-			return;
-		}
-		firstRow = pageInt * rowsPerPage - rowsPerPage;
-	}
-	
-	public String getPage() {
-		return page;
-	}
 
-	public void setPage(String page) {
-		this.page = page;
-	}
 
 }

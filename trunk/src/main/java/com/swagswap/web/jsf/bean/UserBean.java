@@ -1,9 +1,7 @@
 package com.swagswap.web.jsf.bean;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.util.Date;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -32,20 +30,9 @@ public class UserBean {
 		this.swagSwapUserService = swagSwapUserService;
 	}
 
-	public boolean isLoggedIn() {
-		return swagSwapUserService.isUserLoggedIn();
-	}
-
-	public String getUserEmail() {
-		return swagSwapUserService.getCurrentUser().getEmail();
-	}
-
-	public String getUserName() {
-		return swagSwapUserService.getCurrentUser().getEmail();
-	}
-
 	public SwagSwapUser getLoggedInUser() {
-		return swagSwapUserService.findByEmailOrCreate((getUserEmail()));
+		return swagSwapUserService.findByEmail((swagSwapUserService
+				.getCurrentUser().getEmail()));
 	}
 
 	private String getCurrentURL() {
@@ -77,28 +64,34 @@ public class UserBean {
 		HttpServletResponse response = (HttpServletResponse) FacesContext
 				.getCurrentInstance().getExternalContext().getResponse();
 		response.sendRedirect(swagSwapUserService
-				.createLogoutURL(getCurrentURL()));
+				.createLogoutURL("/jsf/home.jsf"));
 	}
 
-	public Integer getUserRatingForItem(Long key) {
+	public Integer getUserRatingForItem(Long key, SwagSwapUser user) {
 		// TODO Maybe service should default user rating to zero if it
 		// doesn't exist
-		if (! isLoggedIn()) {
+
+		if (user == null || (!swagSwapUserService.isUserLoggedIn())) {
 			return 0;
 		}
-		
+		long time = new Date().getTime();
 		Integer userItemRating;
-		if (getLoggedInUser().getSwagItemRating(key) == null) {
+		if (user.getSwagItemRating(key) == null) {
 			userItemRating = 0;
 		} else {
-			userItemRating = getLoggedInUser().getSwagItemRating(
-					key).getUserRating();
+			userItemRating = user.getSwagItemRating(key).getUserRating();
 		}
 		// Temporary hack
 		if (userItemRating == null) {
 			userItemRating = 0;
 		}
+		
 		return userItemRating;
+	}
+
+	public Boolean isItemOwner(SwagItem item) {
+		return swagSwapUserService.isUserAdmin()
+				|| swagSwapUserService.isItemOwner(item);
 	}
 
 }

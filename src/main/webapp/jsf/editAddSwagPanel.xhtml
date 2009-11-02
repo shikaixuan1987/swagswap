@@ -35,7 +35,7 @@
 </swag:panel>
 <br />
 <h:panelGroup layout="block" style="text-align: center;">
-	<h:commandButton value="Save" action="#{actionBean.actionSaveItem}" />
+	<h:commandButton value="Save" action="#{actionBean.actionSaveItem}" disabled="#{!swagEditBean.editSwagItem.itemOwner}"/>
 	<h:commandButton value="Cancel" action="allSwag" immediate="true" />
 </h:panelGroup>
 

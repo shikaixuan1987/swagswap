@@ -1,6 +1,7 @@
 package com.swagswap.service;
 
 import com.google.appengine.api.users.User;
+import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
 import com.swagswap.exceptions.InvalidSwagItemRatingException;
@@ -19,6 +20,8 @@ public interface SwagSwapUserService {
 	SwagSwapUser findByEmailOrCreate(String email);
 
 	void addOrUpdateRating(String userEmail, SwagItemRating swagItemRating) throws InvalidSwagItemRatingException ;
+	
+	public boolean isItemOwner(SwagItem item);
 	
 	/**
 	 * Wrapped Google UserService methods

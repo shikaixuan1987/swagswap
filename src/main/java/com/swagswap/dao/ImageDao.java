@@ -13,7 +13,4 @@ public interface ImageDao {
 	byte[] getResizedImageBytes(byte[] originalImageBytes);
 
 	byte[] getThumbnailBytes(String key);
-	
-	void deleteImageFromCache(String imageKey);
-
 }

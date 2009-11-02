@@ -2,12 +2,12 @@ package com.swagswap.web.jsf.bean;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
@@ -24,8 +24,8 @@ import com.swagswap.web.jsf.model.SwagItemWrapper;
 public class ActionBean {
 
 	private static final Logger log = Logger.getLogger(ActionBean.class);
-	
-	// TODO  Inject SwagImpl
+
+	// TODO Inject SwagTableImpl
 
 	// Inject the swagItemService Spring Bean
 	@ManagedProperty(value = "#{swagItemService}")
@@ -43,6 +43,16 @@ public class ActionBean {
 
 	@ManagedProperty(value = "#{swagBean}")
 	private SwagBean swagBean;
+
+	private String lastPage;
+
+	public String getLastPage() {
+		return lastPage;
+	}
+
+	public void setLastPage(String lastPage) {
+		this.lastPage = lastPage;
+	}
 
 	public void setUserBean(UserBean userBean) {
 		this.userBean = userBean;
@@ -62,7 +72,8 @@ public class ActionBean {
 
 	public String actionSaveItem() {
 		itemService.save(swagEditBean.getEditSwagItem().getSwagItem());
-		return "allSwag?faces-redirect=true";
+		return actionBack();
+		// return "allSwag";
 	}
 
 	public void actionAddComment() throws IOException {
@@ -96,6 +107,7 @@ public class ActionBean {
 	}
 
 	public void populateSwagList() {
+		lastPage = (FacesContext.getCurrentInstance().getViewRoot().getViewId());
 		SwagTable swagTable = swagBean.getSwagTable();
 		if (swagTable == null) {
 			swagTable = new SwagTableImpl();
@@ -108,47 +120,60 @@ public class ActionBean {
 			swagBean.setTotalItems(swagList.size());
 		}
 	}
-	
+
 	public void populateMySwagList() {
+		lastPage = (FacesContext.getCurrentInstance().getViewRoot().getViewId());
 		// TODO Refactor
 		SwagTable swagTable = swagBean.getSwagTable();
 		if (swagTable == null) {
 			swagTable = new SwagTableImpl();
 		}
 		if (swagTable.getSwagList() == null) {
-			long start = new Date().getTime();
 			List<SwagItem> swagList = itemService.getAll();
-			swagTable.setSwagList(SwagItemWrapper
-					.convertSwagListToWrapperList(swagList, userBean));
+			swagTable.setSwagList(SwagItemWrapper.convertSwagListToWrapperList(
+					swagList, userBean));
 
 			// All swag
 			swagBean.setTotalItems(swagList.size());
-			
-			// Created
-			SwagTable createdTable = new SwagTableImpl((SwagItemWrapper
-					.convertSwagListToWrapperList(itemService
-							.filterByOwnerNickName(swagList,
-									swagSwapUserService.getCurrentUser()
-											.getNickname()), userBean)));
-			swagBean.setCreatedTable(createdTable);
 
-			// Commented
-			SwagTable commentedTable = new SwagTableImpl(
-					(SwagItemWrapper.convertSwagListToWrapperList(itemService
-							.filterByCommentedOn(swagList, swagSwapUserService
-									.getCurrentUser().getNickname()), userBean)));
-			swagBean.setCommentedTable(commentedTable);
+			populateCreatedTable(swagList);
+			populateCommentedTable(swagList);
+			populateRatedTable(swagList);
 
-			// Rated
-			SwagSwapUser user = swagSwapUserService.findByEmail();
-			SwagTable ratedTable = new SwagTableImpl((SwagItemWrapper
-					.convertSwagListToWrapperList(itemService.filterByRated(
-							swagList, user),
-							userBean)));
-			swagBean.setRatedTable(ratedTable);
-			
 			swagBean.setFilter("CREATE");
 		}
+	}
+
+	public String actionBack() {
+		if (swagEditBean.getLastPage() == null) {
+			return "allSwag?faces-redirect=true";
+		}
+		return swagEditBean.getLastPage() + "?faces-redirect=true";
+	}
+
+	private void populateCreatedTable(List<SwagItem> swagList) {
+		// Created
+		SwagTable createdTable = new SwagTableImpl((SwagItemWrapper
+				.convertSwagListToWrapperList(itemService
+						.filterByOwnerNickName(swagList, swagSwapUserService
+								.getCurrentUser().getNickname()), userBean)));
+		swagBean.setCreatedTable(createdTable);
+	}
+
+	private void populateCommentedTable(List<SwagItem> swagList) {
+		SwagTable commentedTable = new SwagTableImpl((SwagItemWrapper
+				.convertSwagListToWrapperList(itemService.filterByCommentedOn(
+						swagList, swagSwapUserService.getCurrentUser()
+								.getNickname()), userBean)));
+		swagBean.setCommentedTable(commentedTable);
+	}
+
+	private void populateRatedTable(List<SwagItem> swagList) {
+		SwagSwapUser user = swagSwapUserService.findByEmail();
+		SwagTable ratedTable = new SwagTableImpl((SwagItemWrapper
+				.convertSwagListToWrapperList(itemService.filterByRated(
+						swagList, user), userBean)));
+		swagBean.setRatedTable(ratedTable);
 	}
 
 	public void actionDelete() {
@@ -164,12 +189,9 @@ public class ActionBean {
 			return;
 		}
 		actionRateSwagFromTable();
-		//  TODO.  If rated table not null then ensure rated item is refreshed.
+		// TODO. If rated table not null then ensure rated item is refreshed.
 		if (swagBean.getRatedTable() != null) {
-			System.out.println("****  Rated table is not null");
-			if (swagBean.getRatedTable().getSwagList().contains(swagBean.getSelectedRow())) {
-				System.out.println("****  Rated table contains rated item");
-			}
+			populateRatedTable(itemService.getAll());
 		}
 	}
 
@@ -189,9 +211,7 @@ public class ActionBean {
 	}
 
 	private void rate(SwagItemWrapper ratedItem) throws IOException {
-
-		long startTime = new Date().getTime();
-
+		
 		if (!swagSwapUserService.isUserLoggedIn()) {
 			userBean.showLogin();
 			return;

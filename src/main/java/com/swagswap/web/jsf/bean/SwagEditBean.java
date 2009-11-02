@@ -20,14 +20,24 @@ import com.swagswap.web.jsf.model.SwagItemWrapper;
 @ManagedBean(name = "swagEditBean")
 @ViewScoped
 public class SwagEditBean implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private SwagItemWrapper editSwagItem;
 	private String newComment = "";
 
-
 	private Long selectedRowId;
-	
+
+	private String lastPage;
+
+	public String getLastPage() {
+		return lastPage;
+	}
+
+	public void setLastPage(String lastPage) {
+		System.out.println("****  SwagEditBean.  Last page set to "+lastPage);
+		this.lastPage = lastPage;
+	}
+
 	public Long getSelectedRowId() {
 		return selectedRowId;
 	}
@@ -40,7 +50,7 @@ public class SwagEditBean implements Serializable {
 		super();
 		initialiseSwagItem();
 	}
-	
+
 	public String getNewComment() {
 		return newComment;
 	}
@@ -48,7 +58,7 @@ public class SwagEditBean implements Serializable {
 	public void setNewComment(String newComment) {
 		this.newComment = newComment;
 	}
-	
+
 	public SwagItemWrapper getEditSwagItem() {
 		return editSwagItem;
 	}
@@ -58,14 +68,12 @@ public class SwagEditBean implements Serializable {
 	}
 
 	private void initialiseSwagItem() {
-		editSwagItem = new SwagItemWrapper(new SwagItem(),0, true);
+		editSwagItem = new SwagItemWrapper(new SwagItem(), 0, true);
 		List<String> tagList = new ArrayList<String>();
 		for (int i = 0; i < 4; i++) {
 			tagList.add("");
 		}
 		editSwagItem.getSwagItem().setTags(tagList);
 	}
-
-
 
 }

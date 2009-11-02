@@ -43,7 +43,6 @@ public class ItemServiceImpl implements ItemService {
 	private static final Logger log = Logger.getLogger(ItemServiceImpl.class);
 
 	private ItemDao itemDao;
-	private ImageDao imageDao;
 
 	@Autowired
 	private ImageService imageService;
@@ -243,11 +242,7 @@ public class ItemServiceImpl implements ItemService {
 	public void setItemDao(ItemDao itemDao) {
 		this.itemDao = itemDao;
 	}
-
-	public void setImageDao(ImageDao imageDao) {
-		this.imageDao = imageDao;
-	}
-
+	
 	// for tests
 	public void setSwagSwapUserService(SwagSwapUserService swagSwapUserService) {
 		this.swagSwapUserService = swagSwapUserService;
@@ -274,8 +269,7 @@ public class ItemServiceImpl implements ItemService {
 		// Resize the image before saving
 		swagItem.setImage(new SwagImage(imageService
 				.getResizedImageBytes(newImageData)));
-		// Delete old image from cache so it is refreshed
-		imageDao.deleteImageFromCache(swagItem.getImageKey());
+
 
 	}
 

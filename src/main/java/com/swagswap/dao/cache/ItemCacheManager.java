@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.cache.Cache;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.swagswap.dao.ItemDao;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
+import com.swagswap.web.jsf.model.SwagItemWrapper;
 
 @SuppressWarnings("unchecked")
 public class ItemCacheManager implements ItemDao, InitializingBean {
@@ -86,8 +89,16 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 	public void delete(Long id) {
 		itemDao.delete(id);
 		// Also remove from cache
-		if (swagCacheManager.getCache().containsKey(id)) {
-			swagCacheManager.getCache().remove(id);
+		Cache cache = swagCacheManager.getCache();
+		if (cache.containsKey(id)) {
+			SwagItem item = ((SwagItem) cache.get(id));
+			//  And delete imageKey from Cache
+			String imageKey = item.getImageKey();
+			if (cache.containsKey(imageKey)) {
+				System.out.println("****  Deleted Item also has image removed");
+				cache.remove(imageKey);
+			}
+			cache.remove(id);
 			keyList.remove(id);
 		} else {
 			// Refresh is things were out of sync
@@ -95,6 +106,7 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 					+ ".  Refresh cache");
 			loadSwagItems();
 		}
+
 	}
 
 	public SwagItem get(Long id) {

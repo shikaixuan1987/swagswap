@@ -5,6 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import net.sf.jmimemagic.Magic;
@@ -20,8 +23,11 @@ import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.users.User;
 import com.swagswap.dao.ImageDao;
 import com.swagswap.dao.ItemDao;
+import com.swagswap.domain.SwagImage;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
+import com.swagswap.domain.SwagItemRating;
+import com.swagswap.domain.SwagSwapUser;
 import com.swagswap.exceptions.AccessDeniedException;
 import com.swagswap.exceptions.ImageTooLargeException;
 import com.swagswap.exceptions.InvalidSwagImageException;
@@ -37,11 +43,10 @@ import com.swagswap.exceptions.LoadImageFromURLException;
 public class ItemServiceImpl implements ItemService {
 
 	private static final Logger log = Logger.getLogger(ItemServiceImpl.class);
-	
 
 	private ItemDao itemDao;
 	private ImageDao imageDao;
-	
+
 	@Autowired
 	private ImageService imageService;
 
@@ -98,10 +103,75 @@ public class ItemServiceImpl implements ItemService {
 	public List<SwagItem> getAll() {
 		return itemDao.getAll();
 	}
-	
-	
+
 	public List<SwagItem> findByTag(String searchString) {
 		return itemDao.findByTag(searchString);
+	}
+
+	public List<SwagItem> filterByRated(List<SwagItem> swagList,
+			SwagSwapUser user) {
+		// Easier and faster to do this programatically than go to DAO
+		List<SwagItem> filteredList = new ArrayList<SwagItem>();
+		if (swagList == null || user == null) {
+			return filteredList;
+		}
+		Iterator<SwagItem> itemIter = swagList.iterator();
+		//  TODO This seems a bit clunky.  Refactor.  Scott.
+		while (itemIter.hasNext()) {
+			SwagItem swagItem = (SwagItem) itemIter.next();
+			Iterator<SwagItemRating> ratingIter = user.getSwagItemRatings()
+					.iterator();
+			while (ratingIter.hasNext()) {
+				SwagItemRating rating = (SwagItemRating) ratingIter.next();
+				if (rating.getSwagItemKey().equals(swagItem.getKey())) {
+					filteredList.add(swagItem);
+				}
+			}
+		}
+		return filteredList;
+	}
+
+	public List<SwagItem> filterByOwnerNickName(List<SwagItem> swagList,
+			String userNickName) {
+		// Easier and faster to do this programatically than go to DAO
+		List<SwagItem> filteredList = new ArrayList<SwagItem>();
+		if (swagList == null || userNickName == null) {
+			return filteredList;
+		}
+		Iterator<SwagItem> iter = swagList.iterator();
+		while (iter.hasNext()) {
+			SwagItem item = (SwagItem) iter.next();
+			if (item.getOwnerNickName().equals(userNickName)) {
+				filteredList.add(item);
+			}
+		}
+		return filteredList;
+	}
+
+	public List<SwagItem> filterByCommentedOn(List<SwagItem> swagList,
+			String userNickName) {
+		// Easier and faster to do this programatically than go to DAO
+		List<SwagItem> filteredList = new ArrayList<SwagItem>();
+		if (swagList == null || userNickName == null) {
+			return filteredList;
+		}
+		Iterator<SwagItem> iter = swagList.iterator();
+		while (iter.hasNext()) {
+			SwagItem item = (SwagItem) iter.next();
+			Iterator<SwagItemComment> commentIter = item.getComments()
+					.iterator();
+			while (commentIter.hasNext()) {
+				SwagItemComment swagItemComment = (SwagItemComment) commentIter
+						.next();
+				if (swagItemComment.getSwagSwapUserNickname().equals(
+						userNickName)) {
+					filteredList.add(item);
+					break;
+				}
+
+			}
+		}
+		return filteredList;
 	}
 
 	/**
@@ -119,7 +189,7 @@ public class ItemServiceImpl implements ItemService {
 			ImageTooLargeException, InvalidSwagImageException {
 		if (StringUtils.isEmpty(swagItem.getName())) { // only required field
 			throw new InvalidSwagItemException("name is required");
-		}		
+		}
 		if (swagItem.isNew()) {
 			String currentUserEmail = swagSwapUserService.getCurrentUser()
 					.getEmail();
@@ -177,7 +247,7 @@ public class ItemServiceImpl implements ItemService {
 	public void setItemDao(ItemDao itemDao) {
 		this.itemDao = itemDao;
 	}
-	
+
 	public void setImageDao(ImageDao imageDao) {
 		this.imageDao = imageDao;
 	}
@@ -205,16 +275,18 @@ public class ItemServiceImpl implements ItemService {
 			newImageData = getImageDataFromURL(swagItem.getImageURL());
 		}
 		checkImageMimeType(newImageData);
-		//  Resize the image before saving
-		swagItem.getImage().setImage(new Blob(imageService.getResizedImageBytes(newImageData)));
-		//  Delete old image from cache so it is refreshed
-		imageDao.deleteImageFromCache(swagItem.getImage().getEncodedKey());
-		
+		// Resize the image before saving
+		swagItem.setImage(new SwagImage(imageService
+				.getResizedImageBytes(newImageData)));
+		// Delete old image from cache so it is refreshed
+		imageDao.deleteImageFromCache(swagItem.getImageKey());
+
 	}
 
 	/**
 	 * 
 	 * public so that it can be used by AdminService
+	 * 
 	 * @return image data from swagItem
 	 */
 	public byte[] getImageDataFromURL(String imageURL)
@@ -294,14 +366,9 @@ public class ItemServiceImpl implements ItemService {
 		// (again, if this happened the webapp messed up or someone's trying to
 		// hack us)
 		if (!user.getEmail().equals(swagItemToCheck.getOwnerEmail())) {
-			throw new AccessDeniedException(
-					swagItemToCheck.getName(),
-					swagItemToCheck.getOwnerEmail(),
-					user.getEmail()
-					);
+			throw new AccessDeniedException(swagItemToCheck.getName(),
+					swagItemToCheck.getOwnerEmail(), user.getEmail());
 		}
 	}
-
-
 
 }

@@ -58,7 +58,7 @@ public class SwagEditBean implements Serializable {
 	}
 
 	private void initialiseSwagItem() {
-		editSwagItem = new SwagItemWrapper(new SwagItem(),0);
+		editSwagItem = new SwagItemWrapper(new SwagItem(),0, true);
 		List<String> tagList = new ArrayList<String>();
 		for (int i = 0; i < 4; i++) {
 			tagList.add("");

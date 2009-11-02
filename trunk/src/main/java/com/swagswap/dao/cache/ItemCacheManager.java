@@ -1,6 +1,7 @@
 package com.swagswap.dao.cache;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -66,11 +67,13 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 
 	public List<SwagItem> getAll() {
 
-		List<SwagItem> swagList = new ArrayList<SwagItem>();
-		Map<Long, SwagItem> allItems = swagCacheManager.getCache().getAll(
-				keyList);
 
-		Iterator<SwagItem> iter = allItems.values().iterator();
+		List<SwagItem> swagList = new ArrayList<SwagItem>();
+		Map<Long, SwagItem> allItems = swagCacheManager.getCache().getAll(keyList);
+				
+		List myList = new ArrayList(allItems.values());
+		Collections.reverse(myList);
+		Iterator<SwagItem> iter = myList.iterator();
 		while (iter.hasNext()) {
 			SwagItem item = iter.next();
 			swagList.add(item);

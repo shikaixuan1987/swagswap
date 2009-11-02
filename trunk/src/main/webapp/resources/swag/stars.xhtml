@@ -19,11 +19,12 @@
 </composite:interface>
 
 <composite:implementation>
+
 	<h:panelGrid columns="#{cc.attrs.stars}" cellpadding="0"
 		cellspacing="0" style="#{cc.attrs.style}">
 		<c:forEach var="i" begin="10" end="#{(cc.attrs.stars * 10)}" step="10">
 			<h:panelGroup>
-				<h:commandButton image="/images/starOff.gif"
+				<h:commandButton image="/images/starOff.gif" title="Click to rate"
 					rendered="#{cc.attrs.value le ((i / 10 )- 1)}"
 					action="#{actionBean.actionRateSwag}"
 					disabled="#{cc.attrs.disabled}" style="#{cc.attrs.disabled ? 'cursor: default;' : ''}">
@@ -33,8 +34,9 @@
 						target="#{cc.attrs.keyTarget}" />
 					<f:ajax render="@form" />
 				</h:commandButton>
-				<h:commandButton image="/images/starOn.gif"
-					rendered="#{cc.attrs.value gt ((i / 10 )- 1)}"
+	
+				<h:commandButton image="/images/starOn.gif" title="Click to rate"
+					rendered="#{cc.attrs.value gt ((i / 10 )- 0.5)}"
 					action="#{actionBean.actionRateSwag}"
 					disabled="#{cc.attrs.disabled}" style="#{cc.attrs.disabled ? 'cursor: default;' : ''}">
 					<f:setPropertyActionListener value="${i / 10}"
@@ -43,6 +45,18 @@
 						target="#{cc.attrs.keyTarget}" />
 					<f:ajax render="@form" />
 				</h:commandButton>
+				
+				<h:commandButton image="/images/starHalf.gif" title="Click to rate"
+					rendered="#{cc.attrs.value gt ((i / 10 )- 1) and cc.attrs.value le ((i / 10 ) - 0.5)}"
+					action="#{actionBean.actionRateSwag}"
+					disabled="#{cc.attrs.disabled}" style="#{cc.attrs.disabled ? 'cursor: default;' : ''}">
+					<f:setPropertyActionListener value="${i / 10}"
+						target="#{cc.attrs.value}" />
+					<f:setPropertyActionListener value="#{cc.attrs.key}"
+						target="#{cc.attrs.keyTarget}" />
+					<f:ajax render="@form" />
+				</h:commandButton>
+	
 			</h:panelGroup>
 		</c:forEach>
 	</h:panelGrid>

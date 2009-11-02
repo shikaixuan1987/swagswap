@@ -1,5 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -8,14 +6,16 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 <composite:interface>
-	<composite:attribute name="value" />
+	<composite:attribute name="for" />
 </composite:interface>
 
 <composite:implementation>
-	<h:panelGrid
-		style="text-align: right; background-color: #EAEAEA; font-weight: bold;"
-		width="140px">
-		<h:outputText value="#{cc.attrs.value}: " />
-	</h:panelGrid>
+	<h:outputScript name="jsf.js" library="javax.faces" target="head" />
+	<h:outputScript name="swag/busyStatus.js" target="head" />
+	<script type="text/javascript">
+        busystatusdemo.init("#{cc.clientId}");
+    </script>
+	<span id="#{cc.clientId}" style="display: inline;"> <h:outputText
+		id="busyindicator" value="Loading..." /> </span>
 </composite:implementation>
 </html>

@@ -13,8 +13,8 @@
 </composite:interface>
 
 <composite:implementation>
-	<h:form>
-		<swag:busyStatus id="busy" />
+	<h:form id="tableForm">
+		<swag:ajaxStatus id="busy" styleClass="ajaxStatus"/>
 		<h:dataTable value="#{cc.attrs.value}" var="row" width="100%"
 			styleClass="tableBorder" rules="all"
 			rowClasses="tableRow1, tableRow2"

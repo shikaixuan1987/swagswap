@@ -30,7 +30,7 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 	/**
 	 * Maintain list of cache keys for more efficient getAll()
 	 */
-	private List<Long> keyList;
+	private List<Long> keyList = Collections.synchronizedList(new ArrayList<Long>());
 
 	public ItemCacheManager() {
 	}
@@ -53,7 +53,7 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 	private void loadSwagItems() {
 		log.info("Inserting all Swag Items into cache from DAO");
 
-		keyList = Collections.synchronizedList(new ArrayList<Long>());
+		keyList.clear();
 
 		for (SwagItem swagItem : itemDao.getAll()) {
 			swagCacheManager.getCache().put(swagItem.getKey(), swagItem);
@@ -69,11 +69,11 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 		SortedMap<Long, SwagItem> allItems = new TreeMap(swagCacheManager
 				.getCache().getAll(keyList));
 
-		List myList = new ArrayList(allItems.values());
+		List swagList = new ArrayList(allItems.values());
 		//  Reverse the original order so we see latest items first
-		Collections.reverse(myList);
+		Collections.reverse(swagList);
 
-		return myList;
+		return swagList;
 	}
 
 	public void addComment(SwagItemComment swagItemComment) {

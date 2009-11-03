@@ -5,11 +5,11 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.DataSourceField;
-import com.smartgwt.client.data.fields.DataSourceBinaryField;
 import com.smartgwt.client.data.fields.DataSourceDateField;
 import com.smartgwt.client.data.fields.DataSourceFloatField;
 import com.smartgwt.client.data.fields.DataSourceImageField;
@@ -55,7 +55,6 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		imageField.setImageURLPrefix("/swag/showThumbnail/");
 		addField(imageField);
 		
-		//do we want this exposed?
 		addField(new DataSourceTextField("ownerID", "Owner", 20, false));
 		addField(new DataSourceTextField("ownerNickName", "Owner Nick Name", 20, false));
 		addField(new DataSourceFloatField("averageRating", "Avg Rating", 5, false));
@@ -170,7 +169,7 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		SmartGWTItemServiceWrapperAsync service = GWT
 				.create(SmartGWTItemServiceWrapper.class);
 		
-		//Just do a fetch
+		//Just do a fetch to refresh the item
 		if (testRec.isFetchOnly()) {
 			service.fetch(testRec.getKey(),new UpdateOrFetchCallback(requestId, response));
 		}
@@ -198,6 +197,8 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		public void onSuccess(SwagItemGWTDTO result) {
 			TileRecord[] list = new TileRecord[1];
 			TileRecord updRec = new TileRecord();
+			//Trick the cache so that the image upates in the TileGrid
+			result.setImageKey(appendRandomQueryString(result.getImageKey()));
 			copyValues(result, updRec);
 			list[0] = updRec;
 			response.setData(list);
@@ -240,7 +241,7 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		to.setName(from.getAttributeAsString("name"));
 		to.setCompany(from.getAttributeAsString("company"));
 		to.setDescription(from.getAttributeAsString("description"));
-		to.setImageKey(from.getAttributeAsString("imageKey"));
+		to.setImageKey(removeQueryString(from.getAttributeAsString("imageKey")));
 		to.setAverageRating(from.getAttributeAsFloat("averageRating"));
 		to.setNumberOfRatings(from.getAttributeAsInt("numberOfRatings"));
 		to.setCreated(from.getAttributeAsDate("created"));
@@ -257,6 +258,39 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 //		to.setNewImageBytes((byte[])from.getAttributeAsObject("newImageBytes")); //TODO we may have to make a new attr for this
 		to.setTags(tags);
 		to.setNewImageURL(from.getAttributeAsString("newImageURL"));
+	}
+	
+	/**
+	 * Remove cache tricking side effect QueryString from imageKey 
+	 * see above: result.setImageKey(appendRandomQueryString(result.getImageKey()));
+	 * @param imageKey
+	 * @return imageKey without cache trick QueryString
+	 */
+	public static String removeQueryString(String imageKey) {
+		// if it's a new item there is no imageKey
+		if (imageKey==null) {
+			return null;
+		}
+		Integer queryStringSuffix = imageKey.indexOf("?");
+		if (queryStringSuffix == -1) {
+			queryStringSuffix = imageKey.length();
+		}
+		String imagekeyNoQueryString = imageKey.substring(0, queryStringSuffix);
+		return imagekeyNoQueryString;
+	}
+	
+	/**
+	 * Used to trick the browser cache
+	 * @param imageKey
+	 * @return imageKey with Random QueryString
+	 */
+	public static String appendRandomQueryString(String imageKey) {
+		String imageKeyNoQueryString = removeQueryString(imageKey);
+		if (imageKeyNoQueryString==null) {
+			return null;
+		}
+		String imageKeyWithRandomQueryString = imageKeyNoQueryString + "?" + Random.nextInt();
+		return imageKeyWithRandomQueryString;
 	}
 
 	public static void copyValues(SwagItemGWTDTO from, TileRecord to) {

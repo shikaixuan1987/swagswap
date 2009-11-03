@@ -128,6 +128,7 @@ public class ActionBean {
 		if (swagTable == null) {
 			swagTable = new SwagTableImpl();
 		}
+
 		if (swagTable.getSwagList() == null) {
 			List<SwagItem> swagList = itemService.getAll();
 			swagTable.setSwagList(SwagItemWrapper.convertSwagListToWrapperList(
@@ -138,8 +139,10 @@ public class ActionBean {
 
 			populateCreatedTable(swagList);
 			populateCommentedTable(swagList);
-			populateRatedTable(swagList);
+			populateNotCommentedTable(swagList);
 
+			populateRatedTable(swagList);
+			populateNotRatedTable(swagList);
 			swagBean.setFilter("CREATE");
 		}
 	}
@@ -152,7 +155,6 @@ public class ActionBean {
 	}
 
 	private void populateCreatedTable(List<SwagItem> swagList) {
-		// Created
 		SwagTable createdTable = new SwagTableImpl((SwagItemWrapper
 				.convertSwagListToWrapperList(itemService
 						.filterByOwnerNickName(swagList, swagSwapUserService
@@ -160,20 +162,40 @@ public class ActionBean {
 		swagBean.setCreatedTable(createdTable);
 	}
 
+	private void populateNotCommentedTable(List<SwagItem> swagList) {
+		SwagTable notCommentedTable = populateCommentedTable(swagList, true);
+		swagBean.setNotCommentedTable(notCommentedTable);
+	}
+
 	private void populateCommentedTable(List<SwagItem> swagList) {
-		SwagTable commentedTable = new SwagTableImpl((SwagItemWrapper
-				.convertSwagListToWrapperList(itemService.filterByCommentedOn(
-						swagList, swagSwapUserService.getCurrentUser()
-								.getNickname()), userBean)));
+		SwagTable commentedTable = populateCommentedTable(swagList, false);
 		swagBean.setCommentedTable(commentedTable);
 	}
 
+	private SwagTable populateCommentedTable(List<SwagItem> swagList,
+			boolean exclusive) {
+
+		return new SwagTableImpl((SwagItemWrapper.convertSwagListToWrapperList(
+				itemService.filterByCommentedOn(swagList, swagSwapUserService
+						.getCurrentUser().getNickname(), exclusive), userBean)));
+	}
+
+	private void populateNotRatedTable(List<SwagItem> swagList) {
+		SwagTable notRatedTable = populateRatedTable(swagList, true);
+		swagBean.setNotRatedTable(notRatedTable);
+	}
+
 	private void populateRatedTable(List<SwagItem> swagList) {
-		SwagSwapUser user = swagSwapUserService.findByEmail();
-		SwagTable ratedTable = new SwagTableImpl((SwagItemWrapper
-				.convertSwagListToWrapperList(itemService.filterByRated(
-						swagList, user), userBean)));
+		SwagTable ratedTable = populateRatedTable(swagList, false);
 		swagBean.setRatedTable(ratedTable);
+	}
+
+	private SwagTable populateRatedTable(List<SwagItem> swagList,
+			boolean exclusive) {
+		SwagSwapUser user = swagSwapUserService.findByEmail();
+		return new SwagTableImpl(
+				(SwagItemWrapper.convertSwagListToWrapperList(itemService
+						.filterByRated(swagList, user, exclusive), userBean)));
 	}
 
 	public void actionDelete() {
@@ -191,7 +213,9 @@ public class ActionBean {
 		actionRateSwagFromTable();
 		// TODO. If rated table not null then ensure rated item is refreshed.
 		if (swagBean.getRatedTable() != null) {
-			populateRatedTable(itemService.getAll());
+			List <SwagItem> itemlist=itemService.getAll();
+			populateRatedTable(itemlist);
+			populateNotRatedTable(itemlist);
 		}
 	}
 
@@ -211,7 +235,7 @@ public class ActionBean {
 	}
 
 	private void rate(SwagItemWrapper ratedItem) throws IOException {
-		
+
 		if (!swagSwapUserService.isUserLoggedIn()) {
 			userBean.showLogin();
 			return;

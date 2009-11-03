@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.jmimemagic.Magic;
 import net.sf.jmimemagic.MagicMatch;
@@ -106,25 +107,37 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	public List<SwagItem> filterByRated(List<SwagItem> swagList,
-			SwagSwapUser user) {
+			SwagSwapUser user, boolean exclusive) {
 		// Easier and faster to do this programatically than go to DAO
 		List<SwagItem> filteredList = new ArrayList<SwagItem>();
 		if (swagList == null || user == null) {
 			return filteredList;
 		}
-		Iterator<SwagItem> itemIter = swagList.iterator();
-		//  TODO This seems a bit clunky.  Refactor.  Scott.
-		while (itemIter.hasNext()) {
-			SwagItem swagItem = (SwagItem) itemIter.next();
-			Iterator<SwagItemRating> ratingIter = user.getSwagItemRatings()
-					.iterator();
-			while (ratingIter.hasNext()) {
-				SwagItemRating rating = (SwagItemRating) ratingIter.next();
+		Set<SwagItemRating> userRatingList = user.getSwagItemRatings();
+		if (userRatingList.size() == 0) {
+			// Performance imporvement. No ratings from this user so we return
+			// complete swagList
+			return swagList;
+		}
+
+		itemLoop: for (SwagItem swagItem : swagList) {
+			for (SwagItemRating rating : userRatingList) {
 				if (rating.getSwagItemKey().equals(swagItem.getKey())) {
-					filteredList.add(swagItem);
+					if (!exclusive) {
+						filteredList.add(swagItem);
+						continue itemLoop;
+					} else {
+						continue itemLoop;
+					}
+
 				}
 			}
+			// No user ratings for item so meets exclusive criteria
+			if (exclusive) {
+				filteredList.add(swagItem);
+			}
 		}
+
 		return filteredList;
 	}
 
@@ -145,27 +158,36 @@ public class ItemServiceImpl implements ItemService {
 		return filteredList;
 	}
 
+	/**
+	 * @param exclusive
+	 *            The reverse of what it normally does
+	 */
 	public List<SwagItem> filterByCommentedOn(List<SwagItem> swagList,
-			String userNickName) {
+			String userNickName, boolean exclusive) {
+
 		// Easier and faster to do this programatically than go to DAO
 		List<SwagItem> filteredList = new ArrayList<SwagItem>();
 		if (swagList == null || userNickName == null) {
 			return filteredList;
 		}
-		Iterator<SwagItem> iter = swagList.iterator();
-		while (iter.hasNext()) {
-			SwagItem item = (SwagItem) iter.next();
-			Iterator<SwagItemComment> commentIter = item.getComments()
-					.iterator();
-			while (commentIter.hasNext()) {
-				SwagItemComment swagItemComment = (SwagItemComment) commentIter
-						.next();
+		itemLoop: for (SwagItem swagItem : swagList) {
+			for (SwagItemComment swagItemComment : swagItem.getComments()) {
 				if (swagItemComment.getSwagSwapUserNickname().equals(
-						userNickName)) {
-					filteredList.add(item);
-					break;
+						userNickName)
+						&& !exclusive) {
+					filteredList.add(swagItem);
+					continue itemLoop;
 				}
-
+				if ((!swagItemComment.getSwagSwapUserNickname().equals(
+						userNickName))
+						&& exclusive) {
+					filteredList.add(swagItem);
+					continue itemLoop;
+				}
+			}
+			// No comments for Item so meets criteria if exclusive
+			if (exclusive && swagItem.getComments().size() == 0) {
+				filteredList.add(swagItem);
 			}
 		}
 		return filteredList;
@@ -188,7 +210,8 @@ public class ItemServiceImpl implements ItemService {
 			throw new InvalidSwagItemException("name is required");
 		}
 		if (swagItem.isNew()) {
-			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmailOrCreate();
+			SwagSwapUser swagSwapUser = swagSwapUserService
+					.findByEmailOrCreate();
 			swagItem.setOwnerID(swagSwapUser.getGoogleID());
 			String currentUserNickName = swagSwapUser.getNickName();
 			swagItem.setOwnerNickName(currentUserNickName);
@@ -218,8 +241,6 @@ public class ItemServiceImpl implements ItemService {
 	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public synchronized void updateRating(Long swagItemKey,
 			int computedRatingDifference, boolean isNewRating) {
-		// TODO can this line be removed?
-		SwagItem swagItem = get(swagItemKey);
 		itemDao
 				.updateRating(swagItemKey, computedRatingDifference,
 						isNewRating);
@@ -242,7 +263,7 @@ public class ItemServiceImpl implements ItemService {
 	public void setItemDao(ItemDao itemDao) {
 		this.itemDao = itemDao;
 	}
-	
+
 	// for tests
 	public void setSwagSwapUserService(SwagSwapUserService swagSwapUserService) {
 		this.swagSwapUserService = swagSwapUserService;
@@ -269,7 +290,6 @@ public class ItemServiceImpl implements ItemService {
 		// Resize the image before saving
 		swagItem.setImage(new SwagImage(imageService
 				.getResizedImageBytes(newImageData)));
-
 
 	}
 
@@ -332,7 +352,8 @@ public class ItemServiceImpl implements ItemService {
 			log.error(e);
 			throw new InvalidSwagImageException(e);
 		}
-		if (!(("text/html".equals(mimeType)) ||("image/gif".equals(mimeType)) || ("image/png".equals(mimeType)) || ("image/jpeg"
+		if (!(("text/html".equals(mimeType)) || ("image/gif".equals(mimeType))
+				|| ("image/png".equals(mimeType)) || ("image/jpeg"
 				.equals(mimeType)))) {
 			throw new InvalidSwagImageException(mimeType);
 		}
@@ -356,11 +377,8 @@ public class ItemServiceImpl implements ItemService {
 		// (again, if this happened the webapp messed up or someone's trying to
 		// hack us)
 		if (!user.getUserId().equals(swagItemToCheck.getOwnerID())) {
-			throw new AccessDeniedException(
-					swagItemToCheck.getName(),
-					swagItemToCheck.getOwnerID(),
-					user.getUserId()
-					);
+			throw new AccessDeniedException(swagItemToCheck.getName(),
+					swagItemToCheck.getOwnerID(), user.getUserId());
 		}
 	}
 

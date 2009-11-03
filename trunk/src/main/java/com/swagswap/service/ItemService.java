@@ -24,9 +24,10 @@ public interface ItemService {
 			String userNickName);
 
 	List<SwagItem> filterByCommentedOn(List<SwagItem> swagList,
-			String userNickName);
+			String userNickName, boolean exclusive);
 
-	List<SwagItem> filterByRated(List<SwagItem> swagList, SwagSwapUser user);
+	List<SwagItem> filterByRated(List<SwagItem> swagList, SwagSwapUser user,
+			boolean exclusive);
 
 	SwagItem save(SwagItem swagItem) throws LoadImageFromURLException;
 

@@ -31,6 +31,9 @@ public class UserBean {
 	}
 
 	public SwagSwapUser getLoggedInUser() {
+		if (!swagSwapUserService.isUserLoggedIn()) {
+			return null;
+		}
 		return swagSwapUserService.findByEmail();
 	}
 

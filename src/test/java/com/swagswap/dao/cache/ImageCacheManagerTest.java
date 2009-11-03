@@ -14,7 +14,7 @@ public class ImageCacheManagerTest extends LocalDatastoreTestCase {
 		if (imageCacheManager == null) {
 			ImageDaoImpl imageDao = new ImageDaoImpl();
 			imageDao.setPersistenceManagerFactory(PMF);
-			imageCacheManager = new ImageCacheManager(imageDao, new ImageServiceImpl());
+			imageCacheManager = new ImageCacheManager(imageDao);
 		}
 	}
 	

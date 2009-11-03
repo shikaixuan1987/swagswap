@@ -217,7 +217,7 @@ public class SwagBean implements Serializable {
 		float percent = tableSize / totalItems.floatValue();
 
 		if (percent == 1) {
-			return "green";
+			return "#FF8800";
 		}
 		if (percent < 0.33) {
 			return "red";
@@ -226,7 +226,7 @@ public class SwagBean implements Serializable {
 			return "yellow";
 		}
 		if (percent < 1) {
-			return "blue";
+			return "lime";
 		}
 
 		return "white";

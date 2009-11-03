@@ -7,7 +7,8 @@
 	xmlns:swag="http://java.sun.com/jsf/composite/swag">
 
 <ui:composition template="template.xhtml">
-	<ui:param name="title" value="My Swag for #{swagSwapUserService.currentUser.nickname}" />
+	<ui:param name="title"
+		value="My Swag for #{swagSwapUserService.currentUser.nickname}" />
 	<ui:define name="content">
 		<h:form>
 			<f:metadata>
@@ -24,7 +25,7 @@
 						<h:outputText
 							value="#{swagBean.createdTable.tableSize} of #{swagBean.totalItems} Swag Items" />
 						<swag:progressBar value1="#{swagBean.createdTable.tableSize}"
-							value2="#{swagBean.totalItems}" />
+							value2="#{swagBean.totalItems}"  colour="#{swagBean.createdColour}"/>
 					</h:panelGrid>
 					<swag:label value="Swag Rated" />
 					<h:panelGrid width="300px" columns="2"
@@ -33,7 +34,7 @@
 						<h:outputText
 							value="#{swagBean.ratedTable.tableSize} of #{swagBean.totalItems} Swag Items" />
 						<swag:progressBar value1="#{swagBean.ratedTable.tableSize}"
-							value2="#{swagBean.totalItems}" />
+							value2="#{swagBean.totalItems}" colour="#{swagBean.ratedColour}"/>
 					</h:panelGrid>
 					<swag:label value="Swag Commented On" />
 					<h:panelGrid width="300px" columns="2"
@@ -42,15 +43,18 @@
 						<h:outputText
 							value="#{swagBean.commentedTable.tableSize} of #{swagBean.totalItems} Swag Items" />
 						<swag:progressBar value1="#{swagBean.commentedTable.tableSize}"
-							value2="#{swagBean.totalItems}" />
+							value2="#{swagBean.totalItems}" colour="#{swagBean.commentedColour}"/>
 					</h:panelGrid>
 					<h:panelGroup />
 					<h:panelGroup />
 					<swag:label value="Show" />
 					<h:selectOneRadio value="#{swagBean.filter}">
-						<f:selectItem itemLabel="Swag Created" itemValue="CREATE" />
-						<f:selectItem itemLabel="Swag Rated" itemValue="RATE" />
-						<f:selectItem itemLabel="Swag Commented On" itemValue="COMMENT" />
+						<f:selectItem itemLabel="Created" itemValue="CREATE" />
+						<f:selectItem itemLabel="Rated" itemValue="RATE" />
+						<f:selectItem itemLabel="Commented On" itemValue="COMMENT" />
+						<f:selectItem itemLabel="Not Rated" itemValue="NOTRATE" />
+						<f:selectItem itemLabel="Not Commented On"
+							itemValue="NOTCOMMENT" />
 						<f:ajax render="@form" event="change" />
 					</h:selectOneRadio>
 				</h:panelGrid>

@@ -16,6 +16,7 @@
   <link rel="icon" type="image/gif" href="/images/animated_favicon1.gif" >
   <script type="text/javascript" src="/js/prototype.js"></script>
   <script type="text/javascript" src="/js/swagswap.js"></script>
+
   
   	<%-- This is to show cost and usage stats from liveHttpHeaders --%>
 	<google-auth:isAdmin>
@@ -88,15 +89,5 @@ pageTracker._trackPageview();
   <br/>
   <tr><td>Welcome Admin: <a href="/swag/admin/main">Go to Admin Page</a> | <a href="#"  onclick="showTotalUsage();">Show GAE Usage for this page</a> (doesn't work in dev env)</td></tr>
 </google-auth:isAdmin>
-<tr><td>
-<h3>Swagswap Devoxx 2009 Demo application (work in progress)</h3>
-
-<ul>
-	<li>Read about it and run it yourself with these <a href="http://code.google.com/p/swagswap/wiki/Instructions">instructions</a></li> 
-	<li>Visit our <a href="http://cloudmouthdevoxx.blogspot.com/">cloudMouth blog</a></li> 
-	<li>Attend our <a href="http://www.devoxx.com/display/DV09/Google+App+Engine+for+Java+-+a+real+live+voyage+to+The+Cloud">Devoxx session</a> (November 17th at 9:30)</li> 
-</ul>
---<a href="http://www.devoxx.com/display/DV09/Sam+Brodkin">Sam Brodkin</a> and <a href="http://www.devoxx.com/display/DV09/Scott+Stevenson">Scott Stevenson</a>
-</td></tr>
 </table>
 

@@ -144,6 +144,10 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	}
 	
 	public boolean isUserAdmin() {
+		//  If use is not logged in then clearly hes not an admin
+		if (!isUserLoggedIn()) {
+			return false;
+		}
 		return googleUserService.isUserAdmin();
 	}
 	

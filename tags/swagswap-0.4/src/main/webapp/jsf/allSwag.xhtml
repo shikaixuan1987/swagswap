@@ -1,0 +1,28 @@
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:swag="http://java.sun.com/jsf/composite/swag">
+
+<ui:composition template="template.xhtml">
+	<ui:param name="title" value="All Swag" />
+	<ui:define name="content">
+		<h:form>
+			<f:metadata>
+				<f:viewParam name="selectedRowId" value="#{swagBean.selectedRowId}" />
+				<f:event type="preRenderView"
+					listener="#{actionBean.populateSwagList}" />
+			</f:metadata>
+		</h:form>
+		<ui:include src="searchPanel.xhtml">
+			<ui:param name="bean" value="#{swagBean}" />
+		</ui:include>
+		<br />
+		<swag:swagTable value="#{swagBean.swagTable.swagList}" bean="#{swagBean}" />
+	</ui:define>
+</ui:composition>
+</html>

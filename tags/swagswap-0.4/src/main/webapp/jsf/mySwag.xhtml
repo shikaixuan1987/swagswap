@@ -1,0 +1,68 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:swag="http://java.sun.com/jsf/composite/swag">
+
+<ui:composition template="template.xhtml">
+	<ui:param name="title"
+		value="My Swag for #{swagSwapUserService.currentUser.nickname}" />
+	<ui:define name="content">
+		<h:form>
+			<f:metadata>
+				<f:viewParam name="selectedRowId" value="#{swagBean.selectedRowId}" />
+				<f:event type="preRenderView"
+					listener="#{actionBean.populateMySwagList}" />
+			</f:metadata>
+			<swag:panel>
+				<h:panelGrid columns="2">
+					<swag:label value="Swag Created" />
+					<h:panelGrid width="300px" columns="2"
+						columnClasses="colWidth50, colWidth50" cellspacing="0"
+						cellpadding="0">
+						<h:outputText
+							value="#{swagBean.createdTable.tableSize} of #{swagBean.totalItems} Swag Items" />
+						<swag:progressBar value1="#{swagBean.createdTable.tableSize}"
+							value2="#{swagBean.totalItems}"  colour="#{swagBean.createdColour}"/>
+					</h:panelGrid>
+					<swag:label value="Swag Rated" />
+					<h:panelGrid width="300px" columns="2"
+						columnClasses="colWidth50, colWidth50" cellspacing="0"
+						cellpadding="0">
+						<h:outputText
+							value="#{swagBean.ratedTable.tableSize} of #{swagBean.totalItems} Swag Items" />
+						<swag:progressBar value1="#{swagBean.ratedTable.tableSize}"
+							value2="#{swagBean.totalItems}" colour="#{swagBean.ratedColour}"/>
+					</h:panelGrid>
+					<swag:label value="Swag Commented On" />
+					<h:panelGrid width="300px" columns="2"
+						columnClasses="colWidth50, colWidth50" cellspacing="0"
+						cellpadding="0">
+						<h:outputText
+							value="#{swagBean.commentedTable.tableSize} of #{swagBean.totalItems} Swag Items" />
+						<swag:progressBar value1="#{swagBean.commentedTable.tableSize}"
+							value2="#{swagBean.totalItems}" colour="#{swagBean.commentedColour}"/>
+					</h:panelGrid>
+					<h:panelGroup />
+					<h:panelGroup />
+					<swag:label value="Show" />
+					<h:selectOneRadio value="#{swagBean.filter}">
+						<f:selectItem itemLabel="Created" itemValue="CREATE" />
+						<f:selectItem itemLabel="Rated" itemValue="RATE" />
+						<f:selectItem itemLabel="Commented On" itemValue="COMMENT" />
+						<f:selectItem itemLabel="Not Rated" itemValue="NOTRATE" />
+						<f:selectItem itemLabel="Not Commented On"
+							itemValue="NOTCOMMENT" />
+						<f:ajax render="@form" event="change" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+			</swag:panel>
+			<br />
+			<swag:swagTable value="#{swagBean.swagTable.swagList}"
+				bean="#{swagBean}" />
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

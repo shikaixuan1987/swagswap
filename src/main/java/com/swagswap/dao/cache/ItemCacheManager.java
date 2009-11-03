@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.cache.Cache;
 
@@ -52,7 +53,7 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 	private void loadSwagItems() {
 		log.info("Inserting all Swag Items into cache from DAO");
 
-		keyList = new ArrayList<Long>();
+		keyList = Collections.synchronizedList(new ArrayList<Long>());
 
 		List<SwagItem> swagItemList = itemDao.getAll();
 		Iterator<SwagItem> iter = swagItemList.iterator();
@@ -66,20 +67,15 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 
 	public List<SwagItem> getAll() {
 
+		//  Get list of all values from cache in key value order
+		SortedMap<Long, SwagItem> allItems = new TreeMap(swagCacheManager
+				.getCache().getAll(keyList));
 
-		List<SwagItem> swagList = new ArrayList<SwagItem>();
-		Map<Long, SwagItem> allItems = swagCacheManager.getCache().getAll(keyList);
-				
 		List myList = new ArrayList(allItems.values());
+		//  Reverse the original order so we see latest items first
 		Collections.reverse(myList);
-		Iterator<SwagItem> iter = myList.iterator();
-		while (iter.hasNext()) {
-			SwagItem item = iter.next();
-			swagList.add(item);
-		}
 
-		return swagList;
-
+		return myList;
 	}
 
 	public void addComment(SwagItemComment swagItemComment) {

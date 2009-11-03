@@ -10,6 +10,7 @@
 <composite:interface>
 	<composite:attribute name="value1" required="true" />
 	<composite:attribute name="value2" required="true" />
+	<composite:attribute name="colour" required="true" />
 </composite:interface>
 
 <composite:implementation>
@@ -17,15 +18,14 @@
 		style="border: 1px solid black; width: 100px; vertical-align: middle;">
 
 		<h:panelGroup layout="block"
-			style="width: #{fn:substringBefore(cc.attrs.value1 / cc.attrs.value2 * 100,'.')}px; background-color: #FF8800; height: 15px;"
+			style="width: #{fn:substringBefore(cc.attrs.value1 / cc.attrs.value2 * 100,'.')}px; background-color: #{cc.attrs.colour}; height: 15px;"
 			rendered="#{cc.attrs.value2 != 0}">
 			<h:outputText
 				value="#{fn:substringBefore(cc.attrs.value1 / cc.attrs.value2 * 100,'.')}%"
 				style="font-size: 10px; font-weight: bold; position: relative; left: 43px; right: 43px; top: 20%;" />
 
 		</h:panelGroup>
-		<h:panelGroup layout="block"
-			style="height: 15px;"
+		<h:panelGroup layout="block" style="height: 15px;"
 			rendered="#{cc.attrs.value2 == 0}">
 			<h:outputText value="0%"
 				style="font-size: 10px; font-weight: bold; position: relative; left: 43px; right: 43px;"

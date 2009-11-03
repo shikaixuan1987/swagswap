@@ -1,7 +1,6 @@
 package com.swagswap.web.gwt.client;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -14,6 +13,9 @@ import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.data.Criteria;
+import com.smartgwt.client.data.DSCallback;
+import com.smartgwt.client.data.DSRequest;
+import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Encoding;
 import com.smartgwt.client.types.ImageStyle;
@@ -25,6 +27,8 @@ import com.smartgwt.client.widgets.Img;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
+import com.smartgwt.client.widgets.events.CloseClickHandler;
+import com.smartgwt.client.widgets.events.CloseClientEvent;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.events.ItemChangedEvent;
 import com.smartgwt.client.widgets.form.events.ItemChangedHandler;
@@ -41,6 +45,7 @@ import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.HStack;
+import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.layout.VStack;
 import com.smartgwt.client.widgets.tile.TileGrid;
 import com.smartgwt.client.widgets.tile.TileRecord;
@@ -76,7 +81,7 @@ public class SmartGWT implements EntryPoint {
 	private StarClickHandler starClickHandler5;
 	private HStack starHStack;
 	private DynamicForm uploadForm;
-	private HLayout saveCancelButtonsLayout;
+	private HLayout editButtonsLayout;
 	
 	/**
 	 * Check login status and build GUI
@@ -93,45 +98,20 @@ public class SmartGWT implements EntryPoint {
 				public void onSuccess(LoginInfo result) {
 					loginInfo = result;
 					buildGUI();
-					//TODO check if tileRecord is still valid before doing this
-//					TileRecord currentTileRecord = getCurrentTileRecord(); 
-//					if (currentTileRecord!=null) {
-//						prepareAndShowEditForm(currentTileRecord); 
-//					}
-				}
-				
-				/**
-				 * For showing last viewed record if any
-				 * @return currentSwagItem from session or null
-				 */
-				private TileRecord getCurrentTileRecord() {
-					SwagItemGWTDTO currentSwagItemGWTDTO = loginInfo.getCurrentSwagItem();
-					if (currentSwagItemGWTDTO==null) {
-						return null;
-					}
-					TileRecord currentTileRecord = new TileRecord();
-					SmartGWTRPCDataSource.copyValues(currentSwagItemGWTDTO,currentTileRecord);
-					return currentTileRecord;
 				}
 			});
-		
 	}
 	
 	public void buildGUI() {
 		final VStack mainStack = new VStack(20);
 		mainStack.setShowEdges(true);
 		mainStack.setWidth100();
-		
-		
 		HStack menuHStack= new HStack();
 		menuHStack.setHeight(25);
-//		searchSortHStack.setWidth100();
 		addSearchPanel(menuHStack);
 		addSortPanel(menuHStack);
 		addLoginLogoutPanel(menuHStack);
 		mainStack.addMember(menuHStack);
-		
-//		HLayout hLayout = addFilterButton(vStack, filterForm, sortForm);
 		
 		HStack itemsAndEditHStack = new HStack();
 		addItemsPanel(itemsAndEditHStack);
@@ -142,35 +122,6 @@ public class SmartGWT implements EntryPoint {
 		RootPanel.get("gwt-tilegrid").add(mainStack); //anchored on GWT html page
 		mainStack.draw();
 	}
-
-/*	private HLayout addFilterButton(final VStack vStack,
-			final DynamicForm filterForm, final DynamicForm sortForm) {
-		HLayout hLayout = new HLayout(10);
-		hLayout.setHeight(22);
-
-		IButton filterButton = new IButton("Filter");
-		filterButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				tileGrid.fetchData(filterForm.getValuesAsCriteria());
-			}
-		});
-		filterButton.setAutoFit(true);
-
-		IButton clearButton = new IButton("Clear");
-		clearButton.setAutoFit(true);
-		clearButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				tileGrid.fetchData();
-				filterForm.clearValues();
-				sortForm.clearValues();
-			}
-		});
-
-		hLayout.addMember(filterButton);
-		hLayout.addMember(clearButton);
-		vStack.addMember(hLayout);
-		return hLayout;
-	}*/
 
 	private void addSortPanel(final HStack hStack) {
 		final DynamicForm sortForm = new DynamicForm();
@@ -451,15 +402,6 @@ public class SmartGWT implements EntryPoint {
 			public void onRecordClick(RecordClickEvent event) {
 				SwagItemGWTDTO dto = new SwagItemGWTDTO();
 				SmartGWTRPCDataSource.copyValues(event.getRecord(),dto);
-				loginService.setCurrentTileRecord(dto, new AsyncCallback() {
-					public void onFailure(Throwable error) {
-						GWT.log("", error);
-					}
-					@Override
-					public void onSuccess(Object result) {
-						//noop
-					}
-				});
 				prepareAndShowEditForm(event.getRecord());
 			}
 		});
@@ -490,14 +432,70 @@ public class SmartGWT implements EntryPoint {
 				boundFormVStack.hide();
 			}
 		});
-		saveCancelButtonsLayout = new HLayout();
-		saveCancelButtonsLayout.addMember(saveButton);
-		saveCancelButtonsLayout.addMember(cancelButton);
-		boundFormVStack.addMember(saveCancelButtonsLayout);
+		
+		IButton deleteButton = new IButton("Delete");
+		deleteButton.setAutoFit(true);
+		deleteButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				showConfirmRemovePopup(tileGrid.getSelectedRecord());
+				boundFormVStack.hide();
+			}
+		});
+		editButtonsLayout = new HLayout();
+		editButtonsLayout.addMember(saveButton);
+		editButtonsLayout.addMember(cancelButton);
+		editButtonsLayout.addMember(deleteButton);
+		boundFormVStack.addMember(editButtonsLayout);
 		boundFormVStack.hide();
 		hStack.addMember(boundFormVStack);
 	}
-
+	
+    private void showConfirmRemovePopup(final TileRecord selectedTileRecord) {
+    	final com.smartgwt.client.widgets.Window winModal = new com.smartgwt.client.widgets.Window();
+		winModal.setWidth(360);
+		winModal.setHeight(115);
+		winModal.setTitle("Confirm Delete");
+		winModal.setShowMinimizeButton(false);
+		winModal.setIsModal(true);
+		winModal.setShowModalMask(true);
+		winModal.centerInPage();
+		winModal.addCloseClickHandler(new CloseClickHandler() {
+			public void onCloseClick(CloseClientEvent event) {
+				winModal.destroy();
+			}
+		});
+    	
+		VLayout vLayout = new VLayout();
+		String recordName = selectedTileRecord.getAttributeAsString("name");
+		Label confirmText = new Label("Are you sure you want to delete " + recordName + "?");
+		confirmText.setHeight(50);
+		vLayout.addMember(confirmText);
+		
+		IButton yesButton = new IButton("Yes");
+		yesButton.setAutoFit(true);
+		yesButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				tileGrid.removeData(selectedTileRecord);
+				winModal.hide();
+			}
+		});
+		IButton cancelButton = new IButton("Cancel");
+		cancelButton.setAutoFit(true);
+		cancelButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				winModal.hide();
+			}
+		});
+		HLayout buttonsLayout = new HLayout();
+		buttonsLayout.addMember(yesButton);
+		buttonsLayout.addMember(cancelButton);
+		
+		vLayout.addMember(buttonsLayout);
+		
+		winModal.addItem(vLayout);
+		winModal.show();
+    }
+	
 	private void addStarRatings() {
 		//add five stars
 		for (int i = 0; i < 5; i++) {
@@ -531,17 +529,67 @@ public class SmartGWT implements EntryPoint {
 		//end stars
 	}
 	
+	public class StarClickHandler implements ClickHandler {
+		private SwagItemRating newRating;
+		public void setSwagItemRating(SwagItemRating swagItemRating) {
+			newRating = swagItemRating;
+		}
+		@Override
+		public void onClick(ClickEvent event) {
+			//send them to login page if not logged in
+			if (!loginInfo.isLoggedIn()) {
+				Window.open(loginInfo.getLoginUrl(), "_self", ""); 
+			}
+			else { //logged in
+				event.getSource();
+				loginService.addOrUpdateRating(loginInfo.getEmail(), 
+					newRating,
+					new AsyncCallback() {
+						public void onFailure(Throwable error) {
+							GWT.log("", error);
+						}
+						@Override
+						public void onSuccess(Object result) {
+							//refresh client side userRating
+							SwagItemRating previousRating = loginInfo.getSwagItemRating(newRating.getSwagItemKey());
+							if (previousRating!=null) {
+								loginInfo.getSwagItemRatings().remove(previousRating);
+							}
+							loginInfo.getSwagItemRatings().add(newRating);
+							
+							//update stars
+							updateUserRatingStars(newRating.getSwagItemKey());
+							
+							//refresh item
+							//kludge to execute a fetch through saveData()
+							boundSwagForm.getField("isFetchOnly").setValue(true);
+							boundSwagForm.saveData(new DSCallback() {
+								//reselect selected tile (call to saveData deselects it)
+								public void execute(DSResponse response,
+										Object rawData, DSRequest request) {
+									//get updated record
+									final TileRecord rec = new TileRecord(request.getData());
+									//Note: selectRecord seems to only work on the tile index
+									tileGrid.selectRecord(tileGrid.getRecordIndex(rec)); 
+								}});
+						}
+				}
+				);
+			}
+		}
+	}
+	
 	private void prepareAndShowEditForm(TileRecord tileRecord) {
 		// make read only if they don't have permission
 		String currentSwagItemOwner = tileRecord.getAttribute("ownerID");
 		String currentUserId = loginInfo.getID();
 		if (loginInfo.isUserAdmin() || currentSwagItemOwner.equals(currentUserId)) {
 			boundSwagForm.enable();
-			saveCancelButtonsLayout.show();
+			editButtonsLayout.show();
 		}
 		else {
 			boundSwagForm.disable();
-			saveCancelButtonsLayout.hide();
+			editButtonsLayout.hide();
 		}
 		boundSwagForm.editRecord(tileRecord);
 		currentSwagImage.setSrc("/swag/showImage/" + tileRecord.getAttribute("imageKey"));  
@@ -579,47 +627,6 @@ public class SmartGWT implements EntryPoint {
 		}
 	}
 	
-	public class StarClickHandler implements ClickHandler {
-		private SwagItemRating newRating;
-		public void setSwagItemRating(SwagItemRating swagItemRating) {
-			newRating = swagItemRating;
-		}
-		@Override
-		public void onClick(ClickEvent event) {
-			if (!loginInfo.isLoggedIn()) {
-				Window.open(loginInfo.getLoginUrl(), "_self", ""); 
-			}
-			else { //logged in
-				event.getSource();
-				loginService.addOrUpdateRating(loginInfo.getEmail(), 
-					newRating,
-					new AsyncCallback() {
-						public void onFailure(Throwable error) {
-							GWT.log("", error);
-						}
-						@Override
-						public void onSuccess(Object result) {
-							//refresh client side userRating
-							SwagItemRating previousRating = loginInfo.getSwagItemRating(newRating.getSwagItemKey());
-							if (previousRating!=null) {
-								loginInfo.getSwagItemRatings().remove(previousRating);
-							}
-							loginInfo.getSwagItemRatings().add(newRating);
-							
-							//update stars
-							updateUserRatingStars(newRating.getSwagItemKey());
-							
-							//refresh item
-							//kludge to execute a fetch threw saveData()
-							boundSwagForm.getField("isFetchOnly").setValue(true);
-							boundSwagForm.saveData();
-						}
-				}
-				);
-			}
-		}
-	}
-
 	private void setUncaughtExceptionHandler() {
 		// better exception handling
 		GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {

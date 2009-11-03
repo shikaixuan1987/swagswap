@@ -12,6 +12,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Swag Swap - ${title}</title>
 	<h:outputStylesheet name="/css/swagswap01.css" />
+	<h:outputScript name="/js/common.js" target="head" />
+	<script src="http://www.google.com/jsapi" type="text/javascript"></script>
 </h:head>
 
 <h:body>
@@ -41,21 +43,21 @@
 						<h:panelGrid cellpadding="0" cellspacing="0" width="100%"
 							style="text-align: right; margin-top: 10px">
 							<h:panelGroup rendered="#{!swagSwapUserService.userLoggedIn}">
-								<h:commandLink value="Login"
-									style="margin-left: 10px" action="#{userBean.showLogin}">
+								<h:commandLink value="Login" style="margin-left: 10px"
+									action="#{userBean.showLogin}">
 								</h:commandLink>
 							</h:panelGroup>
 							<h:panelGroup rendered="#{swagSwapUserService.userLoggedIn}">
-								<h:outputText value="#{swagSwapUserService.currentUser.nickname}"
+								<h:outputText
+									value="#{swagSwapUserService.currentUser.nickname}"
 									style="font-weight: bold;" />
-								<h:commandLink value="Logout"
-									style="margin-left: 10px" action="#{userBean.showLogout}">
+								<h:commandLink value="Logout" style="margin-left: 10px"
+									action="#{userBean.showLogout}">
 								</h:commandLink>
 							</h:panelGroup>
 						</h:panelGrid>
 					</h:form>
-					<h:panelGroup layout="block"
-						style="height: 50px;">
+					<h:panelGroup layout="block" style="height: 50px;">
 						<h:outputText value="${title}" styleClass="subTitleText" />
 						<h:panelGroup layout="block" styleClass="subTitleBar" />
 					</h:panelGroup>

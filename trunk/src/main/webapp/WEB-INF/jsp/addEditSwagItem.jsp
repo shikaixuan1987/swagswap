@@ -73,16 +73,16 @@
           </tr>
           <tr>
             <td>Image "I'm feeling lucky"</td>
-            <td><input id="ImfeelingLuckyButton" type="submit"
+            <td><input id="ImfeelingLuckyButton" type="button"
               alt="search Google images based on item name"
               value="I'm feeling lucky"
-              onClick="OnImFeeelingLucky();return false;" /></td>
+              onClick="OnImFeelingLuckyWrapper();return false;" /></td>
 
           </tr>
           <tr>
             <td></td>
             <td align="center">
-            <div id="luckyImage" />
+				<div id="luckyImage" style="margin-left: 5px; margin-top: 3px;" />
             </td>
 
           </tr>
@@ -118,56 +118,14 @@ Inspired by http://code.google.com/apis/ajax/playground/#raw_search
 --%>
 
 <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript" src="/resources/js/feelingLucky.js"></script>
 <script language="Javascript" type="text/javascript">
 
-google.load('search', '1');
-
-var imageSearch;
-var lastImageIndex=0;
-
-function searchComplete() {
-  // Check that we got results
-  if (imageSearch.results && imageSearch.results.length > 0) {
-    // Grab our content div, clear it.
-    var contentDiv = document.getElementById('luckyImage');
-    contentDiv.innerHTML = '';
-
-    var results = imageSearch.results;
-
-    var randomResult = results[lastImageIndex++ % 8]; //only have results 0..7
-    
-    var imgContainer = document.getElementById('luckyImage');
-    var newImg = document.createElement('img');
-    newImg.src = randomResult.tbUrl;
-    imgContainer.appendChild(newImg);
-
-    //change text of I'm feeling lucky button
-    document.getElementById('ImfeelingLuckyButton').value="I'm feeling lucky again";
-
-    //put url of image in imageURL
-    document.getElementById('imageURL').value=randomResult.tbUrl;
-  }
-}
-
-function OnImFeeelingLucky() {
-  // Our ImageSearch instance.
-  imageSearch = new google.search.ImageSearch();
-
-  // Restrict to extra large images only
-  imageSearch.setRestriction(google.search.ImageSearch.RESTRICT_IMAGESIZE,
-                             google.search.ImageSearch.IMAGESIZE_MEDIUM);
-  //get 8 results (default is 4)
-  imageSearch.setResultSetSize(google.search.Search.LARGE_RESULTSET);
-
-  // Here we set a callback so that anytime a search is executed, it will call
-  // the searchComplete function and pass it our ImageSearch searcher.
-  // When a search completes, our ImageSearch object is automatically
-  // populated with the results.
-  imageSearch.setSearchCompleteCallback(this, searchComplete, null);
-
-  // Find based on swag item name
-  var name = document.getElementById('name').value;
-  imageSearch.execute(name);
+function OnImFeelingLuckyWrapper() {
+  	searchElement = document.getElementById('name');
+  	buttonElement = document.getElementById('ImfeelingLuckyButton');
+  	urlElement = document.getElementById('imageURL');
+ 	OnImFeelingLucky(buttonElement, searchElement, urlElement);
 }
 
 window.onload=formatStr(document.getElementById('comments'));

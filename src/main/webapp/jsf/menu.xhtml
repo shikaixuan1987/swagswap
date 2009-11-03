@@ -14,7 +14,7 @@
 		style="padding-left: 10px; height: 100%; font-weight: bold; font-style: italic;"
 		layout="block">
 		<h:panelGroup layout="block" style="height: 50px; margin-top: 50px;" />
-		<h:outputLink value="/" >
+		<h:outputLink value="/">
 			<h:outputText value="Home" />
 		</h:outputLink>
 		<br />
@@ -28,7 +28,9 @@
 		<h:outputText value="Top Rated Swag" />
 		<br />
 		<br />
-		<h:link value="Add Swag" outcome="addSwag" />
+		<h:link value="Add Swag" outcome="addSwag">
+			<f:param name="lastPage" value="#{actionBean.lastPage}" />
+		</h:link>
 	</h:panelGroup>
 </h:form>
 </html>

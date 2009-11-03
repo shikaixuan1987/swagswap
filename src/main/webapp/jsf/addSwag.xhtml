@@ -13,7 +13,10 @@
 <ui:composition template="template.xhtml">
 	<ui:param name="title" value="New Swag Item" />
 	<ui:define name="content">
-		<h:form enctype="multipart/form-data" >
+		<h:form enctype="multipart/form-data">
+			<f:metadata>
+				<f:viewParam name="lastPage" value="#{swagEditBean.lastPage}" />
+			</f:metadata>
 			<ui:include src="editAddSwagPanel.xhtml">
 				<ui:param name="title" value="New Swag Item" />
 			</ui:include>

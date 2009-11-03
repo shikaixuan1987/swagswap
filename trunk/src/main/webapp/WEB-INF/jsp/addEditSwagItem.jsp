@@ -134,7 +134,7 @@ function searchComplete() {
 
     var results = imageSearch.results;
 
-    var randomResult = results[lastImageIndex++ % 8]; //only have results 0..3
+    var randomResult = results[lastImageIndex++ % 8]; //only have results 0..7
     
     var imgContainer = document.getElementById('luckyImage');
     var newImg = document.createElement('img');

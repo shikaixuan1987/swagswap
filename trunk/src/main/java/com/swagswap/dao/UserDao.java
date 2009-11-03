@@ -1,5 +1,8 @@
 package com.swagswap.dao;
 
+import java.util.List;
+
+import com.swagswap.domain.BlackListedUser;
 import com.swagswap.domain.SwagSwapUser;
 
 public interface UserDao {
@@ -12,4 +15,9 @@ public interface UserDao {
 
 	void insert(SwagSwapUser swagSwapUser);
 
+	void blackListUser(String email);
+	
+	boolean isBlackListed(String email);
+	
+	List<BlackListedUser> getBlackListedUsers();
 }

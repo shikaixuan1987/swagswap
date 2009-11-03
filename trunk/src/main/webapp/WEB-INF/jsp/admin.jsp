@@ -14,5 +14,9 @@ How many? <input type="text" name="numberOfSwagItems" size="5" /> <input type="s
 <form action="deleteTestSwagItems">
 Delete Test Swag Items: <input type="submit" value="delete" />
 </form>
+<hr/>
+<form action="blackListUser">
+<input type="submit" value="blacklist" />: <input type="text" name="email" size="20" />
+</form>
 </pre>
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>

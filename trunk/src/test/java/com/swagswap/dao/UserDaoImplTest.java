@@ -1,9 +1,12 @@
 package com.swagswap.dao;
 
+import java.util.List;
+
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
 import com.swagswap.common.Fixture;
 import com.swagswap.common.LocalDatastoreTestCase;
+import com.swagswap.domain.BlackListedUser;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
 
@@ -30,6 +33,7 @@ public class UserDaoImplTest extends LocalDatastoreTestCase  {
         assertNotNull(swagSwapUser.getJoined()); //joined should be set
     }
     
+    //TODO fix me
     public void testUpdate() {
     	
     	SwagSwapUser orig = Fixture.createUser();
@@ -57,6 +61,16 @@ public class UserDaoImplTest extends LocalDatastoreTestCase  {
     	SwagSwapUser retrievedItem = userDao.findByEmail("bogus");
     	assertNull(retrievedItem);
     		
+    }
+    
+    //Make sure it's null (and doesn't thrown an exception)
+    public void testBlackListUser_and_IsBlackListed() {
+    	String email = "bogus@gmail.com";
+    	userDao.blackListUser(email);
+    	Query query = new Query(BlackListedUser.class.getSimpleName());
+    	assertEquals(1, DatastoreServiceFactory.getDatastoreService().prepare(query).countEntities());
+    	assertTrue(userDao.isBlackListed(email));
+    	assertFalse(userDao.isBlackListed("not@blacklisted.com"));
     }
     
     /**

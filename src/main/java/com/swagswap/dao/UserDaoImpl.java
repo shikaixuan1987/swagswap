@@ -1,12 +1,14 @@
 package com.swagswap.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.jdo.Query;
 
 import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
+import com.swagswap.domain.BlackListedUser;
 import com.swagswap.domain.SwagSwapUser;
 
 /**
@@ -58,6 +60,27 @@ public class UserDaoImpl extends JdoDaoSupport implements UserDao {
 		Date now = new Date();
 		swagSwapUser.setJoined(now);
 		getPersistenceManager().makePersistent(swagSwapUser);
+	}
+	
+	public void blackListUser(String email) {
+		BlackListedUser user = new BlackListedUser(email);
+		getPersistenceManager().makePersistent(user);
+	}
+	
+	public boolean isBlackListed(String email) {
+		Query query = getPersistenceManager().newQuery(
+				"select from " + BlackListedUser.class.getName()
+						+ " where email==p1 parameters String p1");
+		query.setUnique(true);
+		BlackListedUser user = (BlackListedUser) query.execute(email);
+		;
+		return user != null; // if there's a result they're blacklisted
+	}
+	
+	public List<BlackListedUser> getBlackListedUsers() {
+		Query query = getPersistenceManager().newQuery(
+				"select from " + SwagSwapUser.class.getName());
+		return  (List<BlackListedUser>)query.execute(); 
 	}
 	
 }

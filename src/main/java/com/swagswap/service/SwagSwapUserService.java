@@ -36,5 +36,7 @@ public interface SwagSwapUserService {
 	public boolean isUserAdmin();
 	
 	public boolean isUserLoggedIn();
+	
+	public void blackListUser(String email);
 
 }

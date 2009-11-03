@@ -1,5 +1,7 @@
 package com.swagswap.service;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +66,11 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		if (getCurrentUser()==null) {
 			return null;
 		}
-		return userDao.findByEmail(getCurrentUser().getEmail());
+		String email = getCurrentUser().getEmail();
+		if (isBlackListed(email)) {
+			throw new AccessDeniedException("User " + email + " is blacklisted");
+		}
+		return userDao.findByEmail(email);
 	}
 	
 /*	 I wanted to include this method so that the front end wouldn't have to deal with 
@@ -153,6 +159,14 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	
 	public boolean isUserLoggedIn() {
 		return googleUserService.isUserLoggedIn();
+	}
+	
+	public void blackListUser(String email) {
+		userDao.blackListUser(email);
+	}
+	
+	public boolean isBlackListed(String email) {
+		return userDao.isBlackListed(email);
 	}
 
 	/**

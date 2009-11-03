@@ -11,15 +11,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.swagswap.service.AdminService;
+import com.swagswap.service.SwagSwapUserService;
 
 @Controller
 public class AdminController {
 	private static final Logger log = Logger.getLogger(AdminController.class);
 	private AdminService adminService;
-
+	private SwagSwapUserService swagSwapUserService;
+	
 	@Autowired
-	public AdminController(AdminService adminService) {
+	public AdminController(AdminService adminService, SwagSwapUserService swagSwapUserService) {
 		this.adminService = adminService;
+		this.swagSwapUserService=swagSwapUserService;
 	}
 
 	@RequestMapping("/admin/main")
@@ -44,5 +47,14 @@ public class AdminController {
 		model.addAttribute("message", "deleted " + numberDeleted + " test swag items");
 		return "admin";
 	}
+	
+	@RequestMapping(value = "/admin/blackListUser", method = RequestMethod.GET)
+	public String blackListUser(@RequestParam("email") String email,
+					Model model) throws IOException {
+		swagSwapUserService.blackListUser(email);
+		model.addAttribute("message", "blacklisted " + email);
+		return "admin";
+	}
+	
 
 }

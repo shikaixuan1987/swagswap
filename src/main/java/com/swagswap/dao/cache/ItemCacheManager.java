@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.swagswap.dao.ItemDao;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
-import com.swagswap.web.jsf.model.SwagItemWrapper;
 
 @SuppressWarnings("unchecked")
 public class ItemCacheManager implements ItemDao, InitializingBean {

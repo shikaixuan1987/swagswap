@@ -55,14 +55,12 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 
 		keyList = Collections.synchronizedList(new ArrayList<Long>());
 
-		List<SwagItem> swagItemList = itemDao.getAll();
-		Iterator<SwagItem> iter = swagItemList.iterator();
-		while (iter.hasNext()) {
-			SwagItem item = iter.next();
-			swagCacheManager.getCache().put(item.getKey(), item);
-			keyList.add(item.getKey());
+		for (SwagItem swagItem : itemDao.getAll()) {
+			swagCacheManager.getCache().put(swagItem.getKey(), swagItem);
+			keyList.add(swagItem.getKey());
 		}
-		log.info(swagItemList.size() + " Swag Items inserted to cache");
+		
+		log.info(keyList.size() + " Swag Items inserted to cache");
 	}
 
 	public List<SwagItem> getAll() {

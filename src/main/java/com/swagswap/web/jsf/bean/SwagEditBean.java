@@ -34,7 +34,6 @@ public class SwagEditBean implements Serializable {
 	}
 
 	public void setLastPage(String lastPage) {
-		System.out.println("****  SwagEditBean.  Last page set to "+lastPage);
 		this.lastPage = lastPage;
 	}
 

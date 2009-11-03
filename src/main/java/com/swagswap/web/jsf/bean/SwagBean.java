@@ -23,14 +23,35 @@ public class SwagBean implements Serializable {
 	private Long selectedRowId;
 	private String filter = "";
 	private Integer totalItems = 0;
-	
-	//  Used for View all 
+	private Integer createdItems = 0;
+	private Integer ratedItems = 0;
+	private Integer commentedItems = 0;
+
+	// Used for View all
 	private SwagTable swagTable;
-	//  Used for MySwag
+	// Used for MySwag
 	private SwagTable createdTable;
 	private SwagTable commentedTable;
 	private SwagTable ratedTable;
-	
+	private SwagTable notCommentedTable;
+	private SwagTable notRatedTable;
+
+	public SwagTable getNotRatedTable() {
+		return notRatedTable;
+	}
+
+	public void setNotRatedTable(SwagTable notRatedTable) {
+		this.notRatedTable = notRatedTable;
+	}
+
+	public SwagTable getNotCommentedTable() {
+		return notCommentedTable;
+	}
+
+	public void setNotCommentedTable(SwagTable notCommentedTable) {
+		this.notCommentedTable = notCommentedTable;
+	}
+
 	public Integer getTotalItems() {
 		return totalItems;
 	}
@@ -38,7 +59,7 @@ public class SwagBean implements Serializable {
 	public void setTotalItems(Integer totalItems) {
 		this.totalItems = totalItems;
 	}
-	
+
 	public String getFilter() {
 		return filter;
 	}
@@ -87,10 +108,6 @@ public class SwagBean implements Serializable {
 		this.commentedItems = commentedItems;
 	}
 
-	private Integer createdItems = 0;
-	private Integer ratedItems = 0;
-	private Integer commentedItems = 0;
-
 	public Integer getRatedItems() {
 		return ratedItems;
 	}
@@ -100,14 +117,21 @@ public class SwagBean implements Serializable {
 	}
 
 	public SwagTable getSwagTable() {
+
 		if (filter.equals("CREATE")) {
 			return createdTable;
 		}
 		if (filter.equals("RATE")) {
 			return ratedTable;
 		}
+		if (filter.equals("NOTRATE")) {
+			return notRatedTable;
+		}
 		if (filter.equals("COMMENT")) {
 			return commentedTable;
+		}
+		if (filter.equals("NOTCOMMENT")) {
+			return notCommentedTable;
 		}
 		return swagTable;
 	}
@@ -121,7 +145,7 @@ public class SwagBean implements Serializable {
 		searchString = "";
 		refreshSwagList();
 	}
-	
+
 	public void refreshSwagList() {
 		// Set swagList to null to force refresh on next request
 		getSwagTable().setSwagList(null);
@@ -155,7 +179,8 @@ public class SwagBean implements Serializable {
 		// Can't use component binding on dataTable as it's not Serializable
 		SwagItemWrapper selectedRow = null;
 		if (getSwagTable() != null) {
-			Iterator<SwagItemWrapper> iter = getSwagTable().getSwagList().iterator();
+			Iterator<SwagItemWrapper> iter = getSwagTable().getSwagList()
+					.iterator();
 			while (iter.hasNext()) {
 				SwagItemWrapper item = (SwagItemWrapper) iter.next();
 				if (item.getSwagItem().getKey().equals(selectedRowId)) {
@@ -166,5 +191,46 @@ public class SwagBean implements Serializable {
 		return selectedRow;
 	}
 
+	// TODO Refactor this colour stuff! Quick and dirty. Consider storing
+	// percentages...
+
+	public String getCreatedColour() {
+
+		return getColourForPercentage(getCreatedTable().getTableSize());
+	}
+
+	public String getRatedColour() {
+
+		return getColourForPercentage(getRatedTable().getTableSize());
+	}
+
+	public String getCommentedColour() {
+
+		return getColourForPercentage(getCommentedTable().getTableSize());
+	}
+
+	private String getColourForPercentage(int tableSize) {
+
+		if (totalItems == 0) {
+			return "white";
+		}
+		float percent = tableSize / totalItems.floatValue();
+
+		if (percent == 1) {
+			return "green";
+		}
+		if (percent < 0.33) {
+			return "red";
+		}
+		if (percent < 0.66) {
+			return "yellow";
+		}
+		if (percent < 1) {
+			return "blue";
+		}
+
+		return "white";
+
+	}
 
 }

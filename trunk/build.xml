@@ -264,6 +264,7 @@
 
 	<path id="test.classpath">
 		<path refid="classpath" />
+		<path refid="gwt.classpath" />
 		<pathelement location="${appengine.sdk}/lib/impl/appengine-api-stubs.jar" />
 		<pathelement location="${appengine.sdk}/lib/impl/appengine-local-runtime.jar" />
 		<fileset dir="src/test/lib">

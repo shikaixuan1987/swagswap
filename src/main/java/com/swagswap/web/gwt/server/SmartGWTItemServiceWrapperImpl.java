@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Required;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
 import com.swagswap.exceptions.AccessDeniedException;
+import com.swagswap.exceptions.ImageTooLargeException;
+import com.swagswap.exceptions.LoadImageFromURLException;
 import com.swagswap.service.ItemService;
 import com.swagswap.web.gwt.client.SmartGWTItemServiceWrapper;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
@@ -41,13 +43,13 @@ public class SmartGWTItemServiceWrapperImpl extends
 	}
 
 	//SmartGWT requires the updated item to be returned
-	public SwagItemGWTDTO add(SwagItemGWTDTO swagItemGWTDTO) throws AccessDeniedException {
+	public SwagItemGWTDTO add(SwagItemGWTDTO swagItemGWTDTO) throws AccessDeniedException, LoadImageFromURLException, ImageTooLargeException {
 		SwagItem updatedItem = itemService.save(toSwagItem(swagItemGWTDTO));
 		return toDTO(updatedItem);
 	}
 
 	// TOOD combine these if possible
-	public SwagItemGWTDTO update(SwagItemGWTDTO swagItemGWTDTO) throws AccessDeniedException {
+	public SwagItemGWTDTO update(SwagItemGWTDTO swagItemGWTDTO) throws AccessDeniedException, LoadImageFromURLException, ImageTooLargeException {
 		return add(swagItemGWTDTO);
 	}
 

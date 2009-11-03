@@ -9,6 +9,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.smartgwt.client.widgets.tile.TileRecord;
 import com.swagswap.domain.SwagItemComment;
 import com.swagswap.exceptions.AccessDeniedException;
+import com.swagswap.exceptions.ImageTooLargeException;
+import com.swagswap.exceptions.LoadImageFromURLException;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 @RemoteServiceRelativePath ("smartGWTItemServiceWrapper")
@@ -24,9 +26,9 @@ public interface SmartGWTItemServiceWrapper extends RemoteService {
     
 	public SwagItemGWTDTO fetch(Long key);
 
-    SwagItemGWTDTO add (SwagItemGWTDTO swagItemGWTDTO) throws AccessDeniedException;
+    SwagItemGWTDTO add (SwagItemGWTDTO swagItemGWTDTO) throws AccessDeniedException, LoadImageFromURLException, ImageTooLargeException;
 
-    SwagItemGWTDTO update (SwagItemGWTDTO swagItemGWTDTO) throws AccessDeniedException;
+    SwagItemGWTDTO update (SwagItemGWTDTO swagItemGWTDTO) throws AccessDeniedException, LoadImageFromURLException, ImageTooLargeException;
 
     void remove (SwagItemGWTDTO swagItemGWTDTO);
     

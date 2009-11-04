@@ -1,12 +1,14 @@
 package com.swagswap.web.gwt.client;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.StatusCodeException;
@@ -16,11 +18,19 @@ import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
+import com.smartgwt.client.data.DataSourceField;
+import com.smartgwt.client.data.Record;
+import com.smartgwt.client.data.XJSONDataSource;
+import com.smartgwt.client.data.fields.DataSourceImageField;
+import com.smartgwt.client.data.fields.DataSourceIntegerField;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Encoding;
+import com.smartgwt.client.types.FieldType;
 import com.smartgwt.client.types.ImageStyle;
 import com.smartgwt.client.types.OperatorId;
 import com.smartgwt.client.types.Visibility;
+import com.smartgwt.client.util.DateDisplayFormatter;
+import com.smartgwt.client.util.DateUtil;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Img;
@@ -30,10 +40,12 @@ import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.events.CloseClickHandler;
 import com.smartgwt.client.widgets.events.CloseClientEvent;
 import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.form.SearchForm;
 import com.smartgwt.client.widgets.form.events.ItemChangedEvent;
 import com.smartgwt.client.widgets.form.events.ItemChangedHandler;
 import com.smartgwt.client.widgets.form.events.SubmitValuesEvent;
 import com.smartgwt.client.widgets.form.events.SubmitValuesHandler;
+import com.smartgwt.client.widgets.form.fields.ButtonItem;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
 import com.smartgwt.client.widgets.form.fields.HiddenItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
@@ -43,6 +55,7 @@ import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.form.fields.UploadItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
+import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.HStack;
 import com.smartgwt.client.widgets.layout.VLayout;
@@ -82,6 +95,7 @@ public class SmartGWT implements EntryPoint {
 	private HStack starHStack;
 	private DynamicForm uploadForm;
 	private HLayout editButtonsLayout;
+	private ButtonItem imFeelingLuckyButton;
 	
 	/**
 	 * Check login status and build GUI
@@ -197,7 +211,7 @@ public class SmartGWT implements EntryPoint {
 		tileGrid.setTileWidth(100);
 		tileGrid.setTileHeight(140);
 		tileGrid.setTileValueAlign("left");
-		tileGrid.setWidth(600);
+		tileGrid.setWidth(400);
 		tileGrid.setHeight(600);
 		tileGrid.setShowResizeBar(true);
 		tileGrid.setShowAllRecords(true);
@@ -224,15 +238,16 @@ public class SmartGWT implements EntryPoint {
 			}
 		});
 		DetailViewerField lastUpdated = new DetailViewerField("lastUpdated");
-		//TODO format date
-//		lastUpdated.setDetailFormatter(new DetailFormatter() {
-//			public String format(Object value, DetailViewerRecord record,
-//					DetailViewerField field) {
-//					Date lastUpdated = record.getAttributeAsDate("lastUpdated");
-//					SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy HH:MM");
-//				return formatter.format(lastUpdated);
-//			}
-//		});
+
+		DateUtil.setNormalDateDisplayFormatter(new DateDisplayFormatter() {
+		    public String format(Date date) {
+		        if(date == null) return null;        
+		        DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd-MM-yy HH:MM");
+		        String format = dateFormatter.format(date);
+		        return format;
+		    }
+		});
+		
 		tileGrid.setFields(pictureField, name, company ,ownerNickName, averageRating, lastUpdated);
 		hStack.addMember(tileGrid);
 	}
@@ -396,6 +411,7 @@ public class SmartGWT implements EntryPoint {
 		currentSwagImage = new Img("/images/no_photo.jpg");  
 		currentSwagImage.setImageType(ImageStyle.NORMAL); 
 		boundFormVStack.addMember(currentSwagImage);
+		createImFeelingLuckyImageSearch(boundFormVStack);
 		
 		tileGrid.addRecordClickHandler(new RecordClickHandler() {
 
@@ -405,9 +421,6 @@ public class SmartGWT implements EntryPoint {
 				prepareAndShowEditForm(event.getRecord());
 			}
 		});
-		//
-		// HLayout hLayout = new HLayout(10);
-		// hLayout.setHeight(22);
 
 		IButton saveButton = new IButton("Save");
 		saveButton.setAutoFit(true);
@@ -415,6 +428,8 @@ public class SmartGWT implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				//TODO
 				//uploadForm.submitForm();
+				//Turn off fetch only (could have been on from them rating the item
+				boundSwagForm.getField("isFetchOnly").setValue(false);
 				boundSwagForm.saveData();
 				if (boundSwagForm.hasErrors()) {
 					Window.alert("" + boundSwagForm.getErrors());
@@ -458,7 +473,7 @@ public class SmartGWT implements EntryPoint {
 		winModal.setShowMinimizeButton(false);
 		winModal.setIsModal(true);
 		winModal.setShowModalMask(true);
-		winModal.centerInPage();
+//		winModal.centerInPage();
 		winModal.addCloseClickHandler(new CloseClickHandler() {
 			public void onCloseClick(CloseClientEvent event) {
 				winModal.destroy();
@@ -586,10 +601,12 @@ public class SmartGWT implements EntryPoint {
 		if (loginInfo.isUserAdmin() || currentSwagItemOwner.equals(currentUserId)) {
 			boundSwagForm.enable();
 			editButtonsLayout.show();
+			imFeelingLuckyButton.show();
 		}
 		else {
 			boundSwagForm.disable();
 			editButtonsLayout.hide();
+			imFeelingLuckyButton.hide();
 		}
 		boundSwagForm.editRecord(tileRecord);
 		currentSwagImage.setSrc("/swag/showImage/" + tileRecord.getAttribute("imageKey"));  
@@ -626,6 +643,121 @@ public class SmartGWT implements EntryPoint {
 			}
 		}
 	}
+	
+	/**
+	 * Inspired by http://www.smartclient.com/smartgwt/showcase/#featured_json_integration_category_yahoo
+	 */
+	private void createImFeelingLuckyImageSearch(VStack vStack) {
+	         final Canvas searchResultsCanvas = new Canvas(); 
+	         searchResultsCanvas.setWidth(600);
+	   
+	         XJSONDataSource yahooDS = new XJSONDataSource();  
+	         yahooDS.setDataURL("http://api.search.yahoo.com/ImageSearchService/V1/imageSearch?appid=YahooDemo&output=json");  
+	         yahooDS.setRecordXPath("/ResultSet/Result");  
+	         DataSourceImageField thumbnail = new DataSourceImageField("Thumbnail", "Thumbnail");  
+	         thumbnail.setWidth(150);  
+	         thumbnail.setImageHeight("imageHeight");  
+	         thumbnail.setImageWidth("imageWidth");  
+	         thumbnail.setValueXPath("Thumbnail/Url");  
+	   
+	         DataSourceIntegerField imageWidth = new DataSourceIntegerField("imageWidth");  
+	         imageWidth.setValueXPath("Thumbnail/Width");  
+	         imageWidth.setAttribute("hidden", true);  
+	   
+	         DataSourceIntegerField imageHeight = new DataSourceIntegerField("imageHeight");  
+	         imageHeight.setValueXPath("Thumbnail/Height");  
+	         imageHeight.setAttribute("hidden", true);  
+	   
+	         DataSourceField title = new DataSourceField("Title", FieldType.TEXT);  
+	         DataSourceField summary = new DataSourceField("Summary", FieldType.TEXT);  
+	   
+	         yahooDS.addField(thumbnail);  
+	         yahooDS.addField(imageWidth);  
+	         yahooDS.addField(imageHeight);  
+	         yahooDS.addField(title);  
+	         yahooDS.addField(summary);  
+	   
+	         final ListGrid grid = new ListGrid();  
+	         grid.setTop(120);  
+	         grid.setWidth100();  
+	         grid.setHeight(500);  
+	         grid.setWrapCells(true);  
+	         grid.setFixedRecordHeights(false);  
+	         grid.setShowAllRecords(true);  
+	         grid.setDataSource(yahooDS);  
+	         
+	         final com.smartgwt.client.widgets.Window searchResults = createImFeelingLuckyResults(grid); 
+	   
+	         //search form (which is actually just the button showing)
+	         final SearchForm imFeelingLuckyForm = new SearchForm();  
+	         imFeelingLuckyForm.setNumCols(1); 
+	         imFeelingLuckyForm.setHeight(50);
+	         final HiddenItem query = new HiddenItem("query");  
+	   
+	         imFeelingLuckyButton = new ButtonItem();  
+	         imFeelingLuckyButton.setTitle("I'm Feeling Lucky Image Search");  
+	         imFeelingLuckyButton.setStartRow(false);  
+	         imFeelingLuckyButton.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {  
+	             public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
+	            	 searchResults.show();
+	     			 String swagItemName = (String)boundSwagForm.getField("name").getValue();
+	     			 query.setValue(swagItemName);
+	                 grid.fetchData(imFeelingLuckyForm.getValuesAsCriteria());  
+	             }
+	         });  
+	   
+	 		grid.addRecordClickHandler(new com.smartgwt.client.widgets.grid.events.RecordClickHandler() {
+
+				public void onRecordClick(com.smartgwt.client.widgets.grid.events.RecordClickEvent event) {
+					Record record = event.getRecord();
+					String URL = record.getAttributeAsString("Url");
+					boundSwagForm.getField("newImageURL").setValue(URL);
+					currentSwagImage.setSrc(URL); 
+					currentSwagImage.setWidth(283);
+					currentSwagImage.setHeight(212);
+//					currentSwagImage.redraw();
+					searchResults.hide();
+				}
+			});
+	         
+	         imFeelingLuckyForm.setItems(query, imFeelingLuckyButton);  
+	   
+	         //end search form
+	         
+	         vStack.addMember(imFeelingLuckyForm); 
+	}
+
+	private com.smartgwt.client.widgets.Window createImFeelingLuckyResults(ListGrid grid) {
+    	final com.smartgwt.client.widgets.Window winModal = new com.smartgwt.client.widgets.Window();
+		winModal.setWidth(600);
+		winModal.setHeight(400);
+		winModal.setTitle("Select an image for your swag");
+		winModal.setShowMinimizeButton(false);
+		winModal.setIsModal(true);
+		winModal.setShowModalMask(true);
+		winModal.centerInPage();
+		winModal.addCloseClickHandler(new CloseClickHandler() {
+			public void onCloseClick(CloseClientEvent event) {
+				winModal.destroy();
+			}
+		});
+    	
+		VLayout vLayout = new VLayout();
+		IButton cancelButton = new IButton("Cancel");
+		cancelButton.setAutoFit(true);
+		cancelButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				winModal.hide();
+			}
+		});
+		
+		vLayout.addMember(grid);
+		vLayout.addMember(cancelButton);
+		
+		winModal.addItem(vLayout);
+		return winModal;
+	}
+	
 	
 	private void setUncaughtExceptionHandler() {
 		// better exception handling

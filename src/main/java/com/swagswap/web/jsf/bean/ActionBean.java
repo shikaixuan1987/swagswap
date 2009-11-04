@@ -86,6 +86,7 @@ public class ActionBean {
 		}
 
 		SwagItemComment comment = new SwagItemComment(key, swagSwapUserService
+				.getCurrentUser().getUserId(),swagSwapUserService
 				.getCurrentUser().getNickname(), newComment);
 		itemService.addComment(comment);
 		swagEditBean.setNewComment("");
@@ -177,7 +178,7 @@ public class ActionBean {
 
 		return new SwagTableImpl((SwagItemWrapper.convertSwagListToWrapperList(
 				itemService.filterByCommentedOn(swagList, swagSwapUserService
-						.getCurrentUser().getNickname(), exclusive), userBean)));
+						.getCurrentUser().getUserId(), exclusive), userBean)));
 	}
 
 	private void populateNotRatedTable(List<SwagItem> swagList) {

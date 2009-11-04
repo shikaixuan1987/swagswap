@@ -28,6 +28,7 @@ import com.smartgwt.client.types.Encoding;
 import com.smartgwt.client.types.FieldType;
 import com.smartgwt.client.types.ImageStyle;
 import com.smartgwt.client.types.OperatorId;
+import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.Visibility;
 import com.smartgwt.client.util.DateDisplayFormatter;
 import com.smartgwt.client.util.DateUtil;
@@ -35,6 +36,7 @@ import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Img;
 import com.smartgwt.client.widgets.Label;
+import com.smartgwt.client.widgets.RichTextEditor;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.events.CloseClickHandler;
@@ -56,6 +58,7 @@ import com.smartgwt.client.widgets.form.fields.UploadItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 import com.smartgwt.client.widgets.grid.ListGrid;
+import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.HStack;
 import com.smartgwt.client.widgets.layout.VLayout;
@@ -68,7 +71,9 @@ import com.smartgwt.client.widgets.viewer.DetailFormatter;
 import com.smartgwt.client.widgets.viewer.DetailViewerField;
 import com.smartgwt.client.widgets.viewer.DetailViewerRecord;
 import com.swagswap.domain.SwagItemRating;
+import com.swagswap.web.gwt.client.domain.CommentRecord;
 import com.swagswap.web.gwt.client.domain.LoginInfo;
+import com.swagswap.web.gwt.client.domain.SwagItemCommentGWTDTO;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 public class SmartGWT implements EntryPoint {
@@ -83,7 +88,7 @@ public class SmartGWT implements EntryPoint {
 
 	//global GUI objects TODO: can scope be reduced?
 	final TileGrid tileGrid = new TileGrid();
-	private VStack boundFormVStack;
+	protected HStack editFormHStack;
 	private DynamicForm boundSwagForm;
 	private Img currentSwagImage;
 	private List<Img> starImages = new ArrayList<Img>();
@@ -96,6 +101,10 @@ public class SmartGWT implements EntryPoint {
 	private DynamicForm uploadForm;
 	private HLayout editButtonsLayout;
 	private ButtonItem imFeelingLuckyButton;
+	private ListGrid commentsGrid;
+	private VStack commentsFormVStack;
+	private RichTextEditor richTextEditor;
+	private VStack commentsFormAndCommentsVStack;
 	
 	/**
 	 * Check login status and build GUI
@@ -118,26 +127,27 @@ public class SmartGWT implements EntryPoint {
 	
 	public void buildGUI() {
 		final VStack mainStack = new VStack(20);
-		mainStack.setShowEdges(true);
 		mainStack.setWidth100();
 		HStack menuHStack= new HStack();
 		menuHStack.setHeight(25);
-		addSearchPanel(menuHStack);
-		addSortPanel(menuHStack);
-		addLoginLogoutPanel(menuHStack);
+		menuHStack.addMember(createSearchPanel());
+		menuHStack.addMember(createSortPanel());
+		menuHStack.addMember(createLoginLogoutPanel());
+		
 		mainStack.addMember(menuHStack);
 		
-		HStack itemsAndEditHStack = new HStack();
-		addItemsPanel(itemsAndEditHStack);
+		HStack itemsEditCommentsHStack = new HStack();
+		itemsEditCommentsHStack.addMember(createItemsPanel());
 //		addImageUpload(itemsAndEditHStack);
-		addEditForm(itemsAndEditHStack);
-		mainStack.addMember(itemsAndEditHStack);
+		itemsEditCommentsHStack.addMember(createEditForm());
+		
+		mainStack.addMember(itemsEditCommentsHStack);
 
 		RootPanel.get("gwt-tilegrid").add(mainStack); //anchored on GWT html page
 		mainStack.draw();
 	}
 
-	private void addSortPanel(final HStack hStack) {
+	private DynamicForm createSortPanel() {
 		final DynamicForm sortForm = new DynamicForm();
 		sortForm.setAutoFocus(false);
 		sortForm.setNumCols(4);
@@ -170,10 +180,10 @@ public class SmartGWT implements EntryPoint {
 				}
 			}
 		});
-		hStack.addMember(sortForm);
+		return sortForm;
 	}
 
-	private void addSearchPanel(final HStack hStack) {
+	private DynamicForm createSearchPanel() {
 		final DynamicForm filterForm = new DynamicForm();
 		filterForm.setNumCols(2);
 		filterForm.setDataSource(SmartGWTRPCDataSource.getInstance());
@@ -204,10 +214,10 @@ public class SmartGWT implements EntryPoint {
 			}
 		});
 
-		hStack.addMember(filterForm);
+		return filterForm;
 	}
 
-	private void addItemsPanel(final HStack hStack) {
+	private TileGrid createItemsPanel() {
 		tileGrid.setTileWidth(100);
 		tileGrid.setTileHeight(140);
 		tileGrid.setTileValueAlign("left");
@@ -249,7 +259,17 @@ public class SmartGWT implements EntryPoint {
 		});
 		
 		tileGrid.setFields(pictureField, name, company ,ownerNickName, averageRating, lastUpdated);
-		hStack.addMember(tileGrid);
+		
+		tileGrid.addRecordClickHandler(new RecordClickHandler() {
+
+			public void onRecordClick(RecordClickEvent event) {
+				SwagItemGWTDTO dto = new SwagItemGWTDTO();
+				SmartGWTRPCDataSource.copyValues(event.getRecord(),dto);
+				prepareAndShowEditForm(event.getRecord());
+			}
+		});
+		
+		return tileGrid;
 	}
 	
 /*	public void addImageUploadForm(HStack hStack) {
@@ -342,25 +362,23 @@ public class SmartGWT implements EntryPoint {
 		return s.toString();
 	}
 	
-	private void addLoginLogoutPanel(final HStack hStack) {
+	private HStack createLoginLogoutPanel() {
 		HStack loginPanel = new HStack();
 		loginPanel.setWidth100();
-//		loginPanel.setHeight(10);
 		HStack logoutPanel = new HStack();
 		logoutPanel.setWidth100();
-//		logoutPanel.setHeight(10);
 		Anchor signInLink = new Anchor("Sign In");
 		Anchor signOutLink = new Anchor("Sign Out");
 		Label addLink = new Label("Add Swag");
 		addLink.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				currentSwagImage.setSrc("/images/no_photo.jpg");
-				boundFormVStack.hideMember(starHStack);
-				boundFormVStack.show();
+				starHStack.hide();
+				editFormHStack.show();
+				commentsFormVStack.hide(); //no comments on add
 				boundSwagForm.editNewRecord();
 			}
 		});
-
 		if (loginInfo.isLoggedIn()) {
 			logoutPanel.addMember(addLink);
 			signOutLink.setHref(loginInfo.getLogoutUrl());
@@ -369,27 +387,31 @@ public class SmartGWT implements EntryPoint {
 					+ loginInfo.getNickName());
 			welcomeLabel.setWrap(false);
 			logoutPanel.addMember(welcomeLabel);
-			hStack.addMember(logoutPanel);
+			return logoutPanel;
 		} else { //not logged in
 			signInLink.setHref(loginInfo.getLoginUrl());
 			loginPanel.addMember(signInLink);
-			hStack.addMember(loginPanel);
+			return loginPanel;
 		}
 	}
 	
 	/**
 	 * For adding or editing a swagItem
 	 */
-	private void addEditForm(HStack hStack) {
-		boundFormVStack = new VStack();
+	private HStack createEditForm() {
+		editFormHStack = new HStack();
+		
+		VStack editFormVStack = new VStack();
+		editFormVStack.addMember(addStarRatings());
+		
 		boundSwagForm = new DynamicForm();
 		boundSwagForm.setNumCols(2);
 		boundSwagForm.setDataSource(SmartGWTRPCDataSource.getInstance());
-		boundSwagForm.setAutoFocus(false);
+		boundSwagForm.setAutoFocus(true);
 
-		addStarRatings();
-		
+		HiddenItem keyItem = new HiddenItem("key");
 		TextItem nameItem = new TextItem("name");
+		nameItem.setSelectOnFocus(true);
 		TextItem companyItem = new TextItem("company");
 		TextItem descriptionItem = new TextItem("description");
 		TextItem tag1Item = new TextItem("tag1");
@@ -404,24 +426,15 @@ public class SmartGWT implements EntryPoint {
 		
 		TextItem newImageURLItem = new TextItem("newImageURL");
 
-		boundSwagForm.setFields(nameItem, companyItem, descriptionItem, tag1Item,
+		boundSwagForm.setFields(keyItem, nameItem, companyItem, descriptionItem, tag1Item,
 				tag2Item, tag3Item, tag4Item, isFetchOnlyItem, imageKeyItem, newImageURLItem);
-		boundFormVStack.addMember(boundSwagForm);
+		editFormVStack.addMember(boundSwagForm);
 		
 		currentSwagImage = new Img("/images/no_photo.jpg");  
 		currentSwagImage.setImageType(ImageStyle.NORMAL); 
-		boundFormVStack.addMember(currentSwagImage);
-		createImFeelingLuckyImageSearch(boundFormVStack);
+		editFormVStack.addMember(currentSwagImage);
+		createImFeelingLuckyImageSearch(editFormVStack);
 		
-		tileGrid.addRecordClickHandler(new RecordClickHandler() {
-
-			public void onRecordClick(RecordClickEvent event) {
-				SwagItemGWTDTO dto = new SwagItemGWTDTO();
-				SmartGWTRPCDataSource.copyValues(event.getRecord(),dto);
-				prepareAndShowEditForm(event.getRecord());
-			}
-		});
-
 		IButton saveButton = new IButton("Save");
 		saveButton.setAutoFit(true);
 		saveButton.addClickHandler(new ClickHandler() {
@@ -431,11 +444,12 @@ public class SmartGWT implements EntryPoint {
 				//Turn off fetch only (could have been on from them rating the item
 				boundSwagForm.getField("isFetchOnly").setValue(false);
 				boundSwagForm.saveData();
+				handleSubmitComment(); //in case they commented while editing
 				if (boundSwagForm.hasErrors()) {
 					Window.alert("" + boundSwagForm.getErrors());
 				} else {
 					boundSwagForm.clearValues();
-					boundFormVStack.hide();
+					editFormHStack.hide();
 				}
 			}
 		});
@@ -444,7 +458,7 @@ public class SmartGWT implements EntryPoint {
 		cancelButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				boundSwagForm.clearValues();
-				boundFormVStack.hide();
+				editFormHStack.hide();
 			}
 		});
 		
@@ -453,16 +467,18 @@ public class SmartGWT implements EntryPoint {
 		deleteButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				showConfirmRemovePopup(tileGrid.getSelectedRecord());
-				boundFormVStack.hide();
+				editFormHStack.hide();
 			}
 		});
 		editButtonsLayout = new HLayout();
 		editButtonsLayout.addMember(saveButton);
 		editButtonsLayout.addMember(cancelButton);
 		editButtonsLayout.addMember(deleteButton);
-		boundFormVStack.addMember(editButtonsLayout);
-		boundFormVStack.hide();
-		hStack.addMember(boundFormVStack);
+		editFormVStack.addMember(editButtonsLayout);
+		editFormHStack.addMember(editFormVStack);
+		editFormHStack.addMember(createComments());
+		editFormHStack.hide();
+		return editFormHStack;
 	}
 	
     private void showConfirmRemovePopup(final TileRecord selectedTileRecord) {
@@ -510,8 +526,77 @@ public class SmartGWT implements EntryPoint {
 		winModal.addItem(vLayout);
 		winModal.show();
     }
+    
+	private VStack createComments() {
+		
+		commentsFormAndCommentsVStack = new VStack();
+		commentsFormVStack = new VStack();
+
+		richTextEditor = new RichTextEditor();
+		richTextEditor.setHeight(155);
+		richTextEditor.setWidth(530);
+		richTextEditor.setOverflow(Overflow.HIDDEN);
+		richTextEditor.setCanDragResize(true);
+		richTextEditor.setShowEdges(true);
+
+		IButton addCommentButton = new IButton();
+		addCommentButton.setTitle("Add Comment");
+		addCommentButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				handleSubmitComment();
+			}
+		});
+		
+		commentsGrid = new ListGrid();
+		commentsGrid.setWrapCells(true);
+		commentsGrid.setFixedRecordHeights(false);
+		commentsGrid.setWidth(400);
+		commentsGrid.setHeight(400);
+		commentsGrid.setShowAllRecords(true);
+		commentsGrid.setCanEdit(false);
+
+		ListGridField nickNameField = new ListGridField("swagSwapUserNickname",
+				"Nickname", 100);
+		ListGridField commentField = new ListGridField("commentText", "Comment");
+		ListGridField dateField = new ListGridField("created", "Date", 50);
+
+		commentsGrid.setFields(new ListGridField[] { nickNameField,
+				commentField, dateField });
+
+		commentsFormVStack.addMember(addCommentButton);
+		commentsFormVStack.addMember(richTextEditor);
+		commentsFormAndCommentsVStack.addMember(commentsFormVStack);
+		commentsFormAndCommentsVStack.addMember(commentsGrid);
+		commentsFormVStack.hide();
+		commentsGrid.hide();
+//		commentsFormAndCommentsVStack.hide();
+		return commentsFormAndCommentsVStack;
+	}
 	
-	private void addStarRatings() {
+	private void handleSubmitComment() {
+		String comment = richTextEditor.getValue();
+		final Long currentItemKey = (Long)boundSwagForm.getField("key").getValue();
+		SwagItemCommentGWTDTO newComment = new SwagItemCommentGWTDTO(
+				currentItemKey,
+				loginInfo.getID(),
+				loginInfo.getNickName(),
+				comment,
+				null);
+		itemService.addComment(
+				newComment,
+				new AsyncCallback<Object>() {
+					@Override
+					public void onFailure(Throwable caught) {
+						GWT.log("", caught);
+					}
+					@Override
+					public void onSuccess(Object result) {
+						refreshComments(currentItemKey);
+					}
+				});
+	}
+	
+	private HStack addStarRatings() {
 		//add five stars
 		for (int i = 0; i < 5; i++) {
 			starImages.add(new Img("/images/starOff.gif",12,12));
@@ -530,7 +615,6 @@ public class SmartGWT implements EntryPoint {
 		starImages.get(4).addClickHandler(starClickHandler5);
 		
 		starHStack = new HStack();
-//		starHStack.setBorder("2px solid blue");
 		starHStack.setHeight(25);
 		starHStack.setAlign(Alignment.RIGHT);
 		starHStack.addMember(new Label("My Rating: "));
@@ -539,7 +623,7 @@ public class SmartGWT implements EntryPoint {
 		starHStack.addMember(starImages.get(2));
 		starHStack.addMember(starImages.get(3));
 		starHStack.addMember(starImages.get(4));
-		boundFormVStack.addMember(starHStack);
+		return starHStack;
 		
 		//end stars
 	}
@@ -595,7 +679,7 @@ public class SmartGWT implements EntryPoint {
 	}
 	
 	private void prepareAndShowEditForm(TileRecord tileRecord) {
-		// make read only if they don't have permission
+		// Make read only if they don't have permission
 		String currentSwagItemOwner = tileRecord.getAttribute("ownerID");
 		String currentUserId = loginInfo.getID();
 		if (loginInfo.isUserAdmin() || currentSwagItemOwner.equals(currentUserId)) {
@@ -622,8 +706,46 @@ public class SmartGWT implements EntryPoint {
 		
 		updateUserRatingStars(currentKey);
 		
+		//get fresh comments
+		refreshComments(currentKey);
 		starHStack.show();
-		boundFormVStack.show();
+		editFormHStack.show();
+	}
+
+	private void refreshComments(Long currentKey) {
+		richTextEditor.setValue(""); //clear Add Comment box
+		itemService.fetch(currentKey, new AsyncCallback<SwagItemGWTDTO>() {
+			@Override
+			public void onSuccess(SwagItemGWTDTO result) {
+				List<SwagItemCommentGWTDTO> comments = result.getComments();
+				commentsGrid.setData(toCommentRecords(comments));
+				commentsGrid.show();
+				if (loginInfo.isLoggedIn()) {
+					commentsFormVStack.show();
+				}
+				else { //not logged in
+					commentsFormVStack.hide();
+				}
+			}
+			@Override
+			public void onFailure(Throwable error) {
+				GWT.log("", error);
+			}
+		}
+		);
+	}
+
+	/**
+	 * Turn this into something the SmartGWT Grid can use
+	 * @param comments
+	 * @return CommentRecord[]
+	 */
+	private CommentRecord[] toCommentRecords(List<SwagItemCommentGWTDTO> comments) {
+		CommentRecord[] recordArray = new CommentRecord[comments.size()];
+		for (int i = 0; i < comments.size(); i++) {
+			recordArray[i]=new CommentRecord(comments.get(i));
+		}
+		return recordArray;
 	}
 
 	/**
@@ -648,8 +770,6 @@ public class SmartGWT implements EntryPoint {
 	 * Inspired by http://www.smartclient.com/smartgwt/showcase/#featured_json_integration_category_yahoo
 	 */
 	private void createImFeelingLuckyImageSearch(VStack vStack) {
-	         final Canvas searchResultsCanvas = new Canvas(); 
-	         searchResultsCanvas.setWidth(600);
 	   
 	         XJSONDataSource yahooDS = new XJSONDataSource();  
 	         yahooDS.setDataURL("http://api.search.yahoo.com/ImageSearchService/V1/imageSearch?appid=YahooDemo&output=json");  
@@ -677,16 +797,16 @@ public class SmartGWT implements EntryPoint {
 	         yahooDS.addField(title);  
 	         yahooDS.addField(summary);  
 	   
-	         final ListGrid grid = new ListGrid();  
-	         grid.setTop(120);  
-	         grid.setWidth100();  
-	         grid.setHeight(500);  
-	         grid.setWrapCells(true);  
-	         grid.setFixedRecordHeights(false);  
-	         grid.setShowAllRecords(true);  
-	         grid.setDataSource(yahooDS);  
+	         final ListGrid imageResultsGrid = new ListGrid();  
+	         imageResultsGrid.setTop(120);  
+	         imageResultsGrid.setWidth100();  
+	         imageResultsGrid.setHeight(600);  
+	         imageResultsGrid.setWrapCells(true);  
+	         imageResultsGrid.setFixedRecordHeights(false);  
+	         imageResultsGrid.setShowAllRecords(true);  
+	         imageResultsGrid.setDataSource(yahooDS);  
 	         
-	         final com.smartgwt.client.widgets.Window searchResults = createImFeelingLuckyResults(grid); 
+	         final com.smartgwt.client.widgets.Window imageSearchResults = createImFeelingLuckyResults(imageResultsGrid); 
 	   
 	         //search form (which is actually just the button showing)
 	         final SearchForm imFeelingLuckyForm = new SearchForm();  
@@ -699,15 +819,14 @@ public class SmartGWT implements EntryPoint {
 	         imFeelingLuckyButton.setStartRow(false);  
 	         imFeelingLuckyButton.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {  
 	             public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
-	            	 searchResults.show();
+	            	 imageSearchResults.show();
 	     			 String swagItemName = (String)boundSwagForm.getField("name").getValue();
 	     			 query.setValue(swagItemName);
-	                 grid.fetchData(imFeelingLuckyForm.getValuesAsCriteria());  
+	                 imageResultsGrid.fetchData(imFeelingLuckyForm.getValuesAsCriteria());  
 	             }
 	         });  
 	   
-	 		grid.addRecordClickHandler(new com.smartgwt.client.widgets.grid.events.RecordClickHandler() {
-
+	 		imageResultsGrid.addRecordClickHandler(new com.smartgwt.client.widgets.grid.events.RecordClickHandler() {
 				public void onRecordClick(com.smartgwt.client.widgets.grid.events.RecordClickEvent event) {
 					Record record = event.getRecord();
 					String URL = record.getAttributeAsString("Url");
@@ -715,22 +834,19 @@ public class SmartGWT implements EntryPoint {
 					currentSwagImage.setSrc(URL); 
 					currentSwagImage.setWidth(283);
 					currentSwagImage.setHeight(212);
-//					currentSwagImage.redraw();
-					searchResults.hide();
+					imageSearchResults.hide();
 				}
 			});
 	         
 	         imFeelingLuckyForm.setItems(query, imFeelingLuckyButton);  
-	   
 	         //end search form
-	         
 	         vStack.addMember(imFeelingLuckyForm); 
 	}
 
 	private com.smartgwt.client.widgets.Window createImFeelingLuckyResults(ListGrid grid) {
     	final com.smartgwt.client.widgets.Window winModal = new com.smartgwt.client.widgets.Window();
 		winModal.setWidth(600);
-		winModal.setHeight(400);
+		winModal.setHeight(650);
 		winModal.setTitle("Select an image for your swag");
 		winModal.setShowMinimizeButton(false);
 		winModal.setIsModal(true);
@@ -742,7 +858,6 @@ public class SmartGWT implements EntryPoint {
 			}
 		});
     	
-		VLayout vLayout = new VLayout();
 		IButton cancelButton = new IButton("Cancel");
 		cancelButton.setAutoFit(true);
 		cancelButton.addClickHandler(new ClickHandler() {
@@ -751,10 +866,8 @@ public class SmartGWT implements EntryPoint {
 			}
 		});
 		
-		vLayout.addMember(grid);
-		vLayout.addMember(cancelButton);
-		
-		winModal.addItem(vLayout);
+		winModal.addItem(grid);
+		winModal.addItem(cancelButton);
 		return winModal;
 	}
 	

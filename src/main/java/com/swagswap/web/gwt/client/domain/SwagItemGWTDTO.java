@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.swagswap.domain.SwagItemComment;
 
 /**
  * Unfortunate violation of the DRY principle :(
@@ -32,7 +31,7 @@ public class SwagItemGWTDTO implements IsSerializable {
 	private Date created;
 	private Date lastUpdated;
 	private ArrayList<String> tags = new ArrayList<String>();
-	private ArrayList<SwagItemComment> comments = new ArrayList<SwagItemComment>();
+	private ArrayList<SwagItemCommentGWTDTO> comments = new ArrayList<SwagItemCommentGWTDTO>();
 	
 	private boolean isFetchOnly;
 
@@ -55,7 +54,7 @@ public class SwagItemGWTDTO implements IsSerializable {
 			String description, String imageKey,
 			String ownerID, String ownerNickName, Float averageRating,
 			Integer numberOfRatings, Date created, Date lastUpdated,
-			ArrayList<String> tags, ArrayList<SwagItemComment> comments) {
+			ArrayList<String> tags, ArrayList<SwagItemCommentGWTDTO> comments) {
 		this();
 		this.key = key;
 		this.name = name;
@@ -188,11 +187,11 @@ public class SwagItemGWTDTO implements IsSerializable {
 		this.tags = tags;
 	}
 
-	public ArrayList<SwagItemComment> getComments() {
+	public ArrayList<SwagItemCommentGWTDTO> getComments() {
 		return comments;
 	}
 
-	public void setComments(ArrayList<SwagItemComment> comments) {
+	public void setComments(ArrayList<SwagItemCommentGWTDTO> comments) {
 		this.comments = comments;
 	}
 

@@ -10,6 +10,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.api.datastore.Text;
+
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class SwagItemComment implements Serializable, Comparable<SwagItemComment> {
 	private static final long serialVersionUID = 1L;
@@ -24,10 +26,13 @@ public class SwagItemComment implements Serializable, Comparable<SwagItemComment
 	private Long swagItemKey;
 	
 	@Persistent
+	private String swagSwapUserID;
+	
+	@Persistent
 	private String swagSwapUserNickname;
 	
 	@Persistent
-	private String commentText;
+	private Text commentText;
 	
 	@Persistent
 	private Date created;
@@ -39,10 +44,11 @@ public class SwagItemComment implements Serializable, Comparable<SwagItemComment
 		this.swagItemKey=swagItemKey;
 	}
 
-	public SwagItemComment(Long key, String nickName, String commentText) {
-		this(key);
+	public SwagItemComment(Long swagItemKey, String userId, String nickName, String commentText) {
+		this(swagItemKey);
+		this.swagSwapUserID=userId;
 		this.swagSwapUserNickname = nickName;
-		this.commentText=commentText;
+		this.commentText=new Text(commentText);
 		
 	}
 
@@ -57,17 +63,26 @@ public class SwagItemComment implements Serializable, Comparable<SwagItemComment
 	public String getSwagSwapUserNickname() {
 		return swagSwapUserNickname;
 	}
+	
+	public String getSwagSwapUserID() {
+		return swagSwapUserID;
+	}
+
+	public void setSwagSwapUserID(String swagSwapUserID) {
+		this.swagSwapUserID = swagSwapUserID;
+	}
 
 	public void setSwagSwapUserNickname(String swagSwapUserNickname) {
 		this.swagSwapUserNickname = swagSwapUserNickname;
 	}
-
+	
 	public String getCommentText() {
-		return commentText;
+		return (commentText == null) ? "" : commentText.getValue();
 	}
 
+	//creating a new Text(null) causes a datanucleus Exception
 	public void setCommentText(String commentText) {
-		this.commentText = commentText;
+		this.commentText = new Text((commentText == null) ? "" : commentText);
 	}
 	
 	public Date getCreated() {

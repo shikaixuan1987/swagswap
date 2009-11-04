@@ -3,8 +3,7 @@ package com.swagswap.web.gwt.client;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.smartgwt.client.widgets.tile.TileRecord;
-import com.swagswap.domain.SwagItemComment;
+import com.swagswap.web.gwt.client.domain.SwagItemCommentGWTDTO;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 public interface SmartGWTItemServiceWrapperAsync {
@@ -21,6 +20,6 @@ public interface SmartGWTItemServiceWrapperAsync {
 
 	void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNew, AsyncCallback callback);
 	
-	void addComment(SwagItemComment swagItemComment, AsyncCallback callback);
+	void addComment(SwagItemCommentGWTDTO swagItemCommentGWTDTO, AsyncCallback callback);
 
 }

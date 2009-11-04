@@ -139,7 +139,8 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 //		orig.setNumberOfRatings(updatedItem.getNumberOfRatings());
 		orig.setLastUpdated(new Date());
 		orig.setTags(updatedItem.getTags());
-		orig.setComments(updatedItem.getComments());
+		//comments are managed through addComment()
+//		orig.setComments(updatedItem.getComments());
 		if (updatedItem.hasNewImage()) {
 			orig.getImage().setImage(updatedItem.getImage().getImage());
 		}

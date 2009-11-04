@@ -234,32 +234,6 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		});
 	}
 
-	public static void copyValues(TileRecord from, SwagItemGWTDTO to) {
-		//key is null if adding
-		to.setKey((from.getAttributeAsString("key")==null)?null:Long.valueOf(from.getAttributeAsString("key")));
-		to.setOwnerID(from.getAttributeAsString("ownerID"));
-		to.setName(from.getAttributeAsString("name"));
-		to.setCompany(from.getAttributeAsString("company"));
-		to.setDescription(from.getAttributeAsString("description"));
-		to.setImageKey(removeQueryString(from.getAttributeAsString("imageKey")));
-		to.setAverageRating(from.getAttributeAsFloat("averageRating"));
-		to.setNumberOfRatings(from.getAttributeAsInt("numberOfRatings"));
-		to.setCreated(from.getAttributeAsDate("created"));
-		to.setLastUpdated(from.getAttributeAsDate("lastUpdated"));
-		to.setIsFetchOnly(from.getAttributeAsBoolean("isFetchOnly"));
-//		to.setSwagImage(from.getAttributeAs("image")); //TODO what do we do about image?
-		//TODO email?
-		to.setOwnerNickName(from.getAttributeAsString("ownerNickName"));
-		ArrayList<String> tags = new ArrayList<String>();
-		tags.add((from.getAttributeAsString("tag1")==null)?"":from.getAttributeAsString("tag1"));
-		tags.add((from.getAttributeAsString("tag2")==null)?"":from.getAttributeAsString("tag2"));
-		tags.add((from.getAttributeAsString("tag3")==null)?"":from.getAttributeAsString("tag3"));
-		tags.add((from.getAttributeAsString("tag4")==null)?"":from.getAttributeAsString("tag4"));
-//		to.setNewImageBytes((byte[])from.getAttributeAsObject("newImageBytes")); //TODO we may have to make a new attr for this
-		to.setTags(tags);
-		to.setNewImageURL(from.getAttributeAsString("newImageURL"));
-	}
-	
 	/**
 	 * Remove cache tricking side effect QueryString from imageKey 
 	 * see above: result.setImageKey(appendRandomQueryString(result.getImageKey()));
@@ -292,6 +266,30 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		String imageKeyWithRandomQueryString = imageKeyNoQueryString + "?" + Random.nextInt();
 		return imageKeyWithRandomQueryString;
 	}
+	
+	public static void copyValues(TileRecord from, SwagItemGWTDTO to) {
+		//key is null if adding
+		to.setKey((from.getAttributeAsString("key")==null)?null:Long.valueOf(from.getAttributeAsString("key")));
+		to.setOwnerID(from.getAttributeAsString("ownerID"));
+		to.setName(from.getAttributeAsString("name"));
+		to.setCompany(from.getAttributeAsString("company"));
+		to.setDescription(from.getAttributeAsString("description"));
+		to.setImageKey(removeQueryString(from.getAttributeAsString("imageKey")));
+		to.setAverageRating(from.getAttributeAsFloat("averageRating"));
+		to.setNumberOfRatings(from.getAttributeAsInt("numberOfRatings"));
+		to.setCreated(from.getAttributeAsDate("created"));
+		to.setLastUpdated(from.getAttributeAsDate("lastUpdated"));
+		to.setIsFetchOnly(from.getAttributeAsBoolean("isFetchOnly"));
+		to.setOwnerNickName(from.getAttributeAsString("ownerNickName"));
+		ArrayList<String> tags = new ArrayList<String>();
+		tags.add((from.getAttributeAsString("tag1")==null)?"":from.getAttributeAsString("tag1"));
+		tags.add((from.getAttributeAsString("tag2")==null)?"":from.getAttributeAsString("tag2"));
+		tags.add((from.getAttributeAsString("tag3")==null)?"":from.getAttributeAsString("tag3"));
+		tags.add((from.getAttributeAsString("tag4")==null)?"":from.getAttributeAsString("tag4"));
+		to.setTags(tags);
+		//don't need comments
+		to.setNewImageURL(from.getAttributeAsString("newImageURL"));
+	}
 
 	public static void copyValues(SwagItemGWTDTO from, TileRecord to) {
 		to.setAttribute("key", from.getKey());
@@ -309,6 +307,7 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		to.setAttribute("tag2", from.getTags().get(1));
 		to.setAttribute("tag3", from.getTags().get(2));
 		to.setAttribute("tag4", from.getTags().get(3));
+		to.setAttribute("comments", from.getComments());
 		//newImageURL not needed here
 	}
 

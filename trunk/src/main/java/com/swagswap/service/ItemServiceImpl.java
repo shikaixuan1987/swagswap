@@ -163,23 +163,23 @@ public class ItemServiceImpl implements ItemService {
 	 *            The reverse of what it normally does
 	 */
 	public List<SwagItem> filterByCommentedOn(List<SwagItem> swagList,
-			String userNickName, boolean exclusive) {
+			String userID, boolean exclusive) {
 
 		// Easier and faster to do this programatically than go to DAO
 		List<SwagItem> filteredList = new ArrayList<SwagItem>();
-		if (swagList == null || userNickName == null) {
+		if (swagList == null || userID == null) {
 			return filteredList;
 		}
 		itemLoop: for (SwagItem swagItem : swagList) {
 			for (SwagItemComment swagItemComment : swagItem.getComments()) {
-				if (swagItemComment.getSwagSwapUserNickname().equals(
-						userNickName)
+				if (swagItemComment.getSwagSwapUserID().equals(
+						userID)
 						&& !exclusive) {
 					filteredList.add(swagItem);
 					continue itemLoop;
 				}
-				if ((!swagItemComment.getSwagSwapUserNickname().equals(
-						userNickName))
+				if ((!swagItemComment.getSwagSwapUserID().equals(
+						userID))
 						&& exclusive) {
 					filteredList.add(swagItem);
 					continue itemLoop;

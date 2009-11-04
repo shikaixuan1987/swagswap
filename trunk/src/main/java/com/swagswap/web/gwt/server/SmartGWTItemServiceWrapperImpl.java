@@ -13,6 +13,7 @@ import com.swagswap.exceptions.ImageTooLargeException;
 import com.swagswap.exceptions.LoadImageFromURLException;
 import com.swagswap.service.ItemService;
 import com.swagswap.web.gwt.client.SmartGWTItemServiceWrapper;
+import com.swagswap.web.gwt.client.domain.SwagItemCommentGWTDTO;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 /**
@@ -66,10 +67,14 @@ public class SmartGWTItemServiceWrapperImpl extends
 		itemService.updateRating(swagItemKey, computedRatingDifference, isNew);
 	}
 	
-	public void addComment(SwagItemComment swagItemComment) {
-		itemService.addComment(swagItemComment);
+	public void addComment(SwagItemCommentGWTDTO swagItemComment) {
+		itemService.addComment(toComment(swagItemComment));
 	}
 
+
+	/**
+	 * For DTO
+	 */
 	
 	private ArrayList<SwagItemGWTDTO> toDTOList(List<SwagItem> swagItems) {
 		ArrayList<SwagItemGWTDTO> dtos = new ArrayList<SwagItemGWTDTO>();
@@ -86,11 +91,30 @@ public class SmartGWTItemServiceWrapperImpl extends
 		}
 		return copiedList;
 	}
+	
+	private ArrayList<SwagItemCommentGWTDTO> toCommentDTOList(List<SwagItemComment> listItems) {
+		ArrayList<SwagItemCommentGWTDTO> copiedList = new ArrayList<SwagItemCommentGWTDTO>();
+		for (SwagItemComment listItem : listItems) {
+			copiedList.add(new SwagItemCommentGWTDTO(
+					listItem.getSwagItemKey(),
+					listItem.getSwagSwapUserID(),
+					listItem.getSwagSwapUserNickname(), 
+					listItem.getCommentText(), 
+					listItem.getCreated()));
+		}
+		return copiedList;
+	}
+	
 
-	/**
-	 * For DTO
-	 */
-
+	private SwagItemComment toComment(
+			SwagItemCommentGWTDTO swagItemCommentGWTDTO) {
+		return new SwagItemComment(
+				swagItemCommentGWTDTO.getSwagItemKey(),
+				swagItemCommentGWTDTO.getSwagSwapUserID(),
+				swagItemCommentGWTDTO.getSwagSwapUserNickname(),
+				swagItemCommentGWTDTO.getCommentText());
+	}
+	
 	public SwagItem toSwagItem(SwagItemGWTDTO dto) {
 		SwagItem swagItem = new SwagItem();
 		swagItem.setKey(dto.getKey());
@@ -119,7 +143,7 @@ public class SmartGWTItemServiceWrapperImpl extends
 						.getAverageRating(), swagItem.getNumberOfRatings(),
 				swagItem.getCreated(), swagItem.getLastUpdated(),
 				paddedTags,
-				toCopiedArrayList(swagItem.getComments()));
+				toCopiedArrayList(toCommentDTOList(swagItem.getComments())));
 	}
 
 	//always want 4 tags present for backing form so add empty strings on the end to get the count up to 4

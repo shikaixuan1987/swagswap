@@ -3,14 +3,12 @@ package com.swagswap.web.gwt.client;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.smartgwt.client.widgets.tile.TileRecord;
-import com.swagswap.domain.SwagItemComment;
 import com.swagswap.exceptions.AccessDeniedException;
 import com.swagswap.exceptions.ImageTooLargeException;
 import com.swagswap.exceptions.LoadImageFromURLException;
+import com.swagswap.web.gwt.client.domain.SwagItemCommentGWTDTO;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 @RemoteServiceRelativePath ("smartGWTItemServiceWrapper")
@@ -39,7 +37,7 @@ public interface SmartGWTItemServiceWrapper extends RemoteService {
     
 	void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNew);
 	
-	void addComment(SwagItemComment swagItemComment);
+	void addComment(SwagItemCommentGWTDTO swagItemCommentGWTDTO);
 	
     public static class Util {
 		private static SmartGWTItemServiceWrapperAsync instance;

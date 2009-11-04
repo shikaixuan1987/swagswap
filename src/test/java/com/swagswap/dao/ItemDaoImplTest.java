@@ -176,7 +176,7 @@ public class ItemDaoImplTest extends LocalDatastoreTestCase  {
     	itemDao.insert(swagItem);
     	SwagItem retrievedItem = itemDao.get(swagItem.getKey());
     	String nickName = UserServiceFactory.getUserService().getCurrentUser().getNickname();
-    	itemDao.addComment(new SwagItemComment(swagItem.getKey(), nickName, "comment"));
+    	itemDao.addComment(new SwagItemComment(swagItem.getKey(),"1", nickName, "comment"));
     	//get it again
     	retrievedItem = itemDao.get(swagItem.getKey());
     	assertEquals(1, retrievedItem.getComments().size());

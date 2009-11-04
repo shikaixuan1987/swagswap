@@ -135,6 +135,9 @@ public class SmartGWTItemServiceWrapperImpl extends
 	}
 
 	public SwagItemGWTDTO toDTO(SwagItem swagItem) {
+		if (swagItem==null) {
+			return null;
+		}
 		ArrayList<String> paddedTags = toCopiedArrayList(swagItem.getTags());
 		padTags(paddedTags);
 		return new SwagItemGWTDTO(swagItem.getKey(), swagItem.getName(),

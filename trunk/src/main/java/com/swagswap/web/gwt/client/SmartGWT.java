@@ -30,8 +30,6 @@ import com.smartgwt.client.types.ImageStyle;
 import com.smartgwt.client.types.OperatorId;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.Visibility;
-import com.smartgwt.client.util.DateDisplayFormatter;
-import com.smartgwt.client.util.DateUtil;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Img;
@@ -57,8 +55,10 @@ import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.form.fields.UploadItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
+import com.smartgwt.client.widgets.grid.CellFormatter;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
+import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.HStack;
 import com.smartgwt.client.widgets.layout.VLayout;
@@ -104,7 +104,7 @@ public class SmartGWT implements EntryPoint {
 	private ListGrid commentsGrid;
 	private VStack commentsFormVStack;
 	private RichTextEditor richTextEditor;
-	private VStack commentsFormAndCommentsVStack;
+	private DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd-MM-yy HH:MM");
 	
 	/**
 	 * Check login status and build GUI
@@ -221,7 +221,7 @@ public class SmartGWT implements EntryPoint {
 		tileGrid.setTileWidth(100);
 		tileGrid.setTileHeight(140);
 		tileGrid.setTileValueAlign("left");
-		tileGrid.setWidth(400);
+		tileGrid.setWidth(350);
 		tileGrid.setHeight(600);
 		tileGrid.setShowResizeBar(true);
 		tileGrid.setShowAllRecords(true);
@@ -247,16 +247,17 @@ public class SmartGWT implements EntryPoint {
 				return createStarsHTMLString(averageRating) + " / " + numberOfRatings;
 			}
 		});
+		
 		DetailViewerField lastUpdated = new DetailViewerField("lastUpdated");
-
-		DateUtil.setNormalDateDisplayFormatter(new DateDisplayFormatter() {
-		    public String format(Date date) {
-		        if(date == null) return null;        
-		        DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd-MM-yy HH:MM");
-		        String format = dateFormatter.format(date);
-		        return format;
-		    }
-		});
+		lastUpdated.setDetailFormatter(new DetailFormatter()  {
+			public String format(Object value, DetailViewerRecord record,
+					DetailViewerField field) {
+					Date lastUpdated = record.getAttributeAsDate("lastUpdated");
+			        if(lastUpdated == null) return null;        
+			        return dateFormatter.format(lastUpdated);
+			}
+		}
+		);
 		
 		tileGrid.setFields(pictureField, name, company ,ownerNickName, averageRating, lastUpdated);
 		
@@ -376,6 +377,7 @@ public class SmartGWT implements EntryPoint {
 				starHStack.hide();
 				editFormHStack.show();
 				commentsFormVStack.hide(); //no comments on add
+				commentsGrid.hide();
 				boundSwagForm.editNewRecord();
 			}
 		});
@@ -528,8 +530,6 @@ public class SmartGWT implements EntryPoint {
     }
     
 	private VStack createComments() {
-		
-		commentsFormAndCommentsVStack = new VStack();
 		commentsFormVStack = new VStack();
 
 		richTextEditor = new RichTextEditor();
@@ -550,7 +550,7 @@ public class SmartGWT implements EntryPoint {
 		commentsGrid = new ListGrid();
 		commentsGrid.setWrapCells(true);
 		commentsGrid.setFixedRecordHeights(false);
-		commentsGrid.setWidth(400);
+		commentsGrid.setWidth(530);
 		commentsGrid.setHeight(400);
 		commentsGrid.setShowAllRecords(true);
 		commentsGrid.setCanEdit(false);
@@ -558,13 +558,24 @@ public class SmartGWT implements EntryPoint {
 		ListGridField nickNameField = new ListGridField("swagSwapUserNickname",
 				"Nickname", 100);
 		ListGridField commentField = new ListGridField("commentText", "Comment");
-		ListGridField dateField = new ListGridField("created", "Date", 50);
+		ListGridField dateField = new ListGridField("created", "Date", 70);
+		dateField.setCellFormatter(new CellFormatter() {
+			public String format(Object value, ListGridRecord record,
+					int rowNum, int colNum) {
+				if (value==null) {
+					return null;
+				}
+				return dateFormatter.format((Date)value);
+			}
+		});
 
 		commentsGrid.setFields(new ListGridField[] { nickNameField,
 				commentField, dateField });
 
 		commentsFormVStack.addMember(addCommentButton);
 		commentsFormVStack.addMember(richTextEditor);
+		
+		VStack commentsFormAndCommentsVStack = new VStack();
 		commentsFormAndCommentsVStack.addMember(commentsFormVStack);
 		commentsFormAndCommentsVStack.addMember(commentsGrid);
 		commentsFormVStack.hide();
@@ -717,6 +728,10 @@ public class SmartGWT implements EntryPoint {
 		itemService.fetch(currentKey, new AsyncCallback<SwagItemGWTDTO>() {
 			@Override
 			public void onSuccess(SwagItemGWTDTO result) {
+				//result is null on an add
+				if (result==null) {
+					return;
+				}
 				List<SwagItemCommentGWTDTO> comments = result.getComments();
 				commentsGrid.setData(toCommentRecords(comments));
 				commentsGrid.show();

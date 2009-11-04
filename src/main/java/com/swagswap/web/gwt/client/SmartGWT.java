@@ -160,9 +160,10 @@ public class SmartGWT implements EntryPoint {
 		valueMap.put("company", "Company");
 		valueMap.put("averageRating", "Avg Rating");
 		valueMap.put("ownerNickName", "Owner");
-		valueMap.put("date", "Date");
+		valueMap.put("lastUpdated", "Last Updated");
 
 		sortItem.setValueMap(valueMap);
+		sortItem.setValue("lastUpdated"); //default
 
 		final CheckboxItem ascendingItem = new CheckboxItem("chkSortDir");
 		ascendingItem.setTitle("Ascending");

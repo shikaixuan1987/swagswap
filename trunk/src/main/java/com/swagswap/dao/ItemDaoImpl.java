@@ -131,6 +131,7 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 //	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public void update(SwagItem updatedItem) {
 		SwagItem orig = get(updatedItem.getKey(),true);
+		orig.setLastUpdated(new Date());
 		orig.setName(updatedItem.getName());
 		orig.setCompany(updatedItem.getCompany());
 		orig.setDescription(updatedItem.getDescription());
@@ -149,7 +150,6 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 		updatedItem.setNumberOfRatings(orig.getNumberOfRatings());
 	}
 	
-
 	/**
 	 * 
 	 * @param calculatedNewRating the new rating for the swagItem. 

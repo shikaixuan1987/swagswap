@@ -10,8 +10,12 @@ public interface UserDao {
 	SwagSwapUser get(Long id);
 
 	SwagSwapUser findByEmail(String email);
+	
+	SwagSwapUser findByGoogleID(String googleID);
 
 	void update(SwagSwapUser updatedUser);
+	
+	void optOut(String googleID, boolean optOut);
 
 	void insert(SwagSwapUser swagSwapUser);
 

@@ -47,8 +47,8 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		key.setRequired (false);
         addField (key);
 
-        addField(new DataSourceTextField("name", "Name", 20, true));
-        addField(new DataSourceTextField("company", "Company", 20, false));
+        addField(new DataSourceTextField("name", "Name", 30, true));
+        addField(new DataSourceTextField("company", "Company", 30, false));
         addField(new DataSourceTextField("description", "Description", 30, false));
 		
 		DataSourceImageField imageField = new DataSourceImageField("imageKey", "Image");
@@ -56,15 +56,15 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		addField(imageField);
 		
 		addField(new DataSourceTextField("ownerID", "Owner", 20, false));
-		addField(new DataSourceTextField("ownerNickName", "Owner Nick Name", 20, false));
+		addField(new DataSourceTextField("ownerNickName", "Owner Nick Name", 30, false));
 		addField(new DataSourceFloatField("averageRating", "Avg Rating", 5, false));
 		addField(new DataSourceIntegerField("numberOfRatings", "No. Ratings", 5, false));
 		addField(new DataSourceDateField("created", "Created", 10, false));
 		addField(new DataSourceDateField("lastUpdated", "Updated", 10, false));
-		addField(new DataSourceTextField("tag1", "Tag 1", 10, false));
-		addField(new DataSourceTextField("tag2", "Tag 2", 10, false));
-		addField(new DataSourceTextField("tag3", "Tag 3", 10, false));
-		addField(new DataSourceTextField("tag4", "Tag 4", 10, false));
+		addField(new DataSourceTextField("tag1", "Tag 1", 30, false));
+		addField(new DataSourceTextField("tag2", "Tag 2", 30, false));
+		addField(new DataSourceTextField("tag3", "Tag 3", 30, false));
+		addField(new DataSourceTextField("tag4", "Tag 4", 30, false));
 		addField(new DataSourceImageFileField("newImageBytes", "New Swag Image", 20, false));
 		//TODO add tags and comments
 	}

@@ -5,9 +5,13 @@ import java.util.List;
 
 import javax.jdo.Query;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.google.apphosting.api.UserServicePb.GetOAuthUserRequest;
 import com.swagswap.domain.BlackListedUser;
 import com.swagswap.domain.SwagSwapUser;
 
@@ -41,19 +45,27 @@ public class UserDaoImpl extends JdoDaoSupport implements UserDao {
 		query.setUnique(true);
 		return (SwagSwapUser) query.execute(email); 
 	}
+	
+	public SwagSwapUser findByGoogleID(String googleID) {
+		Query query = getPersistenceManager().newQuery(
+				"select from " + SwagSwapUser.class.getName()
+				+ " where googleID==p1 parameters String p1");
+		query.setUnique(true);
+		return (SwagSwapUser) query.execute(googleID); 
+	}
 
 	//Can't delete users right now (design decision :)
 	// public void delete(Long id) {}
 
-	/**
-	 * Does not update SwagItemRatings. 
-	 */
 	public void update(SwagSwapUser updatedUser) {
 		SwagSwapUser orig = get(updatedUser.getKey());
 		orig.setNickName(updatedUser.getNickName());
-		//This will replace any all items. 
-		//TODO this gives error "object is managed by a different object manager"
-		//orig.getSwagItemRatings().addAll(updatedUser.getSwagItemRatings());
+		orig.setOptOut(updatedUser.getOptOut());
+	}
+	
+	public void optOut(String googleID, boolean optOut) {
+		SwagSwapUser orig = findByGoogleID(googleID);
+		orig.setOptOut(optOut);
 	}
 
 	public void insert(SwagSwapUser swagSwapUser) {

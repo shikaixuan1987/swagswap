@@ -1,5 +1,6 @@
 package com.swagswap.service;
 
+import java.util.Date;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -9,7 +10,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.appengine.api.labs.taskqueue.QueueFactory;
+import com.google.appengine.api.labs.taskqueue.TaskOptions;
 
 /**
  * For sending email
@@ -17,29 +20,49 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class MailServiceImpl implements MailService {
 
+	private static final String FROM_ADDRESS = "swagswap.devoxx2009@gmail.com";
+
 	private static final Logger log = Logger.getLogger(MailServiceImpl.class);
 
-	@Autowired
-	private ItemService swagSwItemService;
-	
 	public MailServiceImpl() {
 	}
 
-	public void sendMail(String email, String subject, String msgBody) {
+	/**
+	 * @param googleId To construct opt-out line in message
+	 */
+	public void send(String googleId, String email, String subject, String msgBody) {
+		log.debug("Processing send for " + subject + " at " + new Date());
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
-        String sender= "SamBrodkin@gmail.com";
         try {
             Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress(sender));
+            msg.setFrom(new InternetAddress(FROM_ADDRESS));
             msg.addRecipient(Message.RecipientType.TO,new InternetAddress(email));
             msg.setSubject(subject);
+            // add opt-out line
+            msgBody=msgBody + "\n\n\n\n\nStop receiving emails from SwagSwap: http://swagswap.appspot.com/swag/opt-out/"+ googleId +"/true";   
+            msgBody=msgBody + "\n\n(Re)start receiving emails from SwagSwap: http://swagswap.appspot.com/swag/opt-out/"+ googleId +"/false";   
             msg.setText(msgBody);
             Transport.send(msg);
             log.debug("sending mail to " + email);
         } catch (Exception e) {
-           log.error("sender is " +  sender, e);
+           log.error("sender is " +  FROM_ADDRESS, e);
         }
+	}
+	
+	/**
+	 * Send mail based on user id.  Do it in a Task Queue to prevent delay
+	 */
+	public void sendWithTaskManager(Long swagItemKey, String subject, String msgBody) {
+		log.debug("Queing task for mail with subject " + subject + " at " + new Date());
+	    QueueFactory.getDefaultQueue().add(
+	    		//only can pass String or byte[] params
+	            TaskOptions.Builder
+	              .url("/swag/admin/sendMail")
+	              .param("swagItemKey", swagItemKey.toString())
+	              .param("subject", subject)
+	              .param("msgBody", msgBody)
+	              );
 	}
 
 }

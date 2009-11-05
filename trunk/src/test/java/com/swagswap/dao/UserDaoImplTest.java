@@ -73,6 +73,17 @@ public class UserDaoImplTest extends LocalDatastoreTestCase  {
     	assertFalse(userDao.isBlackListed("not@blacklisted.com"));
     }
     
+    public void testOptOut() {
+    	SwagSwapUser orig = Fixture.createUser();
+    	userDao.insert(orig);
+    	SwagSwapUser user = userDao.findByGoogleID(orig.getGoogleID());
+//    	userDao.optOut(orig.getGoogleID(), true);
+        user.setOptOut(true);
+        
+    	SwagSwapUser retrievedUser = userDao.get(orig.getKey());
+//    	assertEquals(retrievedUser.getOptOut(), true);
+    }
+    
     /**
      * Database count assertions
      * @param usersExpected

@@ -21,7 +21,7 @@ public class Fixture {
 		SwagItem swagItem = new SwagItem();
 		swagItem.setName("name");
 		swagItem.setDescription("description");
-		swagItem.setOwnerID("1");
+		swagItem.setOwnerGoogleID("1");
 
 		ArrayList<String> tags = new ArrayList<String>();
 		tags.add("orange");
@@ -40,7 +40,7 @@ public class Fixture {
 		SwagItem swagItem = createSwagItem(); // use swagItem for convenience
 		return new SwagItemGWTDTO(swagItem.getKey(), swagItem.getName(),
 				swagItem.getCompany(), swagItem.getDescription(), swagItem
-						.getImageKey(), swagItem.getOwnerID(), swagItem
+						.getImageKey(), swagItem.getOwnerGoogleID(), swagItem
 						.getOwnerNickName(), swagItem.getAverageRating(),
 				swagItem.getNumberOfRatings(), swagItem.getCreated(),
 				swagItem.getLastUpdated(), (ArrayList)swagItem.getTags(), (ArrayList)swagItem.getComments()

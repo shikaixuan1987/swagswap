@@ -2,7 +2,9 @@ package com.swagswap.dao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import org.apache.commons.lang.NotImplementedException;
@@ -25,6 +27,14 @@ public class UserDaoImpl extends JdoDaoSupport implements UserDao {
 
 	private static final Logger log = Logger.getLogger(UserDaoImpl.class);
 
+	
+	public List<SwagSwapUser> getAll() {
+		
+		PersistenceManager pm = getPersistenceManager();
+		String query = "select from " + SwagSwapUser.class.getName() + " order by nickName";
+		List<SwagSwapUser> users = (List<SwagSwapUser>) pm.newQuery(query).execute();
+		return users;
+	}
 	
 	/* (non-Javadoc)
 	 * @see com.swagswap.dao.UserDao#get(java.lang.Long)
@@ -94,5 +104,6 @@ public class UserDaoImpl extends JdoDaoSupport implements UserDao {
 				"select from " + SwagSwapUser.class.getName());
 		return  (List<BlackListedUser>)query.execute(); 
 	}
+
 	
 }

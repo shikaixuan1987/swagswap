@@ -57,7 +57,7 @@ public class ImageServiceImpl implements ImageService {
 	 */
 	private String constructDefaultImageURL(String requestURL) {
 		String baseURL = requestURL.substring(0, requestURL
-				.lastIndexOf("/swag"));
+				.lastIndexOf("/springmvc"));
 		return baseURL + "/" + PATH_TO_DEFAULT_IMAGE;
 	}
 

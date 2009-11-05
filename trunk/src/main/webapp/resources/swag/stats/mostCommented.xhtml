@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:swag="http://java.sun.com/jsf/composite/swag">
+
+
+<composite:interface>
+	<composite:attribute name="style" />
+</composite:interface>
+
+<composite:implementation>
+	<swag:panel title="Most Commented Swag" height="105px"
+		style="#{cc.attrs.style}"  headerColor="white">
+		<h:dataTable value="#{swagStatsBean.swagStats.mostCommented}" var="row"
+			width="100%" rules="none" rowClasses="tableRow1, tableRow2"
+			columnClasses="colWidth100" cellpadding="4">
+			<h:column>
+				<h:outputText value="#{row.name}" title="#{row.description}" />
+			</h:column>
+			<h:column>
+				<h:outputText value="#{row.numberOfComments}" />
+			</h:column>
+		</h:dataTable>
+	</swag:panel>
+</composite:implementation>
+
+
+</html>

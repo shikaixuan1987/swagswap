@@ -1,7 +1,5 @@
 package com.swagswap.service;
 
-import java.util.List;
-
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -74,6 +72,10 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		return userDao.findByEmail(email);
 	}
 	
+	public SwagSwapUser findByGoogleID(String googleID) {
+		return userDao.findByGoogleID(googleID);
+	}
+	
 /*	 I wanted to include this method so that the front end wouldn't have to deal with 
 	 just in time creation of users in our db if they don't exist. The reason this was needed is that since
 	 we're using google authentication, we never know if a user is logged in with google 
@@ -126,6 +128,19 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		recomputeAndRecordSwagItemAverageRating(previousRatingValue, newSwagItemRating);
 	}
 	
+	public void blackListUser(String email) {
+		userDao.blackListUser(email);
+	}
+	
+	public boolean isBlackListed(String email) {
+		return userDao.isBlackListed(email);
+	}
+	
+	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
+	public void optOut(String googleID, boolean optOut) {
+		userDao.optOut(googleID, optOut);
+	}
+	
 	/**
 	 * Wrapped Google UserService methods so that we can 
 	 * add openId or something else later
@@ -160,18 +175,6 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	
 	public boolean isUserLoggedIn() {
 		return googleUserService.isUserLoggedIn();
-	}
-	
-	public void blackListUser(String email) {
-		userDao.blackListUser(email);
-	}
-	
-	public boolean isBlackListed(String email) {
-		return userDao.isBlackListed(email);
-	}
-	
-	public void removeUserFromMailings(String userId) {
-		throw new NotImplementedException();
 	}
 
 	/**

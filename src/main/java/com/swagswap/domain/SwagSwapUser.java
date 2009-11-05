@@ -38,6 +38,9 @@ public class SwagSwapUser implements Serializable {
 	@Persistent
 	private Date joined;
 	
+	@Persistent
+	private boolean optOut; //if they've opted out of maliings
+	
 	public SwagSwapUser() {
 	}
 	
@@ -112,6 +115,14 @@ public class SwagSwapUser implements Serializable {
 	}
 	public void setJoined(Date joined) {
 		this.joined = joined;
+	}
+	
+	public boolean getOptOut() {
+		return optOut;
+	}
+
+	public void setOptOut(boolean optOut) {
+		this.optOut = optOut;
 	}
 
 	@Override

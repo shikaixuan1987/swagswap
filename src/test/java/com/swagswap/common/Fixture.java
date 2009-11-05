@@ -51,6 +51,7 @@ public class Fixture {
 	public static SwagSwapUser createUser() {
 		SwagSwapUser swagSwapUser = new SwagSwapUser();
 		swagSwapUser.setEmail("test@gmail.com");
+		swagSwapUser.setGoogleID("111");
 		return swagSwapUser;
 	}
 

@@ -56,6 +56,7 @@ import com.smartgwt.client.widgets.form.fields.UploadItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 import com.smartgwt.client.widgets.grid.CellFormatter;
+import com.smartgwt.client.widgets.grid.HoverCustomizer;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
@@ -143,7 +144,7 @@ public class SmartGWT implements EntryPoint {
 		
 		mainStack.addMember(itemsEditCommentsHStack);
 
-		RootPanel.get("gwt-tilegrid").add(mainStack); //anchored on GWT html page
+		RootPanel.get("gwtApp").add(mainStack); //anchored on GWT html page
 		mainStack.draw();
 	}
 
@@ -219,6 +220,7 @@ public class SmartGWT implements EntryPoint {
 	}
 
 	private TileGrid createItemsPanel() {
+		// build swag icons
 		tileGrid.setTileWidth(100);
 		tileGrid.setTileHeight(140);
 		tileGrid.setTileValueAlign("left");

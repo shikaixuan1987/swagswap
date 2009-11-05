@@ -2,15 +2,24 @@ package com.swagswap.web.springmvc.controller;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.catalina.HttpResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.swagswap.domain.SwagItem;
+import com.swagswap.domain.SwagSwapUser;
 import com.swagswap.service.AdminService;
+import com.swagswap.service.ItemService;
+import com.swagswap.service.MailService;
 import com.swagswap.service.SwagSwapUserService;
 
 @Controller
@@ -18,11 +27,18 @@ public class AdminController {
 	private static final Logger log = Logger.getLogger(AdminController.class);
 	private AdminService adminService;
 	private SwagSwapUserService swagSwapUserService;
+	private ItemService itemService;
+	private MailService mailService;
 	
 	@Autowired
-	public AdminController(AdminService adminService, SwagSwapUserService swagSwapUserService) {
+	public AdminController(AdminService adminService, 
+			SwagSwapUserService swagSwapUserService, 
+			ItemService itemService,
+			MailService mailService) {
 		this.adminService = adminService;
 		this.swagSwapUserService=swagSwapUserService;
+		this.itemService=itemService;
+		this.mailService=mailService;
 	}
 
 	@RequestMapping("/admin/main")
@@ -56,14 +72,55 @@ public class AdminController {
 		return "admin";
 	}
 	
-	//TODO finish me
-	@RequestMapping(value = "/mailings/removeUser", method = RequestMethod.GET)
-	public String removeUserFromMailings(@RequestParam("userId") String userId,
+	@RequestMapping(value = "/opt-out/{googleID}/{optOut}", method = RequestMethod.GET)
+	public String optOut(
+			@PathVariable("googleID") String googleId,
+			@PathVariable("optOut") boolean optOut,
 			Model model) throws IOException {
-//		swagSwapUserService.removeUserFromMailings(userId);
-		model.addAttribute("message", "You have been removed from all future swagswap mailings ");
-		return "youHaveBeenRemoved";
+		swagSwapUserService.optOut(googleId, optOut);
+		//repace it in the session
+		
+		model.addAttribute("message", "You have been" +
+				((optOut)? " removed from" : " added to") + " future SwagSwap mailings.");
+		return "opt-out";
 	}
 	
-
+	/**
+	 * Construct mail message and send it using the MailService
+	 * Called by Task Queue
+	 * @param swagItemKey
+	 * @param subject
+	 * @param msgBody
+	 * @param response returns HTTP 200 response status
+	 * @param model
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/admin/sendMail", method = RequestMethod.POST)
+	public void sendMailById(
+			@RequestParam("swagItemKey") String swagItemKey,
+			@RequestParam("subject") String subject,
+			@RequestParam("msgBody") String msgBody,
+			HttpServletResponse response,
+			Model model) throws IOException {
+		SwagItem swagItem = itemService.get(Long.parseLong(swagItemKey));
+		String googleID = swagItem.getOwnerID();
+		SwagSwapUser swagSwapUser = swagSwapUserService.findByGoogleID(googleID);
+		//TODO don't send emails when a user comments on their own item
+		if (swagSwapUser.getOptOut()) {
+			log.debug(swagSwapUser.getGoogleID() + " has opted out of emails");
+		}
+		else {
+			String email = swagSwapUser.getEmail();
+			log.debug("Sending mail to " + email + " msg is subject:" + subject + " msgBody:" + msgBody);
+			try {
+				mailService.send(googleID, email, subject, msgBody);
+			}
+			catch (Exception e) {
+				log.error(e);
+			}
+		}
+		//if you don't do this, taskmanager retries the task (a lot)
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+	
 }

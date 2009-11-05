@@ -5,7 +5,9 @@ import java.io.OutputStream;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,7 +42,11 @@ public class ImageController {
 	 */
 	@RequestMapping(value = "/showImage/{key}", method = RequestMethod.GET)
 	public void streamImageContent(@PathVariable("key") String key,
-					HttpServletRequest req, OutputStream outputStream) throws IOException {
+					HttpServletRequest req, HttpServletResponse response, 
+					OutputStream outputStream) throws IOException {
+		// set to no cache: NOTE this could fix caching problem 
+		// but may not be ideal to stop all browser image caching
+		//response.setDateHeader( "Expires", DateUtils.addMonths( new Date(), -2 ).getTime() );
 		SwagImage swagImage = imageService.get(key);
 		byte[] swagImageBytes;
 		//if there's no image, return default image

@@ -261,14 +261,17 @@ public class ItemServiceImpl implements ItemService {
 		newComment.setSwagSwapUserNickname(swagSwapUserService.getCurrentUser()
 				.getNickname());
 		newComment.setSwagSwapUserID(swagSwapUserService.getCurrentUser().getUserId());
-		//send the owner a mail
-		mailService.sendMail(
-				swagSwapUserService.getCurrentUser().getEmail(),
-				"Someone just commented on your swag item",
-				newComment.getSwagSwapUserNickname() + " said: " + newComment.getCommentText() +
-				"\nSee Your Item here: http://swagswap.appspot.com/swag/view/"+newComment.getSwagItemKey()
-				);
 		itemDao.addComment(newComment);
+		//send the owner a mail
+		String subject = "Someone just commented on your swag item";
+		String msgBody = newComment.getSwagSwapUserNickname() + " said: " + newComment.getCommentText() +
+		"\n\nSee Your Item here: (Spring MVC impl) http://swagswap.appspot.com/swag/view/"+newComment.getSwagItemKey() +
+		"\nor here (JSF 2.0 impl) http://swagswap.appspot.com/jsf/viewSwag.jsf?swagItemKey=" + newComment.getSwagItemKey();
+		mailService.sendWithTaskManager(
+				newComment.getSwagItemKey(),
+				subject,
+				msgBody
+				);
 	}
 
 	public void setItemDao(ItemDao itemDao) {

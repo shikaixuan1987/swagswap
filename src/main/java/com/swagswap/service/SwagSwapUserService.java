@@ -17,28 +17,31 @@ public interface SwagSwapUserService {
 
 	SwagSwapUser findByEmail();
 	
+	SwagSwapUser findByGoogleID(String googleID);
+	
 	SwagSwapUser findByEmailOrCreate();
 
 	void addOrUpdateRating(String userEmail, SwagItemRating swagItemRating) throws InvalidSwagItemRatingException ;
 	
-	public boolean isItemOwner(SwagItem item);
+	boolean isItemOwner(SwagItem item);
+	
+	
+	void blackListUser(String email);
+	
+	void optOut(String googleID, boolean optOut);
 	
 	/**
 	 * Wrapped Google UserService methods
 	 */
 	
-	public String createLoginURL(String destinationURL);
+	String createLoginURL(String destinationURL);
 	
-	public String createLogoutURL(String destinationURL);
+	String createLogoutURL(String destinationURL);
 	
-	public User getCurrentUser();
+	User getCurrentUser();
 	
-	public boolean isUserAdmin();
+	boolean isUserAdmin();
 	
-	public boolean isUserLoggedIn();
-	
-	public void blackListUser(String email);
-
-	void removeUserFromMailings(String userId);
+	boolean isUserLoggedIn();
 
 }

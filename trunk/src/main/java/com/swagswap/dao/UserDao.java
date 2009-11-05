@@ -24,4 +24,6 @@ public interface UserDao {
 	boolean isBlackListed(String email);
 	
 	List<BlackListedUser> getBlackListedUsers();
+
+	List<SwagSwapUser> getAll();
 }

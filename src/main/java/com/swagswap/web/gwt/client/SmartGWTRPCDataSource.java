@@ -55,7 +55,7 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		imageField.setImageURLPrefix("/springmvc/showThumbnail/");
 		addField(imageField);
 		
-		addField(new DataSourceTextField("ownerID", "Owner", 20, false));
+		addField(new DataSourceTextField("ownerGoogleID", "Owner", 20, false));
 		addField(new DataSourceTextField("ownerNickName", "Owner Nick Name", 30, false));
 		addField(new DataSourceFloatField("averageRating", "Avg Rating", 5, false));
 		addField(new DataSourceIntegerField("numberOfRatings", "No. Ratings", 5, false));
@@ -270,7 +270,7 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 	public static void copyValues(TileRecord from, SwagItemGWTDTO to) {
 		//key is null if adding
 		to.setKey((from.getAttributeAsString("key")==null)?null:Long.valueOf(from.getAttributeAsString("key")));
-		to.setOwnerID(from.getAttributeAsString("ownerID"));
+		to.setOwnerGoogleID(from.getAttributeAsString("ownerGoogleID"));
 		to.setName(from.getAttributeAsString("name"));
 		to.setCompany(from.getAttributeAsString("company"));
 		to.setDescription(from.getAttributeAsString("description"));
@@ -293,7 +293,7 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 
 	public static void copyValues(SwagItemGWTDTO from, TileRecord to) {
 		to.setAttribute("key", from.getKey());
-		to.setAttribute("ownerID", from.getOwnerID());
+		to.setAttribute("ownerGoogleID", from.getOwnerGoogleID());
 		to.setAttribute("ownerNickName", from.getOwnerNickName());
 		to.setAttribute("name", from.getName());
 		to.setAttribute("company", from.getCompany());

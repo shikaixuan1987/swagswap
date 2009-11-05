@@ -13,7 +13,7 @@ public class IsAllowedTag extends AbstractSpringContextLookupTag {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(IsAllowedTag.class);
 	// tag attributes
-	private String swagItemOwnerID;
+	private String swagItemOwnerGoogleID;
 
 	public int doStartTag() throws JspException {
 		boolean isLoggedIn = getSwagSwapUserService().isUserLoggedIn();
@@ -21,7 +21,7 @@ public class IsAllowedTag extends AbstractSpringContextLookupTag {
 		boolean iDMatchesCurrentItemOwnerID=false;
 		if (isLoggedIn) {
 			isAdmin = getSwagSwapUserService().isUserAdmin();
-			iDMatchesCurrentItemOwnerID = getSwagSwapUserService().getCurrentUser().getUserId().equals(swagItemOwnerID);
+			iDMatchesCurrentItemOwnerID = getSwagSwapUserService().getCurrentUser().getUserId().equals(swagItemOwnerGoogleID);
 		}
 		if (isLoggedIn && (isAdmin || iDMatchesCurrentItemOwnerID)) {
 			return EVAL_BODY_INCLUDE;
@@ -31,7 +31,7 @@ public class IsAllowedTag extends AbstractSpringContextLookupTag {
 		}
 	}
 
-	public void setSwagItemOwnerID(String swagItemOwnerID) {
-		this.swagItemOwnerID = swagItemOwnerID;
+	public void setSwagItemOwnerGoogleID(String swagItemOwnerGoogleID) {
+		this.swagItemOwnerGoogleID = swagItemOwnerGoogleID;
 	}
 }

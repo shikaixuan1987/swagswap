@@ -1,16 +1,22 @@
 package com.swagswap.web.springmvc.controller;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +28,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagSwapUser;
+import com.swagswap.exceptions.ImageTooLargeException;
+import com.swagswap.exceptions.InvalidSwagImageException;
+import com.swagswap.exceptions.LoadImageFromURLException;
 import com.swagswap.service.AdminService;
 import com.swagswap.service.ItemService;
 import com.swagswap.service.MailService;
@@ -138,10 +147,78 @@ public class AdminController {
 		//Handle message
         Properties props = new Properties(); 
         Session session = Session.getDefaultInstance(props, null); 
-        MimeMessage message = new MimeMessage(session, request.getInputStream());
-		log.info("Message is " + message.getContent());
+        MimeMessage mimeMessage = new MimeMessage(session, request.getInputStream());
+		log.info("Receieved message");
+		String userID = mimeMessage.getSubject();
+		if (StringUtils.isEmpty(userID)) {
+			return;
+		}
+		SwagSwapUser user = swagSwapUserService.get(Long.valueOf(userID));
+		if (user==null) {
+			return;
+		}
+		// take apart the mutlipart
 		
+		InputStream inputStreamContent = (InputStream)mimeMessage.getContent();
+		//from http://groups.google.com/group/google-appengine-java/browse_thread/thread/e6a23e509e7d43c9/09c5b278e85144ff?lnk=gst&q=incoming+email#09c5b278e85144ff
+		ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource
+		(inputStreamContent,mimeMessage.getContentType());
+		Multipart mimeMultipart = new MimeMultipart(byteArrayDataSource); 
+
+		// from http://java.sun.com/developer/onlineTraining/JavaMail/contents.html#JavaMailMessage
+		for (int i=0, n=mimeMultipart.getCount(); i<n; i++) {
+		  String disposition = mimeMultipart.getBodyPart(i).getDisposition();
+
+			if ((disposition != null)
+					&& ((disposition.equals(Part.ATTACHMENT) || (disposition
+							.equals(Part.INLINE))))) {
+				InputStream inputStream = mimeMultipart.getBodyPart(i)
+						.getInputStream();
+				byte[] imageData = getImageDataFromInputStream(inputStream);
+				SwagItem swagItem = new SwagItem();
+				swagItem.setOwnerGoogleID((user.getGoogleID()));
+				swagItem.setOwnerNickName(user.getNickName());
+				swagItem.setName("emailed item"); //TODO get name from messaage body
+				swagItem.setImageBytes(imageData);
+				itemService.saveFromEmail(swagItem);
+				log.debug("saved emailed item, owner Sam Brodkin");
+			}
+		}
 		response.setStatus(HttpServletResponse.SC_OK);
+	}
+	
+	// tsk tsk, this is copy pasted from ItemService.getImageDataFromURL()
+	public byte[] getImageDataFromInputStream(InputStream inputStream)
+			throws LoadImageFromURLException, ImageTooLargeException {
+		BufferedInputStream bis = null;
+		ByteArrayOutputStream bos = null;
+		try {
+			bis = new BufferedInputStream(inputStream);
+			// write it to a byte[] using a buffer since we don't know the exact
+			// image size
+			byte[] buffer = new byte[1024];
+			bos = new ByteArrayOutputStream();
+			int i = 0;
+			while (-1 != (i = bis.read(buffer))) {
+				bos.write(buffer, 0, i);
+			}
+			byte[] imageData = bos.toByteArray();
+			if (imageData.length > 150000) {
+				throw new ImageTooLargeException("from email", 150000);
+			}
+			return imageData;
+		} catch (IOException e) {
+			throw new InvalidSwagImageException(e);
+		} finally {
+			try {
+				if (bis != null)
+					bis.close();
+				if (bos != null)
+					bos.close();
+			} catch (IOException e) {
+				// ignore
+			}
+		}
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)

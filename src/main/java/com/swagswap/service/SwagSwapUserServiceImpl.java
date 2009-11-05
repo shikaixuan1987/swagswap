@@ -30,7 +30,9 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	private UserDao userDao;
 	@Autowired
 	private ItemService itemService;
-	
+	@Autowired
+	private MailService mailService;
+	//created with a factory in the config
 	private UserService googleUserService;
 	
 	
@@ -59,11 +61,26 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 			throw new UserAlreadyExistsException(swagSwapUser);
 		}
 		userDao.insert(swagSwapUser);
+		//Welcome message
+		mailService.send(swagSwapUser.getGoogleID(), swagSwapUser.getEmail(),
+				"Welcome to SwagSwap!",
+				"To email a swagitem to be shown live on our site do the following:" +
+				"\n<br/><br/>Compose an email to <a href=\"mailto:add@swagswap.appspotmail.com?subject="+
+				swagSwapUser.getKey()+ "\">add@swagswap.appspotmail.com</a>" +
+				"\n<br/>Put your secret code in the subject: " + swagSwapUser.getKey() +
+				"\n<br/>Put the name of the swag item in the mail body" +
+				"\n<br/>Optionally attatch an image to your mail" +
+				"\n\n<br/><br/>Regards,\n<br/>The SwagSwap Team"
+		);
 	}
 	
 	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public void update(SwagSwapUser swagSwapUser) {
 		userDao.update(swagSwapUser);
+	}
+	
+	public SwagSwapUser findByGoogleID(String googleID) {
+		return userDao.findByGoogleID(googleID);
 	}
 	
 	public SwagSwapUser findByEmail() {
@@ -75,10 +92,6 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 			throw new AccessDeniedException("User " + email + " is blacklisted");
 		}
 		return userDao.findByEmail(email);
-	}
-	
-	public SwagSwapUser findByGoogleID(String googleID) {
-		return userDao.findByGoogleID(googleID);
 	}
 	
 /*	 I wanted to include this method so that the front end wouldn't have to deal with 

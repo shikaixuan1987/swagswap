@@ -12,7 +12,7 @@
     <tag-class>com.swagswap.web.springmvc.tags.IsAllowedTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
-        <name>swagItemOwnerID</name>
+        <name>swagItemOwnerGoogleID</name>
         <rtexprvalue>true</rtexprvalue>
         <required>true</required>
     </attribute>

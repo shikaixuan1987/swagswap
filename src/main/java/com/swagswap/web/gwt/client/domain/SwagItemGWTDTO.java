@@ -52,7 +52,7 @@ public class SwagItemGWTDTO implements IsSerializable {
 	
 	public SwagItemGWTDTO(Long key, String name, String company,
 			String description, String imageKey,
-			String ownerID, String ownerNickName, Float averageRating,
+			String ownerGoogleID, String ownerNickName, Float averageRating,
 			Integer numberOfRatings, Date created, Date lastUpdated,
 			ArrayList<String> tags, ArrayList<SwagItemCommentGWTDTO> comments) {
 		this();
@@ -61,7 +61,7 @@ public class SwagItemGWTDTO implements IsSerializable {
 		this.company = company;
 		this.description = description;
 		this.imageKey = imageKey;
-		this.ownerGoogleID = ownerID;
+		this.ownerGoogleID = ownerGoogleID;
 		this.ownerNickName = ownerNickName;
 		this.averageRating = averageRating;
 		this.numberOfRatings = numberOfRatings;

@@ -31,6 +31,8 @@ public interface ItemService {
 
 	SwagItem save(SwagItem swagItem) throws LoadImageFromURLException;
 
+	void saveFromEmail(SwagItem swagItem);
+	
 	void updateRating(Long swagItemKey, int computedRatingDifference,
 			boolean isNew);
 
@@ -40,5 +42,6 @@ public interface ItemService {
 
 	byte[] getImageDataFromURL(String imageURL)
 			throws LoadImageFromURLException, ImageTooLargeException;
+
 
 }

@@ -143,6 +143,8 @@
 
 
 	<bean id="adminService" class="com.swagswap.service.AdminServiceImpl" />
+	
+	<bean id="swagStatsService" class="com.swagswap.service.SwagStatsServiceImpl" />
 
 	<bean id="swagCacheManager" class="com.swagswap.dao.cache.SwagCacheManagerImpl" />
 

@@ -7,7 +7,7 @@
   <h2>Add</h2>
 </c:if>
 
-<form:form action="/swag/save" enctype="multipart/form-data"
+<form:form action="/springmvc/save" enctype="multipart/form-data"
   commandName="swagItem" method="post">
   <%--Any fields they're not filling in have to be carried
 	    over in hidden fields because of request scoping --%>
@@ -49,7 +49,7 @@
             <td>Current Image:</td>
             <td><c:if test="${not empty swagItem.imageKey}">
               <img border="0"
-                src="<c:url value='/swag/showImage/${swagItem.imageKey}'/>" />
+                src="<c:url value='/springmvc/showImage/${swagItem.imageKey}'/>" />
             </c:if></td>
           </tr>
           <tr>
@@ -108,7 +108,7 @@
   </table>
   <input type="submit" value="save" />
   <input type="submit" value="cancel"
-    onclick="document.location.href='<c:url value='/swag/search'/>';return false;" />
+    onclick="document.location.href='<c:url value='/springmvc/search'/>';return false;" />
 
 </form:form>
 

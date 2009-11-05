@@ -2,7 +2,7 @@
 
 <h2>View / Rate / Comment on ${swagItem.name}</h2>
 <%--Trick because this page has swagItem as null which swagItemRating tag picks up and anchors, so anchor to that --%>
-<form:form action="/swag/rate#null" commandName="newRating"
+<form:form action="/springmvc/rate#null" commandName="newRating"
   name="rateForm" method="get">
   <form:hidden path="swagItemKey" />
   <!-- can't use spring form:hidden tag here cause if userRating is empty, GAE blows up. 
@@ -14,7 +14,7 @@
     </tr>
     <google-auth:isLoggedIn>
       <tr>
-        <td><a href="/swag/search">Back</a></td>
+        <td><a href="/springmvc/search">Back</a></td>
         <td>My Rating:</td>
         <td><swagItemRating:showRatingStars rateFormName="rateForm"
           userRating="${userRating}" /></td>
@@ -26,7 +26,7 @@
         <td width="30%"></td>
         <td><google-auth:loginLogoutTag
           loginText="Login to rate items"
-          requestURL="/swag/view/${swagItem.key}" /></td>
+          requestURL="/springmvc/view/${swagItem.key}" /></td>
       </tr>
     </google-auth:isNotLoggedIn>
 
@@ -41,7 +41,7 @@
         <td nowrap="true"><%--TODO is this test needed anymore? --%>
         <c:if test="${not empty swagItem.imageKey}">
           <img border="0"
-            src="<c:url value='/swag/showImage/${swagItem.imageKey}'/>" />
+            src="<c:url value='/springmvc/showImage/${swagItem.imageKey}'/>" />
         </c:if></td>
       </tr>
       <tr>
@@ -74,7 +74,7 @@
     <table>
       <tr>
         <td>Comments:
-        <form:form action="/swag/addComment" commandName="newComment" method="get">
+        <form:form action="/springmvc/addComment" commandName="newComment" method="get">
           <form:hidden path="swagItemKey" />
           <form:input path="commentText" />
           <input type="submit" value="add comment" />
@@ -95,7 +95,7 @@
 </table>
 <form:form method="post">
   <input type="submit" value="cancel"
-    onclick="document.location.href='<c:url value='/swag/search'/>';return false;" />
+    onclick="document.location.href='<c:url value='/springmvc/search'/>';return false;" />
 </form:form>
 
 <script>

@@ -97,7 +97,7 @@ public class SmartGWTItemServiceWrapperImpl extends
 		for (SwagItemComment listItem : listItems) {
 			copiedList.add(new SwagItemCommentGWTDTO(
 					listItem.getSwagItemKey(),
-					listItem.getSwagSwapUserID(),
+					listItem.getItemOwnerGoogleID(),
 					listItem.getSwagSwapUserNickname(), 
 					listItem.getCommentText(), 
 					listItem.getCreated()));
@@ -110,7 +110,7 @@ public class SmartGWTItemServiceWrapperImpl extends
 			SwagItemCommentGWTDTO swagItemCommentGWTDTO) {
 		return new SwagItemComment(
 				swagItemCommentGWTDTO.getSwagItemKey(),
-				swagItemCommentGWTDTO.getSwagSwapUserID(),
+				swagItemCommentGWTDTO.getGoogleID(),
 				swagItemCommentGWTDTO.getSwagSwapUserNickname(),
 				swagItemCommentGWTDTO.getCommentText());
 	}

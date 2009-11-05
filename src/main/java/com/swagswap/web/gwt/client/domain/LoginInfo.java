@@ -18,7 +18,7 @@ public class LoginInfo implements Serializable {
 	private String loginUrl;
 	private String logoutUrl;
 	private String email;
-	private String ID;
+	private String googleID;
 	private String nickName;
 	private Set<SwagItemRating> swagItemRatings = new HashSet<SwagItemRating>();
 	private SwagItemGWTDTO currentSwagItem; //for remembering which one they were editing
@@ -63,12 +63,12 @@ public class LoginInfo implements Serializable {
 		this.email = email;
 	}
 
-	public String getID() {
-		return ID;
+	public String getGoogleID() {
+		return googleID;
 	}
 
-	public void setID(String ID) {
-		this.ID=ID;
+	public void setGoogleID(String googleID) {
+		this.googleID=googleID;
 	}
 
 	public String getNickName() {

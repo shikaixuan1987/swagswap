@@ -592,7 +592,7 @@ public class SmartGWT implements EntryPoint {
 		final Long currentItemKey = (Long)boundSwagForm.getField("key").getValue();
 		SwagItemCommentGWTDTO newComment = new SwagItemCommentGWTDTO(
 				currentItemKey,
-				loginInfo.getID(),
+				loginInfo.getGoogleID(),
 				loginInfo.getNickName(),
 				comment,
 				null);
@@ -695,8 +695,8 @@ public class SmartGWT implements EntryPoint {
 	private void prepareAndShowEditForm(TileRecord tileRecord) {
 		// Make read only if they don't have permission
 		String currentSwagItemOwner = tileRecord.getAttribute("ownerID");
-		String currentUserId = loginInfo.getID();
-		if (loginInfo.isUserAdmin() || currentSwagItemOwner.equals(currentUserId)) {
+		String currentGoogleID = loginInfo.getGoogleID();
+		if (loginInfo.isUserAdmin() || currentSwagItemOwner.equals(currentGoogleID)) {
 			boundSwagForm.enable();
 			editButtonsLayout.show();
 			imFeelingLuckyButton.show();
@@ -707,7 +707,7 @@ public class SmartGWT implements EntryPoint {
 			imFeelingLuckyButton.hide();
 		}
 		boundSwagForm.editRecord(tileRecord);
-		currentSwagImage.setSrc("/swag/showImage/" + tileRecord.getAttribute("imageKey"));  
+		currentSwagImage.setSrc("/springmvc/showImage/" + tileRecord.getAttribute("imageKey"));  
 		currentSwagImage.setWidth(283);
 		currentSwagImage.setHeight(212);
 		

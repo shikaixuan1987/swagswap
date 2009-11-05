@@ -9,7 +9,7 @@ import com.swagswap.web.springmvc.controller.ImageController;
 public class ImageControllerTest extends TestCase {
 
 	public void testConstructDefaultImageURL() {
-		String requestURL = "http://localhost:8080/swag/showImage/blahblah";
+		String requestURL = "http://localhost:8080/springmvc/showImage/blahblah";
 		ImageController imageController 
 			= new ImageController(new ImageDaoImpl());
 		String defaultImageURL = imageController.constructDefaultImageURL(requestURL);

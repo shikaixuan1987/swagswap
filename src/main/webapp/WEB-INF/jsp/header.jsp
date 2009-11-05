@@ -87,7 +87,7 @@ pageTracker._trackPageview();
 <table border="1">
 <google-auth:isAdmin>
   <br/>
-  <tr><td>Welcome Admin: <a href="/swag/admin/main">Go to Admin Page</a> | <a href="#"  onclick="showTotalUsage();">Show GAE Usage for this page</a> (doesn't work in dev env)</td></tr>
+  <tr><td>Welcome Admin: <a href="/springmvc/admin/main">Go to Admin Page</a> | <a href="#"  onclick="showTotalUsage();">Show GAE Usage for this page</a> (doesn't work in dev env)</td></tr>
 </google-auth:isAdmin>
 </table>
 

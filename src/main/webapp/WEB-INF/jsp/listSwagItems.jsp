@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
 <%--Shows a search box and a list of SwagItems using the old but good displaytag library --%>
 
-<form:form action="/swag/search" commandName="searchCriteria" name="searchForm" method="GET">
+<form:form action="/springmvc/search" commandName="searchCriteria" name="searchForm" method="GET">
 
 	<c:if test="${not empty searchCriteria.searchString}">
 		<h2>Swag Item Search: ${searchCriteria.searchString}</h2>
@@ -17,30 +17,30 @@
 				<a href="#" onclick="document.searchForm.submit()">
 				<img src="/images/icon_flashlight.gif" border="0"/>Search Swag</a>
 				&nbsp; 
-				<a href="/swag/add"><img src="/images/newAdd.png" 
+				<a href="/springmvc/add"><img src="/images/newAdd.png" 
 				   title="Add SwagItem" border="0"/>Add Swag</a>
 				&nbsp; 
-				<google-auth:loginLogoutTag requestURL="/swag/search"/>
+				<google-auth:loginLogoutTag requestURL="/springmvc/search"/>
 			</td>
 		</tr>
 	</table>
 </form:form>
 
 <display:table name="swagItems" uid="swagItemsList" id="currentObject" 
-               requestURI="/swag/search" keepStatus="true">
+               requestURI="/springmvc/search" keepStatus="true">
 	<display:column sortable="true" property="name" />
 		<display:column title="Action" >
-			<a href="<c:url value='/swag/view/${currentObject.key}'/>"> 
+			<a href="<c:url value='/springmvc/view/${currentObject.key}'/>"> 
 				<img border="0" alt="View/Comment/Rate" src="<%=request.getContextPath()%>/images/view.gif"/>
 			</a>
 			<%-- Users can only edit their own items --%>
 			<google-auth:isAllowed swagItemOwnerID="${currentObject.ownerID}">
 				
-				<a href="<c:url value='/swag/edit/${currentObject.key}'/>"> 
+				<a href="<c:url value='/springmvc/edit/${currentObject.key}'/>"> 
 					<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/>
 				</a>
 			  
-		        <a href="<c:url value='/swag/delete/${currentObject.key}'/>" onclick="return confirmSubmit()"> 
+		        <a href="<c:url value='/springmvc/delete/${currentObject.key}'/>" onclick="return confirmSubmit()"> 
 		            <img border="0" alt="Delete" src="<%=request.getContextPath()%>/images/delete.gif"/>
 				</a>
 			</google-auth:isAllowed>
@@ -51,7 +51,7 @@
 		<google-auth:isLoggedIn>
 		<%-- HTML anchor to compensate for web 1.0 implementation --%>
 		<a name="${currentObject.key}"></a>
-		<form:form action="/swag/rate#${currentObject.key}" commandName="newRating-${currentObject.key}" name="rateForm${currentObject.key}" method="get">
+		<form:form action="/springmvc/rate#${currentObject.key}" commandName="newRating-${currentObject.key}" name="rateForm${currentObject.key}" method="get">
 			<form:hidden path="swagItemKey" />
 			<!-- can't use spring form:hidden tag here cause if userRating is empty, GAE blows up. 
 		     Spring seems to be doing something not-kosher for GAE when it populates a default value -->
@@ -76,7 +76,7 @@
 	--%>
 	<c:if test="${not empty currentObject.imageKey}">
 		<display:column title="Image">
-			<img border="0" alt="Image" height="50" width="66" src="<c:url value='/swag/showThumbnail/${currentObject.imageKey}'/>"/>
+			<img border="0" alt="Image" height="50" width="66" src="<c:url value='/springmvc/showThumbnail/${currentObject.imageKey}'/>"/>
 		</display:column>
 	</c:if>
 	<display:column sortable="true" title="Owner" property="ownerNickName" />

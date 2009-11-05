@@ -114,7 +114,7 @@
 
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
-		<url-pattern>/swag/*</url-pattern>
+		<url-pattern>/springmvc/*</url-pattern>
 	</servlet-mapping>
 
 	<error-page>
@@ -193,10 +193,10 @@
 	<!-- Spring MVC -->
 	<security-constraint>
 		<web-resource-collection>
-			<url-pattern>/swag/delete/*</url-pattern>
-			<url-pattern>/swag/add/*</url-pattern>
-			<url-pattern>/swag/edit/*</url-pattern>
-			<url-pattern>/swag/rate/*</url-pattern>
+			<url-pattern>/springmvc/delete/*</url-pattern>
+			<url-pattern>/springmvc/add/*</url-pattern>
+			<url-pattern>/springmvc/edit/*</url-pattern>
+			<url-pattern>/springmvc/rate/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name>
@@ -204,7 +204,9 @@
 	</security-constraint>
 	<security-constraint>
 		<web-resource-collection>
-			<url-pattern>/swag/admin/*</url-pattern>
+			<url-pattern>/springmvc/admin/*</url-pattern>
+			<!-- for incoming mail -->
+			<url-pattern>/_ah/mail/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>admin</role-name>

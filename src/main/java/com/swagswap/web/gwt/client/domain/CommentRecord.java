@@ -15,7 +15,7 @@ public class CommentRecord extends ListGridRecord {
     }
 
     public CommentRecord(SwagItemCommentGWTDTO swagItemComment) {
-    	setSwagSwapUserID(swagItemComment.getSwagSwapUserID());
+    	setGoogleID(swagItemComment.getGoogleID());
     	setSwagSwapUserNickname(swagItemComment.getSwagSwapUserNickname());
     	setCommentText(swagItemComment.getCommentText());
     	setCreated(swagItemComment.getCreated());
@@ -29,12 +29,12 @@ public class CommentRecord extends ListGridRecord {
 		setAttribute("swagSwapUserNickname", swagSwapUserNickname);
 	}
 	
-	public String getSwagSwapUserID() {
-		return getAttributeAsString("swagSwapUserID");
+	public String getGoogleID() {
+		return getAttributeAsString("googleID");
 	}
 	
-	public void setSwagSwapUserID(String swagSwapUserID) {
-		setAttribute("swagSwapUserID", swagSwapUserID);
+	public void setGoogleID(String googleID) {
+		setAttribute("googleID", googleID);
 	}
 
 	public String getCommentText() {

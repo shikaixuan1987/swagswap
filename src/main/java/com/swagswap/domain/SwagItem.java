@@ -68,8 +68,9 @@ public class SwagItem implements Serializable {
 	@NotPersistent
 	private String imageURL;
 
+	// GoogleID: String because that's how it is in google user object
 	@Persistent
-	private String ownerID; //String because that's how it is in google user object
+	private String ownerID; 
 
 	@Persistent
 	private String ownerNickName;

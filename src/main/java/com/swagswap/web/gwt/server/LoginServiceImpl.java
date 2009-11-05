@@ -54,7 +54,7 @@ public class LoginServiceImpl extends AutoinjectingRemoteServiceServlet
 			
 			//hosted mode not setting email correctly so use nickName instead
 			loginInfo.setEmail(user.getEmail());
-			loginInfo.setID(user.getGoogleID());
+			loginInfo.setGoogleID(user.getGoogleID());
 			loginInfo.setNickName(user.getNickName());
 			Set<SwagItemRating> swagItemRatings = user.getSwagItemRatings();
 			loginInfo.setSwagItemRatings(toCopiedSet(swagItemRatings));

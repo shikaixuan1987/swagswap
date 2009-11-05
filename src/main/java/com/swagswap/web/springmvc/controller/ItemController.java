@@ -83,7 +83,7 @@ public class ItemController {
 		catch (InvalidSwagItemException e) {
 			errors.rejectValue("name","","name is required");
 		}
-		return (errors.hasErrors()) ? "addEditSwagItem" : "redirect:/swag/search";
+		return (errors.hasErrors()) ? "addEditSwagItem" : "redirect:/springmvc/search";
 	}
 	
 	@RequestMapping(value = "/view/{key}", method = RequestMethod.GET)
@@ -114,7 +114,7 @@ public class ItemController {
 	@RequestMapping(value = "/delete/{key}", method = RequestMethod.GET)
 	public String deleteHandler(@PathVariable("key") Long key) {
 		itemService.delete(key);
-		return "redirect:/swag/search";
+		return "redirect:/springmvc/search";
 	}
 	
     @RequestMapping(value = "/rate", method = RequestMethod.GET)
@@ -133,7 +133,7 @@ public class ItemController {
 	//For legacy URL that some tweets had already linked to.
 	@RequestMapping(value = "/listSwagItems", method = RequestMethod.GET)
 	public String listHandler(Model model) {
-		return "redirect:/swag/search";
+		return "redirect:/springmvc/search";
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class ItemController {
 	private String getReferringPage(HttpServletRequest request) {
 		String referer = request.getHeader("Referer");
 		if (referer==null) { //in case browser doesn't support Redirect header
-			referer="/swag/search";
+			referer="/springmvc/search";
 		}
 		return referer;
 	}

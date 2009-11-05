@@ -26,7 +26,7 @@ public class SwagItemComment implements Serializable, Comparable<SwagItemComment
 	private Long swagItemKey;
 	
 	@Persistent
-	private String swagSwapUserID;
+	private String itemOwnerGoogleID;
 	
 	@Persistent
 	private String swagSwapUserNickname;
@@ -44,9 +44,9 @@ public class SwagItemComment implements Serializable, Comparable<SwagItemComment
 		this.swagItemKey=swagItemKey;
 	}
 
-	public SwagItemComment(Long swagItemKey, String userId, String nickName, String commentText) {
+	public SwagItemComment(Long swagItemKey, String itemOwnerGoogleID, String nickName, String commentText) {
 		this(swagItemKey);
-		this.swagSwapUserID=userId;
+		this.itemOwnerGoogleID=itemOwnerGoogleID;
 		this.swagSwapUserNickname = nickName;
 		this.commentText=new Text(commentText);
 		
@@ -64,12 +64,12 @@ public class SwagItemComment implements Serializable, Comparable<SwagItemComment
 		return swagSwapUserNickname;
 	}
 	
-	public String getSwagSwapUserID() {
-		return swagSwapUserID;
+	public String getItemOwnerGoogleID() {
+		return itemOwnerGoogleID;
 	}
 
-	public void setSwagSwapUserID(String swagSwapUserID) {
-		this.swagSwapUserID = swagSwapUserID;
+	public void setItemOwnerGoogleID(String itemOwnerGoogle) {
+		this.itemOwnerGoogleID = itemOwnerGoogle;
 	}
 
 	public void setSwagSwapUserNickname(String swagSwapUserNickname) {

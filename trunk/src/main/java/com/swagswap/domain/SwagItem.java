@@ -101,6 +101,11 @@ public class SwagItem implements Serializable {
 		tags.add("");
 	}
 	
+	public Integer getNumberOfComments() {
+		// TODO.  Temporary hack.  Persist this at some point.  Scott.
+		return comments.size();
+	}
+	
 	public boolean isNew() {
 		return getKey() == null;
 	}

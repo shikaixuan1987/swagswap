@@ -15,7 +15,7 @@
 	<ui:define name="content">
 		<h:form>
 			<f:metadata>
-				<f:viewParam name="selectedRowId"
+				<f:viewParam name="swagItemKey"
 					value="#{swagEditBean.selectedRowId}" />
 				<f:viewParam name="lastPage" value="#{swagEditBean.lastPage}" />
 				<f:event type="preRenderView"
@@ -114,8 +114,8 @@
 								<swag:date value="#{row.created}" />
 							</h:panelGroup>
 							<br />
-							<h:panelGroup layout="block" style="height: 30px;">
-								<h:outputText value="#{row.commentText}" />
+							<h:panelGroup layout="block" style="margin-bottom: 15px;">
+								<h:outputText value="#{row.commentText}" escape="false" />
 							</h:panelGroup>
 						</h:column>
 					</h:dataTable>

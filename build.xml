@@ -55,13 +55,8 @@
 	<!-- Number of days worth of logs to retrieve -->
 	<property name="log.days" value="2" />
 
-
-	<!-- Change if you like e.g. "war" better than "www" for the output -->
 	<property name="war.dir" location="target/${ant.project.name}" />
 
-	<!-- take out gwt until it's working
-	<target name="war" depends="compile,gwtc,copyResources" description="Assemble the application directory">
-	-->
 	<target name="war" depends="compile,copyResources" description="Assemble the application directory">
 		<mkdir dir="${war.dir}/WEB-INF/lib" />
 		<copy todir="${war.dir}/WEB-INF/lib" flatten="true">
@@ -96,12 +91,6 @@
 
 	<path id="tools.class.path">
 		<pathelement location="${appengine.sdk}/lib/appengine-tools-api.jar" />
-		<!--
-		<fileset dir="${appengine.sdk}/lib/tools">
-			<include name="**/asm-*.jar" />
-			<include name="**/datanucleus-enhancer-*.jar" />
-		</fileset>
-		-->
 	</path>
 
 
@@ -173,7 +162,8 @@
 		</dev_appserver>
 	</target>
 
-	<target name="update" depends="war" description="Uploads the application, including indexes">
+	<target name="update" depends="war" description="Uploads the application, including indexes.  Note 
+		you should run gwtc seperately first since it's not included in war task">
 		<appcfg action="update" war="${war.dir}" />
 	</target>
 

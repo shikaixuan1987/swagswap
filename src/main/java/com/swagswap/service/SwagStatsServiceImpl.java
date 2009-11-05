@@ -100,7 +100,7 @@ public class SwagStatsServiceImpl implements SwagStatsService {
 				// Is this the most efficient way to do this? Probably not.
 				for (SwagItemComment swagItemComment : swagItem.getComments()) {
 					boolean commentFound = false;
-					if (swagItemComment.getSwagSwapUserID().equals(userID)) {
+					if (swagItemComment.getItemOwnerGoogleID().equals(userID)) {
 						// Only increment comment once for a user. User may have
 						// multiple comments for item. Total comments needs
 						// complete count

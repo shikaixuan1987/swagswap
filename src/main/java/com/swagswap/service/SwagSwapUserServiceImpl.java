@@ -2,6 +2,7 @@ package com.swagswap.service;
 
 import java.util.List;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -167,6 +168,10 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	
 	public boolean isBlackListed(String email) {
 		return userDao.isBlackListed(email);
+	}
+	
+	public void removeUserFromMailings(String userId) {
+		throw new NotImplementedException();
 	}
 
 	/**

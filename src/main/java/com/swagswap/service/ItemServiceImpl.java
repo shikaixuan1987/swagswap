@@ -50,6 +50,9 @@ public class ItemServiceImpl implements ItemService {
 
 	@Autowired
 	private SwagSwapUserService swagSwapUserService; // for saving users to our
+	
+	@Autowired
+	private MailService mailService;
 	// app
 	// for checking mime type
 	private Magic jmimeMagicParser = new Magic();
@@ -257,6 +260,14 @@ public class ItemServiceImpl implements ItemService {
 		}
 		newComment.setSwagSwapUserNickname(swagSwapUserService.getCurrentUser()
 				.getNickname());
+		newComment.setSwagSwapUserID(swagSwapUserService.getCurrentUser().getUserId());
+		//send the owner a mail
+		mailService.sendMail(
+				swagSwapUserService.getCurrentUser().getEmail(),
+				"Someone just commented on your swag item",
+				newComment.getSwagSwapUserNickname() + " said: " + newComment.getCommentText() +
+				"\nSee Your Item here: http://swagswap.appspot.com/swag/view/"+newComment.getSwagItemKey()
+				);
 		itemDao.addComment(newComment);
 	}
 

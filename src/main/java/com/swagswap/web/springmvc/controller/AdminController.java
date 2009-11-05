@@ -56,5 +56,14 @@ public class AdminController {
 		return "admin";
 	}
 	
+	//TODO finish me
+	@RequestMapping(value = "/mailings/removeUser", method = RequestMethod.GET)
+	public String removeUserFromMailings(@RequestParam("userId") String userId,
+			Model model) throws IOException {
+//		swagSwapUserService.removeUserFromMailings(userId);
+		model.addAttribute("message", "You have been removed from all future swagswap mailings ");
+		return "youHaveBeenRemoved";
+	}
+	
 
 }

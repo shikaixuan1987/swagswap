@@ -39,4 +39,6 @@ public interface SwagSwapUserService {
 	
 	public void blackListUser(String email);
 
+	void removeUserFromMailings(String userId);
+
 }

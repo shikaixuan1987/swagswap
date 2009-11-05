@@ -14,7 +14,6 @@
 
 <composite:implementation>
 	<h:form id="tableForm">
-		<swag:ajaxStatus id="busy" styleClass="ajaxStatus" />
 		<h:dataTable value="#{cc.attrs.value}" var="row" width="100%"
 			styleClass="tableBorder" rules="all"
 			rowClasses="tableRow1, tableRow2"
@@ -31,7 +30,7 @@
 					style="text-align:center; width:100%; background-color:white;">
 					<h:button outcome="viewSwag" image="/springmvc/showThumbnail/#{row.swagItem.imageKey}"
 						style="height: 50px; width: 66px;" title="#{row.swagItem.description}">
-						<f:param name="selectedRowId" value="#{row.swagItem.key}" />
+						<f:param name="swagItemKey" value="#{row.swagItem.key}" />
 						<f:param name="lastPage" value="#{actionBean.lastPage}" />
 					</h:button>
 				</h:panelGroup>
@@ -90,12 +89,12 @@
 				</f:facet>
 				<h:panelGrid cellPadding="0" cellspacing="0" columns="3">
 					<h:button image="/images/view.gif" outcome="viewSwag">
-						<f:param name="selectedRowId" value="#{row.swagItem.key}" />
+						<f:param name="swagItemKey" value="#{row.swagItem.key}" />
 						<f:param name="lastPage" value="#{actionBean.lastPage}" />
 					</h:button>
 					<h:button image="/images/edit.gif" outcome="editSwag"
 						rendered="#{row.itemOwner}">
-						<f:param name="selectedRowId" value="#{row.swagItem.key}" />
+						<f:param name="swagItemKey" value="#{row.swagItem.key}" />
 						<f:param name="lastPage" value="#{actionBean.lastPage}" />
 					</h:button>
 					<h:commandButton image="/images/delete.gif"

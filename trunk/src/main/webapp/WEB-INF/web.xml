@@ -229,7 +229,7 @@
 	<!-- This is taken care of in the AdminController because of having to map "/" to the spring dispatchservlet -->
     <!-- 
 	<welcome-file-list>
-		<welcome-file>welcome.html</welcome-file>
+		<welcome-file>/jsf/home.jsf</welcome-file>
 	</welcome-file-list>
 	 -->
 

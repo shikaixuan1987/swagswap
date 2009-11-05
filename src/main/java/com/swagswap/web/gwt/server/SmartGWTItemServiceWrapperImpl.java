@@ -118,7 +118,7 @@ public class SmartGWTItemServiceWrapperImpl extends
 	public SwagItem toSwagItem(SwagItemGWTDTO dto) {
 		SwagItem swagItem = new SwagItem();
 		swagItem.setKey(dto.getKey());
-		swagItem.setOwnerID(dto.getOwnerID());
+		swagItem.setOwnerGoogleID(dto.getOwnerGoogleID());
 		swagItem.setOwnerNickName(dto.getOwnerNickName());
 		swagItem.setName(dto.getName());
 		swagItem.setCompany(dto.getCompany());
@@ -142,7 +142,7 @@ public class SmartGWTItemServiceWrapperImpl extends
 		padTags(paddedTags);
 		return new SwagItemGWTDTO(swagItem.getKey(), swagItem.getName(),
 				swagItem.getCompany(), swagItem.getDescription(), swagItem.getImageKey(), swagItem
-						.getOwnerID(), swagItem.getOwnerNickName(), swagItem
+						.getOwnerGoogleID(), swagItem.getOwnerNickName(), swagItem
 						.getAverageRating(), swagItem.getNumberOfRatings(),
 				swagItem.getCreated(), swagItem.getLastUpdated(),
 				paddedTags,

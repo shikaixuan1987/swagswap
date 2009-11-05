@@ -50,7 +50,7 @@ public class ItemServiceImpl implements ItemService {
 
 	@Autowired
 	private SwagSwapUserService swagSwapUserService; // for saving users to our
-	
+
 	@Autowired
 	private MailService mailService;
 	// app
@@ -144,20 +144,20 @@ public class ItemServiceImpl implements ItemService {
 		return filteredList;
 	}
 
-	//  TODO change this to ID and everything that calls it.  Scott.
-	public List<SwagItem> filterByOwnerNickName(List<SwagItem> swagList,
-			String userNickName) {
+	// TODO change this to ID and everything that calls it. Scott.
+	public List<SwagItem> filterByOwnerGoogleID(List<SwagItem> swagList,
+			String googleID) {
 		// Easier and faster to do this programatically than go to DAO
 		List<SwagItem> filteredList = new ArrayList<SwagItem>();
-		if (swagList == null || userNickName == null) {
+		if (swagList == null || googleID == null) {
 			return filteredList;
 		}
 		Iterator<SwagItem> iter = swagList.iterator();
 		while (iter.hasNext()) {
 			SwagItem item = (SwagItem) iter.next();
-			
-			//  TODO   Safety check in here if ID is null
-			if (item.getOwnerNickName().equals(userNickName)) {
+
+			if (item.getOwnerGoogleID() != null
+					&& item.getOwnerGoogleID().equals(googleID)) {
 				filteredList.add(item);
 			}
 		}
@@ -178,17 +178,19 @@ public class ItemServiceImpl implements ItemService {
 		}
 		itemLoop: for (SwagItem swagItem : swagList) {
 			for (SwagItemComment swagItemComment : swagItem.getComments()) {
-				if (swagItemComment.getItemOwnerGoogleID().equals(
-						googleID)
-						&& !exclusive) {
-					filteredList.add(swagItem);
-					continue itemLoop;
-				}
-				if ((!swagItemComment.getItemOwnerGoogleID().equals(
-						googleID))
-						&& exclusive) {
-					filteredList.add(swagItem);
-					continue itemLoop;
+				//  Put this check in to defend against DB changes (like deleting a user)
+				if (swagItemComment.getItemOwnerGoogleID() != null) {
+					if (swagItemComment.getItemOwnerGoogleID().equals(googleID)
+							&& !exclusive) {
+						filteredList.add(swagItem);
+						continue itemLoop;
+					}
+					if ((!swagItemComment.getItemOwnerGoogleID().equals(
+							googleID))
+							&& exclusive) {
+						filteredList.add(swagItem);
+						continue itemLoop;
+					}
 				}
 			}
 			// No comments for Item so meets criteria if exclusive
@@ -218,7 +220,7 @@ public class ItemServiceImpl implements ItemService {
 		if (swagItem.isNew()) {
 			SwagSwapUser swagSwapUser = swagSwapUserService
 					.findByEmailOrCreate();
-			swagItem.setOwnerID(swagSwapUser.getGoogleID());
+			swagItem.setOwnerGoogleID(swagSwapUser.getGoogleID());
 			String currentUserNickName = swagSwapUser.getNickName();
 			swagItem.setOwnerNickName(currentUserNickName);
 
@@ -263,18 +265,20 @@ public class ItemServiceImpl implements ItemService {
 		}
 		newComment.setSwagSwapUserNickname(swagSwapUserService.getCurrentUser()
 				.getNickname());
-		newComment.setItemOwnerGoogleID(swagSwapUserService.getCurrentUser().getUserId()); //GoogleID
+		newComment.setItemOwnerGoogleID(swagSwapUserService.getCurrentUser()
+				.getUserId()); // GoogleID
 		itemDao.addComment(newComment);
-		//send the owner a mail
+		// send the owner a mail
 		String subject = "Someone just commented on your swag item";
-		String msgBody = newComment.getSwagSwapUserNickname() + " said: " + newComment.getCommentText() +
-		"\n\nSee Your Item here: (Spring MVC impl) http://swagswap.appspot.com/springmvc/view/"+newComment.getSwagItemKey() +
-		"\nor here (JSF 2.0 impl) http://swagswap.appspot.com/jsf/viewSwag.jsf?swagItemKey=" + newComment.getSwagItemKey();
-		mailService.sendWithTaskManager(
-				newComment.getSwagItemKey(),
-				subject,
-				msgBody
-				);
+		String msgBody = newComment.getSwagSwapUserNickname()
+				+ " said: "
+				+ newComment.getCommentText()
+				+ "\n\nSee Your Item here: (Spring MVC impl) http://swagswap.appspot.com/springmvc/view/"
+				+ newComment.getSwagItemKey()
+				+ "\nor here (JSF 2.0 impl) http://swagswap.appspot.com/jsf/viewSwag.jsf?swagItemKey="
+				+ newComment.getSwagItemKey();
+		mailService.sendWithTaskManager(newComment.getSwagItemKey(), subject,
+				msgBody);
 	}
 
 	public void setItemDao(ItemDao itemDao) {
@@ -393,9 +397,9 @@ public class ItemServiceImpl implements ItemService {
 		// Their email doesn't match the swagItem
 		// (again, if this happened the webapp messed up or someone's trying to
 		// hack us)
-		if (!user.getUserId().equals(swagItemToCheck.getOwnerID())) {
+		if (!user.getUserId().equals(swagItemToCheck.getOwnerGoogleID())) {
 			throw new AccessDeniedException(swagItemToCheck.getName(),
-					swagItemToCheck.getOwnerID(), user.getUserId());
+					swagItemToCheck.getOwnerGoogleID(), user.getUserId());
 		}
 	}
 

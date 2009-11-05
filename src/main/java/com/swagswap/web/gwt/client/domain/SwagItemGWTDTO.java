@@ -24,7 +24,7 @@ public class SwagItemGWTDTO implements IsSerializable {
 	private String imageKey; //existing image key
 	private String newImageURL;
 	private byte[] newImageBytes;
-	private String ownerID;
+	private String ownerGoogleID;
 	private String ownerNickName;
 	private Float averageRating = 0F;
 	private Integer numberOfRatings = 0;
@@ -61,7 +61,7 @@ public class SwagItemGWTDTO implements IsSerializable {
 		this.company = company;
 		this.description = description;
 		this.imageKey = imageKey;
-		this.ownerID = ownerID;
+		this.ownerGoogleID = ownerID;
 		this.ownerNickName = ownerNickName;
 		this.averageRating = averageRating;
 		this.numberOfRatings = numberOfRatings;
@@ -131,12 +131,12 @@ public class SwagItemGWTDTO implements IsSerializable {
 		this.newImageURL = newImageURL;
 	}
 
-	public String getOwnerID() {
-		return ownerID;
+	public String getOwnerGoogleID() {
+		return ownerGoogleID;
 	}
 
-	public void setOwnerID(String ownerID) {
-		this.ownerID = ownerID;
+	public void setOwnerGoogleID(String ownerGoogleID) {
+		this.ownerGoogleID = ownerGoogleID;
 	}
 
 	public String getOwnerNickName() {

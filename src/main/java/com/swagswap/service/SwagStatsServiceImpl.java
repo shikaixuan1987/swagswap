@@ -94,13 +94,15 @@ public class SwagStatsServiceImpl implements SwagStatsService {
 			userID = user.getGoogleID();
 			// Need to find all items with that ID. Hmmm...
 			for (SwagItem swagItem : swagList) {
-				if (swagItem.getOwnerID().equals(userID)) {
+				if (swagItem.getOwnerGoogleID() != null && swagItem.getOwnerGoogleID().equals(userID)) {
 					createdItems++;
 				}
 				// Is this the most efficient way to do this? Probably not.
 				for (SwagItemComment swagItemComment : swagItem.getComments()) {
 					boolean commentFound = false;
-					if (swagItemComment.getItemOwnerGoogleID().equals(userID)) {
+					if (swagItemComment.getItemOwnerGoogleID() != null
+							&& swagItemComment.getItemOwnerGoogleID().equals(
+									userID)) {
 						// Only increment comment once for a user. User may have
 						// multiple comments for item. Total comments needs
 						// complete count

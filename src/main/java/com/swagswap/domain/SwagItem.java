@@ -70,7 +70,7 @@ public class SwagItem implements Serializable {
 
 	// GoogleID: String because that's how it is in google user object
 	@Persistent
-	private String ownerID; 
+	private String ownerGoogleID; 
 
 	@Persistent
 	private String ownerNickName;
@@ -193,12 +193,12 @@ public class SwagItem implements Serializable {
 		this.imageKey = imageKey;
 	}
 
-	public String getOwnerID() {
-		return ownerID;
+	public String getOwnerGoogleID() {
+		return ownerGoogleID;
 	}
 
-	public void setOwnerID(String ownerID) {
-		this.ownerID = ownerID;
+	public void setOwnerGoogleID(String ownerGoogleID) {
+		this.ownerGoogleID = ownerGoogleID;
 	}
 
 	public String getOwnerNickName() {
@@ -278,7 +278,7 @@ public class SwagItem implements Serializable {
 		result = prime * result
 				+ ((numberOfRatings == null) ? 0 : numberOfRatings.hashCode());
 		result = prime * result
-				+ ((ownerID == null) ? 0 : ownerID.hashCode());
+				+ ((ownerGoogleID == null) ? 0 : ownerGoogleID.hashCode());
 		result = prime * result
 				+ ((ownerNickName == null) ? 0 : ownerNickName.hashCode());
 		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
@@ -347,10 +347,10 @@ public class SwagItem implements Serializable {
 				return false;
 		} else if (!numberOfRatings.equals(other.numberOfRatings))
 			return false;
-		if (ownerID == null) {
-			if (other.ownerID != null)
+		if (ownerGoogleID == null) {
+			if (other.ownerGoogleID != null)
 				return false;
-		} else if (!ownerID.equals(other.ownerID))
+		} else if (!ownerGoogleID.equals(other.ownerGoogleID))
 			return false;
 		if (ownerNickName == null) {
 			if (other.ownerNickName != null)

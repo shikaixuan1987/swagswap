@@ -148,6 +148,7 @@ public class ActionBean {
 		}
 	}
 
+
 	public String actionBack() {
 		if (swagEditBean.getLastPage() == null) {
 			return "allSwag?faces-redirect=true";
@@ -158,8 +159,8 @@ public class ActionBean {
 	private void populateCreatedTable(List<SwagItem> swagList) {
 		SwagTable createdTable = new SwagTableImpl((SwagItemWrapper
 				.convertSwagListToWrapperList(itemService
-						.filterByOwnerNickName(swagList, swagSwapUserService
-								.getCurrentUser().getNickname()), userBean)));
+						.filterByOwnerGoogleID(swagList, swagSwapUserService
+								.getCurrentUser().getUserId()), userBean)));
 		swagBean.setCreatedTable(createdTable);
 	}
 

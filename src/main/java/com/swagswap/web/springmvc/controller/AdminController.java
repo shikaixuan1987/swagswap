@@ -108,7 +108,7 @@ public class AdminController {
 			HttpServletResponse response,
 			Model model) throws IOException {
 		SwagItem swagItem = itemService.get(Long.parseLong(swagItemKey));
-		String googleID = swagItem.getOwnerID();
+		String googleID = swagItem.getOwnerGoogleID();
 		SwagSwapUser swagSwapUser = swagSwapUserService.findByGoogleID(googleID);
 		//TODO don't send emails when a user comments on their own item
 		

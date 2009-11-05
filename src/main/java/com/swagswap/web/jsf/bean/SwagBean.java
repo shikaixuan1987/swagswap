@@ -22,6 +22,7 @@ public class SwagBean implements Serializable {
 	private Boolean showClear = false;
 	private Long selectedRowId;
 	private String filter = "";
+	//  TODO SS.  Refactor this stuff.  See Stats
 	private Integer totalItems = 0;
 	private Integer createdItems = 0;
 	private Integer ratedItems = 0;
@@ -35,6 +36,47 @@ public class SwagBean implements Serializable {
 	private SwagTable ratedTable;
 	private SwagTable notCommentedTable;
 	private SwagTable notRatedTable;
+	
+	private Boolean showUserCreatedPercent = false;
+	private Boolean showUserRatedPercent = false;
+	private Boolean showUserCommentedPercent = false;
+	
+	
+	public Boolean getShowUserRatedPercent() {
+		return showUserRatedPercent;
+	}
+
+	public void setShowUserRatedPercent(Boolean showUserRatedPercent) {
+		this.showUserRatedPercent = showUserRatedPercent;
+	}
+
+	public Boolean getShowUserCommentedPercent() {
+		return showUserCommentedPercent;
+	}
+
+	public void setShowUserCommentedPercent(Boolean showUserCommentedPercent) {
+		this.showUserCommentedPercent = showUserCommentedPercent;
+	}
+
+	public Boolean getShowUserCreatedPercent() {
+		return showUserCreatedPercent;
+	}
+
+	public void setShowUserCreatedPercent(Boolean showUserCreatedPercent) {
+		this.showUserCreatedPercent = showUserCreatedPercent;
+	}
+	
+	public void toggleUserCreatedPercent() {
+		showUserCreatedPercent = !showUserCreatedPercent;
+	}	
+	
+	public void toggleUserRatedPercent() {
+		showUserRatedPercent = !showUserRatedPercent;
+	}
+	
+	public void toggleUserCommentedPercent() {
+		showUserCommentedPercent = !showUserCommentedPercent;
+	}
 
 	public SwagTable getNotRatedTable() {
 		return notRatedTable;
@@ -189,48 +231,6 @@ public class SwagBean implements Serializable {
 			}
 		}
 		return selectedRow;
-	}
-
-	// TODO Refactor this colour stuff! Quick and dirty. Consider storing
-	// percentages...
-
-	public String getCreatedColour() {
-
-		return getColourForPercentage(getCreatedTable().getTableSize());
-	}
-
-	public String getRatedColour() {
-
-		return getColourForPercentage(getRatedTable().getTableSize());
-	}
-
-	public String getCommentedColour() {
-
-		return getColourForPercentage(getCommentedTable().getTableSize());
-	}
-
-	private String getColourForPercentage(int tableSize) {
-
-		if (totalItems == 0) {
-			return "white";
-		}
-		float percent = tableSize / totalItems.floatValue();
-
-		if (percent == 1) {
-			return "#FF8800";
-		}
-		if (percent < 0.33) {
-			return "red";
-		}
-		if (percent < 0.66) {
-			return "yellow";
-		}
-		if (percent < 1) {
-			return "lime";
-		}
-
-		return "white";
-
 	}
 
 }

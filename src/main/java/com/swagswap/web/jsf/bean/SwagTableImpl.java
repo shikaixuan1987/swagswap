@@ -1,11 +1,14 @@
 package com.swagswap.web.jsf.bean;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.swagswap.web.jsf.model.SwagItemWrapper;
 
-public class SwagTableImpl implements Serializable, SwagTable {
+public class SwagTableImpl implements Serializable, SwagTable, SortableList {
 
 	private static final long serialVersionUID = 1L;
 
@@ -15,6 +18,9 @@ public class SwagTableImpl implements Serializable, SwagTable {
 	private Integer firstRow = 0;
 	
 	private String page = "1";
+	
+    private String prevSort;
+    private boolean prevSortDirection;
 	
 	public SwagTableImpl() {
 		super();
@@ -121,6 +127,84 @@ public class SwagTableImpl implements Serializable, SwagTable {
 		}
 		firstRow = pageInt * rowsPerPage - rowsPerPage;
 	}
+	
+	
+	//  SortableList methods
+	   public void sort(final String column, final boolean ascending) {
+	        // final int columnIndex = getColumnIndex(column);
+	        final int direction = (ascending) ? SortableListImpl.SORT_ASCENDING
+	                : SortableListImpl.SORT_DESCENDING;
+	        
+//	        Comparator comparator = new Comparator() {
+//	            public int compare(Object o1, Object o2) {
+//
+//	                int result = 0;
+//
+//	                Object column1 = getRowObjectAtColumn(o1, column, true);
+//	               Object column2 = getRowObjectAtColumn(o2, column, true);
+//
+//	                if (column1 == null && column2 != null)
+//	                    result = -1 * direction;
+//	                else if (column1 == null && column2 == null)
+//	                    result = 0;
+//	                else if (column1 != null && column2 == null)
+//	                    result = 1 * direction;
+//	                else
+//	                    result = ((Comparable) column1).compareTo(column2) * direction;
+//
+//	                return result;
+//	            }
+//	      
+//	        };
+//	        
+//	        sort(column, ascending, comparator);
+	    }
+
+	    public void sort(final String column, final boolean ascending, Comparator comparator) {
+	        // Check if column is null
+	        if (column == null)
+	            return;
+
+	        if ((prevSort != null) && (prevSort.equals(column)) && (prevSortDirection == ascending)) {
+	            // no need to sort
+	            return;
+	        }
+	        
+	        // Added by woo-yo
+
+	            Collections.sort(swagList, comparator);
+	        
+	        prevSort = column;
+	        prevSortDirection = ascending;
+	    }
+	
+	
+	
+	public String getSort() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isAscending() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void setAscending(boolean ascending) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setSort(String sort) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void sort(String sortColumn) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 	

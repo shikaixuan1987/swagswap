@@ -11,13 +11,13 @@ import com.swagswap.service.SwagStatsService;
 
 @ManagedBean(name = "swagStatsBean")
 @RequestScoped
-public class SwagStatsBean  {
-	
+public class SwagStatsBean {
+
 	private static final Logger log = Logger.getLogger(SwagStatsBean.class);
-		
+
 	@ManagedProperty(value = "#{swagStatsService}")
 	SwagStatsService swagStatsService;
-	
+
 	public void setSwagStatsService(SwagStatsService swagStatsService) {
 		this.swagStatsService = swagStatsService;
 	}
@@ -25,6 +25,7 @@ public class SwagStatsBean  {
 	private SwagStats swagStats;
 
 	public SwagStats getSwagStats() {
+		// Check if stats already available for this request
 		if (swagStats == null) {
 			swagStats = swagStatsService.getSwagStats();
 		}
@@ -33,5 +34,5 @@ public class SwagStatsBean  {
 
 	public void setSwagStats(SwagStats swagStats) {
 		this.swagStats = swagStats;
-	}	
+	}
 }

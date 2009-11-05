@@ -10,26 +10,35 @@
 <composite:interface>
 	<composite:attribute name="value1" required="true" />
 	<composite:attribute name="value2" required="true" />
-	<composite:attribute name="colour" required="true" />
+	<composite:attribute name="factor" default="1.0" />
 </composite:interface>
 
 <composite:implementation>
+
+	<c:if test="#{cc.attrs.value2 == 0}">
+		<c:set var="percent" value="0" />
+	</c:if>
+	<c:if test="#{cc.attrs.value2 != 0}">
+		<c:set var="percent"
+			value="#{fn:substringBefore(cc.attrs.value1 / cc.attrs.value2 * 100,'.')}" />
+		<c:set var="color"
+			value="#{(cc.attrs.value1 / cc.attrs.value2) gt 0 ? 'red' : color}" />
+		<c:set var="color"
+			value="#{(cc.attrs.value1 / cc.attrs.value2) ge 0.33 ? 'yellow' : color}" />
+		<c:set var="color"
+			value="#{(cc.attrs.value1 / cc.attrs.value2) ge 0.66 ? 'limegreen' : color}" />
+		<c:set var="color"
+			value="#{(cc.attrs.value1 / cc.attrs.value2) ge 1 ? ' #FF8800' : color}" />
+	</c:if>
+
 	<h:panelGroup layout="block"
-		style="border: 1px solid black; width: 100px; vertical-align: middle;">
+		style="border: 1px solid black; width: #{100 * cc.attrs.factor}px; vertical-align: middle;">
 
 		<h:panelGroup layout="block"
-			style="width: #{fn:substringBefore(cc.attrs.value1 / cc.attrs.value2 * 100,'.')}px; background-color: #{cc.attrs.colour}; height: 15px;"
-			rendered="#{cc.attrs.value2 != 0}">
-			<h:outputText
-				value="#{fn:substringBefore(cc.attrs.value1 / cc.attrs.value2 * 100,'.')}%"
-				style="font-size: 10px; font-weight: bold; position: relative; left: 43px; right: 43px; top: 20%;" />
+			style="width: #{fn:substringBefore(percent * cc.attrs.factor,'.')}px; background-color: #{color}; height: 15px;">
+			<h:outputText value="#{percent}%"
+				style="font-size: 10px; font-weight: bold; position: relative; left:75%; right: 25%; top: 20%;" />
 
-		</h:panelGroup>
-		<h:panelGroup layout="block" style="height: 15px;"
-			rendered="#{cc.attrs.value2 == 0}">
-			<h:outputText value="0%"
-				style="font-size: 10px; font-weight: bold; position: relative; left: 43px; right: 43px;"
-				rendered="#{cc.attrs.value2 == 0}" />
 		</h:panelGroup>
 	</h:panelGroup>
 </composite:implementation>

@@ -1,11 +1,16 @@
 package com.swagswap.web.springmvc.controller;
 
 import java.io.IOException;
+import java.util.Properties;
 
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.catalina.HttpResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -120,8 +125,27 @@ public class AdminController {
 				log.error(e);
 			}
 		}
-		//if you don't do this, taskmanager retries the task (a lot)
+		//if you don't do this, task queue retries the task (a lot)
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 	
+	//Incoming email see http://code.google.com/appengine/docs/java/mail/receiving.html
+	@RequestMapping(value = "/_ah/mail/{address}", method = RequestMethod.POST)
+	public void routeIncomingEmail (
+			@PathVariable("address") String address, HttpServletRequest request,
+			HttpServletResponse response) throws IOException, MessagingException {
+		log.debug("Got mail posted to " + address);
+		//Handle message
+        Properties props = new Properties(); 
+        Session session = Session.getDefaultInstance(props, null); 
+        MimeMessage message = new MimeMessage(session, request.getInputStream());
+		log.info("Message is " + message.getContent());
+		
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public void startPage (HttpServletResponse response) throws IOException {
+		response.sendRedirect("/welcome.html");
+	}
 }

@@ -115,7 +115,10 @@
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>/springmvc/*</url-pattern>
+		<!-- incoming email -->
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
 
 	<error-page>
 		<exception-type>java.lang.Exception</exception-type>
@@ -223,8 +226,11 @@
 	-->
 
 
+	<!-- This is taken care of in the AdminController because of having to map "/" to the spring dispatchservlet -->
+    <!-- 
 	<welcome-file-list>
 		<welcome-file>welcome.html</welcome-file>
 	</welcome-file-list>
+	 -->
 
 </web-app>

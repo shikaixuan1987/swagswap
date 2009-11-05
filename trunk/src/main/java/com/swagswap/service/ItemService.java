@@ -20,7 +20,7 @@ public interface ItemService {
 
 	List<SwagItem> findByTag(String searchString);
 
-	List<SwagItem> filterByOwnerNickName(List<SwagItem> swagList,
+	List<SwagItem> filterByOwnerGoogleID(List<SwagItem> swagList,
 			String userNickName);
 
 	List<SwagItem> filterByCommentedOn(List<SwagItem> swagList,

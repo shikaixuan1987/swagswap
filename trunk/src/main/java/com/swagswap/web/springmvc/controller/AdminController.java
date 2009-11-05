@@ -146,6 +146,6 @@ public class AdminController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public void startPage (HttpServletResponse response) throws IOException {
-		response.sendRedirect("/welcome.html");
+		response.sendRedirect("/jsf/home.jsf");
 	}
 }

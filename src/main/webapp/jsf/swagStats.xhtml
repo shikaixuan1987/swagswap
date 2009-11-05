@@ -8,22 +8,21 @@
 	xmlns:swagStats="http://java.sun.com/jsf/composite/springmvc/stats">
 
 
-<h:panelGrid columns="3" cellpadding="0" cellspacing="0"
-	columnClasses="colWidth33, colWidth33, colWidth33" width="100%">
-	<swagStats:topRated style="margin-right:5px;" />
-	<swagStats:mostRated style="margin-right:5px;" />
-	<swagStats:mostCommented />
+	<h:panelGrid columns="3" cellpadding="0" cellspacing="0"
+		columnClasses="colWidth33, colWidth33, colWidth33" width="100%">
 
-	<h:panelGroup layout="block" style="height: 10px" />
-	<h:panelGroup />
-	<h:panelGroup />
-	<swag:panel title="Top Users by Created " height="105px"
-		style="margin-right:5px;" color="#666666" headerColor="#F1F1F1" />
-	<swag:panel title="Top Users by Rated" height="105px"
-		style="margin-right:5px;" color="#666666" headerColor="#F1F1F1" />
-	<swag:panel title="Top Users by Commented" height="105px"
-	 	color="#666666" headerColor="#F1F1F1" />
-</h:panelGrid>
 
+		<swagStats:topRated style="margin-right:5px;" />
+		<swagStats:mostRated style="margin-right:5px;" />
+		<swagStats:mostCommented />
+
+		<h:panelGroup layout="block" style="height: 10px" />
+		<h:panelGroup />
+		<h:panelGroup />		
+		<swagStats:userCreated style="margin-right:5px;"
+			percent="#{swagBean.showUserCreatedPercent}" />
+		<swagStats:userRated style="margin-right:5px;" percent="#{swagBean.showUserRatedPercent}" />
+		<swagStats:userCommented percent="#{swagBean.showUserCommentedPercent}" />
+	</h:panelGrid>
 </html>
 

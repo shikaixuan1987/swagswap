@@ -1,5 +1,7 @@
 package com.swagswap.service;
 
+import java.util.List;
+
 import com.google.appengine.api.users.User;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemRating;
@@ -9,6 +11,8 @@ import com.swagswap.exceptions.UserAlreadyExistsException;
 
 public interface SwagSwapUserService {
 
+	List<SwagSwapUser> getAll();
+	
 	SwagSwapUser get(Long id);
 
 	void insert(SwagSwapUser swagSwapUser) throws UserAlreadyExistsException ;

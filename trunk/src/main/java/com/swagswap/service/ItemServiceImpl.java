@@ -144,6 +144,7 @@ public class ItemServiceImpl implements ItemService {
 		return filteredList;
 	}
 
+	//  TODO change this to ID and everything that calls it.  Scott.
 	public List<SwagItem> filterByOwnerNickName(List<SwagItem> swagList,
 			String userNickName) {
 		// Easier and faster to do this programatically than go to DAO
@@ -154,6 +155,8 @@ public class ItemServiceImpl implements ItemService {
 		Iterator<SwagItem> iter = swagList.iterator();
 		while (iter.hasNext()) {
 			SwagItem item = (SwagItem) iter.next();
+			
+			//  TODO   Safety check in here if ID is null
 			if (item.getOwnerNickName().equals(userNickName)) {
 				filteredList.add(item);
 			}

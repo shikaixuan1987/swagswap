@@ -42,6 +42,10 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		this.itemService = itemService;
 		this.googleUserService=googleUserService;
 	}
+	
+	public List<SwagSwapUser> getAll() {
+		return userDao.getAll();
+	}
 
 	public SwagSwapUser get(Long key) {
 		return userDao.get(key);

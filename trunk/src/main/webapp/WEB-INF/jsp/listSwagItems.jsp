@@ -34,7 +34,7 @@
 				<img border="0" alt="View/Comment/Rate" src="<%=request.getContextPath()%>/images/view.gif"/>
 			</a>
 			<%-- Users can only edit their own items --%>
-			<google-auth:isAllowed swagItemOwnerID="${currentObject.ownerID}">
+			<google-auth:isAllowed swagItemOwnerGoogleID="${currentObject.ownerGoogleID}">
 				
 				<a href="<c:url value='/springmvc/edit/${currentObject.key}'/>"> 
 					<img border="0" alt="Edit" src="<%=request.getContextPath()%>/images/edit.gif"/>

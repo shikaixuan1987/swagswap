@@ -245,6 +245,16 @@ public class ItemServiceImpl implements ItemService {
 		// throw new RuntimeException("see if it rolls back");
 		return swagItem;
 	}
+	
+	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
+	public void saveFromEmail(SwagItem swagItem) {
+		if (StringUtils.isEmpty(swagItem.getName())) { // only required field
+			throw new InvalidSwagItemException("name is required");
+		}
+		//don't check logged in identity
+		populateSwagImage(swagItem);
+		itemDao.insert(swagItem);
+	}
 
 	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public synchronized void updateRating(Long swagItemKey,

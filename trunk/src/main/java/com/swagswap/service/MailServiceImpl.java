@@ -39,10 +39,10 @@ public class MailServiceImpl implements MailService {
             msg.setFrom(new InternetAddress(FROM_ADDRESS));
             msg.addRecipient(Message.RecipientType.TO,new InternetAddress(email));
             msg.setSubject(subject);
-            // add opt-out line
-            msgBody=msgBody + "\n\n\n\n\nStop receiving emails from SwagSwap: http://swagswap.appspot.com/springmvc/opt-out/"+ googleId +"/true";   
-            msgBody=msgBody + "\n\n(Re)start receiving emails from SwagSwap: http://swagswap.appspot.com/springmvc/opt-out/"+ googleId +"/false";   
-            msg.setText(msgBody);
+            // add opt-out/in lines
+            msgBody=msgBody + "\n\n\n\n\n<br/><br/><br/><br/>Stop receiving emails from SwagSwap: http://swagswap.appspot.com/springmvc/opt-out/"+ googleId +"/true";   
+            msgBody=msgBody + "\n\n<br/><br/>(Re)start receiving emails from SwagSwap: http://swagswap.appspot.com/springmvc/opt-out/"+ googleId +"/false";   
+            msg.setContent(msgBody,"text/html");
             Transport.send(msg);
             log.debug("sending mail to " + email);
         } catch (Exception e) {

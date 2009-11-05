@@ -10,27 +10,16 @@
 	xmlns:swag="http://java.sun.com/jsf/composite/swag">
 
 <h:form>
-	<h:panelGroup
-		style="padding-left: 10px; height: 100%; font-weight: bold; font-style: italic;"
-		layout="block">
-		<h:panelGroup layout="block" style="height: 50px; margin-top: 50px;" />
+	<swag:menuPanel width="100%" title="Menu">
 		<h:outputLink value="/">
 			<h:outputText value="Home" />
 		</h:outputLink>
-		<br />
-		<br />
 		<h:link value="All Swag" outcome="allSwag" />
-		<br />
-		<br />
 		<h:link value="My Swag" outcome="mySwag" />
-		<br />
-		<br />
-		<h:outputText value="Top Rated Swag" />
-		<br />
-		<br />
 		<h:link value="Add Swag" outcome="addSwag">
 			<f:param name="lastPage" value="#{actionBean.lastPage}" />
 		</h:link>
-	</h:panelGroup>
+		<h:link value="Swag Stats" outcome="showSwagStats" />
+	</swag:menuPanel>
 </h:form>
 </html>

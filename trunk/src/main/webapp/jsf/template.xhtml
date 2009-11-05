@@ -25,7 +25,10 @@
 			<h:panelGrid columns="2" cellpadding="2" cellspacing="2" width="100%"
 				columnClasses="mainCol1, mainCol2" style="vertical-align: top;">
 				<h:panelGroup>
-					<ui:include src="menu.xhtml" />
+					<h:panelGroup layout="block" style="height: 73px;" />
+					<ui:insert name="menu">
+						<ui:include src="menu.xhtml" />
+					</ui:insert>
 					<h:panelGrid styleClass="" columns="1"
 						style="position: absolute; bottom: 0px;"
 						columnClasses="footerCol1, footerCol2">
@@ -43,8 +46,8 @@
 						<h:panelGrid cellpadding="0" cellspacing="0" width="100%"
 							style="text-align: right; margin-top: 10px">
 							<h:panelGroup rendered="#{!swagSwapUserService.userLoggedIn}">
-								<h:commandLink value="Login" style="margin-left: 10px"
-									action="#{userBean.showLogin}">
+								<h:commandLink value="Login with your Google account"
+									style="margin-left: 10px" action="#{userBean.showLogin}">
 								</h:commandLink>
 							</h:panelGroup>
 							<h:panelGroup rendered="#{swagSwapUserService.userLoggedIn}">

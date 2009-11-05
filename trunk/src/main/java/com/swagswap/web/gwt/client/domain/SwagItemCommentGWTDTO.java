@@ -11,7 +11,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class SwagItemCommentGWTDTO implements IsSerializable {
 	private Long swagItemKey;
-	private String swagSwapUserID;
+	private String googleID;
 	private String swagSwapUserNickname;
 	private String commentText;
 	private Date created;
@@ -19,9 +19,9 @@ public class SwagItemCommentGWTDTO implements IsSerializable {
 	public SwagItemCommentGWTDTO() {
 	}
 	
-	public SwagItemCommentGWTDTO(Long swagItemKey, String swagSwapUserID, String swagSwapUserNickname, String commentText, Date created) {
+	public SwagItemCommentGWTDTO(Long swagItemKey, String googleID, String swagSwapUserNickname, String commentText, Date created) {
 		this.swagItemKey=swagItemKey;
-		this.swagSwapUserID=swagSwapUserID;
+		this.googleID=googleID;
 		this.swagSwapUserNickname=swagSwapUserNickname;
 		this.commentText=commentText;
 		this.created=created;
@@ -35,12 +35,12 @@ public class SwagItemCommentGWTDTO implements IsSerializable {
 		this.swagItemKey = swagItemKey;
 	}
 
-	public String getSwagSwapUserID() {
-		return swagSwapUserID;
+	public String getGoogleID() {
+		return googleID;
 	}
 
-	public void setSwagSwapUserID(String swagSwapUserID) {
-		this.swagSwapUserID = swagSwapUserID;
+	public void setGoogleID(String googleID) {
+		this.googleID = googleID;
 	}
 
 	public String getSwagSwapUserNickname() {

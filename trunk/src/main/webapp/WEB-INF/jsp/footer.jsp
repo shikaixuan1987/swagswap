@@ -1,7 +1,7 @@
 
   <table class="footer">
     <tr>
-      <td><a href="<spring:url value="/swag/search" htmlEscape="true" />">Home</a></td>
+      <td><a href="<spring:url value="/springmvc/search" htmlEscape="true" />">Home</a></td>
     </tr>
   </table>
 

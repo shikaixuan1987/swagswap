@@ -166,23 +166,23 @@ public class ItemServiceImpl implements ItemService {
 	 *            The reverse of what it normally does
 	 */
 	public List<SwagItem> filterByCommentedOn(List<SwagItem> swagList,
-			String userID, boolean exclusive) {
+			String googleID, boolean exclusive) {
 
 		// Easier and faster to do this programatically than go to DAO
 		List<SwagItem> filteredList = new ArrayList<SwagItem>();
-		if (swagList == null || userID == null) {
+		if (swagList == null || googleID == null) {
 			return filteredList;
 		}
 		itemLoop: for (SwagItem swagItem : swagList) {
 			for (SwagItemComment swagItemComment : swagItem.getComments()) {
-				if (swagItemComment.getSwagSwapUserID().equals(
-						userID)
+				if (swagItemComment.getItemOwnerGoogleID().equals(
+						googleID)
 						&& !exclusive) {
 					filteredList.add(swagItem);
 					continue itemLoop;
 				}
-				if ((!swagItemComment.getSwagSwapUserID().equals(
-						userID))
+				if ((!swagItemComment.getItemOwnerGoogleID().equals(
+						googleID))
 						&& exclusive) {
 					filteredList.add(swagItem);
 					continue itemLoop;
@@ -260,12 +260,12 @@ public class ItemServiceImpl implements ItemService {
 		}
 		newComment.setSwagSwapUserNickname(swagSwapUserService.getCurrentUser()
 				.getNickname());
-		newComment.setSwagSwapUserID(swagSwapUserService.getCurrentUser().getUserId());
+		newComment.setItemOwnerGoogleID(swagSwapUserService.getCurrentUser().getUserId()); //GoogleID
 		itemDao.addComment(newComment);
 		//send the owner a mail
 		String subject = "Someone just commented on your swag item";
 		String msgBody = newComment.getSwagSwapUserNickname() + " said: " + newComment.getCommentText() +
-		"\n\nSee Your Item here: (Spring MVC impl) http://swagswap.appspot.com/swag/view/"+newComment.getSwagItemKey() +
+		"\n\nSee Your Item here: (Spring MVC impl) http://swagswap.appspot.com/springmvc/view/"+newComment.getSwagItemKey() +
 		"\nor here (JSF 2.0 impl) http://swagswap.appspot.com/jsf/viewSwag.jsf?swagItemKey=" + newComment.getSwagItemKey();
 		mailService.sendWithTaskManager(
 				newComment.getSwagItemKey(),

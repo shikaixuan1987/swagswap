@@ -106,6 +106,7 @@ public class AdminController {
 		String googleID = swagItem.getOwnerID();
 		SwagSwapUser swagSwapUser = swagSwapUserService.findByGoogleID(googleID);
 		//TODO don't send emails when a user comments on their own item
+		
 		if (swagSwapUser.getOptOut()) {
 			log.debug(swagSwapUser.getGoogleID() + " has opted out of emails");
 		}

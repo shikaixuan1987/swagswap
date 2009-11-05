@@ -52,7 +52,7 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
         addField(new DataSourceTextField("description", "Description", 30, false));
 		
 		DataSourceImageField imageField = new DataSourceImageField("imageKey", "Image");
-		imageField.setImageURLPrefix("/swag/showThumbnail/");
+		imageField.setImageURLPrefix("/springmvc/showThumbnail/");
 		addField(imageField);
 		
 		addField(new DataSourceTextField("ownerID", "Owner", 20, false));

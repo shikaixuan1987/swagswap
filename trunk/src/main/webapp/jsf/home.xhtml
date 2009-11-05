@@ -9,7 +9,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:swag="http://java.sun.com/jsf/composite/swag"
-	xmlns:swagStats="http://java.sun.com/jsf/composite/swag/stats">
+	xmlns:swagStats="http://java.sun.com/jsf/composite/springmvc/stats">
 
 <ui:composition template="template.xhtml">
 	<ui:param name="title" value="Welcome to Swag Swap!" />
@@ -17,7 +17,7 @@
 
 		<swag:menuPanel width="220px" title="Choose Your Implementation"
 			style="margin-left: 5px;">
-			<h:outputLink value="/swag/search/">
+			<h:outputLink value="/springmvc/search/">
 				<h:outputText value="Spring MVC (Reference Implementation)" />
 			</h:outputLink>
 			<h:outputLink value="/jsf/allSwag.jsf">

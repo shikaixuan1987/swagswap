@@ -40,8 +40,8 @@ public class MailServiceImpl implements MailService {
             msg.addRecipient(Message.RecipientType.TO,new InternetAddress(email));
             msg.setSubject(subject);
             // add opt-out line
-            msgBody=msgBody + "\n\n\n\n\nStop receiving emails from SwagSwap: http://swagswap.appspot.com/swag/opt-out/"+ googleId +"/true";   
-            msgBody=msgBody + "\n\n(Re)start receiving emails from SwagSwap: http://swagswap.appspot.com/swag/opt-out/"+ googleId +"/false";   
+            msgBody=msgBody + "\n\n\n\n\nStop receiving emails from SwagSwap: http://swagswap.appspot.com/springmvc/opt-out/"+ googleId +"/true";   
+            msgBody=msgBody + "\n\n(Re)start receiving emails from SwagSwap: http://swagswap.appspot.com/springmvc/opt-out/"+ googleId +"/false";   
             msg.setText(msgBody);
             Transport.send(msg);
             log.debug("sending mail to " + email);
@@ -52,13 +52,15 @@ public class MailServiceImpl implements MailService {
 	
 	/**
 	 * Send mail based on user id.  Do it in a Task Queue to prevent delay
+	 * The AdminController has a method which is called by the Task Queue,
+	 * which in turn calls MailService.send() back
 	 */
 	public void sendWithTaskManager(Long swagItemKey, String subject, String msgBody) {
 		log.debug("Queing task for mail with subject " + subject + " at " + new Date());
 	    QueueFactory.getDefaultQueue().add(
 	    		//only can pass String or byte[] params
 	            TaskOptions.Builder
-	              .url("/swag/admin/sendMail")
+	              .url("/springmvc/admin/sendMail")
 	              .param("swagItemKey", swagItemKey.toString())
 	              .param("subject", subject)
 	              .param("msgBody", msgBody)

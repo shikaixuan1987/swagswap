@@ -13,19 +13,20 @@
 	<composite:attribute name="height" />
 	<composite:attribute name="parentAttrs" />
 	<composite:attribute name="style" />
+	<composite:attribute name="color" default="#FF8800" />
+	<composite:attribute name="headerColor" default="#FF8800" />
 </composite:interface>
 
 <composite:implementation>
 	<h:panelGroup layout="block" styleClass="panelHeader"
-		style="width: #{cc.attrs.width}"
+		style="width: #{cc.attrs.width}; background-color: #{cc.attrs.headerColor}; border: 1px solid #{cc.attrs.color}; border-bottom: none; #{cc.attrs.style}"
 		rendered="#{not empty cc.attrs.title}">
 		<h:outputText value="#{cc.attrs.title}" />
 
 	</h:panelGroup>
 	<h:panelGroup layout="block" styleClass="panel"
-		style="height : #{cc.attrs.height}; width: #{cc.attrs.width}; #{cc.attrs.style}">
+		style="height : #{cc.attrs.height}; width: #{cc.attrs.width}; border: 1px solid #{cc.attrs.color}; #{cc.attrs.style}">
 		<composite:insertChildren />
-		<composite:renderFacet name="content" />
 	</h:panelGroup>
 </composite:implementation>
 </html>

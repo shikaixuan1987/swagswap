@@ -27,14 +27,16 @@ html,body {
 
 /*  Menu Column  */
 .mainCol1 {
-	width: 15%;
+	width: 20%;
 	/*background-color: #EEEEEE;*/
 	vertical-align: top;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 /*  Content Column  */
 .mainCol2 {
-	width: 75%;
+	width: 80%;
 	vertical-align: top;
 	padding-right: 100px;
 }
@@ -112,16 +114,59 @@ html,body {
 
 /*  swag:panel  */
 .panel {
-	border: 2px solid #FF8800;
 	padding: 10px;
 }
 
 .panelHeader {
-	background-color: #FF8800;
 	text-align: center;
 	padding: 5px;
 	font-weight: bold;
 	vertical-align: middle;
+}
+
+/*  swag:panel  */
+.menuPanel {
+	padding: 10px;
+}
+
+.menuPanelRow A:link {
+	color: #666666;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.menuPanelRow A:visited {
+	color: #666666;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.menuPanelRow A:active {
+	color: #666666;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.menuPanelRow A:hover {
+	color: #666666;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.menuPanelTable {
+	border: 1px solid #666666;
+	background-color: #F1F1F1;
+}
+
+.menuPanelHeader {
+	text-align: center;
+	padding: 5px;
+	font-weight: bold;
+	vertical-align: middle;
+}
+
+.menuPanelRow {
+	background-color: white;
 }
 
 .headCol1 {
@@ -132,8 +177,16 @@ html,body {
 	width: 100%;
 }
 
+.colWidth33 {
+	width: 33%;
+}
+
 .colWidth50 {
 	width: 50%;
+}
+
+.colWidth100 {
+	width: 100%;
 }
 
 .vAlign {

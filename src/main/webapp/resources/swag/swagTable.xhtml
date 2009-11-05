@@ -29,9 +29,11 @@
 				</f:facet>
 				<h:panelGroup layout="block"
 					style="text-align:center; width:100%; background-color:white;">
-					<h:graphicImage
-						value="/swag/showThumbnail/#{row.swagItem.imageKey}"
-						style="height: 50px; width: 66px;" />
+					<h:button outcome="viewSwag" image="/swag/showThumbnail/#{row.swagItem.imageKey}"
+						style="height: 50px; width: 66px;" title="#{row.swagItem.description}">
+						<f:param name="selectedRowId" value="#{row.swagItem.key}" />
+						<f:param name="lastPage" value="#{actionBean.lastPage}" />
+					</h:button>
 				</h:panelGroup>
 			</h:column>
 			<h:column headerClass="tableHeader">

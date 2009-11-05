@@ -27,7 +27,7 @@ function searchComplete() {
 		buttonElement.value = "I'm feeling lucky again!";
 
 		// put url of image in imageURL
-		URLElement.value = randomResult.tbUrl;
+		URLElement.value = randomResult.url;
 	}
 }
 

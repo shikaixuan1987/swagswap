@@ -13,7 +13,7 @@
 	<ui:define name="content">
 		<h:form>
 			<f:metadata>
-				<f:viewParam name="selectedRowId" value="#{swagBean.selectedRowId}" />
+				<f:viewParam name="swagItemKey" value="#{swagBean.selectedRowId}" />
 				<f:event type="preRenderView"
 					listener="#{actionBean.populateSwagList}" />
 			</f:metadata>

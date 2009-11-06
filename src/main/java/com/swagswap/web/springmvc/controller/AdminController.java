@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -164,26 +165,39 @@ public class AdminController {
 		ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource
 		(inputStreamContent,mimeMessage.getContentType());
 		Multipart mimeMultipart = new MimeMultipart(byteArrayDataSource); 
-
+		//TODO get message body
+		String messageBody="uploaded item";
+		SwagItem swagItem = new SwagItem();
+		swagItem.setOwnerGoogleID((user.getGoogleID()));
+		swagItem.setOwnerNickName(user.getNickName());
+		String swagName = StringUtils.isEmpty(messageBody) ? "uploaded with no name" : messageBody;
+		swagItem.setName(swagName); 
 		// from http://java.sun.com/developer/onlineTraining/JavaMail/contents.html#JavaMailMessage
 		for (int i=0, n=mimeMultipart.getCount(); i<n; i++) {
 		  String disposition = mimeMultipart.getBodyPart(i).getDisposition();
-
+		  //TODO get messageBody
+//		  BodyPart bodyPart = mimeMultipart.getBodyPart(i);
+//		  if (bodyPart.isMimeType("text/*")) {
+//			  messageBody=(String)bodyPart.getContent();
+//		  }
 			if ((disposition != null)
 					&& ((disposition.equals(Part.ATTACHMENT) || (disposition
 							.equals(Part.INLINE))))) {
 				InputStream inputStream = mimeMultipart.getBodyPart(i)
 						.getInputStream();
 				byte[] imageData = getImageDataFromInputStream(inputStream);
-				SwagItem swagItem = new SwagItem();
-				swagItem.setOwnerGoogleID((user.getGoogleID()));
-				swagItem.setOwnerNickName(user.getNickName());
-				swagItem.setName("emailed item"); //TODO get name from messaage body
 				swagItem.setImageBytes(imageData);
-				itemService.saveFromEmail(swagItem);
 				log.debug("saved emailed item, owner Sam Brodkin");
 			}
 		}
+		itemService.saveFromEmail(swagItem);
+		mailService.send(user.getGoogleID(), user.getEmail(), "Your swag item: " + swagName +
+				" has been successfuly created",
+		"\n\n<br/><br/>See Your Item here: (Spring MVC impl) http://swagswap.appspot.com/springmvc/view/" +
+		swagItem.getKey() +
+		"\n<br/>or here (JSF 2.0 impl) http://swagswap.appspot.com/jsf/viewSwag.jsf?swagItemKey=" +
+		swagItem.getKey()
+		);
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 	

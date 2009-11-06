@@ -16,9 +16,11 @@
 		style="#{cc.attrs.style}" headerColor="white">
 		<h:dataTable value="#{swagStatsBean.swagStats.topRated}" var="row"
 			width="100%" rules="none" rowClasses="tableRow1, tableRow2"
-			columnClasses="colWidth100" cellpadding="4">
+			columnClasses="colWidth100" cellpadding="4"
+			onmouseover="changeto(this,event,'#67A7E3');"
+			onmouseout="changeback(this,event);">
 			<h:column>
-				<h:outputText value="#{row.name}" title="#{row.description}" />
+					<h:outputText value="#{row.name}" title="#{row.description}" />
 			</h:column>
 			<h:column>
 				<h:panelGroup id="averageRating">

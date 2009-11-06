@@ -14,26 +14,34 @@
 
 <composite:implementation>
 	<h:form>
-		<swag:panel title="Top Users by Rated " height="130px"
-			style="#{cc.attrs.style}" color="#666666" headerColor="#F1F1F1">
-			<h:dataTable value="#{swagStatsBean.swagStats.userRated}" var="row"
-				width="100%" rules="none" rowClasses="tableRow1, tableRow2"
-				columnClasses="colWidth100" cellpadding="4">
-				<f:ajax render="@form" listener="#{swagBean.toggleUserRatedPercent}"
-					event="click" />
-				<h:column>
-					<h:outputText value="#{row.swagSwapUser.nickName}" />
-				</h:column>
-				<h:column>
-					<h:outputText value="#{row.itemsRated}"
-						rendered="#{cc.attrs.percent == 'false'}" />
-					<h:panelGroup rendered="#{cc.attrs.percent == 'true'}">
-						<swag:progressBar value1="#{row.itemsRated}"
-							value2="#{swagStatsBean.swagStats.totalItems}" factor="0.5" />
-					</h:panelGroup>
-				</h:column>
-			</h:dataTable>
-		</swag:panel>
+		<h:panelGrid cellpdding="0" cellspacing="0" width="100%" title="Click to change view">
+			<f:ajax render="@form" listener="#{swagBean.toggleUserRatedPercent}"
+				event="click" />
+			<swag:panel
+				title="Top Users by Rated #{cc.attrs.percent == 'true' ? ' %' : ''}"
+				height="125px" style="#{cc.attrs.style}" color="#666666"
+				headerColor="#F1F1F1">
+				<h:dataTable value="#{swagStatsBean.swagStats.userRated}" var="row"
+					width="100%" rules="none" rowClasses="tableRow1, tableRow2"
+					columnClasses="colWidth100" cellpadding="4">
+					<h:column>
+						<h:outputText value="#{row.swagSwapUser.nickName}" />
+					</h:column>
+					<h:column>
+						<h:panelGroup layout="block" style="height:15px;">
+							<h:outputText value="#{row.itemsRated}"
+								rendered="#{cc.attrs.percent == 'false'}" />
+							<h:panelGroup rendered="#{cc.attrs.percent == 'true'}">
+								<swag:progressBar value1="#{row.itemsRated}"
+									value2="#{swagStatsBean.swagStats.totalItems}" factor="0.5" />
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:column>
+				</h:dataTable>
+
+			</swag:panel>
+			
+		</h:panelGrid>
 	</h:form>
 </composite:implementation>
 

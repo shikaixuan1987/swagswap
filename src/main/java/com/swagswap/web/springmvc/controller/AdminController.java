@@ -194,13 +194,15 @@ public class AdminController {
 		if (user.getOptOut()) {
 			log.debug(user.getGoogleID() + " has opted out of emails");
 		}
-		mailService.send(user.getGoogleID(), user.getEmail(), "Your swag item: " + swagName +
-				" has been successfuly created",
-		"\n\n<br/><br/>See Your Item here: (Spring MVC impl) http://swagswap.appspot.com/springmvc/view/" +
-		swagItem.getKey() +
-		"\n<br/>or here (JSF 2.0 impl) http://swagswap.appspot.com/jsf/viewSwag.jsf?swagItemKey=" +
-		swagItem.getKey()
-		);
+		else { //send email
+			mailService.send(user.getGoogleID(), user.getEmail(), "Your swag item: " + swagName +
+					" has been successfuly created",
+			"\n\n<br/><br/>See Your Item here: (Spring MVC impl) http://swagswap.appspot.com/springmvc/view/" +
+			swagItem.getKey() +
+			"\n<br/>or here (JSF 2.0 impl) http://swagswap.appspot.com/jsf/viewSwag.jsf?swagItemKey=" +
+			swagItem.getKey()
+			);
+		}
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 	

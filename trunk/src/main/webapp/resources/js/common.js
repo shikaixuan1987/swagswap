@@ -48,21 +48,26 @@ function findRow(table, target) {
 
 function highlightRow(row, color, saveOriginal) {
 	
-	if (row) {
-		for (i=0; i < row.children.length; i++)
-			var child = row.children[i];
-			if (child.style.backgroundColor!=color) {
-				if (saveOriginal) {
-					child.style.originalColor=child.style.backgroundColor;
-					child.style.backgroundColor=color;
-					
-				} else {
-					child.style.backgroundColor=child.style.originalColor;
-				}
-		
-			}
-		}
+	if (!row) {
+		return;
+	}
 	
+	if (row.parentNode.tagName=="THEAD") {
+		return;
+	}
+	
+	for (i=0; i < row.children.length; i++) {
+		var child = row.children[i];
+		// window.alert(child);
+		if (child.style.backgroundColor!=color) {
+			if (saveOriginal) {
+				child.style.originalColor=child.style.backgroundColor;
+				child.style.backgroundColor=color;
+			} else {
+				child.style.backgroundColor=child.style.originalColor;
+			}	
+		}
+	}	
 }
 
 function changeback(table, event) {

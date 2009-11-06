@@ -18,8 +18,8 @@
 			styleClass="tableBorder" rules="all"
 			rowClasses="tableRow1, tableRow2"
 			columnClasses="tableCol1, tableCol2, tableCol4, tableCol7, tableCol5, tableCol6, tableCol5,  tableCol8"
-			onRowMouseOver="window.alert('over');"
-			onRowMouseOut="window.alert('out);" cellpadding="4"
+			onmouseover="changeto(this,event,'#67A7E3');"
+			onmouseout="changeback(this,event);" cellpadding="4"
 			rows="#{swagBean.swagTable.rowsPerPage}"
 			first="#{swagBean.swagTable.firstRow}">
 			<h:column headerClass="tableHeader">
@@ -28,8 +28,10 @@
 				</f:facet>
 				<h:panelGroup layout="block"
 					style="text-align:center; width:100%; background-color:white;">
-					<h:button outcome="viewSwag" image="/springmvc/showThumbnail/#{row.swagItem.imageKey}"
-						style="height: 50px; width: 66px;" title="#{row.swagItem.description}">
+					<h:button outcome="viewSwag"
+						image="/springmvc/showThumbnail/#{row.swagItem.imageKey}"
+						style="height: 50px; width: 66px;"
+						title="#{row.swagItem.description}">
 						<f:param name="swagItemKey" value="#{row.swagItem.key}" />
 						<f:param name="lastPage" value="#{actionBean.lastPage}" />
 					</h:button>

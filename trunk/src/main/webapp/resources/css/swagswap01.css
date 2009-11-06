@@ -7,9 +7,7 @@ html,body {
 	height: 100%;
 }
 
-table {
-	background-color: white;
-}
+
 
 .error {
 	font-color: red;
@@ -119,6 +117,7 @@ table {
 /*  swag:panel  */
 .panel {
 	padding: 10px;
+	background-color: white;
 }
 
 .panelHeader {

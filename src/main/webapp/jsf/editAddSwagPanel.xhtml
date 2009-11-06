@@ -8,63 +8,69 @@
 	xmlns:swagcomp="/tags/swagcomp">
 
 <h:outputScript name="js/feelingLucky.js" target="head" />
-<swag:panel title="${title}">
-	<h:panelGrid columns="2" style="vertical-align: middle">
-		<swag:label value="Name" />
-		<h:inputText value="#{swagEditBean.editSwagItem.swagItem.name}"
-			id="name" />
-		<swag:label value="Description" />
-		<h:inputText value="#{swagEditBean.editSwagItem.swagItem.description}"
-			size="75" maxLength="100" />
-		<swag:label value="Company" />
-		<h:inputText value="#{swagEditBean.editSwagItem.swagItem.company}" />
-		<swag:label value="Tags" />
-		<h:panelGrid columns="4" cellpadding="0" cellspacing="0">
-			<h:inputText value="#{swagEditBean.editSwagItem.swagItem.tags[0]}"
-				size="15" style="margin-right: 5px" />
-			<h:inputText value="#{swagEditBean.editSwagItem.swagItem.tags[1]}"
-				size="15" style="margin-right: 5px" />
-			<h:inputText value="#{swagEditBean.editSwagItem.swagItem.tags[2]}"
-				size="15" style="margin-right: 5px" />
-			<h:inputText value="#{swagEditBean.editSwagItem.swagItem.tags[3]}"
-				size="15" />
+<h:panelGroup style="background-color: white;" layout="block">
+	<swag:panel title="${title}">
+		<h:panelGrid columns="2"
+			style="vertical-align: middle; background-color: white;">
+			<swag:label value="Name" />
+			<h:inputText value="#{swagEditBean.editSwagItem.swagItem.name}"
+				id="name" />
+			<swag:label value="Description" />
+			<h:inputText
+				value="#{swagEditBean.editSwagItem.swagItem.description}" size="75"
+				maxLength="100" />
+			<swag:label value="Company" />
+			<h:inputText value="#{swagEditBean.editSwagItem.swagItem.company}" />
+			<swag:label value="Tags" />
+			<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
+				style="background-color: white;">
+				<h:inputText value="#{swagEditBean.editSwagItem.swagItem.tags[0]}"
+					size="15" style="margin-right: 5px" />
+				<h:inputText value="#{swagEditBean.editSwagItem.swagItem.tags[1]}"
+					size="15" style="margin-right: 5px" />
+				<h:inputText value="#{swagEditBean.editSwagItem.swagItem.tags[2]}"
+					size="15" style="margin-right: 5px" />
+				<h:inputText value="#{swagEditBean.editSwagItem.swagItem.tags[3]}"
+					size="15" />
+			</h:panelGrid>
 		</h:panelGrid>
-	</h:panelGrid>
-</swag:panel>
-<br />
-<swag:panel title="Image" height="205px">
-	<h:panelGrid columns="2" style="vertical-align: middle">
-		<swag:label value="Image" />
-		<swagcomp:upload
-			value="#{swagEditBean.editSwagItem.swagItem.imageBytes}" />
-		<h:panelGrid style="text-align: right; font-weight: bold;"
-			width="140px">
-			<h:outputText value="or" />
-		</h:panelGrid>
-		<h:panelGroup />
-		<swag:label value="Image URL" />
-		<h:inputText id="url"
-			value="#{swagEditBean.editSwagItem.swagItem.imageURL}" size="75" />
-		<h:panelGrid style="text-align: right; font-weight: bold;"
-			width="140px">
-			<h:outputText value="or" />
-		</h:panelGrid>
-		<h:panelGroup />
-		<swag:label value="I'm Feeling Lucky!" />
-		<h:commandButton value="I'm Feeling Lucky!" size="75" type="button"
-			onclick="OnImFeelingLucky(this,findElementInForm(this.form,'name'),findElementInForm(this.form,'url'));return false;" />
+	</swag:panel>
 
-		<h:panelGroup />
-		<div id="luckyImage" style="margin-left: 5px; margin-top: 3px;" />
-	</h:panelGrid>
+	<br />
+	<swag:panel title="Image" height="205px">
+		<h:panelGrid columns="2" style="vertical-align: middle">
+			<swag:label value="Image" />
+			<swagcomp:upload
+				value="#{swagEditBean.editSwagItem.swagItem.imageBytes}" />
+			<h:panelGrid style="text-align: right; font-weight: bold;"
+				width="140px">
+				<h:outputText value="or" />
+			</h:panelGrid>
+			<h:panelGroup />
+			<swag:label value="Image URL" />
+			<h:inputText id="url"
+				value="#{swagEditBean.editSwagItem.swagItem.imageURL}" size="75" />
+			<h:panelGrid style="text-align: right; font-weight: bold;"
+				width="140px">
+				<h:outputText value="or" />
+			</h:panelGrid>
+			<h:panelGroup />
+			<swag:label value="I'm Feeling Lucky!" />
+			<h:commandButton value="I'm Feeling Lucky!" size="75" type="button"
+				onclick="OnImFeelingLucky(this,findElementInForm(this.form,'name'),findElementInForm(this.form,'url'));return false;" />
 
-</swag:panel>
-<br />
-<h:panelGroup layout="block" style="text-align: center;">
-	<h:commandButton value="Save" action="#{actionBean.actionSaveItem}"
-		disabled="#{!swagEditBean.editSwagItem.itemOwner}" />
-	<h:commandButton value="Cancel" action="#{actionBean.actionBack}"
-		immediate="true" />
+			<h:panelGroup />
+			<div id="luckyImage" style="margin-left: 5px; margin-top: 3px;" />
+		</h:panelGrid>
+
+	</swag:panel>
+	<br />
+	<h:panelGroup layout="block" style="text-align: center;">
+		<h:commandButton value="Save" action="#{actionBean.actionSaveItem}"
+			disabled="#{!swagEditBean.editSwagItem.itemOwner}" />
+		<h:commandButton value="Cancel" action="#{actionBean.actionBack}"
+			immediate="true" />
+	</h:panelGroup>
 </h:panelGroup>
 
 </html>

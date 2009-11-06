@@ -28,6 +28,7 @@ public class MailServiceImpl implements MailService {
 	}
 
 	/**
+	 * Make sure you check if user has opted out of emails before you call this method!
 	 * @param googleId To construct opt-out line in message
 	 */
 	public void send(String googleId, String email, String subject, String msgBody) {

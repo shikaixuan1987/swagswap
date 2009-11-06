@@ -283,9 +283,9 @@ public class ItemServiceImpl implements ItemService {
 		String msgBody = newComment.getSwagSwapUserNickname()
 				+ " said: "
 				+ newComment.getCommentText()
-				+ "\n\nSee Your Item here: (Spring MVC impl) http://swagswap.appspot.com/springmvc/view/"
+				+ "\n\n<br/><br/>See Your Item here: (Spring MVC impl) http://swagswap.appspot.com/springmvc/view/"
 				+ newComment.getSwagItemKey()
-				+ "\nor here (JSF 2.0 impl) http://swagswap.appspot.com/jsf/viewSwag.jsf?swagItemKey="
+				+ "\n<br/>or here (JSF 2.0 impl) http://swagswap.appspot.com/jsf/viewSwag.jsf?swagItemKey="
 				+ newComment.getSwagItemKey();
 		mailService.sendWithTaskManager(newComment.getSwagItemKey(), subject,
 				msgBody);

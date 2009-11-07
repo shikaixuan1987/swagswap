@@ -148,13 +148,13 @@ public class SmartGWT implements EntryPoint {
 		itemsEditCommentsHStack.addMember(createItemsPanel());
 //		addImageUpload(itemsAndEditHStack);
 		itemsEditCommentsHStack.addMember(createEditForm());
-		
 		mainStack.addMember(itemsEditCommentsHStack);
 
 		RootPanel.get("gwtApp").add(mainStack); //anchored on GWT html page
 		mainStack.draw();
 	}
 
+	@SuppressWarnings("unchecked")
 	private DynamicForm createSortPanel() {
 		final DynamicForm sortForm = new DynamicForm();
 		sortForm.setAutoFocus(false);
@@ -228,12 +228,12 @@ public class SmartGWT implements EntryPoint {
 
 	private VStack createItemsPanel() {
 		// build swag icons
+		tileGrid.setBorder("1px solid #C0C3C7");
 		tileGrid.setTileWidth(100);
 		tileGrid.setTileHeight(140);
 		tileGrid.setTileValueAlign("left");
-		tileGrid.setWidth(350);
-		tileGrid.setHeight(600);
-		tileGrid.setShowResizeBar(true);
+		tileGrid.setWidth100();
+		tileGrid.setHeight100();
 		tileGrid.setShowAllRecords(true);
 		tileGrid.setDataSource(SmartGWTRPCDataSource.getInstance());
 		tileGrid.setAutoFetchData(true);
@@ -283,8 +283,13 @@ public class SmartGWT implements EntryPoint {
 		VStack vStack = new VStack();
 		vStack.addMember(createSearchPanel());
 		vStack.addMember(createSortPanel());
+		vStack.setWidth(350);
+		vStack.setHeight(600);
 		vStack.addMember(tileGrid);
-		vStack.setShowEdges(true);
+		vStack.setBorder("1px solid #C0C3C7");
+		vStack.setShowEdges(false);
+		vStack.setCanDragResize(true);
+		vStack.setShowResizeBar(true);
 		return vStack;
 	}
 	
@@ -388,6 +393,8 @@ public class SmartGWT implements EntryPoint {
 		Label addLink = new Label("Add Swag");
 		addLink.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				itemEditTitleLabel.setIcon(""); 
+				itemEditTitleLabel.setContents("<b>Add Swag</b>");
 				currentSwagImage.setSrc("/images/no_photo.jpg");
 				starHStack.hide();
 				editFormHStack.show();
@@ -510,7 +517,7 @@ public class SmartGWT implements EntryPoint {
         tabSet.setHeight(570);
         
 
-        Tab viewEditTab = new Tab("View");
+        Tab viewEditTab = new Tab();
         viewEditTab.setPane(editFormVStack);
 
         commentsTab = new Tab("Comments");
@@ -522,11 +529,11 @@ public class SmartGWT implements EntryPoint {
         VStack tabsVStack = new VStack();
         itemEditTitleLabel = new Label();  
         itemEditTitleLabel.setHeight(30);  
-        itemEditTitleLabel.setAlign(Alignment.CENTER);  
+        itemEditTitleLabel.setAlign(Alignment.LEFT);  
         itemEditTitleLabel.setValign(VerticalAlignment.TOP);  
         itemEditTitleLabel.setWrap(false);  
-        itemEditTitleLabel.setContents("<b>Your Item Name</b>");  
         tabsVStack.addMember(itemEditTitleLabel);
+        //make sure this is drawn since we set the tab names early
         tabSet.draw();
         tabsVStack.addMember(tabSet);
 		editFormHStack.addMember(tabsVStack);
@@ -758,15 +765,13 @@ public class SmartGWT implements EntryPoint {
 			imFeelingLuckyButton.hide();
 			tabSet.setTabTitle(0,"View Item");
 		}
+		itemEditTitleLabel.setIcon("/springmvc/showThumbnail/" + tileRecord.getAttribute("imageKey")); 
+		String itemName = tileRecord.getAttribute("name");
+		itemEditTitleLabel.setContents("<b>" + itemName + "</b>");
 		boundSwagForm.editRecord(tileRecord);
 		currentSwagImage.setSrc("/springmvc/showImage/" + tileRecord.getAttribute("imageKey"));  
 		currentSwagImage.setWidth(283);
 		currentSwagImage.setHeight(212);
-		
-		itemEditTitleLabel.setIcon("/springmvc/showThumbnail/" + tileRecord.getAttribute("imageKey")); 
-		
-		String itemName = tileRecord.getAttribute("name");
-		itemEditTitleLabel.setContents("<b>" + itemName + "</b>");
 		
 		//show commentsTab if it's been removed
 		if (tabSet.getTab(1) == null) {
@@ -978,11 +983,4 @@ public class SmartGWT implements EntryPoint {
 		});
 	}
 
-	// public void onClick(ClickEvent event) {
-	// TileRecord record = tileGrid.getSelectedRecord();
-	// PopupPanel popupPanel = new PopupPanel(true);
-	// popupPanel.add(new T)
-	// dialog.setAutoCenter(true);
-	// dialog.animateShow(AnimationEffect.FADE, null, 1000);
-	// }
 }

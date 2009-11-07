@@ -20,58 +20,58 @@ function findElementInForm(form, id) {
 
 
 
-function changeto(table, event, highlightcolor) { 
+function changeto(table, event, highlightClass) { 
 	var target=event.target;
-	if (target) {
+	
+	// IE support.
+	event = event || window.event;            
+	target = event.target || event.srcElement; 
+	
+	if (target) {	
 		var tagName=target.tagName;
 		if (tagName=="TR" || tagName=="TABLE"){
 			return;
 		}
 		
 		var row = findRow(table, target);
-	
-		highlightRow(row, highlightcolor, true);
+		highlightRow(row, highlightClass, true);
 	}
 }
 
 function findRow(table, target) {
-	//  Not working in IE.  ParentNode not an object
+	var element;
 	while(target.parentNode && target.parentNode != table) {
 		target=target.parentNode; 
 		
-		if (target.tagName=="TR") {
-			return target;
+		if (target.tagName=="TR" || target.tagName=="tr") {
+			element = target;
 		}
-
+		//  keep looking for TBODY to avoid header and footer
+		if (target.tagName=="TBODY" || target.tagName=="tbody") {
+			return element;
+		}
+		
 	}
 }
 
-function highlightRow(row, color, saveOriginal) {
+function highlightRow(row, highlightClass, saveOriginal) {
 	
 	if (!row) {
 		return;
 	}
-	
-	if (row.parentNode.tagName=="THEAD") {
-		return;
+		
+	if (saveOriginal) {
+		row.originalClassName = row.className;
+		row.className = highlightClass;
+	} else {
+		row.className=row.originalClassName;
 	}
-	
-	for (i=0; i < row.children.length; i++) {
-		var child = row.children[i];
-		// window.alert(child);
-		if (child.style.backgroundColor!=color) {
-			if (saveOriginal) {
-				child.style.originalColor=child.style.backgroundColor;
-				child.style.backgroundColor=color;
-			} else {
-				child.style.backgroundColor=child.style.originalColor;
-			}	
-		}
-	}	
 }
 
 function changeback(table, event) {
-	var target=event.target;
+	// IE support.
+	event = event || window.event;            
+	var target = event.target || event.srcElement; 
 	var row = findRow(table, target);
 	highlightRow(row, '', false);
 }

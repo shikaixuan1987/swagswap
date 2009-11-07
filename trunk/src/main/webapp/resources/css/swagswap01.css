@@ -7,7 +7,9 @@ html,body {
 	height: 100%;
 }
 
-
+tr hover {
+		background-color: red;
+	}
 
 .error {
 	font-color: red;
@@ -71,6 +73,17 @@ html,body {
 	background-color: #F1F1F1;
 	font-size: 11px;
 }
+
+.tableRowHover {
+	background-color: #F4F4FF;
+	font-size: 11px;
+}
+
+.tableHeader {
+	background-color: #FF8800;
+	padding: 3px;
+}
+
 
 /*  Image  */
 .tableCol1 {

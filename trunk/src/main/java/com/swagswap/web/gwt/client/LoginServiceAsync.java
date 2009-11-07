@@ -11,6 +11,4 @@ public interface LoginServiceAsync {
   void login(String requestUri, AsyncCallback<LoginInfo> callback);
   
   void addOrUpdateRating(String userEmail, SwagItemRating swagItemRating, AsyncCallback callback) throws InvalidSwagItemRatingException ;
-
-  void setCurrentTileRecord(SwagItemGWTDTO dto, AsyncCallback callback);
 }

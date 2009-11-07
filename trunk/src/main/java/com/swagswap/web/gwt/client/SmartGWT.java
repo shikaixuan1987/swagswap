@@ -29,6 +29,8 @@ import com.smartgwt.client.types.FieldType;
 import com.smartgwt.client.types.ImageStyle;
 import com.smartgwt.client.types.OperatorId;
 import com.smartgwt.client.types.Overflow;
+import com.smartgwt.client.types.Side;
+import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.types.Visibility;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
@@ -56,7 +58,6 @@ import com.smartgwt.client.widgets.form.fields.UploadItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 import com.smartgwt.client.widgets.grid.CellFormatter;
-import com.smartgwt.client.widgets.grid.HoverCustomizer;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
@@ -64,6 +65,8 @@ import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.HStack;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.layout.VStack;
+import com.smartgwt.client.widgets.tab.Tab;
+import com.smartgwt.client.widgets.tab.TabSet;
 import com.smartgwt.client.widgets.tile.TileGrid;
 import com.smartgwt.client.widgets.tile.TileRecord;
 import com.smartgwt.client.widgets.tile.events.RecordClickEvent;
@@ -106,6 +109,9 @@ public class SmartGWT implements EntryPoint {
 	private VStack commentsFormVStack;
 	private RichTextEditor richTextEditor;
 	private DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd-MM-yy HH:MM");
+	private Label itemEditTitleLabel;
+	private TabSet tabSet;
+	private Tab commentsTab;
 	
 	/**
 	 * Check login status and build GUI
@@ -131,11 +137,12 @@ public class SmartGWT implements EntryPoint {
 		mainStack.setWidth100();
 		HStack menuHStack= new HStack();
 		menuHStack.setHeight(25);
-		menuHStack.addMember(createSearchPanel());
-		menuHStack.addMember(createSortPanel());
+//		menuHStack.addMember(createSearchPanel());
+//		menuHStack.addMember(createSortPanel());
 		menuHStack.addMember(createLoginLogoutPanel());
 		
 		mainStack.addMember(menuHStack);
+//		RootPanel.get("gwtMenu").add(menuHStack); //anchored on GWT html page
 		
 		HStack itemsEditCommentsHStack = new HStack();
 		itemsEditCommentsHStack.addMember(createItemsPanel());
@@ -219,7 +226,7 @@ public class SmartGWT implements EntryPoint {
 		return filterForm;
 	}
 
-	private TileGrid createItemsPanel() {
+	private VStack createItemsPanel() {
 		// build swag icons
 		tileGrid.setTileWidth(100);
 		tileGrid.setTileHeight(140);
@@ -273,7 +280,12 @@ public class SmartGWT implements EntryPoint {
 			}
 		});
 		
-		return tileGrid;
+		VStack vStack = new VStack();
+		vStack.addMember(createSearchPanel());
+		vStack.addMember(createSortPanel());
+		vStack.addMember(tileGrid);
+		vStack.setShowEdges(true);
+		return vStack;
 	}
 	
 /*	public void addImageUploadForm(HStack hStack) {
@@ -380,7 +392,11 @@ public class SmartGWT implements EntryPoint {
 				starHStack.hide();
 				editFormHStack.show();
 				commentsFormVStack.hide(); //no comments on add
-				commentsGrid.hide();
+				tabSet.setTabTitle(0,"Add Item");
+				if (tabSet.getTab(1) != null) {
+					tabSet.removeTab(commentsTab);
+				}
+				tileGrid.deselectAllRecords();
 				boundSwagForm.editNewRecord();
 			}
 		});
@@ -411,6 +427,7 @@ public class SmartGWT implements EntryPoint {
 		
 		boundSwagForm = new DynamicForm();
 		boundSwagForm.setNumCols(2);
+//		boundSwagForm.setLongTextEditorThreshold(40);
 		boundSwagForm.setDataSource(SmartGWTRPCDataSource.getInstance());
 		boundSwagForm.setAutoFocus(true);
 
@@ -438,7 +455,7 @@ public class SmartGWT implements EntryPoint {
 		currentSwagImage = new Img("/images/no_photo.jpg");  
 		currentSwagImage.setImageType(ImageStyle.NORMAL); 
 		editFormVStack.addMember(currentSwagImage);
-		createImFeelingLuckyImageSearch(editFormVStack);
+		editFormVStack.addMember(createImFeelingLuckyImageSearch());
 		
 		IButton saveButton = new IButton("Save");
 		saveButton.setAutoFit(true);
@@ -454,6 +471,7 @@ public class SmartGWT implements EntryPoint {
 					Window.alert("" + boundSwagForm.getErrors());
 				} else {
 					boundSwagForm.clearValues();
+					
 					editFormHStack.hide();
 				}
 			}
@@ -475,13 +493,43 @@ public class SmartGWT implements EntryPoint {
 				editFormHStack.hide();
 			}
 		});
+		
 		editButtonsLayout = new HLayout();
+		editButtonsLayout.setHeight(20);
 		editButtonsLayout.addMember(saveButton);
 		editButtonsLayout.addMember(cancelButton);
 		editButtonsLayout.addMember(deleteButton);
+		
 		editFormVStack.addMember(editButtonsLayout);
-		editFormHStack.addMember(editFormVStack);
-		editFormHStack.addMember(createComments());
+		
+		tabSet = new TabSet();
+		tabSet.setDestroyPanes(false);
+        tabSet.setTabBarPosition(Side.TOP);
+        tabSet.setTabBarAlign(Side.LEFT);
+        tabSet.setWidth(570);
+        tabSet.setHeight(570);
+        
+
+        Tab viewEditTab = new Tab("View");
+        viewEditTab.setPane(editFormVStack);
+
+        commentsTab = new Tab("Comments");
+        commentsTab.setPane(createComments());
+        
+        tabSet.addTab(viewEditTab);
+        tabSet.addTab(commentsTab);
+		
+        VStack tabsVStack = new VStack();
+        itemEditTitleLabel = new Label();  
+        itemEditTitleLabel.setHeight(30);  
+        itemEditTitleLabel.setAlign(Alignment.CENTER);  
+        itemEditTitleLabel.setValign(VerticalAlignment.TOP);  
+        itemEditTitleLabel.setWrap(false);  
+        itemEditTitleLabel.setContents("<b>Your Item Name</b>");  
+        tabsVStack.addMember(itemEditTitleLabel);
+        tabSet.draw();
+        tabsVStack.addMember(tabSet);
+		editFormHStack.addMember(tabsVStack);
 		editFormHStack.hide();
 		return editFormHStack;
 	}
@@ -494,7 +542,7 @@ public class SmartGWT implements EntryPoint {
 		winModal.setShowMinimizeButton(false);
 		winModal.setIsModal(true);
 		winModal.setShowModalMask(true);
-//		winModal.centerInPage();
+		winModal.centerInPage();
 		winModal.addCloseClickHandler(new CloseClickHandler() {
 			public void onCloseClick(CloseClientEvent event) {
 				winModal.destroy();
@@ -554,7 +602,7 @@ public class SmartGWT implements EntryPoint {
 		commentsGrid.setWrapCells(true);
 		commentsGrid.setFixedRecordHeights(false);
 		commentsGrid.setWidth(530);
-		commentsGrid.setHeight(400);
+		commentsGrid.setHeight(350);
 		commentsGrid.setShowAllRecords(true);
 		commentsGrid.setCanEdit(false);
 
@@ -629,17 +677,16 @@ public class SmartGWT implements EntryPoint {
 		starImages.get(4).addClickHandler(starClickHandler5);
 		
 		starHStack = new HStack();
-		starHStack.setHeight(25);
-		starHStack.setAlign(Alignment.RIGHT);
-		starHStack.addMember(new Label("My Rating: "));
+		starHStack.setHeight(15);
+		starHStack.setAlign(Alignment.LEFT);
+		Label label = new Label("My Rating: ");
+		starHStack.addMember(label);
 		starHStack.addMember(starImages.get(0));
 		starHStack.addMember(starImages.get(1));
 		starHStack.addMember(starImages.get(2));
 		starHStack.addMember(starImages.get(3));
 		starHStack.addMember(starImages.get(4));
 		return starHStack;
-		
-		//end stars
 	}
 	
 	public class StarClickHandler implements ClickHandler {
@@ -694,22 +741,37 @@ public class SmartGWT implements EntryPoint {
 	
 	private void prepareAndShowEditForm(TileRecord tileRecord) {
 		// Make read only if they don't have permission
-		String currentSwagItemOwner = tileRecord.getAttribute("ownerID");
+		String ownerGoogleID = tileRecord.getAttribute("ownerGoogleID");
 		String currentGoogleID = loginInfo.getGoogleID();
-		if (loginInfo.isUserAdmin() || currentSwagItemOwner.equals(currentGoogleID)) {
+		//edit
+		if (loginInfo.isUserAdmin() || 
+				(loginInfo.isLoggedIn() && currentGoogleID.equals(ownerGoogleID))) {
 			boundSwagForm.enable();
 			editButtonsLayout.show();
 			imFeelingLuckyButton.show();
+			tabSet.setTabTitle(0,"Edit Item");
 		}
+		//view
 		else {
 			boundSwagForm.disable();
 			editButtonsLayout.hide();
 			imFeelingLuckyButton.hide();
+			tabSet.setTabTitle(0,"View Item");
 		}
 		boundSwagForm.editRecord(tileRecord);
 		currentSwagImage.setSrc("/springmvc/showImage/" + tileRecord.getAttribute("imageKey"));  
 		currentSwagImage.setWidth(283);
 		currentSwagImage.setHeight(212);
+		
+		itemEditTitleLabel.setIcon("/springmvc/showThumbnail/" + tileRecord.getAttribute("imageKey")); 
+		
+		String itemName = tileRecord.getAttribute("name");
+		itemEditTitleLabel.setContents("<b>" + itemName + "</b>");
+		
+		//show commentsTab if it's been removed
+		if (tabSet.getTab(1) == null) {
+			tabSet.addTab(commentsTab);
+		}
 		
 		Long currentKey = Long.valueOf(tileRecord.getAttribute("key"));
 		starClickHandler1.setSwagItemRating(new SwagItemRating(currentKey,1));
@@ -786,79 +848,87 @@ public class SmartGWT implements EntryPoint {
 	
 	/**
 	 * Inspired by http://www.smartclient.com/smartgwt/showcase/#featured_json_integration_category_yahoo
+	 * @return ImfeelingLucky search button with backing form
 	 */
-	private void createImFeelingLuckyImageSearch(VStack vStack) {
-	   
-	         XJSONDataSource yahooDS = new XJSONDataSource();  
-	         yahooDS.setDataURL("http://api.search.yahoo.com/ImageSearchService/V1/imageSearch?appid=YahooDemo&output=json");  
-	         yahooDS.setRecordXPath("/ResultSet/Result");  
-	         DataSourceImageField thumbnail = new DataSourceImageField("Thumbnail", "Thumbnail");  
-	         thumbnail.setWidth(150);  
-	         thumbnail.setImageHeight("imageHeight");  
-	         thumbnail.setImageWidth("imageWidth");  
-	         thumbnail.setValueXPath("Thumbnail/Url");  
-	   
-	         DataSourceIntegerField imageWidth = new DataSourceIntegerField("imageWidth");  
-	         imageWidth.setValueXPath("Thumbnail/Width");  
-	         imageWidth.setAttribute("hidden", true);  
-	   
-	         DataSourceIntegerField imageHeight = new DataSourceIntegerField("imageHeight");  
-	         imageHeight.setValueXPath("Thumbnail/Height");  
-	         imageHeight.setAttribute("hidden", true);  
-	   
-	         DataSourceField title = new DataSourceField("Title", FieldType.TEXT);  
-	         DataSourceField summary = new DataSourceField("Summary", FieldType.TEXT);  
-	   
-	         yahooDS.addField(thumbnail);  
-	         yahooDS.addField(imageWidth);  
-	         yahooDS.addField(imageHeight);  
-	         yahooDS.addField(title);  
-	         yahooDS.addField(summary);  
-	   
-	         final ListGrid imageResultsGrid = new ListGrid();  
-	         imageResultsGrid.setTop(120);  
-	         imageResultsGrid.setWidth100();  
-	         imageResultsGrid.setHeight(600);  
-	         imageResultsGrid.setWrapCells(true);  
-	         imageResultsGrid.setFixedRecordHeights(false);  
-	         imageResultsGrid.setShowAllRecords(true);  
-	         imageResultsGrid.setDataSource(yahooDS);  
-	         
-	         final com.smartgwt.client.widgets.Window imageSearchResults = createImFeelingLuckyResults(imageResultsGrid); 
-	   
-	         //search form (which is actually just the button showing)
-	         final SearchForm imFeelingLuckyForm = new SearchForm();  
-	         imFeelingLuckyForm.setNumCols(1); 
-	         imFeelingLuckyForm.setHeight(50);
-	         final HiddenItem query = new HiddenItem("query");  
-	   
-	         imFeelingLuckyButton = new ButtonItem();  
-	         imFeelingLuckyButton.setTitle("I'm Feeling Lucky Image Search");  
-	         imFeelingLuckyButton.setStartRow(false);  
-	         imFeelingLuckyButton.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {  
-	             public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
-	            	 imageSearchResults.show();
-	     			 String swagItemName = (String)boundSwagForm.getField("name").getValue();
-	     			 query.setValue(swagItemName);
-	                 imageResultsGrid.fetchData(imFeelingLuckyForm.getValuesAsCriteria());  
-	             }
-	         });  
-	   
-	 		imageResultsGrid.addRecordClickHandler(new com.smartgwt.client.widgets.grid.events.RecordClickHandler() {
-				public void onRecordClick(com.smartgwt.client.widgets.grid.events.RecordClickEvent event) {
-					Record record = event.getRecord();
-					String URL = record.getAttributeAsString("Url");
-					boundSwagForm.getField("newImageURL").setValue(URL);
-					currentSwagImage.setSrc(URL); 
-					currentSwagImage.setWidth(283);
-					currentSwagImage.setHeight(212);
-					imageSearchResults.hide();
-				}
-			});
-	         
-	         imFeelingLuckyForm.setItems(query, imFeelingLuckyButton);  
-	         //end search form
-	         vStack.addMember(imFeelingLuckyForm); 
+	private SearchForm createImFeelingLuckyImageSearch() {
+
+		XJSONDataSource yahooDS = new XJSONDataSource();
+		yahooDS
+				.setDataURL("http://api.search.yahoo.com/ImageSearchService/V1/imageSearch?appid=YahooDemo&output=json");
+		yahooDS.setRecordXPath("/ResultSet/Result");
+		DataSourceImageField thumbnail = new DataSourceImageField("Thumbnail","Thumbnail");
+		thumbnail.setWidth(150);
+		thumbnail.setImageHeight("imageHeight");
+		thumbnail.setImageWidth("imageWidth");
+		thumbnail.setValueXPath("Thumbnail/Url");
+
+		DataSourceIntegerField imageWidth = new DataSourceIntegerField("imageWidth");
+		imageWidth.setValueXPath("Thumbnail/Width");
+		imageWidth.setAttribute("hidden", true);
+
+		DataSourceIntegerField imageHeight = new DataSourceIntegerField("imageHeight");
+		imageHeight.setValueXPath("Thumbnail/Height");
+		imageHeight.setAttribute("hidden", true);
+
+		DataSourceField title = new DataSourceField("Title", FieldType.TEXT);
+		DataSourceField summary = new DataSourceField("Summary", FieldType.TEXT);
+
+		yahooDS.addField(thumbnail);
+		yahooDS.addField(imageWidth);
+		yahooDS.addField(imageHeight);
+		yahooDS.addField(title);
+		yahooDS.addField(summary);
+
+		final ListGrid imageResultsGrid = new ListGrid();
+		imageResultsGrid.setTop(120);
+		imageResultsGrid.setWidth100();
+		imageResultsGrid.setHeight(600);
+		imageResultsGrid.setWrapCells(true);
+		imageResultsGrid.setFixedRecordHeights(false);
+		imageResultsGrid.setShowAllRecords(true);
+		imageResultsGrid.setDataSource(yahooDS);
+
+		// search form (which is actually just the button showing)
+		final SearchForm imFeelingLuckyForm = new SearchForm();
+		imFeelingLuckyForm.setNumCols(1);
+		imFeelingLuckyForm.setHeight(50);
+		final HiddenItem query = new HiddenItem("query");
+
+		imFeelingLuckyButton = new ButtonItem();
+		imFeelingLuckyButton.setTitle("I'm Feeling Lucky Image Search");
+		imFeelingLuckyButton.setStartRow(false);
+		final com.smartgwt.client.widgets.Window imageSearchResultsWindow = 
+			createImFeelingLuckyResults(imageResultsGrid);
+		imFeelingLuckyButton
+				.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
+					public void onClick(
+							com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
+						
+						imageSearchResultsWindow.show();
+						String swagItemName = (String) boundSwagForm.getField(
+								"name").getValue();
+						query.setValue(swagItemName);
+						imageResultsGrid.fetchData(imFeelingLuckyForm
+								.getValuesAsCriteria());
+					}
+				});
+
+		imageResultsGrid
+				.addRecordClickHandler(new com.smartgwt.client.widgets.grid.events.RecordClickHandler() {
+					public void onRecordClick(
+							com.smartgwt.client.widgets.grid.events.RecordClickEvent event) {
+						Record record = event.getRecord();
+						String URL = record.getAttributeAsString("Url");
+						boundSwagForm.getField("newImageURL").setValue(URL);
+						currentSwagImage.setSrc(URL);
+						currentSwagImage.setWidth(283);
+						currentSwagImage.setHeight(212);
+						imageSearchResultsWindow.hide();
+					}
+				});
+
+		imFeelingLuckyForm.setItems(query, imFeelingLuckyButton);
+		return imFeelingLuckyForm;
 	}
 
 	private com.smartgwt.client.widgets.Window createImFeelingLuckyResults(ListGrid grid) {
@@ -872,7 +942,7 @@ public class SmartGWT implements EntryPoint {
 		winModal.centerInPage();
 		winModal.addCloseClickHandler(new CloseClickHandler() {
 			public void onCloseClick(CloseClientEvent event) {
-				winModal.destroy();
+				winModal.hide();
 			}
 		});
     	

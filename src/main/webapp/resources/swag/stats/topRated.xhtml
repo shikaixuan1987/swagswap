@@ -17,7 +17,7 @@
 		<h:dataTable value="#{swagStatsBean.swagStats.topRated}" var="row"
 			width="100%" rules="none" rowClasses="tableRow1, tableRow2"
 			columnClasses="colWidth100" cellpadding="4"
-			onmouseover="changeto(this,event,'#67A7E3');"
+			onmouseover="changeto(this,event,'tableRowHover');"
 			onmouseout="changeback(this,event);">
 			<h:column>
 					<h:outputText value="#{row.name}" title="#{row.description}" />

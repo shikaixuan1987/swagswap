@@ -27,7 +27,6 @@ public class LoginServiceImpl extends AutoinjectingRemoteServiceServlet
 		implements LoginService {
 
 	// HttpSession key
-	private static final String CURRENT_TILE_RECORD = "currentTileRecord";
 	private SwagSwapUserService swagSwapUserService;
 
 	@Autowired
@@ -58,8 +57,6 @@ public class LoginServiceImpl extends AutoinjectingRemoteServiceServlet
 			loginInfo.setNickName(user.getNickName());
 			Set<SwagItemRating> swagItemRatings = user.getSwagItemRatings();
 			loginInfo.setSwagItemRatings(toCopiedSet(swagItemRatings));
-			//set currentSwagItem
-			loginInfo.setCurrentSwagItem((SwagItemGWTDTO)getThreadLocalRequest().getSession().getAttribute(CURRENT_TILE_RECORD));
 		} else {
 			loginInfo.setLoggedIn(false);
 			loginInfo.setLoginUrl(swagSwapUserService
@@ -72,11 +69,6 @@ public class LoginServiceImpl extends AutoinjectingRemoteServiceServlet
 			SwagItemRating swagItemRating)
 			throws InvalidSwagItemRatingException {
 		swagSwapUserService.addOrUpdateRating(userEmail, swagItemRating);
-	}
-	
-	@Override
-	public void setCurrentTileRecord(SwagItemGWTDTO dto) {
-		getThreadLocalRequest().getSession().setAttribute(CURRENT_TILE_RECORD, dto);
 	}
 
 	// for creating a JDO detatched Set

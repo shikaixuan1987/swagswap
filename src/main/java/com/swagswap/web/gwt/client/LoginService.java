@@ -12,6 +12,4 @@ public interface LoginService extends RemoteService {
   public LoginInfo login(String requestUri);
   
   public void addOrUpdateRating(String userEmail, SwagItemRating swagItemRating) throws InvalidSwagItemRatingException ;
-
-  public void setCurrentTileRecord(SwagItemGWTDTO dto);
 }

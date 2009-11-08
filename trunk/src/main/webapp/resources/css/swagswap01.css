@@ -145,25 +145,25 @@ tr hover {
 	padding: 10px;
 }
 
-.menuPanelRow A:link {
+.menuPanelRow a:link {
 	color: #666666;
 	font-weight: bold;
 	text-decoration: none;
 }
 
-.menuPanelRow A:visited {
+.menuPanelRow a:visited {
 	color: #666666;
 	font-weight: bold;
 	text-decoration: none;
 }
 
-.menuPanelRow A:active {
+.menuPanelRow a:active {
 	color: #666666;
 	font-weight: bold;
 	text-decoration: none;
 }
 
-.menuPanelRow A:hover {
+.menuPanelRow a:hover {
 	color: #666666;
 	font-weight: bold;
 	text-decoration: none;
@@ -252,25 +252,25 @@ tr hover {
 	font-size: 12px;
 }
 
-.scroller A:link {
+.scroller a:link {
 	text-decoration: none;
 	color: black;
 	margin: 5px;
 }
 
-.scroller A:visited {
+.scroller a:visited {
 	text-decoration: none;
 	color: black;
 	margin: 5px;
 }
 
-.scroller A:active {
+.scroller a:active {
 	text-decoration: none;
 	color: black;
 	margin: 5px;
 }
 
-.scroller A:hover {
+.scroller a:hover {
 	text-decoration: none;
 	color: black;
 	margin: 5px;

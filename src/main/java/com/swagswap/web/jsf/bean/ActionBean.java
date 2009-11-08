@@ -45,6 +45,9 @@ public class ActionBean {
 	private SwagBean swagBean;
 
 	private String lastPage;
+	
+	public ActionBean() {
+	}
 
 	public String getLastPage() {
 		return lastPage;
@@ -73,7 +76,6 @@ public class ActionBean {
 	public String actionSaveItem() {
 		itemService.save(swagEditBean.getEditSwagItem().getSwagItem());
 		return actionBack();
-		// return "allSwag";
 	}
 
 	public void actionAddComment() throws IOException {
@@ -97,10 +99,6 @@ public class ActionBean {
 		SwagItem item = itemService.get(key);
 		// TODO. Take this out and test
 		hackSwagItemList(item);
-
-		// TODO Why should I need to do this? Image shouldn't be loaded into
-		// Item.
-		item.setImage(null);
 
 		swagEditBean.setEditSwagItem(new SwagItemWrapper(item, userBean
 				.getUserRatingForItem(key, userBean.getLoggedInUser()),
@@ -150,6 +148,7 @@ public class ActionBean {
 
 
 	public String actionBack() {
+		
 		if (swagEditBean.getLastPage() == null) {
 			return "allSwag?faces-redirect=true";
 		}

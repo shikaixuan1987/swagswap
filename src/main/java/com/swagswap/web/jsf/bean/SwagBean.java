@@ -1,7 +1,6 @@
 package com.swagswap.web.jsf.bean;
 
 import java.io.Serializable;
-import java.util.Iterator;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -22,7 +21,7 @@ public class SwagBean implements Serializable {
 	private Boolean showClear = false;
 	private Long selectedRowId;
 	private String filter = "";
-	//  TODO SS.  Refactor this stuff.  See Stats
+	// TODO SS. Refactor this stuff. See Stats
 	private Integer totalItems = 0;
 	private Integer createdItems = 0;
 	private Integer ratedItems = 0;
@@ -36,12 +35,11 @@ public class SwagBean implements Serializable {
 	private SwagTable ratedTable;
 	private SwagTable notCommentedTable;
 	private SwagTable notRatedTable;
-	
+
 	private Boolean showUserCreatedPercent = false;
 	private Boolean showUserRatedPercent = false;
 	private Boolean showUserCommentedPercent = false;
-	
-	
+
 	public Boolean getShowUserRatedPercent() {
 		return showUserRatedPercent;
 	}
@@ -65,15 +63,15 @@ public class SwagBean implements Serializable {
 	public void setShowUserCreatedPercent(Boolean showUserCreatedPercent) {
 		this.showUserCreatedPercent = showUserCreatedPercent;
 	}
-	
+
 	public void toggleUserCreatedPercent() {
 		showUserCreatedPercent = !showUserCreatedPercent;
-	}	
-	
+	}
+
 	public void toggleUserRatedPercent() {
 		showUserRatedPercent = !showUserRatedPercent;
 	}
-	
+
 	public void toggleUserCommentedPercent() {
 		showUserCommentedPercent = !showUserCommentedPercent;
 	}
@@ -221,12 +219,10 @@ public class SwagBean implements Serializable {
 		// Can't use component binding on dataTable as it's not Serializable
 		SwagItemWrapper selectedRow = null;
 		if (getSwagTable() != null) {
-			Iterator<SwagItemWrapper> iter = getSwagTable().getSwagList()
-					.iterator();
-			while (iter.hasNext()) {
-				SwagItemWrapper item = (SwagItemWrapper) iter.next();
+			for (SwagItemWrapper item : getSwagTable().getSwagList()) {
 				if (item.getSwagItem().getKey().equals(selectedRowId)) {
 					selectedRow = item;
+					break;
 				}
 			}
 		}

@@ -63,6 +63,11 @@ public class ImageCacheManager implements ImageDao {
 		return imageDao.getResizedImageBytes(originalImageBytes);
 	}
 
+	@Override
+	public byte[] getResizedThumbnailImageBytes(byte[] originalImageBytes) {
+		return imageDao.getResizedThumbnailImageBytes(originalImageBytes);
+	}
+
 	public byte[] getThumbnailBytes(String key) {
 
 		if (swagCacheManager.getCache().containsKey(key)) {

@@ -11,6 +11,9 @@ public interface ImageDao {
 	SwagImage get(String key);
 
 	byte[] getResizedImageBytes(byte[] originalImageBytes);
+	
+	byte[] getResizedThumbnailImageBytes(byte[] originalImageBytes);
 
 	byte[] getThumbnailBytes(String key);
+
 }

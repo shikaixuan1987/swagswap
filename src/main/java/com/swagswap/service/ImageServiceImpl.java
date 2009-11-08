@@ -23,6 +23,7 @@ public class ImageServiceImpl implements ImageService {
 	public static final String PATH_TO_DEFAULT_IMAGE = "images/no_photo.jpg";
 
 	private static byte[] defaultImage;
+	private static byte[] defaultThumbnailImage;
 
 	private ImageDao imageDao;
 
@@ -43,6 +44,13 @@ public class ImageServiceImpl implements ImageService {
 
 	public byte[] getResizedImageBytes(byte[] originalImageBytes) {
 		return imageDao.getResizedImageBytes(originalImageBytes);
+	}
+	
+	public byte[] getResizedThumbnailImageBytes(byte[] originalImageBytes) {
+		if (defaultThumbnailImage == null || defaultThumbnailImage.length != 0) {
+			defaultThumbnailImage = imageDao.getResizedThumbnailImageBytes(originalImageBytes);
+		}
+		return defaultThumbnailImage;
 	}
 
 	public byte[] getThumbnailBytes(String key) {
@@ -69,39 +77,37 @@ public class ImageServiceImpl implements ImageService {
 	 *            to construct the full image URL
 	 */
 	public byte[] getDefaultImageBytes(String requestURL) {
-
-		if (defaultImage != null && defaultImage.length != 0) {
-			return defaultImage;
-		}
-
-		String defaultImageURLString = constructDefaultImageURL(requestURL);
-		ByteArrayOutputStream bas = null;
-
-		// create defaultImage byte[] from URL
-		// ouch this would have been easier with ImageIO!
-		try {
-			URL defaultImageURL = new URL(defaultImageURLString);
-			BufferedInputStream bis = new BufferedInputStream(defaultImageURL
-					.openStream());
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			int i;
-			while ((i = bis.read()) != -1) {
-				baos.write(i);
-			}
-			defaultImage = baos.toByteArray();
-			return defaultImage;
-		} catch (IOException e) {
-			log.error("couldn't load defaultImage at " + defaultImageURLString,
-					e);
-			return null;
-		} finally {
+		if (defaultThumbnailImage == null || defaultThumbnailImage.length != 0) {
+			String defaultImageURLString = constructDefaultImageURL(requestURL);
+			ByteArrayOutputStream bas = null;
+	
+			// create defaultImage byte[] from URL
+			// ouch this would have been easier with ImageIO!
 			try {
-				if (bas != null)
-					bas.close();
+				URL defaultImageURL = new URL(defaultImageURLString);
+				BufferedInputStream bis = new BufferedInputStream(defaultImageURL
+						.openStream());
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				int i;
+				while ((i = bis.read()) != -1) {
+					baos.write(i);
+				}
+				defaultImage = baos.toByteArray();
+				return defaultImage;
 			} catch (IOException e) {
-				// ignore
+				log.error("couldn't load defaultImage at " + defaultImageURLString,
+						e);
+				return null;
+			} finally {
+				try {
+					if (bas != null)
+						bas.close();
+				} catch (IOException e) {
+					// ignore
+				}
 			}
 		}
+		return defaultImage;
 	}
 
 }

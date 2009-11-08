@@ -97,8 +97,6 @@ public class ActionBean {
 	public void populateSwagItem() {
 		Long key = swagEditBean.getSelectedRowId();
 		SwagItem item = itemService.get(key);
-		// TODO. Take this out and test
-		hackSwagItemList(item);
 
 		swagEditBean.setEditSwagItem(new SwagItemWrapper(item, userBean
 				.getUserRatingForItem(key, userBean.getLoggedInUser()),
@@ -257,24 +255,6 @@ public class ActionBean {
 
 	public void setSwagBean(SwagBean swagBean) {
 		this.swagBean = swagBean;
-	}
-
-	private void hackSwagItemList(SwagItem item) {
-		// hack Item to add empty Strings to List
-		List<String> tagList = new ArrayList<String>();
-		if (item != null) {
-			if (item.getTags() == null) {
-				for (int i = 0; i < 4; i++) {
-					tagList.add("");
-				}
-				item.setTags(tagList);
-			} else {
-				for (int i = item.getTags().size(); i < 4; i++) {
-					item.getTags().add(i, "");
-				}
-
-			}
-		}
 	}
 
 }

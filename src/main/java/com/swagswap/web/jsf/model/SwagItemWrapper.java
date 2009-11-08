@@ -19,16 +19,17 @@ public class SwagItemWrapper implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public SwagItemWrapper(SwagItem swagItem, Integer userRating, Boolean itemOwner) {
+	public SwagItemWrapper(SwagItem swagItem, Integer userRating,
+			Boolean itemOwner) {
 		super();
 		this.swagItem = swagItem;
 		this.userRating = userRating;
 		this.itemOwner = itemOwner;
 	}
-	
+
 	private SwagItem swagItem;
 	private Integer userRating;
-	//  Problems serializing primitives with GAE.
+	// Problems serializing primitives with GAE.
 	private Boolean itemOwner;
 
 	public Boolean getItemOwner() {
@@ -57,22 +58,26 @@ public class SwagItemWrapper implements Serializable {
 
 	public static List<SwagItemWrapper> convertSwagListToWrapperList(
 			List<SwagItem> itemList, UserBean userBean) {
-		//  Get user to determine user rating
+		// Get user to determine user rating
 		SwagSwapUser user = null;
 		SwagSwapUserService userService = userBean.getSwagSwapUserService();
 		if (userService.isUserLoggedIn()) {
 			user = userService.findByEmail();
 		}
-		List<SwagItemWrapper> wrapperList = new ArrayList<SwagItemWrapper>(itemList.size());
+		List<SwagItemWrapper> wrapperList = new ArrayList<SwagItemWrapper>(
+				itemList.size());
 		Iterator<SwagItem> iter = itemList.iterator();
 		while (iter.hasNext()) {
 			SwagItem swagItem = iter.next();
-			//  TODO  Do we need this?
-			// Set image to null. Not required in Swag Table and affects
-			// performance.
+			// Set image and image bytes to null. These are not required in Swag
+			// Table and affects
+			// performance. ImageBytes may be set due to previously adding a
+			// swagItem. If we don't set this to null the request will blow the
+			// form size limit
 			swagItem.setImage(null);
+			swagItem.setImageBytes(null);
 			wrapperList.add(new SwagItemWrapper(swagItem, userBean
-					.getUserRatingForItem(swagItem.getKey(), user),userBean
+					.getUserRatingForItem(swagItem.getKey(), user), userBean
 					.isItemOwner(swagItem)));
 		}
 		return wrapperList;

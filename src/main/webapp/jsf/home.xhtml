@@ -25,9 +25,20 @@
 			<h:outputLink value="/SwagSwapGWT.html">
 				<h:outputText value="GWT (You decide)" />
 			</h:outputLink>
+			<h:outputLink value="/mobile/mobileHome.jsf">
+				<h:outputText value="iSwag.  Swag Swag for your Mobile Device" />
+			</h:outputLink>
 		</swag:menuPanel>
 	</ui:define>
 	<ui:define name="content">
+			<!--  iPhone detection  -->
+	<script type="text/javascript">
+	alert('browser detection');
+	var agent=navigator.userAgent.toLowerCase();
+	var is_iphone = ((agent.indexOf('iphone')!=-1);
+	if (is_iphone) { alert('iPhone'); }
+	else {alert('not iPhone');}
+</script>	
 		<swag:panel
 			title="Welcome to the Swagswap Devoxx 2009 Demo application (work in progress)">
 			<ul>

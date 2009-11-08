@@ -22,8 +22,8 @@ import com.smartgwt.client.widgets.tile.TileRecord;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 /**
- * A SmartGWT client helper that makes remote calls to SmartGWTItemServiceWrapper
- * It conforms to the requirements of SmartGWT components (which are a layer on top
+ * A SwagSwapGWT client helper that makes remote calls to SmartGWTItemServiceWrapper
+ * It conforms to the requirements of SwagSwapGWT components (which are a layer on top
  * of the SmartClient javascript lib)
  * 
  * This is inspired by http://code.google.com/p/smartgwt-extensions/source/browse/trunk/src/main/java/com/smartgwt/extensions/gwtrpcds/client/example/SimpleGwtRPCDS.java

@@ -43,7 +43,7 @@ public class SmartGWTItemServiceWrapperImpl extends
 		return toDTO(itemService.get(key));
 	}
 
-	//SmartGWT requires the updated item to be returned
+	//SwagSwapGWT requires the updated item to be returned
 	public SwagItemGWTDTO add(SwagItemGWTDTO swagItemGWTDTO) throws AccessDeniedException, LoadImageFromURLException, ImageTooLargeException {
 		SwagItem updatedItem = itemService.save(toSwagItem(swagItemGWTDTO));
 		return toDTO(updatedItem);

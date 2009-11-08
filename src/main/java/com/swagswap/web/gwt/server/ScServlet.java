@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 
  * This is to get around appengine's 3000 src file limit
- * SmartGWT creates a directory with 1000+ files.  The solution (as outlined here
+ * SwagSwapGWT creates a directory with 1000+ files.  The solution (as outlined here
  * http://forums.smartclient.com/showthread.php?t=5258) is to zip these resources
  * and serve them from this Servlet (which unzips and caches)
  *

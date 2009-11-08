@@ -40,7 +40,7 @@ public class SwagItemGWTDTO implements IsSerializable {
 		this(false);
 	}
 	
-	//For SmartGWT fetch(item) adaptation
+	//For SwagSwapGWT fetch(item) adaptation
 	public SwagItemGWTDTO(boolean isFetchOnly) {
 		this.isFetchOnly=isFetchOnly;
 		//Add empty strings for the backing form

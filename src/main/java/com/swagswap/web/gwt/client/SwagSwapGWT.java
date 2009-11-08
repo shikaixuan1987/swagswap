@@ -80,7 +80,7 @@ import com.swagswap.web.gwt.client.domain.LoginInfo;
 import com.swagswap.web.gwt.client.domain.SwagItemCommentGWTDTO;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
-public class SmartGWT implements EntryPoint {
+public class SwagSwapGWT implements EntryPoint {
 
 	//services
 	private final SmartGWTItemServiceWrapperAsync itemService = GWT
@@ -91,7 +91,7 @@ public class SmartGWT implements EntryPoint {
 	private LoginInfo loginInfo; //null if they're not logged in
 
 	//global GUI objects TODO: can scope be reduced?
-	final TileGrid tileGrid = new TileGrid();
+	final TileGrid itemsTileGrid = new TileGrid();
 	protected HStack editFormHStack;
 	private DynamicForm boundSwagForm;
 	private Img currentSwagImage;
@@ -132,33 +132,53 @@ public class SmartGWT implements EntryPoint {
 			});
 	}
 	
+	/**
+	 * Create Menu, items grid, edit, and comment screens
+	 */
 	public void buildGUI() {
-		final VStack mainStack = new VStack(20);
-		mainStack.setWidth100();
+		//Top menu
 		HStack menuHStack= new HStack();
 		menuHStack.setHeight(25);
-//		menuHStack.addMember(createSearchPanel());
-//		menuHStack.addMember(createSortPanel());
 		menuHStack.addMember(createLoginLogoutPanel());
+		 
+		//The rest
+		VStack swagItemsVStack = new VStack();
+		swagItemsVStack.addMember(createSearchBox());
+		swagItemsVStack.addMember(createSortDropDown());
+		swagItemsVStack.addMember(createItemsTileGrid());
+		swagItemsVStack.setWidth(350);
+		swagItemsVStack.setHeight(600);
+		swagItemsVStack.setBorder("1px solid #C0C3C7");
+		swagItemsVStack.setShowEdges(false);
+		swagItemsVStack.setCanDragResize(true);
+		swagItemsVStack.setShowResizeBar(true);
 		
-		mainStack.addMember(menuHStack);
-//		RootPanel.get("gwtMenu").add(menuHStack); //anchored on GWT html page
-		
+		//Pit itemsTileGrid next to createEditComments
 		HStack itemsEditCommentsHStack = new HStack();
-		itemsEditCommentsHStack.addMember(createItemsPanel());
+		itemsEditCommentsHStack.addMember(swagItemsVStack);
 //		addImageUpload(itemsAndEditHStack);
 		itemsEditCommentsHStack.addMember(createEditForm());
+		
+		VStack mainStack = new VStack(20);
+		mainStack.setWidth100();
+		mainStack.addMember(menuHStack);
 		mainStack.addMember(itemsEditCommentsHStack);
 
 		RootPanel.get("gwtApp").add(mainStack); //anchored on GWT html page
 		mainStack.draw();
 	}
 
+	/**
+	 * SwagSwapGWT-specific sort.  Sorts itemsTileGrid
+	 * 
+	 * See http://www.smartclient.com/smartgwt/showcase/#featured_tile_filtering
+	 */
 	@SuppressWarnings("unchecked")
-	private DynamicForm createSortPanel() {
+	private DynamicForm createSortDropDown() {
 		final DynamicForm sortForm = new DynamicForm();
+		//styling
+		sortForm.setNumCols(4); //2 labels + two inputs
 		sortForm.setAutoFocus(false);
-		sortForm.setNumCols(4);
 		sortForm.setWrapItemTitles(false);
 
 		SelectItem sortItem = new SelectItem("sortBy", "Sort By");
@@ -171,7 +191,7 @@ public class SmartGWT implements EntryPoint {
 		valueMap.put("lastUpdated", "Last Updated");
 
 		sortItem.setValueMap(valueMap);
-		sortItem.setValue("lastUpdated"); //default
+		sortItem.setValue("lastUpdated"); //default TODO make sure it sort this way to start!
 
 		final CheckboxItem ascendingItem = new CheckboxItem("chkSortDir");
 		ascendingItem.setTitle("Ascending");
@@ -185,22 +205,30 @@ public class SmartGWT implements EntryPoint {
 				if (sortDir == null)
 					sortDir = false;
 				if (sortVal != null) {
-					tileGrid.sortByProperty(sortVal, sortDir);
+					itemsTileGrid.sortByProperty(sortVal, sortDir);
 				}
 			}
 		});
 		return sortForm;
 	}
 
-	private DynamicForm createSearchPanel() {
+	/**
+	 * SwagSwapGWT filter implementation.  Shows search box, executes
+	 * filter on keyPress which client-side searches a few fields of swagItems
+	 */
+	private DynamicForm createSearchBox() {
 		final DynamicForm filterForm = new DynamicForm();
 		filterForm.setNumCols(2);
-		filterForm.setDataSource(SmartGWTRPCDataSource.getInstance());
 		filterForm.setAutoFocus(false);
+		
+		filterForm.setDataSource(SmartGWTRPCDataSource.getInstance());
 		filterForm.setOperator(OperatorId.OR);
-
+		
+		//Visible search box
 		TextItem nameItem = new TextItem("name", "Search");
 		nameItem.setOperator(OperatorId.ICONTAINS); // case insensitive
+		
+		//The rest are hidden and populated with the contents of nameItem
 		final HiddenItem companyItem = new HiddenItem("company");
 		companyItem.setOperator(OperatorId.ICONTAINS);
 		final HiddenItem ownerItem = new HiddenItem("ownerNickName");
@@ -214,41 +242,42 @@ public class SmartGWT implements EntryPoint {
 				companyItem.setValue(searchTerm);
 				ownerItem.setValue(searchTerm);
 				if (searchTerm==null) {
-					tileGrid.fetchData();
+					itemsTileGrid.fetchData();
 				}
 				else {
 					Criteria criteria = filterForm.getValuesAsCriteria();
-					tileGrid.fetchData(criteria);
+					itemsTileGrid.fetchData(criteria);
 				}
 			}
 		});
-
 		return filterForm;
 	}
 
-	private VStack createItemsPanel() {
-		// build swag icons
-		tileGrid.setBorder("1px solid #C0C3C7");
-		tileGrid.setTileWidth(100);
-		tileGrid.setTileHeight(140);
-		tileGrid.setTileValueAlign("left");
-		tileGrid.setWidth100();
-		tileGrid.setHeight100();
-		tileGrid.setShowAllRecords(true);
-		tileGrid.setDataSource(SmartGWTRPCDataSource.getInstance());
-		tileGrid.setAutoFetchData(true);
-		tileGrid.setAnimateTileChange(true);
+	private TileGrid createItemsTileGrid() {
+		// build flying swag icons
+		
+		//styling
+		itemsTileGrid.setBorder("1px solid #C0C3C7");
+		itemsTileGrid.setTileWidth(100);
+		itemsTileGrid.setTileHeight(140);
+		itemsTileGrid.setTileValueAlign("left");
+		itemsTileGrid.setWidth100();
+		itemsTileGrid.setHeight100();
+		itemsTileGrid.setAnimateTileChange(true);
+		
+		itemsTileGrid.setShowAllRecords(true);
+		itemsTileGrid.setDataSource(SmartGWTRPCDataSource.getInstance());
+		itemsTileGrid.setAutoFetchData(true);
 
-		DetailViewerField pictureField = new DetailViewerField("imageKey");
-		pictureField.setImageWidth(62);
-		pictureField.setImageHeight(50);
-		pictureField.setCellStyle("picture");
+		DetailViewerField imageField = new DetailViewerField("imageKey");
+//		imageField.setImageWidth(62);
+//		imageField.setImageHeight(50);
 
 		DetailViewerField name = new DetailViewerField("name");
 		DetailViewerField company = new DetailViewerField("company");
 		DetailViewerField ownerNickName = new DetailViewerField("ownerNickName");
 		DetailViewerField averageRating = new DetailViewerField("averageRating");
-		//show stars in tile
+		//show star images for the average rating
 		averageRating.setDetailFormatter(new DetailFormatter() {
 			public String format(Object value, DetailViewerRecord record,
 					DetailViewerField field) {
@@ -269,9 +298,10 @@ public class SmartGWT implements EntryPoint {
 		}
 		);
 		
-		tileGrid.setFields(pictureField, name, company ,ownerNickName, averageRating, lastUpdated);
+		itemsTileGrid.setFields(imageField, name, company ,ownerNickName, 
+				averageRating, lastUpdated);
 		
-		tileGrid.addRecordClickHandler(new RecordClickHandler() {
+		itemsTileGrid.addRecordClickHandler(new RecordClickHandler() {
 
 			public void onRecordClick(RecordClickEvent event) {
 				SwagItemGWTDTO dto = new SwagItemGWTDTO();
@@ -280,25 +310,8 @@ public class SmartGWT implements EntryPoint {
 			}
 		});
 		
-		VStack vStack = new VStack();
-		vStack.addMember(createSearchPanel());
-		vStack.addMember(createSortPanel());
-		vStack.setWidth(350);
-		vStack.setHeight(600);
-		vStack.addMember(tileGrid);
-		vStack.setBorder("1px solid #C0C3C7");
-		vStack.setShowEdges(false);
-		vStack.setCanDragResize(true);
-		vStack.setShowResizeBar(true);
-		return vStack;
+		return itemsTileGrid;
 	}
-	
-/*	public void addImageUploadForm(HStack hStack) {
-//		Img img = new Img("file://c:/photos/june2009/Image008.jpg");
-		Image img = new Image("file://c:/photos/june2009/Image008.jpg");
-		URL imageUrl = new 
-//        hStack.addMember(img);
-	}*/
 	
 	public void addImageUpload(HStack hStack) {
 		//create a hidden frame
@@ -386,12 +399,35 @@ public class SmartGWT implements EntryPoint {
 	private HStack createLoginLogoutPanel() {
 		HStack loginPanel = new HStack();
 		loginPanel.setWidth100();
+		loginPanel.setHeight(20);
 		HStack logoutPanel = new HStack();
 		logoutPanel.setWidth100();
-		Anchor signInLink = new Anchor("Sign In");
-		Anchor signOutLink = new Anchor("Sign Out");
-		Label addLink = new Label("Add Swag");
-		addLink.addClickHandler(new ClickHandler() {
+		logoutPanel.setHeight(20);
+		
+		Label homeLabel = new Label("Home");
+		homeLabel.setIcon("/images/home.jpg");
+		homeLabel.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Window.open("/", "_self", ""); 
+			}
+		});
+		Label signOutLabel = new Label("Sign Out");
+		signOutLabel.setIcon("/images/exit.jpg");
+		signOutLabel.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Window.open(loginInfo.getLogoutUrl(), "_self", ""); 
+			}
+		});
+		Label signInLabel = new Label("Sign In");
+		signInLabel.setIcon("/images/key.jpg");
+		signInLabel.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Window.open(loginInfo.getLoginUrl(), "_self", ""); 
+			}
+		});
+		Label addSwagLabel = new Label("Add Swag");
+		addSwagLabel.setIcon("/images/newAdd.png");
+		addSwagLabel.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				itemEditTitleLabel.setIcon(""); 
 				itemEditTitleLabel.setContents("<b>Add Swag</b>");
@@ -403,22 +439,21 @@ public class SmartGWT implements EntryPoint {
 				if (tabSet.getTab(1) != null) {
 					tabSet.removeTab(commentsTab);
 				}
-				tileGrid.deselectAllRecords();
+				itemsTileGrid.deselectAllRecords();
 				boundSwagForm.editNewRecord();
 			}
 		});
 		if (loginInfo.isLoggedIn()) {
-			logoutPanel.addMember(addLink);
-			signOutLink.setHref(loginInfo.getLogoutUrl());
-			logoutPanel.addMember(signOutLink);
-			Label welcomeLabel = new Label("Welcome: "
-					+ loginInfo.getNickName());
+			logoutPanel.addMember(homeLabel);
+			logoutPanel.addMember(addSwagLabel);
+			Label welcomeLabel = new Label("Welcome: " + loginInfo.getNickName());
 			welcomeLabel.setWrap(false);
+			logoutPanel.addMember(signOutLabel);
 			logoutPanel.addMember(welcomeLabel);
 			return logoutPanel;
 		} else { //not logged in
-			signInLink.setHref(loginInfo.getLoginUrl());
-			loginPanel.addMember(signInLink);
+			logoutPanel.addMember(homeLabel);
+			loginPanel.addMember(signInLabel);
 			return loginPanel;
 		}
 	}
@@ -496,7 +531,7 @@ public class SmartGWT implements EntryPoint {
 		deleteButton.setAutoFit(true);
 		deleteButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				showConfirmRemovePopup(tileGrid.getSelectedRecord());
+				showConfirmRemovePopup(itemsTileGrid.getSelectedRecord());
 				editFormHStack.hide();
 			}
 		});
@@ -566,7 +601,7 @@ public class SmartGWT implements EntryPoint {
 		yesButton.setAutoFit(true);
 		yesButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				tileGrid.removeData(selectedTileRecord);
+				itemsTileGrid.removeData(selectedTileRecord);
 				winModal.hide();
 			}
 		});
@@ -731,13 +766,13 @@ public class SmartGWT implements EntryPoint {
 							//kludge to execute a fetch through saveData()
 							boundSwagForm.getField("isFetchOnly").setValue(true);
 							boundSwagForm.saveData(new DSCallback() {
-								//reselect selected tile (call to saveData deselects it)
+								//reselect selected tile (call to saveData de-selects it)
 								public void execute(DSResponse response,
 										Object rawData, DSRequest request) {
 									//get updated record
 									final TileRecord rec = new TileRecord(request.getData());
 									//Note: selectRecord seems to only work on the tile index
-									tileGrid.selectRecord(tileGrid.getRecordIndex(rec)); 
+									itemsTileGrid.selectRecord(itemsTileGrid.getRecordIndex(rec)); 
 								}});
 						}
 				}
@@ -821,7 +856,7 @@ public class SmartGWT implements EntryPoint {
 	}
 
 	/**
-	 * Turn this into something the SmartGWT Grid can use
+	 * Turn this into something the SwagSwapGWT Grid can use
 	 * @param comments
 	 * @return CommentRecord[]
 	 */

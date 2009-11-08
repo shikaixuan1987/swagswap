@@ -12,8 +12,11 @@ public interface ImageService {
 
 	byte[] getResizedImageBytes(byte[] originalImageBytes);
 
+	byte[] getResizedThumbnailImageBytes(byte[] originalImageBytes);
+	
 	byte[] getThumbnailBytes(String key);
 	
 	byte[] getDefaultImageBytes(String requestURL);
+
 
 }

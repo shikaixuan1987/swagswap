@@ -208,7 +208,7 @@ public class ItemServiceImpl implements ItemService {
 	 * 
 	 * @throws IOException
 	 * @throws MalformedURLException
-	 * @return updated SwagItem (needed for SmartGWT impl)
+	 * @return updated SwagItem (needed for SwagSwapGWT impl)
 	 */
 
 	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)

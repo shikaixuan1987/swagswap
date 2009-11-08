@@ -50,14 +50,18 @@ public class ImageDaoImpl extends JdoDaoSupport implements ImageDao {
 		return resizeImage(originalImageBytes, IMAGE_WIDTH,
 				IMAGE_HEIGHT);
 	}
+	
+	public byte[] getResizedThumbnailImageBytes(byte[] originalImageBytes) {
+		return resizeImage(originalImageBytes, THUMBNAIL_WIDTH,
+				THUMBNAIL_HEIGHT);
+	}
 
 	public byte[] getThumbnailBytes(String key) {
 		SwagImage image = get(key);
 		if (image == null || image.getImage() == null) {
 			return null;
 		}
-		return resizeImage(image.getImage().getBytes(), THUMBNAIL_WIDTH,
-				THUMBNAIL_HEIGHT);
+		return getResizedThumbnailImageBytes(image.getImage().getBytes());
 	}
 
 	private byte[] resizeImage(byte[] imageBytes, int resizedWidth,

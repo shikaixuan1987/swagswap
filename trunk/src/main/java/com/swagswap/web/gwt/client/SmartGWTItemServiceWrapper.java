@@ -16,7 +16,7 @@ public interface SmartGWTItemServiceWrapper extends RemoteService {
 
 	/**
 	 * 
-	 * These are for SmartGWT
+	 * These are for SwagSwapGWT
 	 */
 	
 	//maps to getAll in ItemService

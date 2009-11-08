@@ -24,7 +24,7 @@
 	
 	<!-- Specify the app entry point class.                         -->
 	<!-- <entry-point class='com.swagswap.web.gwt.client.SwagSwapGWT' /> -->
-	<entry-point class='com.swagswap.web.gwt.client.SmartGWT' />
+	<entry-point class='com.swagswap.web.gwt.client.SwagSwapGWT' />
 
 	<!-- Specify the paths for translatable code                    -->
 	<source path='client' />

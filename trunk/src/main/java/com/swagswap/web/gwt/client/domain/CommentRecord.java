@@ -6,7 +6,7 @@ import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.swagswap.domain.SwagItemComment;
 
 /**
- * adaptor domain object to show comments in a SmartGWT ListGrid
+ * adaptor domain object to show comments in a SwagSwapGWT ListGrid
  *
  */
 public class CommentRecord extends ListGridRecord {

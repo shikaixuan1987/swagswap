@@ -73,7 +73,8 @@ public class ImageController {
 		byte[] swagImageBytes  = imageService.getThumbnailBytes(key);
 		//if there's no image, return default image
 		if (swagImageBytes == null) {
-			swagImageBytes=imageService.getDefaultImageBytes(req.getRequestURL().toString());
+			swagImageBytes=imageService.getResizedThumbnailImageBytes(
+					imageService.getDefaultImageBytes(req.getRequestURL().toString()));
 		}
 		
 		try {

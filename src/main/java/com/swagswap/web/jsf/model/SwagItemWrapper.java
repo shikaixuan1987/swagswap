@@ -2,7 +2,6 @@ package com.swagswap.web.jsf.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.swagswap.domain.SwagItem;
@@ -66,9 +65,8 @@ public class SwagItemWrapper implements Serializable {
 		}
 		List<SwagItemWrapper> wrapperList = new ArrayList<SwagItemWrapper>(
 				itemList.size());
-		Iterator<SwagItem> iter = itemList.iterator();
-		while (iter.hasNext()) {
-			SwagItem swagItem = iter.next();
+
+		for (SwagItem swagItem : itemList) {
 			// Set image and image bytes to null. These are not required in Swag
 			// Table and affects
 			// performance. ImageBytes may be set due to previously adding a

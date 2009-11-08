@@ -45,11 +45,6 @@ public class SwagEditBean implements Serializable {
 		this.selectedRowId = selectedRowId;
 	}
 
-	public SwagEditBean() {
-		super();
-		initialiseSwagItem();
-	}
-
 	public String getNewComment() {
 		return newComment;
 	}
@@ -66,13 +61,15 @@ public class SwagEditBean implements Serializable {
 		this.editSwagItem = editSwagItem;
 	}
 
-	private void initialiseSwagItem() {
-		editSwagItem = new SwagItemWrapper(new SwagItem(), 0, true);
-		List<String> tagList = new ArrayList<String>();
-		for (int i = 0; i < 4; i++) {
-			tagList.add("");
+	public void initialiseSwagItem() {
+		if (editSwagItem == null) {
+			editSwagItem = new SwagItemWrapper(new SwagItem(), 0, true);
+			List<String> tagList = new ArrayList<String>();
+			for (int i = 0; i < 4; i++) {
+				tagList.add("");
+			}
+			editSwagItem.getSwagItem().setTags(tagList);
 		}
-		editSwagItem.getSwagItem().setTags(tagList);
 	}
 
 }

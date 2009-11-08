@@ -118,7 +118,7 @@ public class ItemServiceImpl implements ItemService {
 		}
 		Set<SwagItemRating> userRatingList = user.getSwagItemRatings();
 		if (userRatingList.size() == 0) {
-			// Performance imporvement. No ratings from this user so we return
+			// Performance improvement. No ratings from this user so we return
 			// complete swagList
 			return swagList;
 		}
@@ -144,7 +144,6 @@ public class ItemServiceImpl implements ItemService {
 		return filteredList;
 	}
 
-	// TODO change this to ID and everything that calls it. Scott.
 	public List<SwagItem> filterByOwnerGoogleID(List<SwagItem> swagList,
 			String googleID) {
 		// Easier and faster to do this programatically than go to DAO
@@ -152,15 +151,13 @@ public class ItemServiceImpl implements ItemService {
 		if (swagList == null || googleID == null) {
 			return filteredList;
 		}
-		Iterator<SwagItem> iter = swagList.iterator();
-		while (iter.hasNext()) {
-			SwagItem item = (SwagItem) iter.next();
-
-			if (item.getOwnerGoogleID() != null
-					&& item.getOwnerGoogleID().equals(googleID)) {
-				filteredList.add(item);
+		for (SwagItem swagItem : filteredList) {
+			if (swagItem.getOwnerGoogleID() != null
+					&& swagItem.getOwnerGoogleID().equals(googleID)) {
+				filteredList.add(swagItem);
 			}
 		}
+	
 		return filteredList;
 	}
 
@@ -178,7 +175,8 @@ public class ItemServiceImpl implements ItemService {
 		}
 		itemLoop: for (SwagItem swagItem : swagList) {
 			for (SwagItemComment swagItemComment : swagItem.getComments()) {
-				//  Put this check in to defend against DB changes (like deleting a user)
+				// Put this check in to defend against DB changes (like deleting
+				// a user)
 				if (swagItemComment.getItemOwnerGoogleID() != null) {
 					if (swagItemComment.getItemOwnerGoogleID().equals(googleID)
 							&& !exclusive) {
@@ -245,13 +243,13 @@ public class ItemServiceImpl implements ItemService {
 		// throw new RuntimeException("see if it rolls back");
 		return swagItem;
 	}
-	
+
 	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public void saveFromEmail(SwagItem swagItem) {
 		if (StringUtils.isEmpty(swagItem.getName())) { // only required field
 			throw new InvalidSwagItemException("name is required");
 		}
-		//don't check logged in identity
+		// don't check logged in identity
 		populateSwagImage(swagItem);
 		itemDao.insert(swagItem);
 	}
@@ -321,7 +319,6 @@ public class ItemServiceImpl implements ItemService {
 		// Resize the image before saving
 		swagItem.setImage(new SwagImage(imageService
 				.getResizedImageBytes(newImageData)));
-
 	}
 
 	/**

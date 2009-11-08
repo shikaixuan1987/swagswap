@@ -1,0 +1,50 @@
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:swag="http://java.sun.com/jsf/composite/swag"
+	xmlns:mobile="http://java.sun.com/jsf/composite/swag/mobile"
+	xmlns:swagStats="http://java.sun.com/jsf/composite/swag/stats">
+
+<ui:composition template="mobileTemplate.xhtml">
+	<ui:param name="title" value="Swag Stats" />
+	<ui:define name="content">
+		<swag:panel title="Global Stats">
+			<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
+				columnClasses="colWidth50 ,colWidth50" width="100%">
+				<h:panelGrid columns="2">
+					<mobile:label value="Total Items" />
+					<h:outputText value="#{swagStatsBean.swagStats.totalItems}" />
+					<mobile:label value="Total Users" />
+					<h:outputText value="#{swagStatsBean.swagStats.totalUsers}" />
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<mobile:label value="Ratings" />
+					<h:outputText value="#{swagStatsBean.swagStats.totalRatings}" />
+					<mobile:label value="Comments" />
+					<h:outputText value="#{swagStatsBean.swagStats.totalComments}" />
+				</h:panelGrid>
+			</h:panelGrid>
+
+		</swag:panel>
+		<br />
+		<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
+			style="background-color: white;" width="100%">
+
+			<swagStats:topRated style="margin-bottom:5px;" />
+			<swagStats:mostRated style="margin-bottom:5px;" />
+			<swagStats:mostCommented style="margin-bottom:5px;" />
+			<swagStats:userCreated style="margin-bottom:5px;"
+				percent="#{swagBean.showUserCreatedPercent}" />
+			<swagStats:userRated style="margin-bottom:5px;"
+				percent="#{swagBean.showUserRatedPercent}" />
+			<swagStats:userCommented 
+				percent="#{swagBean.showUserCommentedPercent}" />
+		</h:panelGrid>
+	</ui:define>
+</ui:composition>
+</html>

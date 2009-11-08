@@ -118,7 +118,7 @@
 		<!-- incoming email -->
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
+
 
 	<error-page>
 		<exception-type>java.lang.Exception</exception-type>
@@ -187,6 +187,9 @@
 			<url-pattern>/jsf/addSwag.jsf</url-pattern>
 			<url-pattern>/jsf/editSwag.jsf</url-pattern>
 			<url-pattern>/jsf/mySwag.jsf</url-pattern>
+			<url-pattern>/mobile/mobileAddSwag.jsf</url-pattern>
+			<url-pattern>/mobile/mobileEditSwag.jsf</url-pattern>
+			<url-pattern>/mobile/mobileMySwag.jsf</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>*</role-name>
@@ -226,11 +229,14 @@
 	-->
 
 
-	<!-- This is taken care of in the AdminController because of having to map "/" to the spring dispatchservlet -->
-    <!-- 
+	<!--
+		This is taken care of in the AdminController because of having to map
+		"/" to the spring dispatchservlet
+	-->
+
 	<welcome-file-list>
 		<welcome-file>/jsf/home.jsf</welcome-file>
 	</welcome-file-list>
-	 -->
+
 
 </web-app>

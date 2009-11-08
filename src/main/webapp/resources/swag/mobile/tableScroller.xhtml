@@ -13,95 +13,61 @@
 </composite:interface>
 
 <composite:implementation>
-	<h:panelGroup layout="block" width="100%"
-		style="text-align: center; margin-top: 5px;" styleClass="scroller">
-		<h:panelGrid layout="block" columns="5"  style="margin-left: auto; margin-right: auto;" >
+	<h:panelGrid layout="block" width="100%"
+		style="text-align: center; margin-top: 5px;">
 
-			<h:panelGroup rendered="#{swagBean.swagTable.firstRow le 0}">
-				<h:graphicImage value="/images/left_off.gif" />
-				<h:graphicImage value="/images/left_off.gif" />
-			</h:panelGroup>
-			<h:panelGroup rendered="#{swagBean.swagTable.firstRow gt 0}">
-				<h:commandButton image="/images/left_on.gif"
-					action="#{swagBean.swagTable.actionPage}" title="First">
-					<f:setPropertyActionListener value="first"
-						target="#{swagBean.swagTable.page}" />
-					<f:ajax render="@form" />
-				</h:commandButton>
-				<h:commandButton image="/images/left_on.gif"
-					action="#{swagBean.swagTable.actionPage}" title="First">
-					<f:setPropertyActionListener value="first"
-						target="#{swagBean.swagTable.page}" />
-					<f:ajax render="@form" />
-				</h:commandButton>
-			</h:panelGroup>
-			<h:graphicImage value="/images/left_off.gif"
-				rendered="#{swagBean.swagTable.firstRow le 0}" />
-			<h:commandButton image="/images/left_on.gif"
-				action="#{swagBean.swagTable.actionPage}"
-				rendered="#{swagBean.swagTable.firstRow gt 0}" title="Previous">
+		<h:panelGroup layout="block" style="width: 100%;" >
+			<h:commandLink value="First" image="/images/left_on.gif"
+				rendered="#{swagBean.swagTable.firstRow gt 0}"
+				action="#{swagBean.swagTable.actionPage}" style="padding-left:10px; padding-right: 10px">
+				<f:setPropertyActionListener value="first"
+					target="#{swagBean.swagTable.page}" />
+				<f:ajax render="@form" />
+			</h:commandLink>
+			<h:commandLink value="Prev" action="#{swagBean.swagTable.actionPage}"
+				rendered="#{swagBean.swagTable.firstRow gt 0}" style="padding-left:10px; padding-right: 10px">
 				<f:setPropertyActionListener value="prev"
 					target="#{swagBean.swagTable.page}" />
 				<f:ajax render="@form" />
-			</h:commandButton>
+			</h:commandLink>
 
 			<ui:repeat value="#{swagBean.swagTable.swagList}"
 				step="#{swagBean.swagTable.rowsPerPage}" varStatus="index">
-				<h:panelGroup>
 					<h:commandLink
 						value="${fn:substringBefore((index.index + index.step) / index.step, '.')}"
 						action="#{swagBean.swagTable.actionPage}"
-						disabled="#{index.index == swagBean.swagTable.firstRow}">
+						disabled="#{index.index == swagBean.swagTable.firstRow}" style="padding-left:10px; padding-right: 10px">
 						<f:setPropertyActionListener
 							value="${fn:substringBefore((index.index + index.step) / index.step, '.')}"
 							target="#{swagBean.swagTable.page}" />
 						<f:ajax render="@form" />
 					</h:commandLink>
-				</h:panelGroup>
 			</ui:repeat>
-			<h:commandButton image="/images/right_on.gif"
-				action="#{swagBean.swagTable.actionPage}"
+			<h:commandLink value="Next" action="#{swagBean.swagTable.actionPage}"
 				rendered="#{(swagBean.swagTable.firstRow + swagBean.swagTable.rowsPerPage + 1) le swagBean.swagTable.tableSize}"
-				title="Next">
+				title="Next" style="padding-left:10px; padding-right: 10px">
 				<f:setPropertyActionListener value="next"
 					target="#{swagBean.swagTable.page}" />
 				<f:ajax render="@form" />
-			</h:commandButton>
+			</h:commandLink>
 
-			<h:graphicImage value="/images/right_off.gif"
-				rendered="#{(swagBean.swagTable.firstRow + swagBean.swagTable.rowsPerPage + 1) > swagBean.swagTable.tableSize}" />
+			<h:commandLink action="#{swagBean.swagTable.actionPage}" value="Last" style="padding-left:10px; padding-right: 10px">
+				<f:setPropertyActionListener value="last"
+					target="#{swagBean.swagTable.page}" />
+				<f:ajax render="@form" />
+			</h:commandLink>
 
-			<h:panelGroup
-				rendered="#{(swagBean.swagTable.firstRow + swagBean.swagTable.rowsPerPage +1) le swagBean.swagTable.tableSize}">
-				<h:commandButton image="/images/right_on.gif"
-					action="#{swagBean.swagTable.actionPage}" title="Last">
-					<f:setPropertyActionListener value="last"
-						target="#{swagBean.swagTable.page}" />
-					<f:ajax render="@form" />
-				</h:commandButton>
-				<h:commandButton image="/images/right_on.gif"
-					action="#{swagBean.swagTable.actionPage}" title="Last">
-					<f:setPropertyActionListener value="last"
-						target="#{swagBean.swagTable.page}" />
-					<f:ajax render="@form" />
-				</h:commandButton>
-			</h:panelGroup>
+		</h:panelGroup>
 
 
-			<h:panelGroup
-				rendered="#{(swagBean.swagTable.firstRow + swagBean.swagTable.rowsPerPage +1) > swagBean.swagTable.tableSize}">
-				<h:graphicImage value="/images/right_off.gif" />
-				<h:graphicImage value="/images/right_off.gif" />
-			</h:panelGroup>
+		<h:panelGroup
+			style="width: 100%; text-align: center; font-weight: bold; font-size: 12px; margin-top: 5px;"
+			layout="block">
+			<h:outputText
+				value="Items #{swagBean.swagTable.firstRow + 1} to #{swagBean.swagTable.lastRow} of #{swagBean.swagTable.tableSize}" />
+		</h:panelGroup>
+
+
 	</h:panelGrid>
-	<h:panelGroup
-		style="width: 100%; text-align: center; font-weight: bold; font-size: 10px; margin-top: 5px;"
-		layout="block">
-		<h:outputText
-			value="Items #{swagBean.swagTable.firstRow + 1} to #{swagBean.swagTable.lastRow} of #{swagBean.swagTable.tableSize}" />
-	</h:panelGroup>
-
-
-	</h:panelGroup>
 </composite:implementation>
 </html>

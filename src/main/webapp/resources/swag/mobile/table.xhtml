@@ -5,7 +5,8 @@
 	xmlns:composite="http://java.sun.com/jsf/composite"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-	xmlns:swag="http://java.sun.com/jsf/composite/swag">
+	xmlns:swag="http://java.sun.com/jsf/composite/swag"
+	xmlns:mobile="http://java.sun.com/jsf/composite/swag/mobile">
 
 
 <composite:interface>
@@ -18,7 +19,7 @@
 			styleClass="tableBorder" rules="all"
 			rowClasses="tableRow1, tableRow2"
 			columnClasses="tableCol1, colWidth100"
-			onmouseover="changeto(this,event,'#E8F2FE');"
+			onmouseover="changeto(this,event,'tableRowHover');"
 			onmouseout="changeback(this,event);" cellpadding="4"
 			rows="#{swagBean.swagTable.rowsPerPage}"
 			first="#{swagBean.swagTable.firstRow}">
@@ -58,14 +59,16 @@
 					<h:outputText value="Action" />
 				</f:facet>
 				<h:panelGroup style="font-size: 14px">
-					<h:panelGroup layout="block" style="height: 25px" rendered="#{row.itemOwner}">
+					<h:panelGroup layout="block" style="height: 25px"
+						rendered="#{row.itemOwner}">
 						<h:link value="Edit" outcome="mobileEditSwag">
-							
+
 							<f:param name="swagItemKey" value="#{row.swagItem.key}" />
 							<f:param name="lastPage" value="#{actionBean.lastPage}" />
 						</h:link>
 					</h:panelGroup>
-					<h:panelGroup layout="block" style="height: 25px" rendered="#{row.itemOwner}">
+					<h:panelGroup layout="block" style="height: 25px"
+						rendered="#{row.itemOwner}">
 						<h:commandLink value="Delete" action="#{actionBean.actionDelete}">
 							<f:setPropertyActionListener value="#{row.swagItem.key}"
 								target="#{swagBean.selectedRowId}" />
@@ -77,7 +80,7 @@
 			<f:facet name="footer">
 				<h:panelGroup
 					rendered="#{(swagBean.swagTable.tableSize gt swagBean.swagTable.rowsPerPage)}">
-					<swag:tableScroller />
+					<mobile:tableScroller />
 				</h:panelGroup>
 			</f:facet>
 		</h:dataTable>

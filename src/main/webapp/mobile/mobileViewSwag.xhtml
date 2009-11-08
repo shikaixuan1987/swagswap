@@ -27,10 +27,11 @@
 					<mobile:label value="Name" />
 					<h:outputText value="#{swagEditBean.editSwagItem.swagItem.name}" />
 					<mobile:label value="Image" />
-					<h:outputLink
-						value="/springmvc/showImage/#{swagEditBean.editSwagItem.swagItem.imageKey}">
-						<h:outputText value="View Image" style="font-size: 14px;" />
-					</h:outputLink>
+					<h:link style="font-size: 14px;" value="View Image"
+						outcome="mobileImage">
+						<f:param name="swagItemKey"
+							value="#{swagEditBean.editSwagItem.swagItem.key}" />
+					</h:link>
 					<mobile:label value="Description" />
 					<h:outputText
 						value="#{swagEditBean.editSwagItem.swagItem.description}" />

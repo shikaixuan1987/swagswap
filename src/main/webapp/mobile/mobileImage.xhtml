@@ -8,20 +8,19 @@
 	xmlns:mobile="http://java.sun.com/jsf/composite/swag/mobile">
 
 <ui:composition template="mobileTemplate.xhtml">
-	<ui:param name="title" value="All Swag" />
+	<ui:param name="title" value="Image" />
 	<ui:define name="content">
 		<h:form>
 			<f:metadata>
-				<f:viewParam name="swagItemKey" value="#{swagBean.selectedRowId}" />
+				<f:viewParam name="swagItemKey"
+					value="#{swagEditBean.selectedRowId}" />
+				<f:viewParam name="lastPage" value="#{swagEditBean.lastPage}" />
 				<f:event type="preRenderView"
-					listener="#{actionBean.populateSwagList}" />
+					listener="#{actionBean.populateSwagItem}" />
 			</f:metadata>
 		</h:form>
-		<ui:include src="../jsf/searchPanel.xhtml">
-			<ui:param name="bean" value="#{swagBean}" />
-		</ui:include>
-		<mobile:table value="#{swagBean.swagTable.swagList}"
-			bean="#{swagBean}" />
+		<h:graphicImage
+			value="/springmvc/showImage/#{swagEditBean.editSwagItem.swagItem.imageKey}" />
 	</ui:define>
 </ui:composition>
 

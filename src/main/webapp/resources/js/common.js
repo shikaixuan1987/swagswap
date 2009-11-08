@@ -46,8 +46,10 @@ function findRow(table, target) {
 		if (target.tagName=="TR" || target.tagName=="tr") {
 			element = target;
 		}
-		//  keep looking for TBODY to avoid header and footer
-		if (target.tagName=="TBODY" || target.tagName=="tbody") {
+	}
+	//  Make sure row is in BODY of table
+	if (element.parentNode) {
+		if (element.parentNode.tagName == "TBODY" || element.parentNode.tagName == "tbody") {
 			return element;
 		}
 		

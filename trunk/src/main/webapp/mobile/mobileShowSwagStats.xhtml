@@ -34,15 +34,14 @@
 		<br />
 		<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 			style="background-color: white;" width="100%">
-
-			<swagStats:topRated style="margin-bottom:5px;" />
-			<swagStats:mostRated style="margin-bottom:5px;" />
-			<swagStats:mostCommented style="margin-bottom:5px;" />
-			<swagStats:userCreated style="margin-bottom:5px;"
+			<swagStats:topRated style="margin-bottom:5px;" height="100%"/>
+			<swagStats:mostRated style="margin-bottom:5px;" height="100%"/>
+			<swagStats:mostCommented style="margin-bottom:5px;" height="100%" />
+			<swagStats:userCreated style="margin-bottom:5px;" height="100%" 
 				percent="#{swagBean.showUserCreatedPercent}" />
-			<swagStats:userRated style="margin-bottom:5px;"
+			<swagStats:userRated style="margin-bottom:5px;" height="100%" 
 				percent="#{swagBean.showUserRatedPercent}" />
-			<swagStats:userCommented 
+			<swagStats:userCommented height="100%" 
 				percent="#{swagBean.showUserCommentedPercent}" />
 		</h:panelGrid>
 	</ui:define>

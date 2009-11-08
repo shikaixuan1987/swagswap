@@ -9,10 +9,11 @@
 
 <composite:interface>
 	<composite:attribute name="style" />
+	<composite:attribute name="height" default="105px" />
 </composite:interface>
 
 <composite:implementation>
-	<swag:panel title="Top Rated Swag" height="105px"
+	<swag:panel title="Top Rated Swag"  height="#{cc.attrs.height}"
 		style="#{cc.attrs.style}" headerColor="white">
 		<h:dataTable value="#{swagStatsBean.swagStats.topRated}" var="row"
 			width="100%" rules="none" rowClasses="tableRow1, tableRow2"
@@ -20,7 +21,7 @@
 			onmouseover="changeto(this,event,'tableRowHover');"
 			onmouseout="changeback(this,event);">
 			<h:column>
-					<h:outputText value="#{row.name}" title="#{row.description}" />
+				<h:outputText value="#{row.name}" title="#{row.description}" />
 			</h:column>
 			<h:column>
 				<h:panelGroup id="averageRating">

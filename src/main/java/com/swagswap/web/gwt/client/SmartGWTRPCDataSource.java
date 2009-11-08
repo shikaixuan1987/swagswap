@@ -66,7 +66,6 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		addField(new DataSourceTextField("tag3", "Tag 3", 30, false));
 		addField(new DataSourceTextField("tag4", "Tag 4", 30, false));
 		addField(new DataSourceImageFileField("newImageBytes", "New Swag Image", 20, false));
-		//TODO add tags and comments
 	}
 
 	@Override

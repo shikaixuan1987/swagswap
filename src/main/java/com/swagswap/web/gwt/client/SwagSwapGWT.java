@@ -9,10 +9,10 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.StatusCodeException;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
@@ -117,6 +117,8 @@ public class SwagSwapGWT implements EntryPoint {
 	 * Check login status and build GUI
 	 */
 	public void onModuleLoad() {
+		// Set GWT container invisible
+		DOM.setInnerHTML(RootPanel.get("loadingMsg").getElement(),"Checking logged-in-edness");
 		// get better exception handling
 		setUncaughtExceptionHandler();
 		
@@ -127,6 +129,7 @@ public class SwagSwapGWT implements EntryPoint {
 				}
 				public void onSuccess(LoginInfo result) {
 					loginInfo = result;
+					DOM.setInnerHTML(RootPanel.get("loadingMsg").getElement(),"Fetching Swag Items");
 					buildGUI();
 				}
 			});
@@ -146,6 +149,16 @@ public class SwagSwapGWT implements EntryPoint {
 		swagItemsVStack.addMember(createSearchBox());
 		swagItemsVStack.addMember(createSortDropDown());
 		swagItemsVStack.addMember(createItemsTileGrid());
+		
+		DOM.setStyleAttribute(RootPanel.get("gwtApp").getElement(), "display", "none");
+		itemsTileGrid.fetchData(null, new DSCallback() {
+			public void execute(DSResponse response, Object rawData, DSRequest request) {
+				DOM.setStyleAttribute(RootPanel.get("gwtApp").getElement(), "display", "block");
+				DOM.setInnerHTML(RootPanel.get("loading").getElement(),"");
+				DOM.setStyleAttribute(DOM.getElementById("loading"), "border", "0");
+			}
+		});
+		
 		swagItemsVStack.setWidth(350);
 		swagItemsVStack.setHeight(600);
 		swagItemsVStack.setBorder("1px solid #C0C3C7");
@@ -165,6 +178,7 @@ public class SwagSwapGWT implements EntryPoint {
 		mainStack.addMember(itemsEditCommentsHStack);
 
 		RootPanel.get("gwtApp").add(mainStack); //anchored on GWT html page
+
 		mainStack.draw();
 	}
 
@@ -267,7 +281,7 @@ public class SwagSwapGWT implements EntryPoint {
 		
 		itemsTileGrid.setShowAllRecords(true);
 		itemsTileGrid.setDataSource(SmartGWTRPCDataSource.getInstance());
-		itemsTileGrid.setAutoFetchData(true);
+		itemsTileGrid.setAutoFetchData(false);
 
 		DetailViewerField imageField = new DetailViewerField("imageKey");
 //		imageField.setImageWidth(62);

@@ -10,6 +10,7 @@
 <composite:interface>
 	<composite:attribute name="style" />
 	<composite:attribute name="percent" default="false" />
+			<composite:attribute name="height" default="125px" />
 </composite:interface>
 
 <composite:implementation>
@@ -19,7 +20,7 @@
 				listener="#{swagBean.toggleUserCreatedPercent}" event="click" />
 			<swag:panel
 				title="Top Users by Created #{cc.attrs.percent == 'true' ? ' %' : ''}"
-				height="125px" style="#{cc.attrs.style}" color="#666666"
+				height="#{cc.attrs.height}" style="#{cc.attrs.style}" color="#666666"
 				headerColor="#F1F1F1">
 
 				<h:dataTable value="#{swagStatsBean.swagStats.userCreated}"

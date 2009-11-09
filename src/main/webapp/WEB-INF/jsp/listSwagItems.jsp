@@ -13,7 +13,10 @@
 	Note: Search is case sensitive, full word, and only on Name and Tags in this implementation
 	<table>
 		<tr>
-			<td><form:input path="searchString" />
+			<td>
+                <a href="/">SwagSwap Home</a>
+                  &nbsp; 
+                <form:input path="searchString" />
 				<a href="#" onclick="document.searchForm.submit()">
 				<img src="/images/icon_flashlight.gif" border="0"/>Search Swag</a>
 				&nbsp; 
@@ -27,8 +30,8 @@
 </form:form>
 
 <display:table name="swagItems" uid="swagItemsList" id="currentObject" 
-               requestURI="/springmvc/search" keepStatus="true">
-	<display:column sortable="true" property="name" />
+               requestURI="/springmvc/search" keepStatus="true" pagesize="10">
+	<display:column sortable="true" property="name"/>
 		<display:column title="Action" >
 			<a href="<c:url value='/springmvc/view/${currentObject.key}'/>"> 
 				<img border="0" alt="View/Comment/Rate" src="<%=request.getContextPath()%>/images/view.gif"/>
@@ -76,8 +79,10 @@
 	--%>
 	<c:if test="${not empty currentObject.imageKey}">
 		<display:column title="Image">
+            <a href="<c:url value='/springmvc/view/${currentObject.key}'/>">
 			<img border="0" alt="Image" height="50" width="66" src="<c:url value='/springmvc/showThumbnail/${currentObject.imageKey}'/>"/>
-		</display:column>
+		</a>
+        </display:column>
 	</c:if>
 	<display:column sortable="true" title="Owner" property="ownerNickName" />
 	<display:column sortable="true" property="company" />
@@ -101,4 +106,3 @@
 	}
 
 </script>
-<%@ include file="/WEB-INF/jsp/footer.jsp" %>

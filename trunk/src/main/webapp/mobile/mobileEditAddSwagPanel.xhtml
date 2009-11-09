@@ -8,7 +8,6 @@
 	xmlns:swagcomp="/tags/swagcomp"
 	xmlns:mobile="http://java.sun.com/jsf/composite/swag/mobile">
 
-<h:outputScript name="js/feelingLucky.js" target="head" />
 <h:panelGroup style="background-color: white;" layout="block">
 	<h:panelGroup
 		style="height: 2px; width: 100%; background-color: #FF8800;"
@@ -51,7 +50,7 @@
 			value="#{swagEditBean.editSwagItem.swagItem.imageURL}" size="25" />
 		<h:outputText value="or" />
 		<h:commandButton value="I'm Feeling Lucky!" size="25" type="button"
-			onclick="OnImFeelingLucky(this,findElementInForm(this.form,'name'),findElementInForm(this.form,'url'));return false;" />
+			onclick="yahooLucky(findElementInForm(this.form,'name'),findElementInForm(this.form,'url'));return false;" />
 	</h:panelGrid>
 
 	<div id="luckyImage" style="margin-left: 5px; margin-top: 3px;" />
@@ -63,5 +62,45 @@
 			immediate="true" />
 	</h:panelGroup>
 </h:panelGroup>
+
+<script type="text/javascript">
+
+var urlElement;
+var lastImageIndex = 0;
+
+function showImage(obj) {
+	var numberResults = obj.ResultSet.totalResultsReturned; 
+	var randomNumber=Math.floor(Math.random()*numberResults);
+	var result = obj.ResultSet.Result[randomNumber];
+	urlElement.value= result.Url;
+	var imgContainer = document.getElementById('luckyImage');
+	var newImg;
+
+	if (!imgContainer.children[0]) {
+		newImg = document.createElement('img');
+		newImg.height = 80;
+		newImg.width = 120;
+	} else {
+		newImg = imgContainer.children[0];
+	}
+	newImg.src = result.Thumbnail.Url;
+	imgContainer.appendChild(newImg);
+}
+
+function yahooLucky(searchStringElement, url) {
+		urlElement = url;
+		var userinput = searchStringElement.value;
+	    var request = "http://api.search.yahoo.com/ImageSearchService/V1/imageSearch?appid=YahooDemo&amp;query="
+	                     + userinput
+	                     + "&amp;output=json&amp;callback=showImage";
+	    var head = document.getElementsByTagName("head").item(0);
+	    var script = document.createElement("script");
+	    script.setAttribute("type", "text/javascript");
+	    script.setAttribute("src", request);
+	    head.appendChild(script);
+}
+
+
+</script>
 
 </html>

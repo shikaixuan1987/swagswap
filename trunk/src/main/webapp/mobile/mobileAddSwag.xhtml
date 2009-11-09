@@ -13,6 +13,8 @@
 		<h:form enctype="multipart/form-data">
 			<f:metadata>
 				<f:viewParam name="lastPage" value="#{swagEditBean.lastPage}" />
+				<f:event type="preRenderView"
+					listener="#{swagEditBean.initialiseSwagItem}" />
 			</f:metadata>
 			<ui:include src="mobileEditAddSwagPanel.xhtml">
 				<ui:param name="title" value="New Swag Item" />

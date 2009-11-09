@@ -142,6 +142,7 @@ public class SwagSwapGWT implements EntryPoint {
 		//Top menu
 		HStack menuHStack= new HStack();
 		menuHStack.setHeight(25);
+		menuHStack.setWidth(200);
 		menuHStack.addMember(createLoginLogoutPanel());
 		 
 		//The rest
@@ -160,7 +161,7 @@ public class SwagSwapGWT implements EntryPoint {
 		});
 		
 		swagItemsVStack.setWidth(350);
-		swagItemsVStack.setHeight(600);
+		swagItemsVStack.setHeight(552);
 		swagItemsVStack.setBorder("1px solid #C0C3C7");
 		swagItemsVStack.setShowEdges(false);
 		swagItemsVStack.setCanDragResize(true);
@@ -183,6 +184,50 @@ public class SwagSwapGWT implements EntryPoint {
 	}
 
 	/**
+	 * SwagSwapGWT filter implementation.  Shows search box, executes
+	 * filter on keyPress which client-side searches a few fields of swagItems
+	 */
+	private DynamicForm createSearchBox() {
+		final DynamicForm filterForm = new DynamicForm();
+		filterForm.setNumCols(4);
+		filterForm.setAlign(Alignment.LEFT);
+		filterForm.setAutoFocus(false);
+		filterForm.setWidth("59%"); //make it line up with sort box
+		
+		filterForm.setDataSource(SmartGWTRPCDataSource.getInstance());
+		filterForm.setOperator(OperatorId.OR);
+		
+		//Visible search box
+		TextItem nameItem = new TextItem("name", "Search");
+		nameItem.setAlign(Alignment.LEFT);
+		nameItem.setOperator(OperatorId.ICONTAINS); // case insensitive
+		
+		//The rest are hidden and populated with the contents of nameItem
+		final HiddenItem companyItem = new HiddenItem("company");
+		companyItem.setOperator(OperatorId.ICONTAINS);
+		final HiddenItem ownerItem = new HiddenItem("ownerNickName");
+		ownerItem.setOperator(OperatorId.ICONTAINS);
+
+		filterForm.setFields(nameItem,companyItem,ownerItem);
+		
+		filterForm.addItemChangedHandler(new ItemChangedHandler() {
+			public void onItemChanged(ItemChangedEvent event) {
+				String searchTerm = filterForm.getValueAsString("name");
+				companyItem.setValue(searchTerm);
+				ownerItem.setValue(searchTerm);
+				if (searchTerm==null) {
+					itemsTileGrid.fetchData();
+				}
+				else {
+					Criteria criteria = filterForm.getValuesAsCriteria();
+					itemsTileGrid.fetchData(criteria);
+				}
+			}
+		});
+		return filterForm;
+	}
+	
+	/**
 	 * SwagSwapGWT-specific sort.  Sorts itemsTileGrid
 	 * 
 	 * See http://www.smartclient.com/smartgwt/showcase/#featured_tile_filtering
@@ -194,6 +239,7 @@ public class SwagSwapGWT implements EntryPoint {
 		sortForm.setNumCols(4); //2 labels + two inputs
 		sortForm.setAutoFocus(false);
 		sortForm.setWrapItemTitles(false);
+		sortForm.setWidth("80%");
 
 		SelectItem sortItem = new SelectItem("sortBy", "Sort By");
 
@@ -224,47 +270,6 @@ public class SwagSwapGWT implements EntryPoint {
 			}
 		});
 		return sortForm;
-	}
-
-	/**
-	 * SwagSwapGWT filter implementation.  Shows search box, executes
-	 * filter on keyPress which client-side searches a few fields of swagItems
-	 */
-	private DynamicForm createSearchBox() {
-		final DynamicForm filterForm = new DynamicForm();
-		filterForm.setNumCols(2);
-		filterForm.setAutoFocus(false);
-		
-		filterForm.setDataSource(SmartGWTRPCDataSource.getInstance());
-		filterForm.setOperator(OperatorId.OR);
-		
-		//Visible search box
-		TextItem nameItem = new TextItem("name", "Search");
-		nameItem.setOperator(OperatorId.ICONTAINS); // case insensitive
-		
-		//The rest are hidden and populated with the contents of nameItem
-		final HiddenItem companyItem = new HiddenItem("company");
-		companyItem.setOperator(OperatorId.ICONTAINS);
-		final HiddenItem ownerItem = new HiddenItem("ownerNickName");
-		ownerItem.setOperator(OperatorId.ICONTAINS);
-
-		filterForm.setFields(nameItem,companyItem,ownerItem);
-		
-		filterForm.addItemChangedHandler(new ItemChangedHandler() {
-			public void onItemChanged(ItemChangedEvent event) {
-				String searchTerm = filterForm.getValueAsString("name");
-				companyItem.setValue(searchTerm);
-				ownerItem.setValue(searchTerm);
-				if (searchTerm==null) {
-					itemsTileGrid.fetchData();
-				}
-				else {
-					Criteria criteria = filterForm.getValuesAsCriteria();
-					itemsTileGrid.fetchData(criteria);
-				}
-			}
-		});
-		return filterForm;
 	}
 
 	private TileGrid createItemsTileGrid() {
@@ -412,35 +417,36 @@ public class SwagSwapGWT implements EntryPoint {
 	
 	private HStack createLoginLogoutPanel() {
 		HStack loginPanel = new HStack();
-		loginPanel.setWidth100();
 		loginPanel.setHeight(20);
 		HStack logoutPanel = new HStack();
-		logoutPanel.setWidth100();
 		logoutPanel.setHeight(20);
 		
 		Label homeLabel = new Label("Home");
-		homeLabel.setIcon("/images/home.jpg");
+		homeLabel.setPrompt("Go back to the SwagSwap home page");
+		homeLabel.setStyleName("menu");
 		homeLabel.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				Window.open("/", "_self", ""); 
 			}
 		});
 		Label signOutLabel = new Label("Sign Out");
-		signOutLabel.setIcon("/images/exit.jpg");
+		signOutLabel.setStyleName("menu");
 		signOutLabel.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				Window.open(loginInfo.getLogoutUrl(), "_self", ""); 
 			}
 		});
 		Label signInLabel = new Label("Sign In");
-		signInLabel.setIcon("/images/key.jpg");
+		signInLabel.setPrompt("Sign in to your Google Account to add or rate items");
+		signInLabel.setStyleName("menu");
 		signInLabel.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				Window.open(loginInfo.getLoginUrl(), "_self", ""); 
 			}
 		});
 		Label addSwagLabel = new Label("Add Swag");
-		addSwagLabel.setIcon("/images/newAdd.png");
+		addSwagLabel.setPrompt("Add a Swag Item to SwagSwap!");
+		addSwagLabel.setStyleName("menu");
 		addSwagLabel.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				itemEditTitleLabel.setIcon(""); 
@@ -466,7 +472,7 @@ public class SwagSwapGWT implements EntryPoint {
 			logoutPanel.addMember(welcomeLabel);
 			return logoutPanel;
 		} else { //not logged in
-			logoutPanel.addMember(homeLabel);
+			loginPanel.addMember(homeLabel);
 			loginPanel.addMember(signInLabel);
 			return loginPanel;
 		}
@@ -644,10 +650,10 @@ public class SwagSwapGWT implements EntryPoint {
 		richTextEditor.setWidth(530);
 		richTextEditor.setOverflow(Overflow.HIDDEN);
 		richTextEditor.setCanDragResize(true);
-		richTextEditor.setShowEdges(true);
+		richTextEditor.setBorder("1px solid #C0C3C7");
 
 		IButton addCommentButton = new IButton();
-		addCommentButton.setTitle("Add Comment");
+		addCommentButton.setTitle("Save Comment");
 		addCommentButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				handleSubmitComment();
@@ -679,8 +685,9 @@ public class SwagSwapGWT implements EntryPoint {
 		commentsGrid.setFields(new ListGridField[] { nickNameField,
 				commentField, dateField });
 
-		commentsFormVStack.addMember(addCommentButton);
+		commentsFormVStack.setMembersMargin(10);  
 		commentsFormVStack.addMember(richTextEditor);
+		commentsFormVStack.addMember(addCommentButton);
 		
 		VStack commentsFormAndCommentsVStack = new VStack();
 		commentsFormAndCommentsVStack.addMember(commentsFormVStack);

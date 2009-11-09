@@ -125,7 +125,7 @@ public class SwagSwapGWT implements EntryPoint {
 		loginService.login(GWT.getHostPageBaseURL() + "SwagSwapGWT.html",
 			new AsyncCallback<LoginInfo>() {
 				public void onFailure(Throwable error) {
-					GWT.log("", error);
+					throw new RuntimeException("can't reach SwagSwap server", error);
 				}
 				public void onSuccess(LoginInfo result) {
 					loginInfo = result;
@@ -646,15 +646,16 @@ public class SwagSwapGWT implements EntryPoint {
 		commentsFormVStack = new VStack();
 
 		richTextEditor = new RichTextEditor();
-		richTextEditor.setHeight(155);
+		richTextEditor.setHeight(100);
 		richTextEditor.setWidth(530);
 		richTextEditor.setOverflow(Overflow.HIDDEN);
 		richTextEditor.setCanDragResize(true);
 		richTextEditor.setBorder("1px solid #C0C3C7");
 
-		IButton addCommentButton = new IButton();
-		addCommentButton.setTitle("Save Comment");
-		addCommentButton.addClickHandler(new ClickHandler() {
+		IButton saveCommentButton = new IButton();
+		saveCommentButton.setTitle("Save Comment");
+		saveCommentButton.setAutoFit(true); //make it stretch to the width of the button
+		saveCommentButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				handleSubmitComment();
 			}
@@ -664,7 +665,7 @@ public class SwagSwapGWT implements EntryPoint {
 		commentsGrid.setWrapCells(true);
 		commentsGrid.setFixedRecordHeights(false);
 		commentsGrid.setWidth(530);
-		commentsGrid.setHeight(350);
+		commentsGrid.setHeight(390);
 		commentsGrid.setShowAllRecords(true);
 		commentsGrid.setCanEdit(false);
 
@@ -685,9 +686,12 @@ public class SwagSwapGWT implements EntryPoint {
 		commentsGrid.setFields(new ListGridField[] { nickNameField,
 				commentField, dateField });
 
-		commentsFormVStack.setMembersMargin(10);  
+//		commentsFormVStack.setMembersMargin(10);  
 		commentsFormVStack.addMember(richTextEditor);
-		commentsFormVStack.addMember(addCommentButton);
+		commentsFormVStack.addMember(saveCommentButton);
+		Label commentsLabel = new Label("Comments:");
+		commentsLabel.setHeight(20);
+		commentsFormVStack.addMember(commentsLabel);
 		
 		VStack commentsFormAndCommentsVStack = new VStack();
 		commentsFormAndCommentsVStack.addMember(commentsFormVStack);

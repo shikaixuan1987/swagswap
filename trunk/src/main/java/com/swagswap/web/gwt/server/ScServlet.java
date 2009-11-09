@@ -49,8 +49,8 @@ public class ScServlet extends HttpServlet {
 
 		requestedURI = requestedURI.replaceAll("//", "/");
 
-		log.info("Requested URI '" + req.getRequestURI() + "' converted to '"
-				+ requestedURI + "'");
+//		log.info("Requested URI '" + req.getRequestURI() + "' converted to '"
+//				+ requestedURI + "'");
 
 		try {
 			resp.getOutputStream().write(
@@ -94,8 +94,8 @@ public class ScServlet extends HttpServlet {
 				}
 				in.close();
 				out.close();
-				log.info("Requested '" + requestedURI
-						+ "' found in zip file entry: " + entry.getName());
+//				log.info("Requested '" + requestedURI
+//						+ "' found in zip file entry: " + entry.getName());
 				return out.toByteArray();
 			}
 		}

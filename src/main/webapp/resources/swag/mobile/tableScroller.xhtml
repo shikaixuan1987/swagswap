@@ -16,16 +16,18 @@
 	<h:panelGrid layout="block" width="100%"
 		style="text-align: center; margin-top: 5px;">
 
-		<h:panelGroup layout="block" style="width: 100%;" >
-			<h:commandLink value="First" image="/images/left_on.gif"
+		<h:panelGroup layout="block" style="width: 100%;">
+			<h:commandLink value="&lt;&lt;" 
 				rendered="#{swagBean.swagTable.firstRow gt 0}"
-				action="#{swagBean.swagTable.actionPage}" style="padding-left:10px; padding-right: 10px">
+				action="#{swagBean.swagTable.actionPage}"
+				style="padding-left:10px; padding-right: 10px">
 				<f:setPropertyActionListener value="first"
 					target="#{swagBean.swagTable.page}" />
 				<f:ajax render="@form" />
 			</h:commandLink>
-			<h:commandLink value="Prev" action="#{swagBean.swagTable.actionPage}"
-				rendered="#{swagBean.swagTable.firstRow gt 0}" style="padding-left:10px; padding-right: 10px">
+			<h:commandLink value="&lt;" action="#{swagBean.swagTable.actionPage}"
+				rendered="#{swagBean.swagTable.firstRow gt 0}"
+				style="padding-left:10px; padding-right: 10px">
 				<f:setPropertyActionListener value="prev"
 					target="#{swagBean.swagTable.page}" />
 				<f:ajax render="@form" />
@@ -33,17 +35,18 @@
 
 			<ui:repeat value="#{swagBean.swagTable.swagList}"
 				step="#{swagBean.swagTable.rowsPerPage}" varStatus="index">
-					<h:commandLink
+				<h:commandLink
+					value="${fn:substringBefore((index.index + index.step) / index.step, '.')}"
+					action="#{swagBean.swagTable.actionPage}"
+					disabled="#{index.index == swagBean.swagTable.firstRow}"
+					style="padding-left:10px; padding-right: 10px">
+					<f:setPropertyActionListener
 						value="${fn:substringBefore((index.index + index.step) / index.step, '.')}"
-						action="#{swagBean.swagTable.actionPage}"
-						disabled="#{index.index == swagBean.swagTable.firstRow}" style="padding-left:10px; padding-right: 10px">
-						<f:setPropertyActionListener
-							value="${fn:substringBefore((index.index + index.step) / index.step, '.')}"
-							target="#{swagBean.swagTable.page}" />
-						<f:ajax render="@form" />
-					</h:commandLink>
+						target="#{swagBean.swagTable.page}" />
+					<f:ajax render="@form" />
+				</h:commandLink>
 			</ui:repeat>
-			<h:commandLink value="Next" action="#{swagBean.swagTable.actionPage}"
+			<h:commandLink value="&gt;" action="#{swagBean.swagTable.actionPage}"
 				rendered="#{(swagBean.swagTable.firstRow + swagBean.swagTable.rowsPerPage + 1) le swagBean.swagTable.tableSize}"
 				title="Next" style="padding-left:10px; padding-right: 10px">
 				<f:setPropertyActionListener value="next"
@@ -51,7 +54,10 @@
 				<f:ajax render="@form" />
 			</h:commandLink>
 
-			<h:commandLink action="#{swagBean.swagTable.actionPage}" value="Last" style="padding-left:10px; padding-right: 10px">
+			<h:commandLink
+				rendered="#{(swagBean.swagTable.firstRow + swagBean.swagTable.rowsPerPage +1) le swagBean.swagTable.tableSize}"
+				action="#{swagBean.swagTable.actionPage}" value="&gt;&gt;"
+				style="padding-left:10px; padding-right: 10px">
 				<f:setPropertyActionListener value="last"
 					target="#{swagBean.swagTable.page}" />
 				<f:ajax render="@form" />

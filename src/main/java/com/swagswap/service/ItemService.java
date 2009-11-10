@@ -16,6 +16,8 @@ public interface ItemService {
 
 	List<SwagItem> search(String queryString);
 
+	List<SwagItem> search(List<SwagItem> swagList, String queryString);
+
 	List<SwagItem> getAll();
 
 	List<SwagItem> findByTag(String searchString);
@@ -32,7 +34,7 @@ public interface ItemService {
 	SwagItem save(SwagItem swagItem) throws LoadImageFromURLException;
 
 	void saveFromEmail(SwagItem swagItem);
-	
+
 	void updateRating(Long swagItemKey, int computedRatingDifference,
 			boolean isNew);
 
@@ -42,6 +44,5 @@ public interface ItemService {
 
 	byte[] getImageDataFromURL(String imageURL)
 			throws LoadImageFromURLException, ImageTooLargeException;
-
 
 }

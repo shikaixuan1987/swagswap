@@ -12,8 +12,9 @@ tr hover {
 	}
 
 .error {
-	font-color: red;
+	color: red;
 	font-weight: bold;
+	margin-left: 5px;
 }
 
 .titleText {

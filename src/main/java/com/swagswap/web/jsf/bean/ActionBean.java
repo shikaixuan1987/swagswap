@@ -1,7 +1,6 @@
 package com.swagswap.web.jsf.bean;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -15,6 +14,8 @@ import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
+import com.swagswap.exceptions.InvalidSwagImageException;
+import com.swagswap.exceptions.LoadImageFromURLException;
 import com.swagswap.service.ItemService;
 import com.swagswap.service.SwagSwapUserService;
 import com.swagswap.web.jsf.model.SwagItemWrapper;
@@ -45,7 +46,7 @@ public class ActionBean {
 	private SwagBean swagBean;
 
 	private String lastPage;
-	
+
 	public ActionBean() {
 	}
 
@@ -74,7 +75,18 @@ public class ActionBean {
 	}
 
 	public String actionSaveItem() {
-		itemService.save(swagEditBean.getEditSwagItem().getSwagItem());
+
+		try {
+			itemService.save(swagEditBean.getEditSwagItem().getSwagItem());
+		} catch (LoadImageFromURLException e) {
+			swagEditBean.setUploadMessage("Failed to load image from URL");
+			return null;
+
+		} catch (InvalidSwagImageException e) {
+			swagEditBean.setUploadMessage("Image has an unsupported MIME type");
+			return null;
+		}
+
 		return actionBack();
 	}
 
@@ -88,7 +100,7 @@ public class ActionBean {
 		}
 
 		SwagItemComment comment = new SwagItemComment(key, swagSwapUserService
-				.getCurrentUser().getUserId(),swagSwapUserService
+				.getCurrentUser().getUserId(), swagSwapUserService
 				.getCurrentUser().getNickname(), newComment);
 		itemService.addComment(comment);
 		swagEditBean.setNewComment("");
@@ -144,9 +156,8 @@ public class ActionBean {
 		}
 	}
 
-
 	public String actionBack() {
-		
+
 		if (swagEditBean.getLastPage() == null) {
 			return "allSwag?faces-redirect=true";
 		}
@@ -212,7 +223,7 @@ public class ActionBean {
 		actionRateSwagFromTable();
 		// TODO. If rated table not null then ensure rated item is refreshed.
 		if (swagBean.getRatedTable() != null) {
-			List <SwagItem> itemlist=itemService.getAll();
+			List<SwagItem> itemlist = itemService.getAll();
 			populateRatedTable(itemlist);
 			populateNotRatedTable(itemlist);
 		}

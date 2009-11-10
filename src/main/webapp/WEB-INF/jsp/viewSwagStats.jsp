@@ -29,14 +29,14 @@
         	<display:column title="My Rating" >
         		<google-auth:isLoggedIn>
         		<a name="${topRated_current.key}"></a>
-        		<form:form action="/springmvc/rate#${topRated_current.key}" commandName="newRating-${topRated_current.key}" name="rateForm${topRated_current.key}" method="get">
+        		<form:form action="/springmvc/rate#${topRated_current.key}" commandName="newRating-${topRated_current.key}" name="rateFormTopRated${topRated_current.key}" method="get">
         			<form:hidden path="swagItemKey" />
         			<!-- can't use spring form:hidden tag here cause if userRating is empty, GAE blows up. 
         		     Spring seems to be doing something not-kosher for GAE when it populates a default value -->
              		<input type="hidden" name="userRating" /> <!-- this is used for javascript trick below -->
              		<center>
         			<swagItemRating:showRatingStars 
-        				rateFormName="rateForm${topRated_current.key}" 
+        				rateFormName="rateFormTopRated${topRated_current.key}" 
         				swagSwapUser="${swagSwapUser}" 
         				swagItemKey="${topRated_current.key}"/>
         			</center>
@@ -89,14 +89,14 @@
         	<display:column title="My Rating" >
         		<google-auth:isLoggedIn>
         		<a name="${mostRated_current.key}"></a>
-        		<form:form action="/springmvc/rate#${mostRated_current.key}" commandName="newRating-${mostRated_current.key}" name="rateForm${mostRated_current.key}" method="get">
+        		<form:form action="/springmvc/rate#${mostRated_current.key}" commandName="newRating-${mostRated_current.key}" name="rateFormMostRated${mostRated_current.key}" method="get">
         			<form:hidden path="swagItemKey" />
         			<!-- can't use spring form:hidden tag here cause if userRating is empty, GAE blows up. 
         		     Spring seems to be doing something not-kosher for GAE when it populates a default value -->
              		<input type="hidden" name="userRating" /> <!-- this is used for javascript trick below -->
              		<center>
         			<swagItemRating:showRatingStars 
-        				rateFormName="rateForm${mostRated_current.key}" 
+        				rateFormName="rateFormMostRated${mostRated_current.key}" 
         				swagSwapUser="${swagSwapUser}" 
         				swagItemKey="${mostRated_current.key}"/>
         			</center>
@@ -149,14 +149,14 @@
         	<display:column title="My Rating" >
         		<google-auth:isLoggedIn>
         		<a name="${mostCommented_current.key}"></a>
-        		<form:form action="/springmvc/rate#${mostCommented_current.key}" commandName="newRating-${mostCommented_current.key}" name="rateForm${mostCommented_current.key}" method="get">
+        		<form:form action="/springmvc/rate#${mostCommented_current.key}" commandName="newRating-${mostCommented_current.key}" name="rateFormMostCommented${mostCommented_current.key}" method="get">
         			<form:hidden path="swagItemKey" />
         			<!-- can't use spring form:hidden tag here cause if userRating is empty, GAE blows up. 
         		     Spring seems to be doing something not-kosher for GAE when it populates a default value -->
              		<input type="hidden" name="userRating" /> <!-- this is used for javascript trick below -->
              		<center>
         			<swagItemRating:showRatingStars 
-        				rateFormName="rateForm${mostCommented_current.key}" 
+        				rateFormName="rateFormMostCommented${mostCommented_current.key}" 
         				swagSwapUser="${swagSwapUser}" 
         				swagItemKey="${mostCommented_current.key}"/>
         			</center>

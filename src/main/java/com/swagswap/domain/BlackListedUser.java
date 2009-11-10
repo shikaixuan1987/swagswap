@@ -8,6 +8,10 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+/**
+ * This could just be an attribute of SwagSwapUser. Yeah it probably should be.
+ *
+ */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class BlackListedUser implements Serializable {
 	private static final long serialVersionUID = 1L;

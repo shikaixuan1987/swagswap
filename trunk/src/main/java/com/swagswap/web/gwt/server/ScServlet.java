@@ -61,6 +61,7 @@ public class ScServlet extends HttpServlet {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private byte[] getResourceFromCache(HttpServletResponse resp, String key)
 			throws CacheException, IOException {
 

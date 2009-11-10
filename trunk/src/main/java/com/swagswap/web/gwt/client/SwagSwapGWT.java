@@ -825,6 +825,7 @@ public class SwagSwapGWT implements EntryPoint {
 			imFeelingLuckyButton.hide();
 			tabSet.setTabTitle(0,"View Item");
 		}
+		tabSet.selectTab(0); //put it on the view/edit tab
 		itemEditTitleLabel.setIcon("/springmvc/showThumbnail/" + tileRecord.getAttribute("imageKey")); 
 		String itemName = tileRecord.getAttribute("name");
 		itemEditTitleLabel.setContents("<b>" + itemName + "</b>");

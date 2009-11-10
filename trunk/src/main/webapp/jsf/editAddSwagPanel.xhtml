@@ -16,7 +16,7 @@
 			<h:panelGroup>
 				<h:inputText value="#{swagEditBean.editSwagItem.swagItem.name}"
 					id="name" required="true" />
-				<h:message for="name" styleClass="error"/>	
+				<h:message for="name" styleClass="error" />
 			</h:panelGroup>
 			<swag:label value="Description" />
 			<h:inputText
@@ -43,8 +43,12 @@
 	<swag:panel title="Image" height="205px">
 		<h:panelGrid columns="2" style="vertical-align: middle">
 			<swag:label value="Image" />
-			<swagcomp:upload
-				value="#{swagEditBean.editSwagItem.swagItem.imageBytes}" />
+			<h:panelGroup>
+				<swagcomp:upload
+					value="#{swagEditBean.editSwagItem.swagItem.imageBytes}" />
+				<h:outputText value="#{swagEditBean.uploadMessage}"
+					styleClass="error" />
+			</h:panelGroup>
 			<h:panelGrid style="text-align: right; font-weight: bold;"
 				width="140px">
 				<h:outputText value="or" />

@@ -13,8 +13,11 @@
 		<h:panelGrid columns="2"
 			style="vertical-align: middle; background-color: white;">
 			<swag:label value="Name" />
-			<h:inputText value="#{swagEditBean.editSwagItem.swagItem.name}"
-				id="name" />
+			<h:panelGroup>
+				<h:inputText value="#{swagEditBean.editSwagItem.swagItem.name}"
+					id="name" required="true" />
+				<h:message for="name" styleClass="error"/>	
+			</h:panelGroup>
 			<swag:label value="Description" />
 			<h:inputText
 				value="#{swagEditBean.editSwagItem.swagItem.description}" size="75"

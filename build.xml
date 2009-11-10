@@ -116,6 +116,12 @@
 				<include name="**/*.gwt.xml"/>
 			</fileset>
 		</copy>
+		<!--for JSF message resources -->
+		<copy todir="${war.dir}/WEB-INF/classes">
+			<fileset dir="src/main/java/">
+				<include name="**/*.properties"/>
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="clean" description="Force a clean slate to rebuild">

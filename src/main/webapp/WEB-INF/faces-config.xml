@@ -6,6 +6,14 @@
 	version="2.0">
 	<application>
 
+		<locale-config>
+			<default-locale>en</default-locale>
+		</locale-config>
+		<message-bundle>
+			com.swagswap.web.jsf.messages.MessageResources
+		</message-bundle>
+
+
 		<variable-resolver>
 			org.springframework.web.jsf.DelegatingVariableResolver
 		</variable-resolver>

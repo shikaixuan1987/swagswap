@@ -14,6 +14,7 @@ import com.swagswap.domain.SwagStats;
 import com.swagswap.domain.SwagSwapUser;
 import com.swagswap.domain.SwagSwapUserStats;
 
+@SuppressWarnings("unchecked")
 public class SwagStatsServiceImpl implements SwagStatsService {
 
 	private static final Logger log = Logger
@@ -24,6 +25,13 @@ public class SwagStatsServiceImpl implements SwagStatsService {
 
 	@Autowired
 	private SwagSwapUserService swagSwapUserService;
+
+	private static final AverageRatingComparator AVERAGE_RATING_COMPARATOR = new AverageRatingComparator();
+	private static final MostRatedComparator MOST_RATED_COMPARATOR = new MostRatedComparator();
+	private static final MostCommentedComparator MOST_COMMENTED_COMPARATOR = new MostCommentedComparator();
+	private static final UserCreatedComparator USER_CREATED_COMPARATOR = new UserCreatedComparator();
+	private static final UserRatedComparator USER_RATED_COMPARATOR = new UserRatedComparator();
+	private static final UserCommentedComparator USER_COMMENTED_COMPARATOR = new UserCommentedComparator();
 
 	public SwagStatsServiceImpl() {
 		super();
@@ -54,7 +62,7 @@ public class SwagStatsServiceImpl implements SwagStatsService {
 	private List<SwagSwapUserStats> getItemsRatedPerUser(
 			List<SwagSwapUserStats> allUserStats) {
 		// Sort the stats list by userCreated
-		Collections.sort(allUserStats, new UserRatedComparator());
+		Collections.sort(allUserStats, USER_RATED_COMPARATOR);
 		// Get top 5 and return as new List
 		return new ArrayList<SwagSwapUserStats>(getTop5(allUserStats));
 	}
@@ -62,7 +70,7 @@ public class SwagStatsServiceImpl implements SwagStatsService {
 	private List<SwagSwapUserStats> getItemsCreatedPerUser(
 			List<SwagSwapUserStats> allUserStats) {
 		// Sort the stats list by userCreated
-		Collections.sort(allUserStats, new UserCreatedComparator());
+		Collections.sort(allUserStats, USER_CREATED_COMPARATOR);
 		// Get top 5 and return as new List
 		return new ArrayList<SwagSwapUserStats>(getTop5(allUserStats));
 	}
@@ -70,7 +78,7 @@ public class SwagStatsServiceImpl implements SwagStatsService {
 	private List<SwagSwapUserStats> getItemsCommentedPerUser(
 			List<SwagSwapUserStats> allUserStats) {
 		// Sort the stats list by userCreated
-		Collections.sort(allUserStats, new UserCommentedComparator());
+		Collections.sort(allUserStats, USER_COMMENTED_COMPARATOR);
 		// Get top 5 and return as new List
 		return new ArrayList<SwagSwapUserStats>(getTop5(allUserStats));
 	}
@@ -94,7 +102,8 @@ public class SwagStatsServiceImpl implements SwagStatsService {
 			userID = user.getGoogleID();
 			// Need to find all items with that ID. Hmmm...
 			for (SwagItem swagItem : swagList) {
-				if (swagItem.getOwnerGoogleID() != null && swagItem.getOwnerGoogleID().equals(userID)) {
+				if (swagItem.getOwnerGoogleID() != null
+						&& swagItem.getOwnerGoogleID().equals(userID)) {
 					createdItems++;
 				}
 				// Is this the most efficient way to do this? Probably not.
@@ -140,19 +149,19 @@ public class SwagStatsServiceImpl implements SwagStatsService {
 
 	private List<SwagItem> getTopRatedSwag(List<SwagItem> swagList) {
 		List<SwagItem> topRated = new ArrayList<SwagItem>(swagList);
-		Collections.sort(topRated, new AverageRatingComparator());
+		Collections.sort(topRated, AVERAGE_RATING_COMPARATOR);
 		return getTop5(topRated);
 	}
 
 	private List<SwagItem> getMostRatedSwag(List<SwagItem> swagList) {
 		List<SwagItem> mostRated = new ArrayList<SwagItem>(swagList);
-		Collections.sort(mostRated, new MostRatedComparator());
+		Collections.sort(mostRated, MOST_RATED_COMPARATOR);
 		return getTop5(mostRated);
 	}
 
 	private List<SwagItem> getMostCommentedSwag(List<SwagItem> swagList) {
 		List<SwagItem> mostCommented = new ArrayList<SwagItem>(swagList);
-		Collections.sort(mostCommented, new MostCommentedComparator());
+		Collections.sort(mostCommented, MOST_COMMENTED_COMPARATOR);
 		return getTop5(mostCommented);
 	}
 

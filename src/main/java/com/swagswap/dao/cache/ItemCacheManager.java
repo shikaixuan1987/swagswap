@@ -2,6 +2,7 @@ package com.swagswap.dao.cache;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -25,11 +26,13 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 	private SwagCacheManager swagCacheManager;
 
 	private ItemDao itemDao;
+	private static LastUpdatedComparator lastUpdatedComparator = new LastUpdatedComparator();
 
 	/**
 	 * Maintain list of cache keys for more efficient getAll()
 	 */
-	private List<Long> keyList = Collections.synchronizedList(new ArrayList<Long>());
+	private List<Long> keyList = Collections
+			.synchronizedList(new ArrayList<Long>());
 
 	public ItemCacheManager() {
 	}
@@ -58,19 +61,19 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 			swagCacheManager.getCache().put(swagItem.getKey(), swagItem);
 			keyList.add(swagItem.getKey());
 		}
-		
+
 		log.info(keyList.size() + " Swag Items inserted to cache");
 	}
 
 	public List<SwagItem> getAll() {
 
-		//  Get list of all values from cache in key value order
+		// Get list of all values from cache in key value order
 		SortedMap<Long, SwagItem> allItems = new TreeMap(swagCacheManager
 				.getCache().getAll(keyList));
 
 		List swagList = new ArrayList(allItems.values());
-		//  Reverse the original order so we see latest items first
-		Collections.reverse(swagList);
+		// Reverse the original order so we see latest items first
+		Collections.sort(swagList, lastUpdatedComparator);
 
 		return swagList;
 	}
@@ -169,6 +172,15 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 	public List<SwagItem> findByTag(String searchString) {
 		// TODO Implement this
 		return itemDao.findByTag(searchString);
+	}
+
+	private static class LastUpdatedComparator implements Comparator<SwagItem> {
+
+		public int compare(SwagItem swagItem1, SwagItem swagItem2) {
+			// Descending
+			return swagItem2.getLastUpdated().compareTo(
+					swagItem1.getLastUpdated());
+		}
 	}
 
 }

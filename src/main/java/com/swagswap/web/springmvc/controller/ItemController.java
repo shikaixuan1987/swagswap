@@ -28,12 +28,15 @@ import com.swagswap.domain.SearchCriteria;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
 import com.swagswap.domain.SwagItemRating;
+import com.swagswap.domain.SwagStats;
 import com.swagswap.domain.SwagSwapUser;
+import com.swagswap.domain.SwagSwapUserStats;
 import com.swagswap.exceptions.ImageTooLargeException;
 import com.swagswap.exceptions.InvalidSwagImageException;
 import com.swagswap.exceptions.InvalidSwagItemException;
 import com.swagswap.exceptions.LoadImageFromURLException;
 import com.swagswap.service.ItemService;
+import com.swagswap.service.SwagStatsService;
 import com.swagswap.service.SwagSwapUserService;
 
 @Controller
@@ -44,6 +47,8 @@ public class ItemController {
 	private ItemService itemService;
 	@Autowired
 	private SwagSwapUserService swagSwapUserService;
+	@Autowired
+	private SwagStatsService swagStatsService;
 	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String addHandler(Model model) {
@@ -109,6 +114,25 @@ public class ItemController {
 		model.addAttribute("newComment", new SwagItemComment(swagItem.getKey())); 
 		model.addAttribute("swagItem", swagItem);
 		return "viewRateSwagItem";
+	}
+	
+	@RequestMapping(value = "/viewSwagStats", method = RequestMethod.GET)
+	public String viewStatsHandler(Model model) {
+		SwagStats swagStats = swagStatsService.getSwagStats();
+		model.addAttribute("swagStats", swagStats);
+		//put SwagSwapUser (if there is one) into the model
+		if (swagSwapUserService.isUserLoggedIn()) {
+			//get swagSwapUser using email key from available google user
+			//we've got to create them here if they don't already exist in our DB
+			SwagSwapUser swagSwapUser = swagSwapUserService.findByEmailOrCreate();
+			model.addAttribute("swagSwapUser", swagSwapUser);
+		}
+		//add backing object for each possible new rating
+		for (SwagItem swagItem : swagStats.getAllTopRatedSwagItems()) {
+			model.addAttribute("newRating"+"-"+swagItem.getKey(), new SwagItemRating(swagItem.getKey())); 
+		}
+		//charts
+		return "viewSwagStats";
 	}
 	
 	@RequestMapping(value = "/delete/{key}", method = RequestMethod.GET)
@@ -179,7 +203,7 @@ public class ItemController {
 		}
 		return referer;
 	}
-
+	
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
 		binder.registerCustomEditor(String.class, new StringTrimmerEditor(false));

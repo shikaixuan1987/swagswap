@@ -88,22 +88,24 @@
           </tr>
       </table>
       </td>
-      <td width="30%">
-      <table>
-        <tr>
-          <td>Comments:</td>
-        </tr>
-        <tr>
-          <td id="comments">
-          <c:forEach var="comment" items="${swagItem.comments}">
-                ${comment.commentText}<br/>
-			 	[${comment.swagSwapUserNickname} <fmt:formatDate value="${comment.created}" pattern="dd/MM HH:mm" />]
-			 	<hr/>
-          </c:forEach>
-          </td>
-        </tr>
-      </table>
-      </td>
+        <c:if test="${not empty swagItem.key}">
+        <td width="30%">
+        <table>
+          <tr>
+            <td>Comments:</td>
+          </tr>
+            <tr>
+              <td id="comments">
+              <c:forEach var="comment" items="${swagItem.comments}">
+                    ${comment.commentText}<br/>
+    			 	[${comment.swagSwapUserNickname} <fmt:formatDate value="${comment.created}" pattern="dd/MM HH:mm" />]
+    			 	<hr/>
+              </c:forEach>
+              </td>
+            </tr>
+        </table>
+        </td>
+      </c:if>
     </tr>
   </table>
   <input type="submit" value="save" />

@@ -437,7 +437,7 @@ public class SwagSwapGWT implements EntryPoint {
 			}
 		});
 		Label signInLabel = new Label("Sign In");
-		signInLabel.setPrompt("Sign in to your Google Account to add or rate items");
+		signInLabel.setPrompt("Sign in to your Google Account to add or rate items. Your email will remain confidential");
 		signInLabel.setStyleName("menu");
 		signInLabel.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {

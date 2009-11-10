@@ -85,20 +85,29 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	// GAE doesn't support case-insensitive queries (yet)
+	// Easiest way to do it is to code our way out of it
 	public List<SwagItem> search(String queryString) {
-		return itemDao.search(queryString);
+		return search(itemDao.getAll(), queryString);
 	}
 
-	// compass wasn't working for me
-	/*
-	 * public Collection<SwagItem> search(String queryString) { CompassHits hits
-	 * =
-	 * swagSwapCompass.getCompass().openSearchSession().find("*"+queryString+"*"
-	 * ); Set<SwagItem> swagItems = new HashSet<SwagItem>(); for (int i = 0; i <
-	 * hits.length(); i++) { swagItems.add((SwagItem)hits.data(i));
-	 * 
-	 * } return swagItems; }
-	 */
+	public List<SwagItem> search(List<SwagItem> swagList, String queryString) {
+
+		List<SwagItem> searchResults = new ArrayList<SwagItem>();
+		//  Put all searchable fields into a StringBuffer and search it.
+		for (SwagItem swagItem : swagList) {
+			StringBuffer searchMe = new StringBuffer();
+			searchMe.append(swagItem.getName()+"/");
+			searchMe.append(swagItem.getDescription()+"/");
+			searchMe.append(swagItem.getCompany()+"/");
+			for (String tag : swagItem.getTags()) {
+				searchMe.append(tag+"/");
+			}
+			if (searchMe.toString().toUpperCase().contains(queryString.toUpperCase())) {
+				searchResults.add(swagItem);
+			}
+		}
+		return searchResults;
+	}
 
 	public List<SwagItem> getAll() {
 		return itemDao.getAll();
@@ -156,7 +165,7 @@ public class ItemServiceImpl implements ItemService {
 				filteredList.add(swagItem);
 			}
 		}
-	
+
 		return filteredList;
 	}
 

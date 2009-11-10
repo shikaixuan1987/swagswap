@@ -1,6 +1,5 @@
 package com.swagswap.web.jsf.servlet;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -47,6 +46,7 @@ public class SwagServletFilter implements Filter {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 

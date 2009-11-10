@@ -1,7 +1,6 @@
 package com.swagswap.web.jsf.bean;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -160,7 +159,8 @@ public class SwagTableImpl implements Serializable, SwagTable, SortableList {
 //	        sort(column, ascending, comparator);
 	    }
 
-	    public void sort(final String column, final boolean ascending, Comparator comparator) {
+	    @SuppressWarnings("unchecked")
+		public void sort(final String column, final boolean ascending, Comparator comparator) {
 	        // Check if column is null
 	        if (column == null)
 	            return;

@@ -98,6 +98,9 @@ public class SwagStats implements Serializable {
 	}
 	
 	private String chopLastSeperator(String string) {
+		if (string==null) {
+			return "";
+		}
 		return string.substring(0,string.length()-1);
 	}
 	

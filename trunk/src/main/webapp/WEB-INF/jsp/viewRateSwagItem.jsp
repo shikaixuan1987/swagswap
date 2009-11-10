@@ -11,24 +11,19 @@
   <!-- this is used for javascript trick below -->
   <table>
     <tr>
-    </tr>
-    <google-auth:isLoggedIn>
-      <tr>
-        <td><a href="/springmvc/search">Back</a></td>
-        <td>My Rating:</td>
-        <td><swagItemRating:showRatingStars rateFormName="rateForm"
-          userRating="${userRating}" /></td>
-        <td width="30%"></td>
-      </tr>
-    </google-auth:isLoggedIn>
+      <td><a href="/springmvc/search">Back</a></td>
+      <google-auth:isLoggedIn>
+          <td>My Rating:</td>
+          <td><swagItemRating:showRatingStars rateFormName="rateForm"
+            userRating="${userRating}" /></td>
+          <td width="30%"></td>
+      </google-auth:isLoggedIn>
     <google-auth:isNotLoggedIn>
-      <tr>
-        <td width="30%"></td>
         <td><google-auth:loginLogoutTag
           loginText="Login to rate items"
           requestURL="/springmvc/view/${swagItem.key}" /></td>
-      </tr>
     </google-auth:isNotLoggedIn>
+    </tr>
 
   </table>
 </form:form>
@@ -73,30 +68,39 @@
     <td width="30%">
     <table>
       <tr>
-        <td>Comments:
-        <form:form action="/springmvc/addComment" commandName="newComment" method="get">
-          <form:hidden path="swagItemKey" />
-          <form:input path="commentText" />
-          <input type="submit" value="add comment" />
-        </td>
-       </tr>
-       <tr>
-        </form:form>
-        <td id="comments">
-          <c:forEach var="comment" items="${swagItem.comments}">
-            ${comment.commentText}<br/>[${comment.swagSwapUserNickname} <fmt:formatDate value="${comment.created}" pattern="dd/MM HH:mm" />]
-            <hr/>
-          </c:forEach>
-        </td>
+        <google-auth:isLoggedIn>
+          <td>
+          <form:form action="/springmvc/addComment" commandName="newComment" method="get">
+            <form:hidden path="swagItemKey" />
+            <form:input path="commentText" />
+            <input type="submit" value="add comment" />
+          </form:form>
+          </td>
+        </google-auth:isLoggedIn>
+        <google-auth:isNotLoggedIn>
+            <td><google-auth:loginLogoutTag
+            loginText="Login to comment on items"
+            requestURL="/springmvc/view/${swagItem.key}" />
+            </td>
+        </google-auth:isNotLoggedIn>
+         </tr>
+         <tr>
+          <td id="comments">Comments:<br/><br/>
+            <c:forEach var="comment" items="${swagItem.comments}">
+              ${comment.commentText}<br/>[${comment.swagSwapUserNickname} <fmt:formatDate value="${comment.created}" pattern="dd/MM HH:mm" />]
+              <hr/>
+            </c:forEach>
+            <%--
+            <c:if test="${empty swagItem.comments}">
+             <div style="white-space: nowrap">No comments yet</div>
+            </c:if>
+             --%> 
+          </td>
       </tr>
     </table>
     </td>
   </tr>
 </table>
-<form:form method="post">
-  <input type="submit" value="cancel"
-    onclick="document.location.href='<c:url value='/springmvc/search'/>';return false;" />
-</form:form>
 
 <script>
 window.onload=formatStr(document.getElementById('comments'));

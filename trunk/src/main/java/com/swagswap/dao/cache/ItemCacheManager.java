@@ -26,7 +26,7 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 	private SwagCacheManager swagCacheManager;
 
 	private ItemDao itemDao;
-	private static LastUpdatedComparator lastUpdatedComparator = new LastUpdatedComparator();
+	private static LastUpdatedComparator LAST_UPDATED_COMPARATOR = new LastUpdatedComparator();
 
 	/**
 	 * Maintain list of cache keys for more efficient getAll()
@@ -73,7 +73,7 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 
 		List swagList = new ArrayList(allItems.values());
 		// Reverse the original order so we see latest items first
-		Collections.sort(swagList, lastUpdatedComparator);
+		Collections.sort(swagList, LAST_UPDATED_COMPARATOR);
 
 		return swagList;
 	}

@@ -1,8 +1,6 @@
 package com.swagswap.web.jsf.bean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -24,10 +22,17 @@ public class SwagEditBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private SwagItemWrapper editSwagItem;
 	private String newComment = "";
-
 	private Long selectedRowId;
-
 	private String lastPage;
+	private String uploadMessage = "";
+
+	public String getUploadMessage() {
+		return uploadMessage;
+	}
+
+	public void setUploadMessage(String uploadMessage) {
+		this.uploadMessage = uploadMessage;
+	}
 
 	public String getLastPage() {
 		return lastPage;

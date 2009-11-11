@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import com.swagswap.domain.SwagItem;
 import com.swagswap.web.jsf.model.SwagItemWrapper;

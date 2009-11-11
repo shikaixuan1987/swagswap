@@ -30,15 +30,6 @@
 		</component-class>
 	</component>
 
-	<render-kit>
-		<renderer>
-			<component-family>javax.faces.Input
-			</component-family>
-			<renderer-type>com.swagswap.web.jsf.component.UploadRenderer
-			</renderer-type>
-			<renderer-class>com.swagswap.web.jsf.component.UploadRenderer
-			</renderer-class>
-		</renderer>
-	</render-kit>
+	<!--   No need to define Renderer for component.  This is done in renderer class with annotations  -->
 
 </faces-config>

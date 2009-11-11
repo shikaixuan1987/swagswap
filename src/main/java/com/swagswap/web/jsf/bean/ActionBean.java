@@ -45,17 +45,11 @@ public class ActionBean {
 	@ManagedProperty(value = "#{swagBean}")
 	private SwagBean swagBean;
 
-	private String lastPage;
-
 	public ActionBean() {
 	}
 
 	public String getLastPage() {
-		return lastPage;
-	}
-
-	public void setLastPage(String lastPage) {
-		this.lastPage = lastPage;
+		return (FacesContext.getCurrentInstance().getViewRoot().getViewId());
 	}
 
 	public void setUserBean(UserBean userBean) {
@@ -116,7 +110,6 @@ public class ActionBean {
 	}
 
 	public void populateSwagList() {
-		lastPage = (FacesContext.getCurrentInstance().getViewRoot().getViewId());
 		SwagTable swagTable = swagBean.getSwagTable();
 		if (swagTable == null) {
 			swagTable = new SwagTableImpl();
@@ -131,7 +124,6 @@ public class ActionBean {
 	}
 
 	public void populateMySwagList() {
-		lastPage = (FacesContext.getCurrentInstance().getViewRoot().getViewId());
 		// TODO Refactor
 		SwagTable swagTable = swagBean.getSwagTable();
 		if (swagTable == null) {
@@ -157,7 +149,6 @@ public class ActionBean {
 	}
 
 	public String actionBack() {
-
 		if (swagEditBean.getLastPage() == null) {
 			return "allSwag?faces-redirect=true";
 		}

@@ -4,6 +4,8 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.swagswap.common.Fixture;
 import com.swagswap.common.LocalDatastoreTestCase;
+import com.swagswap.dao.ImageDao;
+import com.swagswap.dao.ImageDaoImpl;
 import com.swagswap.dao.ItemDao;
 import com.swagswap.dao.ItemDaoImpl;
 import com.swagswap.dao.UserDaoImpl;
@@ -17,6 +19,7 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
 	private UserDaoImpl userDao;
 	private SwagSwapUserService swagSwapUserService;
 	private ItemDao itemDao;
+	private ImageDao imageDao;
 	private ItemService itemService;
 	
 	@Override
@@ -32,8 +35,13 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
         	itemDao.setPersistenceManagerFactory(PMF);
         	this.itemDao=itemDao;
         }
+        if (imageDao == null) {
+        	ImageDaoImpl imageDao = new ImageDaoImpl();
+        	imageDao.setPersistenceManagerFactory(PMF);
+        	this.imageDao=imageDao;
+        }
         if (itemService==null) {
-        	itemService = new ItemServiceImpl(itemDao);
+        	itemService = new ItemServiceImpl(itemDao, imageDao);
         }
         if (swagSwapUserService==null) {
         	//This will give us a UserService based on the TestEnvironment class

@@ -108,10 +108,11 @@ public class SwagSwapGWT implements EntryPoint {
 	private ListGrid commentsGrid;
 	private VStack commentsFormVStack;
 	private RichTextEditor richTextEditor;
-	private DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd-MM-yy HH:MM");
+	private DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd-MM-yy HH:mm");
 	private Label itemEditTitleLabel;
 	private TabSet tabSet;
 	private Tab commentsTab;
+	private DynamicForm sortForm;
 	
 	/**
 	 * Check login status and build GUI
@@ -154,6 +155,7 @@ public class SwagSwapGWT implements EntryPoint {
 		DOM.setStyleAttribute(RootPanel.get("gwtApp").getElement(), "display", "none");
 		itemsTileGrid.fetchData(null, new DSCallback() {
 			public void execute(DSResponse response, Object rawData, DSRequest request) {
+				doSort();
 				DOM.setStyleAttribute(RootPanel.get("gwtApp").getElement(), "display", "block");
 				DOM.setInnerHTML(RootPanel.get("loading").getElement(),"");
 				DOM.setStyleAttribute(DOM.getElementById("loading"), "border", "0");
@@ -234,7 +236,7 @@ public class SwagSwapGWT implements EntryPoint {
 	 */
 	@SuppressWarnings("unchecked")
 	private DynamicForm createSortDropDown() {
-		final DynamicForm sortForm = new DynamicForm();
+		sortForm = new DynamicForm();
 		//styling
 		sortForm.setNumCols(4); //2 labels + two inputs
 		sortForm.setAutoFocus(false);
@@ -260,16 +262,20 @@ public class SwagSwapGWT implements EntryPoint {
 
 		sortForm.addItemChangedHandler(new ItemChangedHandler() {
 			public void onItemChanged(ItemChangedEvent event) {
-				String sortVal = sortForm.getValueAsString("sortBy");
-				Boolean sortDir = (Boolean) ascendingItem.getValue();
-				if (sortDir == null)
-					sortDir = false;
-				if (sortVal != null) {
-					itemsTileGrid.sortByProperty(sortVal, sortDir);
-				}
+				doSort();
 			}
 		});
 		return sortForm;
+	}
+	
+	private void doSort() {
+		String sortVal = sortForm.getValueAsString("sortBy");
+		Boolean sortDir = (Boolean) sortForm.getValue("chkSortDir");
+		if (sortDir == null)
+			sortDir = false;
+		if (sortVal != null) {
+			itemsTileGrid.sortByProperty(sortVal, sortDir);
+		}
 	}
 
 	private TileGrid createItemsTileGrid() {
@@ -529,6 +535,8 @@ public class SwagSwapGWT implements EntryPoint {
 				boundSwagForm.getField("isFetchOnly").setValue(false);
 				boundSwagForm.saveData();
 				handleSubmitComment(); //in case they commented while editing
+				//re-sort
+				doSort();
 				if (boundSwagForm.hasErrors()) {
 					Window.alert("" + boundSwagForm.getErrors());
 				} else {
@@ -828,7 +836,10 @@ public class SwagSwapGWT implements EntryPoint {
 		tabSet.selectTab(0); //put it on the view/edit tab
 		itemEditTitleLabel.setIcon("/springmvc/showThumbnail/" + tileRecord.getAttribute("imageKey")); 
 		String itemName = tileRecord.getAttribute("name");
-		itemEditTitleLabel.setContents("<b>" + itemName + "</b>");
+		String ownerNickName = tileRecord.getAttribute("ownerNickName");
+		Date lastUpdated = tileRecord.getAttributeAsDate("lastUpdated");
+		itemEditTitleLabel.setContents("<b>" + itemName + "</b> posted by: <b>"
+				+ ownerNickName + "</b> (" + dateFormatter.format(lastUpdated) + ")");
 		boundSwagForm.editRecord(tileRecord);
 		currentSwagImage.setSrc("/springmvc/showImage/" + tileRecord.getAttribute("imageKey"));  
 		currentSwagImage.setWidth(283);

@@ -42,5 +42,6 @@
 	<classpathentry kind="var" path="GWT_HOME"/>
 	<classpathentry kind="var" path="GWT_HOME/gwt-dev-windows.jar"/>
 	<classpathentry kind="var" path="GAE_HOME/lib/user/appengine-api-labs-1.2.6.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

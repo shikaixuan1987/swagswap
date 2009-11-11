@@ -87,7 +87,7 @@ public class ItemServiceImpl implements ItemService {
 	// GAE doesn't support case-insensitive queries (yet)
 	// Easiest way to do it is to code our way out of it
 	public List<SwagItem> search(String queryString) {
-		return itemDao.search(queryString);
+		return search(itemDao.getAll(), queryString);
 	}
 
 	public List<SwagItem> search(List<SwagItem> swagList, String queryString) {

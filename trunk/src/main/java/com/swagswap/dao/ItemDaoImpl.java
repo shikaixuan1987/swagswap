@@ -131,7 +131,6 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 //	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public void update(SwagItem updatedItem) {
 		SwagItem orig = get(updatedItem.getKey(),true);
-		orig.setLastUpdated(new Date());
 		orig.setName(updatedItem.getName());
 		orig.setCompany(updatedItem.getCompany());
 		orig.setDescription(updatedItem.getDescription());
@@ -148,6 +147,7 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 		//Tricky, this is for smartGWT impl that needs an updated average rating
 		updatedItem.setAverageRating(orig.getAverageRating());
 		updatedItem.setNumberOfRatings(orig.getNumberOfRatings());
+		updatedItem.setLastUpdated(orig.getLastUpdated());
 	}
 	
 	/**

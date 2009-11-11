@@ -87,7 +87,7 @@ public class ItemServiceImpl implements ItemService {
 	// GAE doesn't support case-insensitive queries (yet)
 	// Easiest way to do it is to code our way out of it
 	public List<SwagItem> search(String queryString) {
-		return search(itemDao.getAll(), queryString);
+		return itemDao.search(queryString);
 	}
 
 	public List<SwagItem> search(List<SwagItem> swagList, String queryString) {
@@ -165,7 +165,7 @@ public class ItemServiceImpl implements ItemService {
 				filteredList.add(swagItem);
 			}
 		}
-
+	
 		return filteredList;
 	}
 
@@ -265,9 +265,28 @@ public class ItemServiceImpl implements ItemService {
 	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public synchronized void updateRating(Long swagItemKey,
 			int computedRatingDifference, boolean isNewRating) {
-		itemDao
-				.updateRating(swagItemKey, computedRatingDifference,
-						isNewRating);
+		itemDao.updateRating(swagItemKey, computedRatingDifference,isNewRating);
+	}
+	
+	/**
+	 * Takes into account previous user rating and updates item average rating
+	 * @param previousRating can be null
+	 * @param newSwagItemRating
+	 */
+	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
+	public void recomputeAndRecordSwagItemAverageRating(Integer previousRatingValue, SwagItemRating newSwagItemRating) {
+		//start with new rating which will be used if this is their first rating of this item
+		int computedRatingDifference = newSwagItemRating.getUserRating().intValue(); 
+		boolean isNew=true;
+		//If they have a previous rating, calculate the difference and update the total item rating with that.
+		if (previousRatingValue!=null) {
+			if (previousRatingValue.equals(newSwagItemRating.getUserRating())) {
+				return; //they submitted the same rating as before
+			}
+			isNew=false;
+			computedRatingDifference=newSwagItemRating.getUserRating().intValue()-previousRatingValue.intValue();
+		}
+		updateRating(newSwagItemRating.getSwagItemKey(),computedRatingDifference,isNew);
 	}
 
 	public void delete(Long id) {
@@ -287,7 +306,7 @@ public class ItemServiceImpl implements ItemService {
 		// send the owner a mail
 		String subject = "Someone just commented on your swag item";
 		String msgBody = newComment.getSwagSwapUserNickname()
-				+ " said: "
+			+ " said: "
 				+ newComment.getCommentText()
 				+ "\n\n<br/><br/>See Your Item here: (Spring MVC impl) http://swagswap.appspot.com/springmvc/view/"
 				+ newComment.getSwagItemKey()

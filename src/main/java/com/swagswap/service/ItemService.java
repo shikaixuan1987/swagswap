@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
+import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagSwapUser;
 import com.swagswap.exceptions.ImageTooLargeException;
 import com.swagswap.exceptions.LoadImageFromURLException;
@@ -45,4 +46,11 @@ public interface ItemService {
 	byte[] getImageDataFromURL(String imageURL)
 			throws LoadImageFromURLException, ImageTooLargeException;
 
+	/**
+	 * Takes into account previous user rating and updates item average rating
+	 * @param previousRatingValue can be null if this is the first user rating for this item
+	 * @param newSwagItemRating
+	 */
+	void recomputeAndRecordSwagItemAverageRating(Integer previousRatingValue,
+			SwagItemRating newSwagItemRating);
 }

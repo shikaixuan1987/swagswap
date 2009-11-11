@@ -168,8 +168,6 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 			float computedTotalRating = 
 				(totalRatingPoints + computedRatingDifference) / orig.getNumberOfRatings();
 			orig.setAverageRating(computedTotalRating);
-			//This is bad for user experience (a rating doesn't warrant an new timestamp)
-//			orig.setLastUpdated(new Date()); 
 		}
 	}
 	

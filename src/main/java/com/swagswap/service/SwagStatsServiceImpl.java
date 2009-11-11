@@ -143,6 +143,7 @@ public class SwagStatsServiceImpl implements SwagStatsService {
 		return statsList;
 	}
 
+
 	private List getTop5(List bigList) {
 		return bigList.subList(0, bigList.size() > 5 ? 5 : bigList.size());
 	}

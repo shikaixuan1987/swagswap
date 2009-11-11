@@ -9,8 +9,7 @@
 	<c:if test="${empty searchCriteria.searchString}">
 		<h2>All Swag Items</h2>
 	</c:if>
-	
-	Note: Search is case sensitive, full word, and only on Name and Tags in this implementation
+  
 	<table>
 		<tr>
 			<td>

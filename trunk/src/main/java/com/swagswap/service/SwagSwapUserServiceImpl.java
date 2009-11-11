@@ -143,7 +143,7 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		swagSwapUser.getSwagItemRatings().add(newSwagItemRating);
 		
 		//update swagItem with new average rating
-		recomputeAndRecordSwagItemAverageRating(previousRatingValue, newSwagItemRating);
+		itemService.recomputeAndRecordSwagItemAverageRating(previousRatingValue, newSwagItemRating);
 	}
 	
 	public void blackListUser(String email) {
@@ -198,26 +198,6 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	/**
 	 * End Wrapped Google UserService methods
 	 */
-
-	/**
-	 * @param previousRating can be null
-	 * @param newSwagItemRating
-	 * TODO transaction requiresNew?
-	 */
-	private void recomputeAndRecordSwagItemAverageRating(Integer previousRatingValue, SwagItemRating newSwagItemRating) {
-		//start with new rating which will be used if this is their first rating of this item
-		int computedRatingDifference = newSwagItemRating.getUserRating().intValue(); 
-		boolean isNew=true;
-		//If they have a previous rating, calculate the difference and update the total item rating with that.
-		if (previousRatingValue!=null) {
-			if (previousRatingValue.equals(newSwagItemRating.getUserRating())) {
-				return; //they submitted the same rating as before
-			}
-			isNew=false;
-			computedRatingDifference=newSwagItemRating.getUserRating().intValue()-previousRatingValue.intValue();
-		}
-		itemService.updateRating(newSwagItemRating.getSwagItemKey(),computedRatingDifference,isNew);
-	}
 
 	// for DI
 	public void setGoogleUserService(UserService googleUserService) {

@@ -29,7 +29,6 @@ public interface SwagSwapUserService {
 	
 	boolean isItemOwner(SwagItem item);
 	
-	
 	void blackListUser(String email);
 	
 	void optOut(String googleID, boolean optOut);

@@ -20,13 +20,11 @@ import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
  * which is needed by GWT since it does an async call onModuleLoad and holds
  * this LoginInfo object for subsequent use. LoginInfo wraps SwagswapUser
  * 
- * @author sam
  * 
  */
 public class LoginServiceImpl extends AutoinjectingRemoteServiceServlet
 		implements LoginService {
 
-	// HttpSession key
 	private SwagSwapUserService swagSwapUserService;
 
 	@Autowired

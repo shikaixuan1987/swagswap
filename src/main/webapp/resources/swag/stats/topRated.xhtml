@@ -13,11 +13,12 @@
 </composite:interface>
 
 <composite:implementation>
-	<swag:panel title="Top Rated Swag"  height="#{cc.attrs.height}"
+	<swag:panel title="Top Rated Swag" height="#{cc.attrs.height}"
 		style="#{cc.attrs.style}" headerColor="white">
 		<h:dataTable value="#{swagStatsBean.swagStats.topRated}" var="row"
 			width="100%" rules="none" rowClasses="tableRow1, tableRow2"
 			columnClasses="colWidth100" cellpadding="4"
+			onclick="selectRow(this, event, 'btnViewSwag');"
 			onmouseover="changeto(this,event,'tableRowHover');"
 			onmouseout="changeback(this,event);">
 			<h:column>
@@ -26,6 +27,11 @@
 			<h:column>
 				<h:panelGroup id="averageRating">
 					<swag:stars value="#{row.averageRating}" disabled="true" />
+					<h:button id="btnViewSwag" image="/images/view.gif"
+						outcome="viewSwag" style="display: none;">
+						<f:param name="swagItemKey" value="#{row.key}" />
+						<f:param name="lastPage" value="#{actionBean.lastPage}" />
+					</h:button>
 				</h:panelGroup>
 			</h:column>
 		</h:dataTable>

@@ -91,7 +91,9 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	public List<SwagItem> search(List<SwagItem> swagList, String queryString) {
-
+		if (queryString==null) {
+			return swagList;
+		}
 		List<SwagItem> searchResults = new ArrayList<SwagItem>();
 		//  Put all searchable fields into a StringBuffer and search it.
 		for (SwagItem swagItem : swagList) {

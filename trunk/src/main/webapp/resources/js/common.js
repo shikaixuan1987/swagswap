@@ -14,8 +14,52 @@ function findElementInForm(form, id) {
 }
 
 
+function selectRow(table, event, btnID) {
+	var target=event.target;
 
+	// IE support.
+	event = event || window.event;            
+	target = event.target || event.srcElement; 
+	
+	if (target) {	
+		if (target.tagName=="INPUT" || target.tagName=="input") {
+			return;
+		}
+		var tagName=target.tagName;
+		if (tagName=="TR" || tagName=="TABLE"){
+			return;
+		}
+		
+		var row = findRow(table, target);
+		var button = findButton(row, btnID);
+		if (button) {
+			button.click();
+		}
+	}
+}
+	
 
+function findButton(row, btnID) {
+
+	if (!row) {
+		return;
+	}
+
+	var elements;
+	if (row.all) {
+		// IE
+		elements = row.all;
+	} else {
+		elements = row.getElementsByTagName("input");
+	}
+
+	for (var i = 0; i < elements.length; i++) {
+		var element = elements[i];
+		if (element.id && (element.id.indexOf(btnID) > -1)) {
+			return element;
+		}
+	}
+}
 
 
 

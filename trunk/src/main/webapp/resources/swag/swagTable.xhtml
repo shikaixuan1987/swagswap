@@ -20,6 +20,7 @@
 			columnClasses="tableCol1, tableCol2, tableCol4, tableCol7, tableCol5, tableCol6, tableCol5,  tableCol8"
 			onmouseover="changeto(this,event,'tableRowHover');"
 			onmouseout="changeback(this,event);" cellpadding="4"
+			onclick="selectRow(this, event, 'btnViewSwag');"
 			rows="#{swagBean.swagTable.rowsPerPage}"
 			first="#{swagBean.swagTable.firstRow}">
 			<h:column headerClass="tableHeader">
@@ -90,7 +91,7 @@
 					<h:outputText value="Action" />
 				</f:facet>
 				<h:panelGrid cellPadding="0" cellspacing="0" columns="3">
-					<h:button image="/images/view.gif" outcome="viewSwag">
+					<h:button id="btnViewSwag" image="/images/view.gif" outcome="viewSwag" style="display: none;">
 						<f:param name="swagItemKey" value="#{row.swagItem.key}" />
 						<f:param name="lastPage" value="#{actionBean.lastPage}" />
 					</h:button>

@@ -208,7 +208,9 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		if (!isUserLoggedIn()) {
 			return false;
 		}
-		return (getCurrentUser().getNickname().equals(item.getOwnerNickName()));
+		//TODO nickname needs to come from swagswap user if we want users to
+		//be able to change their nickname
+		return item.getOwnerNickName().equals(getCurrentUser().getNickname());
 	}
 
 }

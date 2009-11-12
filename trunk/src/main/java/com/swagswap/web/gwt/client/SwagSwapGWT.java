@@ -434,6 +434,7 @@ public class SwagSwapGWT implements EntryPoint {
 					tabSet.removeTab(commentsTab);
 				}
 				itemsTileGrid.deselectAllRecords();
+				boundSwagForm.enable();
 				boundSwagForm.getField("name").focusInItem();
 				boundSwagForm.editNewRecord();
 			}

@@ -71,18 +71,6 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 	@Override
 	protected void executeFetch(final String requestId,
 			final DSRequest request, final DSResponse response) {
-		// This can be used as parameter for server side sorting.
-		// request.getSortBy ();
-
-		// Finding which rows were requested
-		// Normaly these two indexes should be passed to server
-		// but for this example I will do "paging" on client side
-		// final int startIndex = (request.getStartRow () <
-		// 0)?0:request.getStartRow ();
-		final int startIndex = 0;
-		// final int endIndex = (request.getEndRow () ==
-		// null)?-1:request.getEndRow ();
-		final int endIndex = -1;
 		ItemServiceGWTWrapperAsync service = GWT
 				.create(ItemServiceGWTWrapper.class);
 		service.fetch(new AsyncCallback<List<SwagItemGWTDTO>>() {
@@ -90,34 +78,18 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 				response.setStatus(RPCResponse.STATUS_FAILURE);
 				processResponse(requestId, response);
 			}
-
 			public void onSuccess(List<SwagItemGWTDTO> result) {
-				// Calculating size of return list
 				int size = result.size();
-				// if (endIndex >= 0) {
-				// if (endIndex < startIndex) {
-				// size = 0;
-				// }
-				// else {
-				// size = endIndex - startIndex + 1;
-				// }
-				// }
 				// Create list for return - it is just requested records
 				TileRecord[] list = new TileRecord[size];
 				if (size > 0) {
 					for (int i = 0; i < result.size(); i++) {
-						// no paging
-						// if (endIndex >0 && (i >= startIndex && i <=
-						// endIndex)) {
 						TileRecord record = new TileRecord();
 						copyValues(result.get(i), record);
-						list[i - startIndex] = record;
-						// }
+						list[i] = record;
 					}
 				}
 				response.setData(list);
-				// IMPORTANT: for paging to work we have to specify size of full
-				// result set
 				response.setTotalRows(result.size());
 				processResponse(requestId, response);
 			}
@@ -178,6 +150,11 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		
 	}
 
+	/**
+	 * 
+	 * Used to trick the browser cache
+	 *
+	 */
 	final class UpdateOrFetchCallback implements AsyncCallback<SwagItemGWTDTO> {
 		private final String requestId;
 		private final DSResponse response;
@@ -186,17 +163,15 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 			this.requestId = requestId;
 			this.response = response;
 		}
-
+		
 		public void onFailure(Throwable caught) {
 			throw new RuntimeException(caught);
-			// response.setStatus(RPCResponse.STATUS_FAILURE);
-			// processResponse(requestId, response);
 		}
-
+		
 		public void onSuccess(SwagItemGWTDTO result) {
 			TileRecord[] list = new TileRecord[1];
 			TileRecord updRec = new TileRecord();
-			//Trick the cache so that the image upates in the TileGrid
+			//Trick the cache so that the image updates in the TileGrid
 			result.setImageKey(appendRandomQueryString(result.getImageKey()));
 			copyValues(result, updRec);
 			list[0] = updRec;

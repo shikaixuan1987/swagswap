@@ -177,12 +177,16 @@ public class SwagSwapGWT implements EntryPoint {
 		itemsEditCommentsHStack.addMember(swagItemsVStack);
 //		addImageUpload(itemsAndEditHStack);
 		itemsEditCommentsHStack.addMember(createEditForm());
+		itemsEditCommentsHStack.setHeight(720);
 		
-		VStack mainStack = new VStack(20);
+		VStack mainStack = new VStack();
+		//vertical scrolling if browser window is too small
+		mainStack.setOverflow(Overflow.AUTO); 
 		mainStack.setWidth100();
+		mainStack.setHeight100();
 		mainStack.addMember(menuHStack);
 		mainStack.addMember(itemsEditCommentsHStack);
-
+		
 		RootPanel.get("gwtApp").add(mainStack); //anchored on GWT html page
 
 		mainStack.draw();

@@ -152,13 +152,16 @@ public class SwagSwapGWT implements EntryPoint {
 		swagItemsVStack.addMember(createSortDropDown());
 		swagItemsVStack.addMember(createItemsTileGrid());
 		
+		//hide app until data has loaded
 		DOM.setStyleAttribute(RootPanel.get("gwtApp").getElement(), "display", "none");
 		itemsTileGrid.fetchData(null, new DSCallback() {
 			public void execute(DSResponse response, Object rawData, DSRequest request) {
 				doSort();
-				DOM.setStyleAttribute(RootPanel.get("gwtApp").getElement(), "display", "block");
+				//hide loading div and it's border
 				DOM.setInnerHTML(RootPanel.get("loading").getElement(),"");
 				DOM.setStyleAttribute(DOM.getElementById("loading"), "border", "0");
+				//show app
+				DOM.setStyleAttribute(RootPanel.get("gwtApp").getElement(), "display", "block");
 			}
 		});
 		
@@ -169,7 +172,7 @@ public class SwagSwapGWT implements EntryPoint {
 		swagItemsVStack.setCanDragResize(true);
 		swagItemsVStack.setShowResizeBar(true);
 		
-		//Pit itemsTileGrid next to createEditComments
+		//Put itemsTileGrid next to createEditComments
 		HStack itemsEditCommentsHStack = new HStack();
 		itemsEditCommentsHStack.addMember(swagItemsVStack);
 //		addImageUpload(itemsAndEditHStack);
@@ -295,9 +298,6 @@ public class SwagSwapGWT implements EntryPoint {
 		itemsTileGrid.setAutoFetchData(false);
 
 		DetailViewerField imageField = new DetailViewerField("imageKey");
-//		imageField.setImageWidth(62);
-//		imageField.setImageHeight(50);
-
 		DetailViewerField name = new DetailViewerField("name");
 		DetailViewerField company = new DetailViewerField("company");
 		DetailViewerField ownerNickName = new DetailViewerField("ownerNickName");
@@ -322,23 +322,19 @@ public class SwagSwapGWT implements EntryPoint {
 			}
 		}
 		);
-		
 		itemsTileGrid.setFields(imageField, name, company ,ownerNickName, 
 				averageRating, lastUpdated);
-		
 		itemsTileGrid.addRecordClickHandler(new RecordClickHandler() {
-
 			public void onRecordClick(RecordClickEvent event) {
 				SwagItemGWTDTO dto = new SwagItemGWTDTO();
 				SmartGWTRPCDataSource.copyValues(event.getRecord(),dto);
 				prepareAndShowEditForm(event.getRecord());
 			}
 		});
-		
 		return itemsTileGrid;
 	}
 	
-	public void addImageUpload(HStack hStack) {
+/*	public void addImageUpload(HStack hStack) {
 		//create a hidden frame
 		Canvas iframe = new Canvas();
 		iframe.setID("fileUploadFrame");
@@ -382,36 +378,8 @@ public class SwagSwapGWT implements EntryPoint {
 
 		hStack.addMember(uploadForm);
 		hStack.addMember(iframe);
-	}
+	}*/
 	
-/*	public void addImageUploadForm(HStack hStack) {
-		FormPanel imageUploadForm = new FormPanel();
-		imageUploadForm.setAction("/imageUploadServlet"); // onze image fileupload servlet in het server project
-		
-		// Because we're going to add a FileUpload widget, we'll need to set the
-		// form to use the POST method, and multipart MIME encoding.
-		imageUploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
-		imageUploadForm.setMethod(FormPanel.METHOD_POST);
-		
-		final FileUpload afbeeldingImageValue = new FileUpload();
-		afbeeldingImageValue.setName("uploadFormElement");
-		
-		imageUploadForm.setWidget(afbeeldingImageValue);
-		
-		imageUploadForm.addFormHandler(new FormHandler() {
-			public void onSubmit(FormSubmitEvent event) {
-				if (afbeeldingImageValue.getFilename().contains(" ")) {
-					Window.alert("Er mag geen spaties zijn in de naam.");
-					event.setCancelled(true);
-				}
-			}
-			public void onSubmitComplete(FormSubmitCompleteEvent event) {
-				// TODO: Maybe we can try to refresh here, so that the picture is available right away, instead of after a second visit.
-			}
-		});
-		hStack.addMember(imageUploadForm);
-	}
-*/	
 	public String createStarsHTMLString(float rating) {
 		int roundedRating = Math.round(rating);
 		StringBuilder s = new StringBuilder();
@@ -690,11 +658,9 @@ public class SwagSwapGWT implements EntryPoint {
 				return dateFormatter.format((Date)value);
 			}
 		});
-
 		commentsGrid.setFields(new ListGridField[] { nickNameField,
 				commentField, dateField });
 
-//		commentsFormVStack.setMembersMargin(10);  
 		commentsFormVStack.addMember(richTextEditor);
 		commentsFormVStack.addMember(saveCommentButton);
 		Label commentsLabel = new Label("Comments:");
@@ -706,7 +672,6 @@ public class SwagSwapGWT implements EntryPoint {
 		commentsFormAndCommentsVStack.addMember(commentsGrid);
 		commentsFormVStack.hide();
 		commentsGrid.hide();
-//		commentsFormAndCommentsVStack.hide();
 		return commentsFormAndCommentsVStack;
 	}
 	
@@ -989,7 +954,6 @@ public class SwagSwapGWT implements EntryPoint {
 								.getValuesAsCriteria());
 					}
 				});
-
 		imageResultsGrid
 				.addRecordClickHandler(new com.smartgwt.client.widgets.grid.events.RecordClickHandler() {
 					public void onRecordClick(
@@ -1036,7 +1000,6 @@ public class SwagSwapGWT implements EntryPoint {
 		return winModal;
 	}
 	
-	
 	private void setUncaughtExceptionHandler() {
 		// better exception handling
 		GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
@@ -1054,5 +1017,4 @@ public class SwagSwapGWT implements EntryPoint {
 			}
 		});
 	}
-
 }

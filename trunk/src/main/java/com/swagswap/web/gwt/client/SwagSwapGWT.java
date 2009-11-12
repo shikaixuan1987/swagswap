@@ -156,7 +156,6 @@ public class SwagSwapGWT implements EntryPoint {
 		DOM.setStyleAttribute(RootPanel.get("gwtApp").getElement(), "display", "none");
 		itemsTileGrid.fetchData(null, new DSCallback() {
 			public void execute(DSResponse response, Object rawData, DSRequest request) {
-				doSort();
 				//hide loading div and it's border
 				DOM.setInnerHTML(RootPanel.get("loading").getElement(),"");
 				DOM.setStyleAttribute(DOM.getElementById("loading"), "border", "0");

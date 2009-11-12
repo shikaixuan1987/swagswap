@@ -20,12 +20,12 @@
       <table>
         <tr>
           <td>Name:</td>
-          <td><form:input path="name" /> <font color="red"><form:errors
+          <td><form:input path="name" maxlength="30"/> <font color="red"><form:errors
             path="name" /></font></td>
         </tr>
         <tr>
           <td>Description:</td>
-          <td><form:input path="description" size="70" /></td>
+          <td><form:input path="description" size="70" maxlength="100"/></td>
           <tr>
             <td>Created:</td>
             <td><fmt:formatDate value="${swagItem.created}" pattern="dd/MM HH:mm" /></td>
@@ -36,14 +36,14 @@
           </tr>
           <tr>
             <td>Tags:</td>
-            <td><form:input path="tags[0]" /> <form:input
-              path="tags[1]" /> <br />
-            <form:input path="tags[2]" /> <form:input path="tags[3]" />
+            <td>
+            <form:input path="tags[0]" maxlength="15"/><form:input path="tags[1]" maxlength="15" /> <br />
+            <form:input path="tags[2]" maxlength="15" /><form:input path="tags[3]" maxlength="15"/>
             </td>
           </tr>
           <tr>
             <td>Company/Vendor:</td>
-            <td><form:input path="company" /></td>
+            <td><form:input path="company" maxlength="20"/></td>
           </tr>
           <tr>
             <td>Current Image:</td>

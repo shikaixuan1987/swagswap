@@ -137,7 +137,7 @@
 	<servlet>
 		<servlet-name>smartGWTItemServiceWrapper</servlet-name>
 		<servlet-class>
-			com.swagswap.web.gwt.server.SmartGWTItemServiceWrapperImpl</servlet-class>
+			com.swagswap.web.gwt.server.ItemServiceGWTWrapperImpl</servlet-class>
 	</servlet>
 
 	<!-- SmartGWT static resources servlet -->

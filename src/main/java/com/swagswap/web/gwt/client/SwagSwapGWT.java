@@ -83,8 +83,8 @@ import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 public class SwagSwapGWT implements EntryPoint {
 
 	//services
-	private final SmartGWTItemServiceWrapperAsync itemService = GWT
-		.create(SmartGWTItemServiceWrapper.class);
+	private final ItemServiceGWTWrapperAsync itemService = GWT
+		.create(ItemServiceGWTWrapper.class);
 	private LoginServiceAsync loginService = GWT.create(LoginService.class);
 	
 	//client state

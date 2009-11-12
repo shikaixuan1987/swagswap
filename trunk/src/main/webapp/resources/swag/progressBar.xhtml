@@ -24,9 +24,9 @@
 		<c:set var="color"
 			value="#{(cc.attrs.value1 / cc.attrs.value2) gt 0 ? 'red' : color}" />
 		<c:set var="color"
-			value="#{(cc.attrs.value1 / cc.attrs.value2) ge 0.33 ? 'yellow' : color}" />
+			value="#{(cc.attrs.value1 / cc.attrs.value2) ge 0.10 ? 'yellow' : color}" />
 		<c:set var="color"
-			value="#{(cc.attrs.value1 / cc.attrs.value2) ge 0.66 ? 'limegreen' : color}" />
+			value="#{(cc.attrs.value1 / cc.attrs.value2) ge 0.50 ? 'limegreen' : color}" />
 		<c:set var="color"
 			value="#{(cc.attrs.value1 / cc.attrs.value2) ge 1 ? ' #FF8800' : color}" />
 	</c:if>

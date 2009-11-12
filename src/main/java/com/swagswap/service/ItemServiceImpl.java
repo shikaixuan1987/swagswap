@@ -161,7 +161,7 @@ public class ItemServiceImpl implements ItemService {
 		if (swagList == null || googleID == null) {
 			return filteredList;
 		}
-		for (SwagItem swagItem : filteredList) {
+		for (SwagItem swagItem : swagList) {
 			if (swagItem.getOwnerGoogleID() != null
 					&& swagItem.getOwnerGoogleID().equals(googleID)) {
 				filteredList.add(swagItem);

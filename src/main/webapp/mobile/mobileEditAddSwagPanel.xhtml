@@ -16,27 +16,27 @@
 		style="vertical-align: middle; background-color: white;">
 		<mobile:label value="Name" />
 		<h:inputText value="#{swagEditBean.editSwagItem.swagItem.name}"
-			id="name" />
+			id="name" maxlength="30" />
 		<mobile:label value="Description" />
 		<h:inputText value="#{swagEditBean.editSwagItem.swagItem.description}"
 			size="25" maxLength="100" />
 		<mobile:label value="Company" />
-		<h:inputText value="#{swagEditBean.editSwagItem.swagItem.company}" />
+		<h:inputText value="#{swagEditBean.editSwagItem.swagItem.company}" maxlength="20"/>
 		<mobile:label value="Tags" />
 		<h:inputText value="#{swagEditBean.editSwagItem.swagItem.tags[0]}"
-			size="15" style="margin-right: 5px" />
+			size="15" style="margin-right: 5px" maxlength="15"/>
 
 		<h:panelGroup />
 		<h:inputText value="#{swagEditBean.editSwagItem.swagItem.tags[1]}"
-			size="15" style="margin-right: 5px" />
+			size="15" style="margin-right: 5px" maxlength="15"/>
 
 		<h:panelGroup />
 		<h:inputText value="#{swagEditBean.editSwagItem.swagItem.tags[2]}"
-			size="15" style="margin-right: 5px" />
+			size="15" style="margin-right: 5px" maxlength="15"/>
 
 		<h:panelGroup />
 		<h:inputText value="#{swagEditBean.editSwagItem.swagItem.tags[3]}"
-			size="15" />
+			size="15" maxlength="15"/>
 	</h:panelGrid>
 
 

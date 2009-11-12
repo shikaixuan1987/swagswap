@@ -435,6 +435,9 @@ public class SwagSwapGWT implements EntryPoint {
 				}
 				itemsTileGrid.deselectAllRecords();
 				boundSwagForm.enable();
+				editButtonsLayout.show();
+				imFeelingLuckyButton.show();
+				
 				boundSwagForm.getField("name").focusInItem();
 				boundSwagForm.editNewRecord();
 			}
@@ -471,13 +474,20 @@ public class SwagSwapGWT implements EntryPoint {
 
 		HiddenItem keyItem = new HiddenItem("key");
 		TextItem nameItem = new TextItem("name");
+		nameItem.setLength(50);
 		nameItem.setSelectOnFocus(true);
 		TextItem companyItem = new TextItem("company");
+		companyItem.setLength(20);
 		TextItem descriptionItem = new TextItem("description");
+		descriptionItem.setLength(100);
 		TextItem tag1Item = new TextItem("tag1");
+		tag1Item.setLength(15);
 		TextItem tag2Item = new TextItem("tag2");
+		tag2Item.setLength(15);
 		TextItem tag3Item = new TextItem("tag3");
+		tag3Item.setLength(15);
 		TextItem tag4Item = new TextItem("tag4");
+		tag4Item.setLength(15);
 		
 		StaticTextItem isFetchOnlyItem = new StaticTextItem("isFetchOnly");
 		isFetchOnlyItem.setVisible(false);

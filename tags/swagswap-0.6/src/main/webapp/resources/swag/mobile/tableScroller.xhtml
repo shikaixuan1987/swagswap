@@ -1,0 +1,79 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<composite:interface>
+	<composite:attribute name="tableSize" />
+</composite:interface>
+
+<composite:implementation>
+	<h:panelGrid layout="block" width="100%"
+		style="text-align: center; margin-top: 5px;">
+
+		<h:panelGroup layout="block" style="width: 100%;">
+			<h:commandLink value="&lt;&lt;" 
+				rendered="#{swagBean.swagTable.firstRow gt 0}"
+				action="#{swagBean.swagTable.actionPage}"
+				style="padding-left:10px; padding-right: 10px">
+				<f:setPropertyActionListener value="first"
+					target="#{swagBean.swagTable.page}" />
+				<f:ajax render="@form" />
+			</h:commandLink>
+			<h:commandLink value="&lt;" action="#{swagBean.swagTable.actionPage}"
+				rendered="#{swagBean.swagTable.firstRow gt 0}"
+				style="padding-left:10px; padding-right: 10px">
+				<f:setPropertyActionListener value="prev"
+					target="#{swagBean.swagTable.page}" />
+				<f:ajax render="@form" />
+			</h:commandLink>
+
+			<ui:repeat value="#{swagBean.swagTable.swagList}"
+				step="#{swagBean.swagTable.rowsPerPage}" varStatus="index">
+				<h:commandLink
+					value="${fn:substringBefore((index.index + index.step) / index.step, '.')}"
+					action="#{swagBean.swagTable.actionPage}"
+					disabled="#{index.index == swagBean.swagTable.firstRow}"
+					style="padding-left:10px; padding-right: 10px">
+					<f:setPropertyActionListener
+						value="${fn:substringBefore((index.index + index.step) / index.step, '.')}"
+						target="#{swagBean.swagTable.page}" />
+					<f:ajax render="@form" />
+				</h:commandLink>
+			</ui:repeat>
+			<h:commandLink value="&gt;" action="#{swagBean.swagTable.actionPage}"
+				rendered="#{(swagBean.swagTable.firstRow + swagBean.swagTable.rowsPerPage + 1) le swagBean.swagTable.tableSize}"
+				title="Next" style="padding-left:10px; padding-right: 10px">
+				<f:setPropertyActionListener value="next"
+					target="#{swagBean.swagTable.page}" />
+				<f:ajax render="@form" />
+			</h:commandLink>
+
+			<h:commandLink
+				rendered="#{(swagBean.swagTable.firstRow + swagBean.swagTable.rowsPerPage +1) le swagBean.swagTable.tableSize}"
+				action="#{swagBean.swagTable.actionPage}" value="&gt;&gt;"
+				style="padding-left:10px; padding-right: 10px">
+				<f:setPropertyActionListener value="last"
+					target="#{swagBean.swagTable.page}" />
+				<f:ajax render="@form" />
+			</h:commandLink>
+
+		</h:panelGroup>
+
+
+		<h:panelGroup
+			style="width: 100%; text-align: center; font-weight: bold; font-size: 12px; margin-top: 5px;"
+			layout="block">
+			<h:outputText
+				value="Items #{swagBean.swagTable.firstRow + 1} to #{swagBean.swagTable.lastRow} of #{swagBean.swagTable.tableSize}" />
+		</h:panelGroup>
+
+
+	</h:panelGrid>
+</composite:implementation>
+</html>

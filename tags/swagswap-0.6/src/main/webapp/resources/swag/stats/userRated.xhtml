@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:swag="http://java.sun.com/jsf/composite/swag">
+
+
+<composite:interface>
+	<composite:attribute name="style" />
+			<composite:attribute name="height" default="125px" />
+</composite:interface>
+
+
+<composite:implementation>
+	<h:form>
+		<h:panelGrid cellpdding="0" cellspacing="0" width="100%" title="Click to change view">
+			<f:ajax render="@form" listener="#{swagBean.toggleUserRatedPercent}"
+				event="click" />
+			<swag:panel
+				title="Top Users by Rated #{cc.attrs.percent == 'true' ? ' %' : ''}"
+				height="#{cc.attrs.height}" style="#{cc.attrs.style}" color="#666666"
+				headerColor="#F1F1F1">
+				<h:dataTable value="#{swagStatsBean.swagStats.userRated}" var="row"
+					width="100%" rules="none" rowClasses="tableRow1, tableRow2"
+					columnClasses="colWidth100" cellpadding="4">
+					<h:column>
+						<h:outputText value="#{row.swagSwapUser.nickName}" />
+					</h:column>
+					<h:column>
+						<h:panelGroup layout="block" style="height:15px;">
+							<h:outputText value="#{row.itemsRated}"
+								rendered="#{cc.attrs.percent == 'false'}" />
+							<h:panelGroup rendered="#{cc.attrs.percent == 'true'}">
+								<swag:progressBar value1="#{row.itemsRated}"
+									value2="#{swagStatsBean.swagStats.totalItems}" factor="0.5" />
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:column>
+				</h:dataTable>
+
+			</swag:panel>
+			
+		</h:panelGrid>
+	</h:form>
+</composite:implementation>
+
+
+</html>

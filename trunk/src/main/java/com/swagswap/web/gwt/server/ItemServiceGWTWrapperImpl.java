@@ -12,7 +12,7 @@ import com.swagswap.exceptions.AccessDeniedException;
 import com.swagswap.exceptions.ImageTooLargeException;
 import com.swagswap.exceptions.LoadImageFromURLException;
 import com.swagswap.service.ItemService;
-import com.swagswap.web.gwt.client.SmartGWTItemServiceWrapper;
+import com.swagswap.web.gwt.client.ItemServiceGWTWrapper;
 import com.swagswap.web.gwt.client.domain.SwagItemCommentGWTDTO;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
@@ -20,8 +20,8 @@ import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
  * Wraps ItemService to apply the DTO (anti)pattern.  Necessary since annotated
  * JDO objects (with GAE specific types like Text and Blob) won't serialize for GWT RPC 
  */
-public class SmartGWTItemServiceWrapperImpl extends
-		AutoinjectingRemoteServiceServlet implements SmartGWTItemServiceWrapper {
+public class ItemServiceGWTWrapperImpl extends
+		AutoinjectingRemoteServiceServlet implements ItemServiceGWTWrapper {
 	private static final long serialVersionUID = 1L;
 
 	private ItemService itemService;
@@ -70,11 +70,6 @@ public class SmartGWTItemServiceWrapperImpl extends
 	public void addComment(SwagItemCommentGWTDTO swagItemComment) {
 		itemService.addComment(toComment(swagItemComment));
 	}
-
-
-	/**
-	 * For DTO
-	 */
 	
 	private ArrayList<SwagItemGWTDTO> toDTOList(List<SwagItem> swagItems) {
 		ArrayList<SwagItemGWTDTO> dtos = new ArrayList<SwagItemGWTDTO>();

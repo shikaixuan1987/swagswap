@@ -14,7 +14,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * 
  * From http://pgt.de/2009/07/17/non-invasive-gwt-and-spring-integration-reloaded/
  */
-public abstract class AutoinjectingRemoteServiceServlet extends RemoteServiceServlet // extends EngineRemoteService 
+public abstract class AutoinjectingRemoteServiceServlet extends RemoteServiceServlet 
 {
 
 	@Override

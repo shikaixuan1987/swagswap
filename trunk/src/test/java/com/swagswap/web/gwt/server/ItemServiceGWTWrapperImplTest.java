@@ -7,15 +7,15 @@ import com.swagswap.domain.SwagItem;
 import com.swagswap.service.ItemServiceImpl;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
-public class SmartGWTItemServiceWrapperImplTest extends TestCase {
+public class ItemServiceGWTWrapperImplTest extends TestCase {
 
-	SmartGWTItemServiceWrapperImpl service;
+	ItemServiceGWTWrapperImpl service;
 	
 	@Override
     public void setUp() throws Exception {
         super.setUp();
         if (service==null) {
-        	service = new SmartGWTItemServiceWrapperImpl();
+        	service = new ItemServiceGWTWrapperImpl();
         }
 	}
 	

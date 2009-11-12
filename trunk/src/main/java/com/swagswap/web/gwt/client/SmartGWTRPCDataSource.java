@@ -22,7 +22,7 @@ import com.smartgwt.client.widgets.tile.TileRecord;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
 /**
- * A SwagSwapGWT client helper that makes remote calls to SmartGWTItemServiceWrapper
+ * A SwagSwapGWT client helper that makes remote calls to ItemServiceGWTWrapper
  * It conforms to the requirements of SwagSwapGWT components (which are a layer on top
  * of the SmartClient javascript lib)
  * 
@@ -83,8 +83,8 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		// final int endIndex = (request.getEndRow () ==
 		// null)?-1:request.getEndRow ();
 		final int endIndex = -1;
-		SmartGWTItemServiceWrapperAsync service = GWT
-				.create(SmartGWTItemServiceWrapper.class);
+		ItemServiceGWTWrapperAsync service = GWT
+				.create(ItemServiceGWTWrapper.class);
 		service.fetch(new AsyncCallback<List<SwagItemGWTDTO>>() {
 			public void onFailure(Throwable caught) {
 				response.setStatus(RPCResponse.STATUS_FAILURE);
@@ -132,8 +132,8 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		TileRecord rec = new TileRecord(data);
 		SwagItemGWTDTO testRec = new SwagItemGWTDTO();
 		copyValues(rec, testRec);
-		SmartGWTItemServiceWrapperAsync service = GWT
-				.create(SmartGWTItemServiceWrapper.class);
+		ItemServiceGWTWrapperAsync service = GWT
+				.create(ItemServiceGWTWrapper.class);
 		
 		//get newImageBytes
 		//TODO figure out where request.getUploadedFile is
@@ -165,8 +165,8 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		TileRecord rec = getEditedRecord(request);
 		SwagItemGWTDTO testRec = new SwagItemGWTDTO();
 		copyValues(rec, testRec);
-		SmartGWTItemServiceWrapperAsync service = GWT
-				.create(SmartGWTItemServiceWrapper.class);
+		ItemServiceGWTWrapperAsync service = GWT
+				.create(ItemServiceGWTWrapper.class);
 		
 		//Just do a fetch to refresh the item
 		if (testRec.isFetchOnly()) {
@@ -213,8 +213,8 @@ public class SmartGWTRPCDataSource extends AbstractGWTRPCDataSource {
 		final TileRecord rec = new TileRecord(data);
 		SwagItemGWTDTO testRec = new SwagItemGWTDTO();
 		copyValues(rec, testRec);
-		SmartGWTItemServiceWrapperAsync service = GWT
-				.create(SmartGWTItemServiceWrapper.class);
+		ItemServiceGWTWrapperAsync service = GWT
+				.create(ItemServiceGWTWrapper.class);
 		service.remove(testRec, new AsyncCallback<Object>() {
 			public void onFailure(Throwable caught) {
 				response.setStatus(RPCResponse.STATUS_FAILURE);

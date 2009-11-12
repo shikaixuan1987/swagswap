@@ -10,15 +10,13 @@ import com.swagswap.exceptions.ImageTooLargeException;
 import com.swagswap.exceptions.LoadImageFromURLException;
 import com.swagswap.web.gwt.client.domain.SwagItemCommentGWTDTO;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
-
+/**
+ * method names map to SmartGWT Datasource naming conventions
+ *
+ */
 @RemoteServiceRelativePath ("smartGWTItemServiceWrapper")
-public interface SmartGWTItemServiceWrapper extends RemoteService {
+public interface ItemServiceGWTWrapper extends RemoteService {
 
-	/**
-	 * 
-	 * These are for SwagSwapGWT
-	 */
-	
 	//maps to getAll in ItemService
     List<SwagItemGWTDTO> fetch ();
     
@@ -30,19 +28,14 @@ public interface SmartGWTItemServiceWrapper extends RemoteService {
 
     void remove (SwagItemGWTDTO swagItemGWTDTO);
     
-    /**
-     * These are extra for interfacing with ItemService
-     *
-     */
-    
 	void updateRating(Long swagItemKey, int computedRatingDifference, boolean isNew);
 	
 	void addComment(SwagItemCommentGWTDTO swagItemCommentGWTDTO);
 	
     public static class Util {
-		private static SmartGWTItemServiceWrapperAsync instance;
-		public static SmartGWTItemServiceWrapperAsync getInstance() {
-			return (instance == null) ? (instance = GWT.create(SmartGWTItemServiceWrapper.class)) : instance;
+		private static ItemServiceGWTWrapperAsync instance;
+		public static ItemServiceGWTWrapperAsync getInstance() {
+			return (instance == null) ? (instance = GWT.create(ItemServiceGWTWrapper.class)) : instance;
 		}
 	}
 

@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.swagswap.web.gwt.client.domain.SwagItemCommentGWTDTO;
 import com.swagswap.web.gwt.client.domain.SwagItemGWTDTO;
 
-public interface SmartGWTItemServiceWrapperAsync {
+public interface ItemServiceGWTWrapperAsync {
 
     public abstract void fetch (AsyncCallback<List<SwagItemGWTDTO>> asyncCallback);
     

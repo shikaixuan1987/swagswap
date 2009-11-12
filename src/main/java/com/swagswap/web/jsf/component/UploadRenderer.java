@@ -8,9 +8,11 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.render.FacesRenderer;
 import javax.faces.render.Renderer;
 import javax.servlet.http.HttpServletRequest;
 
+@FacesRenderer(rendererType="com.swagswap.web.jsf.component.UploadRenderer", componentFamily="javax.faces.Input")
 public class UploadRenderer extends Renderer {
 
 	public void encodeBegin(FacesContext context, UIComponent component)

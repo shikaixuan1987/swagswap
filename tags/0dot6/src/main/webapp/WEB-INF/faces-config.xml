@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+	version="2.0">
+	<application>
+
+		<locale-config>
+			<default-locale>en</default-locale>
+		</locale-config>
+		<message-bundle>
+			com.swagswap.web.jsf.messages.MessageResources
+		</message-bundle>
+
+
+		<variable-resolver>
+			org.springframework.web.jsf.DelegatingVariableResolver
+		</variable-resolver>
+		<el-resolver>
+			org.springframework.web.jsf.el.SpringBeanFacesELResolver
+		</el-resolver>
+
+	</application>
+
+	<component>
+		<component-type>com.swagswap.web.jsf.component.Upload
+		</component-type>
+		<component-class>javax.faces.component.UIInput
+		</component-class>
+	</component>
+
+	<!--   No need to define Renderer for component.  This is done in renderer class with annotations  -->
+
+</faces-config>

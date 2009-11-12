@@ -107,7 +107,7 @@ public class SwagSwapGWT implements EntryPoint {
 	private ButtonItem imFeelingLuckyButton;
 	private ListGrid commentsGrid;
 	private VStack commentsFormVStack;
-	private RichTextEditor richTextEditor;
+	private RichTextEditor richTextCommentsEditor;
 	private DateTimeFormat dateFormatter = DateTimeFormat.getFormat("dd-MM-yy HH:mm");
 	private Label itemEditTitleLabel;
 	private TabSet tabSet;
@@ -434,6 +434,7 @@ public class SwagSwapGWT implements EntryPoint {
 					tabSet.removeTab(commentsTab);
 				}
 				itemsTileGrid.deselectAllRecords();
+				boundSwagForm.getField("name").focusInItem();
 				boundSwagForm.editNewRecord();
 			}
 		});
@@ -556,7 +557,16 @@ public class SwagSwapGWT implements EntryPoint {
         
         tabSet.addTab(viewEditTab);
         tabSet.addTab(commentsTab);
-		
+        //put focus in commentsEditor when they click the Comments tab
+        tabSet.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Tab selectedTab = tabSet.getSelectedTab();
+				if (commentsTab==selectedTab) {
+					richTextCommentsEditor.focus();
+				}
+			}
+		});
+        
         VStack tabsVStack = new VStack();
         itemEditTitleLabel = new Label();  
         itemEditTitleLabel.setHeight(30);  
@@ -621,12 +631,12 @@ public class SwagSwapGWT implements EntryPoint {
 	private VStack createComments() {
 		commentsFormVStack = new VStack();
 
-		richTextEditor = new RichTextEditor();
-		richTextEditor.setHeight(100);
-		richTextEditor.setWidth(530);
-		richTextEditor.setOverflow(Overflow.HIDDEN);
-		richTextEditor.setCanDragResize(true);
-		richTextEditor.setBorder("1px solid #C0C3C7");
+		richTextCommentsEditor = new RichTextEditor();
+		richTextCommentsEditor.setHeight(100);
+		richTextCommentsEditor.setWidth(530);
+		richTextCommentsEditor.setOverflow(Overflow.HIDDEN);
+		richTextCommentsEditor.setCanDragResize(true);
+		richTextCommentsEditor.setBorder("1px solid #C0C3C7");
 
 		IButton saveCommentButton = new IButton();
 		saveCommentButton.setTitle("Save Comment");
@@ -661,7 +671,7 @@ public class SwagSwapGWT implements EntryPoint {
 		commentsGrid.setFields(new ListGridField[] { nickNameField,
 				commentField, dateField });
 
-		commentsFormVStack.addMember(richTextEditor);
+		commentsFormVStack.addMember(richTextCommentsEditor);
 		commentsFormVStack.addMember(saveCommentButton);
 		Label commentsLabel = new Label("Comments:");
 		commentsLabel.setHeight(20);
@@ -676,7 +686,7 @@ public class SwagSwapGWT implements EntryPoint {
 	}
 	
 	private void handleSubmitComment() {
-		String comment = richTextEditor.getValue();
+		String comment = richTextCommentsEditor.getValue();
 		final Long currentItemKey = (Long)boundSwagForm.getField("key").getValue();
 		SwagItemCommentGWTDTO newComment = new SwagItemCommentGWTDTO(
 				currentItemKey,
@@ -741,7 +751,6 @@ public class SwagSwapGWT implements EntryPoint {
 				Window.open(loginInfo.getLoginUrl(), "_self", ""); 
 			}
 			else { //logged in
-				event.getSource();
 				loginService.addOrUpdateRating(loginInfo.getEmail(), 
 					newRating,
 					new AsyncCallback() {
@@ -831,7 +840,7 @@ public class SwagSwapGWT implements EntryPoint {
 	}
 
 	private void refreshComments(Long currentKey) {
-		richTextEditor.setValue(""); //clear Add Comment box
+		richTextCommentsEditor.setValue(""); //clear Add Comment box
 		itemService.fetch(currentKey, new AsyncCallback<SwagItemGWTDTO>() {
 			@Override
 			public void onSuccess(SwagItemGWTDTO result) {

@@ -149,8 +149,16 @@ public class SwagStatsServiceImpl implements SwagStatsService {
 	}
 
 	private List<SwagItem> getTopRatedSwag(List<SwagItem> swagList) {
-		List<SwagItem> topRated = new ArrayList<SwagItem>(swagList);
+		List<SwagItem> topRated = new ArrayList<SwagItem>();
+		for (SwagItem swagItem : swagList) {
+			//  Don't count items with < 2 ratings
+			if (swagItem.getNumberOfRatings() > 1) {
+				topRated.add(swagItem);
+			}
+			
+		}
 		Collections.sort(topRated, AVERAGE_RATING_COMPARATOR);
+			
 		return getTop5(topRated);
 	}
 

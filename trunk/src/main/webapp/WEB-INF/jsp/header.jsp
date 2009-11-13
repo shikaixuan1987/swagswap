@@ -1,26 +1,29 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false"%>
-<%@ include file="/WEB-INF/jsp/includes.jsp" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"
+	isELIgnored="false"%>
+<%@ include file="/WEB-INF/jsp/includes.jsp"%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <link rel="stylesheet" href="<spring:url value="/css/swagswap.css" htmlEscape="true" />" type="text/css"/>
-  <link rel="stylesheet" href="<spring:url value="/css/maven-base.css" htmlEscape="true" />" type="text/css"/>
-  <link rel="stylesheet" href="<spring:url value="/css/maven-theme.css" htmlEscape="true" />" type="text/css"/>
-  <link rel="stylesheet" href="<spring:url value="/css/site.css" htmlEscape="true" />" type="text/css"/>
-  <link rel="stylesheet" href="<spring:url value="/css/screen.css" htmlEscape="true" />" type="text/css"/>
-  <link rel="stylesheet" href="<spring:url value="/css/teststyles.css" htmlEscape="true" />" type="text/css"/>
-  <link rel="stylesheet" href="<spring:url value="/css/alternative.css" htmlEscape="true" />" type="text/css"/>
-  <title>Swag Swap</title>	
-  <link rel="shortcut icon" href="/images/favicon.ico" >
-  <link rel="icon" type="image/gif" href="/images/animated_favicon1.gif" >
-  <script type="text/javascript" src="/js/prototype.js"></script>
-  <script type="text/javascript" src="/js/swagswap.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet"
+	href="<spring:url value="/css/site.css" htmlEscape="true" />"
+	type="text/css" />
+<link rel="stylesheet"
+	href="<spring:url value="/css/screen.css" htmlEscape="true" />"
+	type="text/css" />
+<link rel="stylesheet"
+	href="<spring:url value="/css/swagswapMVC.css" htmlEscape="true" />"
+	type="text/css" />
+<title>Swag Swap</title>
+<link rel="shortcut icon" href="/images/favicon.ico">
+<link rel="icon" type="image/gif" href="/images/animated_favicon1.gif">
+<script type="text/javascript" src="/js/prototype.js"></script>
+<script type="text/javascript" src="/js/swagswap.js"></script>
 
-  
-  	<%-- This is to show cost and usage stats from liveHttpHeaders --%>
-	<google-auth:isAdmin>
-	   	<script>
+
+<%-- This is to show cost and usage stats from liveHttpHeaders --%>
+<google-auth:isAdmin>
+	<script>
 	   	var costSummary;
 	   	var totalCost;
 
@@ -64,9 +67,7 @@
 		 	alert('Total Cost = ' + totalCost +' Usage Summary: ' + costSummary);
 	   	}
 	   	</script>
-	</google-auth:isAdmin>
-</head>
-
+</google-auth:isAdmin>
 
 <%--Google Analytics (only for swagswap, you can put your own here if deploying yourself --%>
 <script type="text/javascript">
@@ -78,16 +79,43 @@ try {
 var pageTracker = _gat._getTracker("UA-7317033-11");
 pageTracker._trackPageview();
 } catch(err) {}</script>
+</head>
 
 <body>
 
-<div id="mainContent">
-<img src="<spring:url value="/images/trading-floor-banner.jpg" htmlEscape="true" />" alt="Swag Swap"/>
+<div id="page">
 
-<table border="1">
-<google-auth:isAdmin>
-  <br/>
-  <tr><td>Welcome Admin: <a href="/springmvc/admin/main">Go to Admin Page</a> | <a href="#"  onclick="showTotalUsage();">Show GAE Usage for this page</a> (doesn't work in dev env)</td></tr>
-</google-auth:isAdmin>
+<div class="titleBar"></div>
+<table
+	style="vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"
+	width="100%">
+	<tbody>
+		<tr>
+			<td class="headCol1"><img src="/images/logo.jpg" alt="Swag Swap"
+				style="margin-left: 10px; margin-right: 30px" /></td>
+
+			<td class=" headCol2"><span class="titleText">Swag Swap</span></td>
+			<td class=" headCol1"><img src="/images/devoxx.jpg"
+				alt="Swag Swap" style="" /></td>
+
+
+		</tr>
+	</tbody>
 </table>
-
+<div class="titleBar"></div>
+<div id="mainContent">
+<table width="100%">
+	<tr>
+		<td><google-auth:isAdmin>
+			Welcome Admin: <a href="/springmvc/admin/main">Go to Admin Page</a> | <a
+				href="#" onclick="showTotalUsage();">Show GAE Usage for this
+			page</a> (doesn't work in dev env)
+	</google-auth:isAdmin></td>
+		<td style="text-align: right;"><a href="/">SwagSwap Home</a></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td style="text-align: right;"><a href="/springmvc/viewSwagStats">Show Swag Stats</a></td>
+	</tr>
+</table>
+<br />

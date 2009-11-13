@@ -54,7 +54,7 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 	}
 
 	private void loadSwagItems() {
-		log.info("Inserting all Swag Items into cache from DAO");
+		// Inserting all Swag Items into cache from DAO");
 
 		keyList.clear();
 
@@ -62,8 +62,6 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 			swagCacheManager.getCache().put(swagItem.getKey(), swagItem);
 			keyList.add(swagItem.getKey());
 		}
-
-		log.info(keyList.size() + " Swag Items inserted to cache");
 	}
 
 	public List<SwagItem> getAll() {
@@ -130,7 +128,6 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 		// Add new item to cache and keyList
 		swagCacheManager.getCache().put(swagItem.getKey(), swagItem);
 		keyList.add(swagItem.getKey());
-		log.info("New SwagItem " + swagItem.getKey() + " added to cache");
 	}
 
 	public List<SwagItem> search(String searchString) {
@@ -159,7 +156,6 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 	}
 
 	private void refreshItemInCache(Long key) {
-		log.info("Refreshing Swag Item in Cache.  Key " + key);
 		// TODO More efficient to use try/catch than containsKey test
 		if (swagCacheManager.getCache().containsKey(key)) {
 			swagCacheManager.getCache().put(key, itemDao.get(key, true));

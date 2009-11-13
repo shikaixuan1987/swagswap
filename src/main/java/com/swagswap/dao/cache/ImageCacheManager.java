@@ -12,7 +12,7 @@ import com.swagswap.domain.SwagImage;
 public class ImageCacheManager implements ImageDao {
 
 	private static final Logger log = Logger.getLogger(ImageCacheManager.class);
-	
+
 	@Autowired
 	private SwagCacheManager swagCacheManager;
 
@@ -39,24 +39,29 @@ public class ImageCacheManager implements ImageDao {
 	public void setItemDao(ImageDao imageDao) {
 		this.imageDao = imageDao;
 	}
-	
+
 	public SwagImage get(String key) {
 
 		if (swagCacheManager.getCache().containsKey(key)) {
 			// returned cached swagItem
-			return ((ImageAndThumbnail) swagCacheManager.getCache().get(key)).getImage();
+			return ((ImageAndThumbnail) swagCacheManager.getCache().get(key))
+					.getImage();
 		}
-		log.warn("Expected Swag Image not found in Cache.  Key " + key
-				+ ".  Refresh cache");
+		// log.warn("Expected Swag Image not found in Cache.  Key " + key
+		// + ".  Refresh cache");
 		// Not in cache so get from DAO and add to cache
-		//  Getting all upfront causes timeout in GAE
-		swagCacheManager.getCache().put(key, new ImageAndThumbnail(imageDao.get(key), imageDao.getThumbnailBytes(key)));
-		
-		return ((ImageAndThumbnail) swagCacheManager.getCache().get(key)).getImage();
+		// Getting all upfront causes timeout in GAE
+		swagCacheManager.getCache().put(
+				key,
+				new ImageAndThumbnail(imageDao.get(key), imageDao
+						.getThumbnailBytes(key)));
+
+		return ((ImageAndThumbnail) swagCacheManager.getCache().get(key))
+				.getImage();
 	}
 
 	public List<SwagImage> getAll() {
-		//  Just use Dao for this.  Not going to be used so much
+		// Just use Dao for this. Not going to be used so much
 		return imageDao.getAll();
 	}
 
@@ -72,19 +77,24 @@ public class ImageCacheManager implements ImageDao {
 
 		if (swagCacheManager.getCache().containsKey(key)) {
 			// returned cached thumbnail
-			return ((ImageAndThumbnail) swagCacheManager.getCache().get(key)).getThumbnail();
+			return ((ImageAndThumbnail) swagCacheManager.getCache().get(key))
+					.getThumbnail();
 		}
-		log.warn("Expected Swag Image not found in Cache.  Key " + key
-				+ ".  Refresh cache");
+		// log.warn("Expected Swag Image not found in Cache.  Key " + key
+		// + ".  Refresh cache");
 		// Not in cache so get from DAO and add to cache
-		//  Getting all upfront causes timeout in GAE
-		swagCacheManager.getCache().put(key, new ImageAndThumbnail(imageDao.get(key), imageDao.getThumbnailBytes(key)));
+		// Getting all upfront causes timeout in GAE
+		swagCacheManager.getCache().put(
+				key,
+				new ImageAndThumbnail(imageDao.get(key), imageDao
+						.getThumbnailBytes(key)));
 
-		return ((ImageAndThumbnail) swagCacheManager.getCache().get(key)).getThumbnail();
+		return ((ImageAndThumbnail) swagCacheManager.getCache().get(key))
+				.getThumbnail();
 	}
-	
+
 	public void deleteImageFromCache(String imageKey) {
-		swagCacheManager.getCache().remove(imageKey);		
+		swagCacheManager.getCache().remove(imageKey);
 	}
 
 }

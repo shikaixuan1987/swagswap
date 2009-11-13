@@ -166,6 +166,9 @@
 			src="http://chart.apis.google.com/chart?chs=320x75&${swagStats.googleChartsUrlItemsCommented}" />
 		</td>
 	</tr>
+	<tr>
+		<td><a href="/jsf/showSwagStats.jsf">Another view on Swag Stats</a></td>
+	</tr>
 </table>
 
 

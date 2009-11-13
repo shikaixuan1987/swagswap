@@ -42,6 +42,7 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 			SwagCacheManager swagCacheManager) {
 		this();
 		this.itemDao = itemDao;
+		this.swagCacheManager = swagCacheManager;
 	}
 
 	public void setItemDao(ItemDao itemDao) {

@@ -30,7 +30,6 @@ import com.swagswap.domain.SwagItemComment;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagStats;
 import com.swagswap.domain.SwagSwapUser;
-import com.swagswap.domain.SwagSwapUserStats;
 import com.swagswap.exceptions.ImageTooLargeException;
 import com.swagswap.exceptions.InvalidSwagImageException;
 import com.swagswap.exceptions.InvalidSwagItemException;
@@ -116,7 +115,7 @@ public class ItemController {
 		return "viewRateSwagItem";
 	}
 	
-	@RequestMapping(value = "/viewSwagStats", method = RequestMethod.GET)
+	@RequestMapping(value = "/swagStats", method = RequestMethod.GET)
 	public String viewStatsHandler(Model model) {
 		SwagStats swagStats = swagStatsService.getSwagStats();
 		model.addAttribute("swagStats", swagStats);
@@ -132,7 +131,7 @@ public class ItemController {
 			model.addAttribute("newRating"+"-"+swagItem.getKey(), new SwagItemRating(swagItem.getKey())); 
 		}
 		//charts
-		return "viewSwagStats";
+		return "swagStats";
 	}
 	
 	@RequestMapping(value = "/delete/{key}", method = RequestMethod.GET)

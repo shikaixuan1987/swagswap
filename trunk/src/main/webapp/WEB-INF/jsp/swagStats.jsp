@@ -13,30 +13,21 @@
 <br />
 <br />
 <table>
+    <tr>
+      <td><H3 style="border-style: hidden">Swag Rankings</H3></td>
+    </tr>
 	<tr>
 		<td>Top Rated: <display:table style="width:1px;"
 			name="swagStats.topRated" uid="swagItemsList" id="topRated_current"
-			requestURI="/springmvc/viewSwagStats" keepStatus="true">
-			<display:column sortable="true" property="name" />
-			<display:column title="Action">
-				<a href="<c:url value='/springmvc/view/${topRated_current.key}'/>">
-				<img border="0" alt="View/Comment/Rate"
-					src="<%=request.getContextPath()%>/images/view.gif" /> </a>
-				<%-- Users can only edit their own items --%>
-				<google-auth:isAllowed
-					swagItemOwnerGoogleID="${topRated_current.ownerGoogleID}">
-
-					<a href="<c:url value='/springmvc/edit/${topRated_current.key}'/>">
-					<img border="0" alt="Edit"
-						src="<%=request.getContextPath()%>/images/edit.gif" /> </a>
-
-					<a
-						href="<c:url value='/springmvc/delete/${topRated_current.key}'/>"
-						onclick="return confirmSubmit()"> <img border="0" alt="Delete"
-						src="<%=request.getContextPath()%>/images/delete.gif" /> </a>
-				</google-auth:isAllowed>
-			</display:column>
-
+			requestURI="/springmvc/swagStats" keepStatus="true">
+			<display:column property="name" 
+                    href="/springmvc/view/${topRated_current.key}"/>
+            <display:column title="Image" style="width: 1%">
+              <a href="<c:url value='/springmvc/view/${topRated_current.key}'/>">
+              <img border="0" alt="Image" height="50" width="66"
+                src="<c:url value='/springmvc/showThumbnail/${topRated_current.imageKey}'/>" />
+              </a>
+            </display:column>
 			<%-- Ratings --%>
 			<display:column title="My Rating">
 				<google-auth:isLoggedIn>
@@ -68,32 +59,19 @@
 			<%-- 
         	<display:column property="tags" decorator="com.swagswap.web.springmvc.displaytag.TagsDecorator"/>
         	--%>
-			<display:column property="averageRating" title="Avg Rating"
-				sortable="true" />
+			<display:column property="averageRating" title="Avg Rating" />
 		</display:table></td>
 		<td>Most Rated: <display:table style="width:1px;"
 			name="swagStats.topRated" uid="swagItemsList" id="mostRated_current"
-			requestURI="/springmvc/viewSwagStats" keepStatus="true">
-			<display:column sortable="true" property="name" />
-			<display:column title="Action">
-				<a href="<c:url value='/springmvc/view/${mostRated_current.key}'/>">
-				<img border="0" alt="View/Comment/Rate"
-					src="<%=request.getContextPath()%>/images/view.gif" /> </a>
-				<%-- Users can only edit their own items --%>
-				<google-auth:isAllowed
-					swagItemOwnerGoogleID="${mostRated_current.ownerGoogleID}">
-
-					<a href="<c:url value='/springmvc/edit/${mostRated_current.key}'/>">
-					<img border="0" alt="Edit"
-						src="<%=request.getContextPath()%>/images/edit.gif" /> </a>
-
-					<a
-						href="<c:url value='/springmvc/delete/${mostRated_current.key}'/>"
-						onclick="return confirmSubmit()"> <img border="0" alt="Delete"
-						src="<%=request.getContextPath()%>/images/delete.gif" /> </a>
-				</google-auth:isAllowed>
-			</display:column>
-
+			requestURI="/springmvc/swagStats" keepStatus="true">
+			<display:column property="name" 
+                    href="/springmvc/view/${mostRated_current.key}"/>
+            <display:column title="Image" style="width: 1%">
+              <a href="<c:url value='/springmvc/view/${mostRated_current.key}'/>">
+              <img border="0" alt="Image" height="50" width="66"
+                src="<c:url value='/springmvc/showThumbnail/${mostRated_current.imageKey}'/>" />
+              </a>
+            </display:column>
 			<%-- Ratings --%>
 			<display:column title="My Rating">
 				<google-auth:isLoggedIn>
@@ -125,35 +103,19 @@
 			<%-- 
         	<display:column property="tags" decorator="com.swagswap.web.springmvc.displaytag.TagsDecorator"/>
         	--%>
-			<display:column property="numberOfRatings" title="No. Ratings"
-				sortable="true" />
+			<display:column property="numberOfRatings" title="No. Ratings"/>
 		</display:table></td>
 		<td>Most Commented: <display:table style="width:1px;"
 			name="swagStats.topRated" uid="swagItemsList"
-			id="mostCommented_current" requestURI="/springmvc/viewSwagStats"
+			id="mostCommented_current" requestURI="/springmvc/swagStats"
 			keepStatus="true">
-			<display:column sortable="true" property="name" />
-			<display:column title="Action">
-				<a
-					href="<c:url value='/springmvc/view/${mostCommented_current.key}'/>">
-				<img border="0" alt="View/Comment/Rate"
-					src="<%=request.getContextPath()%>/images/view.gif" /> </a>
-				<%-- Users can only edit their own items --%>
-				<google-auth:isAllowed
-					swagItemOwnerGoogleID="${mostCommented_current.ownerGoogleID}">
-
-					<a
-						href="<c:url value='/springmvc/edit/${mostCommented_current.key}'/>">
-					<img border="0" alt="Edit"
-						src="<%=request.getContextPath()%>/images/edit.gif" /> </a>
-
-					<a
-						href="<c:url value='/springmvc/delete/${mostCommented_current.key}'/>"
-						onclick="return confirmSubmit()"> <img border="0" alt="Delete"
-						src="<%=request.getContextPath()%>/images/delete.gif" /> </a>
-				</google-auth:isAllowed>
-			</display:column>
-
+			<display:column property="name" href="/springmvc/view/${mostCommented_current.key}"/>
+            <display:column title="Image" style="width: 1%">
+              <a href="<c:url value='/springmvc/view/${mostCommented_current.key}'/>">
+              <img border="0" alt="Image" height="50" width="66"
+                src="<c:url value='/springmvc/showThumbnail/${mostCommented_current.imageKey}'/>" />
+              </a>
+            </display:column>
 			<%-- Ratings --%>
 			<display:column title="My Rating">
 				<google-auth:isLoggedIn>
@@ -186,19 +148,21 @@
 			<%-- 
         	<display:column property="tags" decorator="com.swagswap.web.springmvc.displaytag.TagsDecorator"/>
         	--%>
-			<display:column property="numberOfComments" title="No. Comments"
-				sortable="true" />
+			<display:column property="numberOfComments" title="No. Comments" />
 		</display:table></td>
 	</tr>
-
+    
 	<tr>
-		<td><img
+		<td><H3 style="border-style: hidden">User Rankings</H3></td>
+	</tr>
+	<tr>
+		<td style="border-style: ridge">Most Items Created<br/><img
 			src="http://chart.apis.google.com/chart?chs=320x75&${swagStats.googleChartsUrlItemsCreated}" />
 		</td>
-		<td><img
+		<td style="border-style: ridge">Most Items Rated<br/><img
 			src="http://chart.apis.google.com/chart?chs=320x75&${swagStats.googleChartsUrlItemsRated}" />
 		</td>
-		<td><img
+		<td style="border-style: ridge">Most Items Commented<br/><img
 			src="http://chart.apis.google.com/chart?chs=320x75&${swagStats.googleChartsUrlItemsCommented}" />
 		</td>
 	</tr>

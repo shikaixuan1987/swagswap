@@ -20,6 +20,14 @@ import com.swagswap.service.ItemService;
 import com.swagswap.service.SwagSwapUserService;
 import com.swagswap.web.jsf.model.SwagItemWrapper;
 
+/**
+ * @author scott
+ * 
+ *         JSF Request scoped Managed bean to handle all interactions with
+ *         Service layer. View scoped beans must be serializable but not Request
+ *         scoped so this bean is used to avoid serializing the used services.
+ * 
+ */
 @ManagedBean(name = "actionBean")
 @RequestScoped
 public class ActionBean {

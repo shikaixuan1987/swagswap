@@ -8,6 +8,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.swagswap.dao.ItemDao;
+import com.swagswap.dao.cache.SwagCacheManager;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagItemComment;
 import com.swagswap.domain.SwagStats;
@@ -35,6 +37,14 @@ public class SwagStatsServiceImpl implements SwagStatsService {
 
 	public SwagStatsServiceImpl() {
 		super();
+	}
+	
+	// for unit tests
+	protected SwagStatsServiceImpl(ItemService itemService,
+			SwagSwapUserService swagSwapUserService) {
+		this();
+		this.itemService = itemService;
+		this.swagSwapUserService = swagSwapUserService;
 	}
 
 	public SwagStats getSwagStats() {

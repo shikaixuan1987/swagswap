@@ -126,10 +126,16 @@
 			<td width="40%">
 			<table width="100%">
 				<tr>
+					<td><div style="text-align: center">
+                    <a href="/springmvc/view/${swagItem.key}">Add a Comment</a>
+                    </div></td>
+				</tr>
+				<tr>
 					<td><div class="label" style="text-align: center">Comments</div></td>
 				</tr>
 				<tr>
-					<td id="comments"><c:forEach var="comment"
+					<td id="comments">
+                      <c:forEach var="comment"
 						items="${swagItem.comments}">
                     ${comment.commentText}<br />
     			 	[${comment.swagSwapUserNickname} <fmt:formatDate

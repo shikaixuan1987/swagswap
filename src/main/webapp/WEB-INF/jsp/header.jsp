@@ -115,7 +115,7 @@ pageTracker._trackPageview();
 	</tr>
 	<tr>
 		<td></td>
-		<td style="text-align: right;"><a href="/springmvc/viewSwagStats">Show Swag Stats</a></td>
+		<td style="text-align: right;"><a href="/springmvc/swagStats">Show Swag Stats</a></td>
 	</tr>
 </table>
 <br />

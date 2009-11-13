@@ -55,7 +55,7 @@ public class ImageCacheManager implements ImageDao {
 	}
 
 	public List<SwagImage> getAll() {
-		//  Just use Dao for this.  Not going to be use so much
+		//  Just use Dao for this.  Not going to be used so much
 		return imageDao.getAll();
 	}
 
@@ -63,7 +63,6 @@ public class ImageCacheManager implements ImageDao {
 		return imageDao.getResizedImageBytes(originalImageBytes);
 	}
 
-	@Override
 	public byte[] getResizedThumbnailImageBytes(byte[] originalImageBytes) {
 		return imageDao.getResizedThumbnailImageBytes(originalImageBytes);
 	}

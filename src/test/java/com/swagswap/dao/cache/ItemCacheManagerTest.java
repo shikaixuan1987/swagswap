@@ -29,26 +29,19 @@ public class ItemCacheManagerTest extends LocalDatastoreTestCase {
 	}
 
 	public void testInsert() {
-
+		//  Insert item into cache and test that it is returned by both DAO and Cache
 		SwagItem swagItem = Fixture.createSwagItem();
 		itemCacheManager.insert(swagItem);
-
-		assertNumberOfItemsAndImages(1, 1);
-	}
-	
-	public void testInsertGetImageKey() {
-
-		SwagItem swagItem = Fixture.createSwagItem();
-		itemCacheManager.insert(swagItem);
-
-		assertNumberOfItemsAndImages(1, 1);
 		
 		SwagItem retrieved = itemCacheManager.get(swagItem.getKey(), true);
 		SwagItem retrieved2 = itemDao.get(swagItem.getKey(), true);
-		assertNotEquals("", retrieved.getImageKey());
+
+		assertEquals(retrieved, retrieved2);
 	}
+	
 
 	public void testUpdate() {
+		//  TODO.  Update to DAO doesn't work.  Cache seems ok.
 		SwagItem orig = Fixture.createSwagItem();
 		itemCacheManager.insert(orig);
 
@@ -82,6 +75,29 @@ public class ItemCacheManagerTest extends LocalDatastoreTestCase {
 
 		List<SwagItem> retrievedItems = itemCacheManager.getAll();
 		assertEquals(retrievedItems.size(), 2);
+	}
+	
+	
+	public void testGetAllOrder() {
+		//  Insert 3 items then check order.  Latest one should be returned first from cache
+		SwagItem item1 = Fixture.createSwagItem();
+		itemCacheManager.insert(item1);
+
+		SwagItem item2 = Fixture.createSwagItem();
+		itemCacheManager.insert(item2);
+		
+		SwagItem item3 = Fixture.createSwagItem();
+		itemCacheManager.insert(item3);
+		
+		List<SwagItem> retrievedItems = itemCacheManager.getAll();
+		assertEquals(retrievedItems.get(0), item3);
+		
+		//  Now update Item1 and ensure it returned first
+		item1.setName("new name");
+		itemCacheManager.update(item1);
+		retrievedItems = itemCacheManager.getAll();
+		//  TODO.  This fails because of update problem
+		assertEquals(retrievedItems.get(0), item1);
 	}
 
 	public void testDelete() {

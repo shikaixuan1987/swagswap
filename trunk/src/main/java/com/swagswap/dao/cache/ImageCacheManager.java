@@ -30,9 +30,10 @@ public class ImageCacheManager implements ImageDao {
 	}
 
 	// for unit tests
-	protected ImageCacheManager(ImageDao imageDao) {
+	protected ImageCacheManager(ImageDao imageDao, SwagCacheManager cacheManager) {
 		this();
 		this.imageDao = imageDao;
+		this.swagCacheManager = cacheManager;
 	}
 
 	public void setItemDao(ImageDao imageDao) {

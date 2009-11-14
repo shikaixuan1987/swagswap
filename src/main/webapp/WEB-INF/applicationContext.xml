@@ -104,7 +104,7 @@
 		</property>
 	</bean>
 	<bean id="adminService" class="com.swagswap.service.AdminServiceImpl" />
-	<bean id="mailService" class="com.swagswap.service.MailServiceImpl" />
+	<bean id="mailService" class="com.swagswap.service.OutgoingMailServiceImpl" />
 	<bean id="swagStatsService" class="com.swagswap.service.SwagStatsServiceImpl" />
 	<bean id="swagCacheManager" class="com.swagswap.dao.cache.SwagCacheManagerImpl" />
 	<bean id="itemCacheManager" class="com.swagswap.dao.cache.ItemCacheManager" >

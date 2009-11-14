@@ -51,7 +51,7 @@ public class ItemServiceImpl implements ItemService {
 	private SwagSwapUserService swagSwapUserService; // for saving users to our
 
 	@Autowired
-	private MailService mailService;
+	private OutgoingMailService outgoingMailService;
 	// app
 	// for checking mime type
 	private Magic jmimeMagicParser = new Magic();
@@ -314,7 +314,7 @@ public class ItemServiceImpl implements ItemService {
 				+ newComment.getSwagItemKey()
 				+ "\n<br/>or here (JSF 2.0 impl) http://swagswap.appspot.com/jsf/viewSwag.jsf?swagItemKey="
 				+ newComment.getSwagItemKey();
-		mailService.sendWithTaskManager(newComment.getSwagItemKey(), subject,
+		outgoingMailService.sendWithTaskManager(newComment.getSwagItemKey(), subject,
 				msgBody);
 	}
 

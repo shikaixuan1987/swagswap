@@ -1,22 +1,10 @@
 package com.swagswap.web.springmvc.controller;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Part;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagSwapUser;
-import com.swagswap.exceptions.ImageTooLargeException;
-import com.swagswap.exceptions.InvalidSwagImageException;
-import com.swagswap.exceptions.LoadImageFromURLException;
 import com.swagswap.service.AdminService;
 import com.swagswap.service.ItemService;
 import com.swagswap.service.MailService;
@@ -138,114 +123,6 @@ public class AdminController {
 		}
 		// if you don't do this, task queue retries the task (a lot)
 		response.setStatus(HttpServletResponse.SC_OK);
-	}
-
-	// Incoming email see
-	// http://code.google.com/appengine/docs/java/mail/receiving.html
-	@RequestMapping(value = "/_ah/mail/{address}", method = RequestMethod.POST)
-	public void routeIncomingEmail(@PathVariable("address") String address,
-			HttpServletRequest request, HttpServletResponse response)
-			throws IOException, MessagingException {
-		log.debug("Got mail posted to " + address);
-		// Handle message
-		Properties props = new Properties();
-		Session session = Session.getDefaultInstance(props, null);
-		MimeMessage mimeMessage = new MimeMessage(session, request
-				.getInputStream());
-		log.info("Receieved message");
-		String userID = mimeMessage.getSubject();
-		if (StringUtils.isEmpty(userID)) {
-			return;
-		}
-		SwagSwapUser user = swagSwapUserService.get(Long.valueOf(userID));
-		if (user == null) {
-			return;
-		}
-		// take apart the mutlipart
-
-		InputStream inputStreamContent = (InputStream) mimeMessage.getContent();
-		// from
-		// http://groups.google.com/group/google-appengine-java/browse_thread/thread/e6a23e509e7d43c9/09c5b278e85144ff?lnk=gst&q=incoming+email#09c5b278e85144ff
-		ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(
-				inputStreamContent, mimeMessage.getContentType());
-		Multipart mimeMultipart = new MimeMultipart(byteArrayDataSource);
-		// TODO get message body
-		String messageBody = "uploaded item";
-		SwagItem swagItem = new SwagItem();
-		swagItem.setOwnerGoogleID((user.getGoogleID()));
-		swagItem.setOwnerNickName(user.getNickName());
-		String swagName = StringUtils.isEmpty(messageBody) ? "uploaded with no name"
-				: messageBody;
-		swagItem.setName(swagName);
-		// from
-		// http://java.sun.com/developer/onlineTraining/JavaMail/contents.html#JavaMailMessage
-		for (int i = 0, n = mimeMultipart.getCount(); i < n; i++) {
-			String disposition = mimeMultipart.getBodyPart(i).getDisposition();
-			// TODO get messageBody
-			// BodyPart bodyPart = mimeMultipart.getBodyPart(i);
-			// if (bodyPart.isMimeType("text/*")) {
-			// messageBody=(String)bodyPart.getContent();
-			// }
-			if ((disposition != null)
-					&& ((disposition.equals(Part.ATTACHMENT) || (disposition
-							.equals(Part.INLINE))))) {
-				InputStream inputStream = mimeMultipart.getBodyPart(i)
-						.getInputStream();
-				byte[] imageData = getImageDataFromInputStream(inputStream);
-				swagItem.setImageBytes(imageData);
-				log.debug("saved emailed item, owner Sam Brodkin");
-			}
-		}
-		itemService.saveFromEmail(swagItem);
-		if (user.getOptOut()) {
-			log.debug(user.getGoogleID() + " has opted out of emails");
-		} else { // send email
-			mailService
-					.send(
-							user.getGoogleID(),
-							user.getEmail(),
-							"Your swag item: " + swagName
-									+ " has been successfuly created",
-							"\n\n<br/><br/>See Your Item here: (Spring MVC impl) http://swagswap.appspot.com/springmvc/view/"
-									+ swagItem.getKey()
-									+ "\n<br/>or here (JSF 2.0 impl) http://swagswap.appspot.com/jsf/viewSwag.jsf?swagItemKey="
-									+ swagItem.getKey());
-		}
-		response.setStatus(HttpServletResponse.SC_OK);
-	}
-
-	// tsk tsk, this is copy pasted from ItemService.getImageDataFromURL()
-	public byte[] getImageDataFromInputStream(InputStream inputStream)
-			throws LoadImageFromURLException, ImageTooLargeException {
-		BufferedInputStream bis = null;
-		ByteArrayOutputStream bos = null;
-		try {
-			bis = new BufferedInputStream(inputStream);
-			// write it to a byte[] using a buffer since we don't know the exact
-			// image size
-			byte[] buffer = new byte[1024];
-			bos = new ByteArrayOutputStream();
-			int i = 0;
-			while (-1 != (i = bis.read(buffer))) {
-				bos.write(buffer, 0, i);
-			}
-			byte[] imageData = bos.toByteArray();
-			if (imageData.length > 150000) {
-				throw new ImageTooLargeException("from email", 150000);
-			}
-			return imageData;
-		} catch (IOException e) {
-			throw new InvalidSwagImageException(e);
-		} finally {
-			try {
-				if (bis != null)
-					bis.close();
-				if (bos != null)
-					bos.close();
-			} catch (IOException e) {
-				// ignore
-			}
-		}
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)

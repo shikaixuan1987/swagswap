@@ -34,7 +34,7 @@ public class UserBean {
 		if (!swagSwapUserService.isUserLoggedIn()) {
 			return null;
 		}
-		return swagSwapUserService.findByEmail();
+		return swagSwapUserService.findCurrentUserByEmail();
 	}
 
 	private String getCurrentURL() {

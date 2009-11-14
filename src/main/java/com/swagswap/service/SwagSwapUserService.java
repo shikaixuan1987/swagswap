@@ -19,7 +19,12 @@ public interface SwagSwapUserService {
 	
 	void update(SwagSwapUser swagSwapUser);
 
-	SwagSwapUser findByEmail();
+	/**
+	 * Gets email from currentUser
+	 */
+	SwagSwapUser findCurrentUserByEmail();
+	
+	SwagSwapUser findByEmail(String email);
 	
 	SwagSwapUser findByGoogleID(String googleID);
 	
@@ -46,5 +51,6 @@ public interface SwagSwapUserService {
 	boolean isUserAdmin();
 	
 	boolean isUserLoggedIn();
+
 
 }

@@ -57,20 +57,19 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	//if you make this transactional the user doesn't seem to be retrieved with ratings :(
 //	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void insert(SwagSwapUser swagSwapUser) throws UserAlreadyExistsException {
-		if (findByEmail() !=null) {
+		if (findCurrentUserByEmail() !=null) {
 			throw new UserAlreadyExistsException(swagSwapUser);
 		}
 		userDao.insert(swagSwapUser);
 		//Welcome message
 		mailService.send(swagSwapUser.getGoogleID(), swagSwapUser.getEmail(),
 				"Welcome to SwagSwap!",
-				"To email a swagitem to be shown live on our site do the following:" +
-				"\n<br/><br/>Compose an email to <a href=\"mailto:add@swagswap.appspotmail.com?subject="+
-				swagSwapUser.getKey()+ "\">add@swagswap.appspotmail.com</a>" +
-				"\n<br/>Put your secret code in the subject: " + swagSwapUser.getKey() +
-				"\n<br/>Put the name of the swag item in the mail body" +
-				"\n<br/>Optionally attatch an image to your mail" +
-				"\n\n<br/><br/>Regards,\n<br/>The SwagSwap Team"
+				"To email a swag item to be shown live on our site do the following:" +
+				"\n<br/><br/>Compose an email to <a href=\"mailto:add@swagswap.appspotmail.com\">add@swagswap.appspotmail.com</a>" +
+				"\n<br/>(Required) put the new swag item name in the subject " +
+//				"\n<br/>(Optional) put the description of the swag item in the mail body " +
+				"\n<br/>(Optional) attatch an image to your mail " +
+				"\n\n<br/><br/>Regards,\n<br/>Team SwagSwap" 
 		);
 	}
 	
@@ -83,14 +82,25 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		return userDao.findByGoogleID(googleID);
 	}
 	
-	public SwagSwapUser findByEmail() {
+	/**
+	 * Gets email from currentUser
+	 */
+	public SwagSwapUser findCurrentUserByEmail() {
 		if (getCurrentUser()==null) {
 			return null;
 		}
-		String email = getCurrentUser().getEmail();
+		//emails stored in lowercase
+		String email = getCurrentUser().getEmail().toLowerCase();
 		if (isBlackListed(email)) {
 			throw new AccessDeniedException("User " + email + " is blacklisted");
 		}
+		return userDao.findByEmail(email);
+	}
+	
+	/**
+	 * For incoming mailService. App should use findByEmail();
+	 */
+	public SwagSwapUser findByEmail(String email) {
 		return userDao.findByEmail(email);
 	}
 	
@@ -114,9 +124,12 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 //	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	//TODO this can take 0 params
 	public SwagSwapUser findByEmailOrCreate() {
-		SwagSwapUser swagSwapUser = findByEmail();
+		SwagSwapUser swagSwapUser = findCurrentUserByEmail();
 		if (swagSwapUser==null) {
-			swagSwapUser = new SwagSwapUser(getCurrentUser().getEmail(),getCurrentUser().getUserId(), getCurrentUser().getNickname());
+			//store email in lowercase otherwise we'll never find it again
+			//with GAE case sensitive-only queries :(
+			String emailUpperCase = getCurrentUser().getEmail().toLowerCase();
+			swagSwapUser = new SwagSwapUser(emailUpperCase,getCurrentUser().getUserId(), getCurrentUser().getNickname());
 			insert(swagSwapUser);
 		}
 		return swagSwapUser;

@@ -201,7 +201,7 @@ public class ActionBean {
 
 	private SwagTable populateRatedTable(List<SwagItem> swagList,
 			boolean exclusive) {
-		SwagSwapUser user = swagSwapUserService.findByEmail();
+		SwagSwapUser user = swagSwapUserService.findCurrentUserByEmail();
 		return new SwagTableImpl(
 				(SwagItemWrapper.convertSwagListToWrapperList(itemService
 						.filterByRated(swagList, user, exclusive), userBean)));

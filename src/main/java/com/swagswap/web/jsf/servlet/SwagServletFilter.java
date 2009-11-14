@@ -24,7 +24,7 @@ import com.swagswap.web.jsf.fileupload.MemoryFileItemFactory;
 
 public class SwagServletFilter implements Filter {
 
-	private int sizeMax = 4*1024*1024;  //4MB
+	private int sizeMax = 1*1024*1024;  //1MB
 
 	public void init(FilterConfig config) throws ServletException {
 

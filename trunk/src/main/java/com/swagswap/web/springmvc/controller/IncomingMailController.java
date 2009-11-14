@@ -33,7 +33,7 @@ import com.swagswap.exceptions.ImageTooLargeException;
 import com.swagswap.exceptions.InvalidSwagImageException;
 import com.swagswap.exceptions.LoadImageFromURLException;
 import com.swagswap.service.ItemService;
-import com.swagswap.service.MailService;
+import com.swagswap.service.OutgoingMailService;
 import com.swagswap.service.SwagSwapUserService;
 
 @Controller
@@ -41,21 +41,21 @@ public class IncomingMailController {
 	private static final Logger log = Logger.getLogger(IncomingMailController.class);
 	private SwagSwapUserService swagSwapUserService;
 	private ItemService itemService;
-	private MailService mailService;
+	private OutgoingMailService outgoingMailService;
 
 	@Autowired
 	public IncomingMailController(SwagSwapUserService swagSwapUserService, 
 			ItemService itemService,
-			MailService mailService) {
+			OutgoingMailService outgoingMailService) {
 		this.swagSwapUserService = swagSwapUserService;
 		this.itemService = itemService;
-		this.mailService = mailService;
+		this.outgoingMailService = outgoingMailService;
 	}
 
 	// Incoming email see
 	// http://code.google.com/appengine/docs/java/mail/receiving.html
 	@RequestMapping(value = "/_ah/mail/{address}", method = RequestMethod.POST)
-	public void routeIncomingEmail(@PathVariable("address") String address,
+	public void createSwagItemFromIncomingEmail(@PathVariable("address") String address,
 			HttpServletRequest request, HttpServletResponse response) {
 		String fromEmail = null;
 		try {
@@ -80,7 +80,7 @@ public class IncomingMailController {
 	
 			//dissect mimeMessage
 			Multipart mimeMultipart = extractMimeMultipart(mimeMessage);
-			//crap this is throwing out java.lang.OutOfMemoryError: Java heap space when sent from mac
+			//crap this is throwing out java.lang.OutOfMemoryError: Java heap space when sent from Mac
 //			String messageBody = extractMailBodyString(mimeMultipart);
 			byte[] imageData = getMailAttachmentBytes(mimeMultipart);
 
@@ -102,6 +102,8 @@ public class IncomingMailController {
 			log.error("Problem with incoming message from " + fromEmail,e);
 			//report error to sender
 			sendItemAddExceptionEmail(fromEmail, e);
+			//report error to Sam
+			sendItemAddExceptionEmailToAdmin(e);
 		}
 		finally {
 			//always send status OK or Appengine will keep retrying
@@ -211,14 +213,20 @@ public class IncomingMailController {
 	}
 
 	private void sendItemAddExceptionEmail(String fromEmail, Exception e) {
-		mailService.send("Your SwagItem email upload failed :(",fromEmail,
+		outgoingMailService.send("Your SwagItem email upload failed :(",fromEmail,
 			"<b>Please <a href=\"http://code.google.com/p/swagswap/issues/entry?template=Defect%20report%20from%20user\">" +
 				"report this issue</a> (requires a google account)</b><br/><br/>Exception:<br/>" + e.toString()
 		);
 	}
+	
+	private void sendItemAddExceptionEmailToAdmin(Exception e) {
+		outgoingMailService.send("SwagItem email upload failed :(","swagswap.devoxx2009@gmail.com",
+				e.toString()
+			);
+	}
 
 	private void sendItemAddedSuccessfullyEmail(SwagSwapUser user, SwagItem swagItem) {
-		mailService.send(
+		outgoingMailService.send(
 			user.getGoogleID(),
 			user.getEmail(),
 			"Your swag item: " + swagItem.getName()
@@ -230,7 +238,7 @@ public class IncomingMailController {
 	}
 
 	private void sendUserNotFoundEmail(String fromEmail) {
-		mailService.send("Your SwagItem email upload failed :(",fromEmail,
+		outgoingMailService.send("Your SwagItem email upload failed :(",fromEmail,
 				"User with email " + fromEmail + " not found in the SwagSwap system.\n " +
 				"please try again and make sure you're sending the email from your Google account email address " +
 				"Or <a href=\"http://www.swagswap.org\">signin to SwagSwap</a> to create your user account and retry your email."

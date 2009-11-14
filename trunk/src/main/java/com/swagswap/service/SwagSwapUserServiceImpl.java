@@ -31,7 +31,7 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	@Autowired
 	private ItemService itemService;
 	@Autowired
-	private MailService mailService;
+	private OutgoingMailService outgoingMailService;
 	//created with a factory in the config
 	private UserService googleUserService;
 	
@@ -62,7 +62,7 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 		}
 		userDao.insert(swagSwapUser);
 		//Welcome message
-		mailService.send(swagSwapUser.getGoogleID(), swagSwapUser.getEmail(),
+		outgoingMailService.send(swagSwapUser.getGoogleID(), swagSwapUser.getEmail(),
 				"Welcome to SwagSwap!",
 				"To email a swag item to be shown live on our site do the following:" +
 				"\n<br/><br/>Compose an email to <a href=\"mailto:add@swagswap.appspotmail.com\">add@swagswap.appspotmail.com</a>" +
@@ -98,7 +98,7 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	}
 	
 	/**
-	 * For incoming mailService. App should use findByEmail();
+	 * For incoming outgoingMailService. App should use findByEmail();
 	 */
 	public SwagSwapUser findByEmail(String email) {
 		return userDao.findByEmail(email);

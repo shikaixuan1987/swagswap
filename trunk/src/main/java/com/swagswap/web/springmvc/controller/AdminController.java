@@ -18,7 +18,7 @@ import com.swagswap.domain.SwagItem;
 import com.swagswap.domain.SwagSwapUser;
 import com.swagswap.service.AdminService;
 import com.swagswap.service.ItemService;
-import com.swagswap.service.MailService;
+import com.swagswap.service.OutgoingMailService;
 import com.swagswap.service.SwagSwapUserService;
 
 @Controller
@@ -27,16 +27,16 @@ public class AdminController {
 	private AdminService adminService;
 	private SwagSwapUserService swagSwapUserService;
 	private ItemService itemService;
-	private MailService mailService;
+	private OutgoingMailService outgoingMailService;
 
 	@Autowired
 	public AdminController(AdminService adminService,
 			SwagSwapUserService swagSwapUserService, ItemService itemService,
-			MailService mailService) {
+			OutgoingMailService outgoingMailService) {
 		this.adminService = adminService;
 		this.swagSwapUserService = swagSwapUserService;
 		this.itemService = itemService;
-		this.mailService = mailService;
+		this.outgoingMailService = outgoingMailService;
 	}
 
 	@RequestMapping("/admin/main")
@@ -87,7 +87,7 @@ public class AdminController {
 	}
 
 	/**
-	 * Construct mail message and send it using the MailService Called by Task
+	 * Construct mail message and send it using the OutgoingMailService Called by Task
 	 * Queue
 	 * 
 	 * @param swagItemKey
@@ -116,7 +116,7 @@ public class AdminController {
 			log.debug("Sending mail to " + email + " msg is subject:" + subject
 					+ " msgBody:" + msgBody);
 			try {
-				mailService.send(googleID, email, subject, msgBody);
+				outgoingMailService.send(googleID, email, subject, msgBody);
 			} catch (Exception e) {
 				log.error(e);
 			}

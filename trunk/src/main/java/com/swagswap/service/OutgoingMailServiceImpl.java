@@ -18,13 +18,13 @@ import com.google.appengine.api.labs.taskqueue.TaskOptions;
  * For sending email
  * 
  */
-public class MailServiceImpl implements MailService {
+public class OutgoingMailServiceImpl implements OutgoingMailService {
 
 	private static final String FROM_ADDRESS = "swagswap.devoxx2009@gmail.com";
 
-	private static final Logger log = Logger.getLogger(MailServiceImpl.class);
+	private static final Logger log = Logger.getLogger(OutgoingMailServiceImpl.class);
 
-	public MailServiceImpl() {
+	public OutgoingMailServiceImpl() {
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class MailServiceImpl implements MailService {
 	/**
 	 * Send mail based on user id.  Do it in a Task Queue to prevent delay
 	 * The AdminController has a method which is called by the Task Queue,
-	 * which in turn calls MailService.send() back
+	 * which in turn calls OutgoingMailService.send() back
 	 */
 	public void sendWithTaskManager(Long swagItemKey, String subject, String msgBody) {
 		log.debug("Queing task for mail with subject " + subject + " at " + new Date());

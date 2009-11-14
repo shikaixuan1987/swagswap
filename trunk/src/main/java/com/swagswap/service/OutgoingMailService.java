@@ -1,6 +1,6 @@
 package com.swagswap.service;
 
-public interface MailService {
+public interface OutgoingMailService {
 
 	void send(String googleID, String email, String subject, String msgBody);
 	

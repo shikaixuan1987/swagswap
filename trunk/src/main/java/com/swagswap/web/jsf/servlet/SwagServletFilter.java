@@ -30,7 +30,7 @@ public class SwagServletFilter implements Filter {
 
 		try {
 			String paramValue = config
-					.getInitParameter("com.corejsf.UploadFilter.sizeMax");
+					.getInitParameter("com.swagswap.UploadFilter.sizeMax");
 			if (paramValue != null)
 				sizeMax = Integer.parseInt(paramValue);
 		}

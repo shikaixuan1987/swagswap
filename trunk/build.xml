@@ -125,7 +125,7 @@
 	</target>
 
 	<target name="clean" description="Force a clean slate to rebuild">
-		<delete dir="${war.dir}" />
+		<delete dir="target" />
 	</target>
 
 	<target name="server_run" depends="war" description="Run the dev_appserver">

@@ -166,7 +166,7 @@ public class SwagSwapGWT implements EntryPoint {
 		
 		swagItemsVStack.setWidth(350);
 		swagItemsVStack.setHeight(552);
-		swagItemsVStack.setBorder("1px solid #C0C3C7");
+		swagItemsVStack.setBorder("1px solid #C0C3C7"); //blue like the rest of the app
 		swagItemsVStack.setShowEdges(false);
 		swagItemsVStack.setCanDragResize(true);
 		swagItemsVStack.setShowResizeBar(true);
@@ -275,12 +275,12 @@ public class SwagSwapGWT implements EntryPoint {
 	}
 	
 	private void doSort() {
-		String sortVal = sortForm.getValueAsString("sortBy");
-		Boolean sortDir = (Boolean) sortForm.getValue("chkSortDir");
-		if (sortDir == null)
-			sortDir = false;
-		if (sortVal != null) {
-			itemsTileGrid.sortByProperty(sortVal, sortDir);
+		String sortValue = sortForm.getValueAsString("sortBy");
+		Boolean sortDirection = (Boolean) sortForm.getValue("chkSortDir");
+		if (sortDirection == null)
+			sortDirection = false;
+		if (sortValue != null) {
+			itemsTileGrid.sortByProperty(sortValue, sortDirection);
 		}
 	}
 

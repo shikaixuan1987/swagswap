@@ -116,7 +116,7 @@ public class ItemController {
 	}
 	
 	@RequestMapping(value = "/swagStats", method = RequestMethod.GET)
-	public String viewStatsHandler(Model model) {
+	public String viewStatsHandler(Model model, HttpServletRequest request) {
 		SwagStats swagStats = swagStatsService.getSwagStats();
 		model.addAttribute("swagStats", swagStats);
 		//put SwagSwapUser (if there is one) into the model
@@ -130,7 +130,7 @@ public class ItemController {
 		for (SwagItem swagItem : swagStats.getAllTopRatedSwagItems()) {
 			model.addAttribute("newRating"+"-"+swagItem.getKey(), new SwagItemRating(swagItem.getKey())); 
 		}
-		//charts
+		model.addAttribute("loginUrl", swagSwapUserService.createLoginURL(getReferringPage(request)));
 		return "swagStats";
 	}
 	

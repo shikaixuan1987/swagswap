@@ -40,7 +40,11 @@ public class UserBean {
 	private String getCurrentURL() {
 		HttpServletRequest request = (HttpServletRequest) FacesContext
 				.getCurrentInstance().getExternalContext().getRequest();
-		return request.getRequestURL().toString();
+		// Hack to get round losing request parameters when redirecting to
+		// Google login page
+		String currentURL = request.getRequestURL().toString().replace(
+				"viewSwag", "allSwag");
+		return currentURL;
 	}
 
 	/**
@@ -76,7 +80,6 @@ public class UserBean {
 		if (user == null || (!swagSwapUserService.isUserLoggedIn())) {
 			return 0;
 		}
-		long time = new Date().getTime();
 		Integer userItemRating;
 		if (user.getSwagItemRating(key) == null) {
 			userItemRating = 0;
@@ -87,7 +90,7 @@ public class UserBean {
 		if (userItemRating == null) {
 			userItemRating = 0;
 		}
-		
+
 		return userItemRating;
 	}
 

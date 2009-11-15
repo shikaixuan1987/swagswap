@@ -46,6 +46,9 @@ public class AdminServiceImpl implements AdminService {
 		int batchId = generator.nextInt(1000); //in case we run this several times
 		List<String> tags = new ArrayList<String>();
 		tags.add(TEST_ITEM_TAG);
+		tags.add("");
+		tags.add("");
+		tags.add("");
 		for (int i = 0; i < numberOfSwagItems; i++) {
 			SwagItem swagItem = new SwagItem();
 			swagItem.setName("item " + batchId + "-" +i);

@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<composite:interface>
+	<composite:attribute name="value1" required="true" />
+	<composite:attribute name="value2" required="true" />
+	<composite:attribute name="factor" default="1.0" />
+</composite:interface>
+
+<composite:implementation>
+
+	<c:if test="#{cc.attrs.value2 == 0}">
+		<c:set var="percent" value="0" />
+	</c:if>
+	<c:if test="#{cc.attrs.value2 != 0}">
+		<c:set var="percent"
+			value="#{fn:substringBefore(cc.attrs.value1 / cc.attrs.value2 * 100,'.')}" />
+		<c:set var="color"
+			value="#{(cc.attrs.value1 / cc.attrs.value2) gt 0 ? 'red' : color}" />
+		<c:set var="color"
+			value="#{(cc.attrs.value1 / cc.attrs.value2) ge 0.10 ? 'yellow' : color}" />
+		<c:set var="color"
+			value="#{(cc.attrs.value1 / cc.attrs.value2) ge 0.50 ? 'limegreen' : color}" />
+		<c:set var="color"
+			value="#{(cc.attrs.value1 / cc.attrs.value2) ge 1 ? ' #FF8800' : color}" />
+	</c:if>
+
+	<h:panelGroup layout="block"
+		style="border: 1px solid black; width: #{100 * cc.attrs.factor}px; vertical-align: middle;">
+
+		<h:panelGroup layout="block"
+			style="width: #{fn:substringBefore(percent * cc.attrs.factor,'.')}px; background-color: #{color}; height: 15px;">
+			<h:outputText value="#{percent}%"
+				style="margin-left: 2px; font-size: 10px; font-weight: bold; position: relative; left:70%; right: 30%; top: 20%;" />
+
+		</h:panelGroup>
+	</h:panelGroup>
+</composite:implementation>
+</html>

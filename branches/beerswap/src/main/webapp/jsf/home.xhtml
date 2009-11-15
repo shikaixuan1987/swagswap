@@ -1,0 +1,58 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:swag="http://java.sun.com/jsf/composite/swag">
+
+<ui:composition template="template.xhtml">
+	<ui:param name="title" value="Welcome to Swag Swap!" />
+	<ui:define name="menu">
+
+		<swag:menuPanel width="220px" title="Choose Your Implementation"
+			style="margin-left: 5px;">
+			<h:outputLink value="/springmvc/search/">
+				<h:outputText value="Spring MVC (Reference Implementation)" />
+			</h:outputLink>
+			<h:outputLink value="/jsf/allSwag.jsf">
+				<h:outputText value="JSF 2.0 (Better than Reference Implementation)" />
+			</h:outputLink>
+			<h:outputLink value="/SwagSwapGWT.html">
+				<h:outputText value="GWT (You decide)" />
+			</h:outputLink>
+			<h:outputLink value="/mobile/mobileHome.jsf">
+				<h:outputText value="iSwag.  Swag Swag for your Mobile Device" />
+			</h:outputLink>
+		</swag:menuPanel>
+	</ui:define>
+	<ui:define name="content">
+		<swag:panel
+			title="Welcome to the Swagswap Devoxx 2009 Demo application" style="font-weight: bold;">
+			<ul>
+				<li>Read about it and run it yourself with these <a
+					href="http://code.google.com/p/swagswap/wiki/Instructions">instructions</a></li>
+				<li>Visit our <a href="http://cloudmouthdevoxx.blogspot.com/">cloudMouth
+				blog</a></li>
+				<li>Attend our <a
+					href="http://www.devoxx.com/display/DV09/Google+App+Engine+for+Java+-+a+real+live+voyage+to+The+Cloud">Devoxx
+				session</a> (November 17th at 9:30)</li>
+				<li>Post your questions during our session using <a
+					href="http://moderator.appspot.com/#16/e=f78f6">Google
+				Moderator</a></li>
+			</ul>
+--<a href="http://www.devoxx.com/display/DV09/Sam+Brodkin">Sam
+			Brodkin</a> and <a
+				href="http://www.devoxx.com/display/DV09/Scott+Stevenson">Scott
+			Stevenson</a>
+		</swag:panel>
+		<br />
+		<ui:include src="swagStats.xhtml" />
+	</ui:define>
+</ui:composition>
+</html>
+

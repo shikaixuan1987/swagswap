@@ -133,7 +133,7 @@ public class AdminController {
 		if (userAgent.contains("iphone")) {
 			response.sendRedirect("/mobile/mobileHome.jsf");
 		} else {
-			response.sendRedirect("/jsf/home.jsf");
+			response.sendRedirect("/jsf/allSwag.jsf");
 		}
 	}
 }

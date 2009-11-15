@@ -7,16 +7,13 @@
 	xmlns:swag="http://java.sun.com/jsf/composite/swag">
 
 <h:form>
-	<swag:menuPanel width="100%" title="Swag Menu">
-		<h:outputLink value="/">
-			<h:outputText value="Home" />
-		</h:outputLink>
-		<h:link value="All Swag" outcome="allSwag" />
-		<h:link value="My Swag" outcome="mySwag" />
-		<h:link value="Add Swag" outcome="addSwag">
+	<swag:menuPanel width="100%" title="Beer Menu">
+		<h:link value="All Beer" outcome="allSwag" />
+		<h:link value="My Beer" outcome="mySwag" />
+		<h:link value="Add Beer" outcome="addSwag">
 			<f:param name="lastPage" value="#{actionBean.lastPage}" />
 		</h:link>
-		<h:link value="Swag Stats" outcome="showSwagStats" />
+		<h:link value="Beer Stats" outcome="showSwagStats" />
 	</swag:menuPanel>
 </h:form>
 </html>

@@ -9,13 +9,13 @@
 	xmlns:swag="http://java.sun.com/jsf/composite/swag">
 
 <ui:composition template="template.xhtml">
-	<ui:param name="title" value="Swag Stats" />
+	<ui:param name="title" value="Beer Stats" />
 	<ui:define name="content">
 		<swag:panel title="Global Stats">
 			<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 				columnClasses="colWidth50 ,colWidth50" width="100%">
 				<h:panelGrid columns="2">
-					<swag:label value="Total Swag Items" />
+					<swag:label value="Total Beer" />
 					<h:outputText value="#{swagStatsBean.swagStats.totalItems}" />
 					<swag:label value="Total Users" />
 					<h:outputText value="#{swagStatsBean.swagStats.totalUsers}" />

@@ -8,7 +8,7 @@
 	xmlns:swagcomp="/tags/swagcomp">
 
 <ui:composition template="template.xhtml">
-	<ui:param name="title" value="New Swag Item" />
+	<ui:param name="title" value="New Beer" />
 	<ui:define name="content">
 		<h:form enctype="multipart/form-data">
 			<f:metadata>
@@ -17,7 +17,7 @@
 					listener="#{swagEditBean.initialiseSwagItem}" />
 			</f:metadata>
 			<ui:include src="editAddSwagPanel.xhtml">
-				<ui:param name="title" value="New Swag Item" />
+				<ui:param name="title" value="New Beer" />
 			</ui:include>
 		</h:form>
 	</ui:define>

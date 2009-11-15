@@ -14,8 +14,9 @@ function searchComplete() {
 
 		var results = imageSearch.results;
 
-		var randomResult = results[lastImageIndex++ % 8]; // only have results
-															// 0..3
+		// only have results 0..7
+		var randomResult = results[lastImageIndex++ % 8]; 
+		
 		var imgContainer = document.getElementById('luckyImage');
 		var newImg = document.createElement('img');
 		newImg.height = 80;

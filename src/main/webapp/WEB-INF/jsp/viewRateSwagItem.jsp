@@ -112,7 +112,7 @@
 				<div class="label" style="text-align: center;">Comments</div>
 				<br />
 				<c:forEach var="comment" items="${swagItem.comments}">
-              ${comment.commentText}<br />[${comment.swagSwapUserNickname} <fmt:formatDate
+              ${comment.commentTextNoHTML}<br />[${comment.swagSwapUserNickname} <fmt:formatDate
 						value="${comment.created}" pattern="dd/MM HH:mm" />]
               <hr />
 				</c:forEach> <%--

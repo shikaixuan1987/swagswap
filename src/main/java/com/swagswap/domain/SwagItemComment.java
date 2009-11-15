@@ -79,6 +79,10 @@ public class SwagItemComment implements Serializable, Comparable<SwagItemComment
 	public String getCommentText() {
 		return (commentText == null) ? "" : commentText.getValue();
 	}
+	
+	public String getCommentTextNoHTML() {
+		return getCommentText().replaceAll("\\<.*?\\>", "");
+	}
 
 	//creating a new Text(null) causes a datanucleus Exception
 	public void setCommentText(String commentText) {

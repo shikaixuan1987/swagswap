@@ -18,16 +18,11 @@
     </tr>
 	<tr>
 		<td>Top Rated: <display:table style="width:1px;"
-			name="swagStats.topRated" uid="swagItemsList" id="topRated_current"
-			requestURI="/springmvc/swagStats" keepStatus="true">
-			<display:column property="name" 
-                    href="/springmvc/view/${topRated_current.key}"/>
-            <display:column title="Image" style="width: 1%">
-              <a href="<c:url value='/springmvc/view/${topRated_current.key}'/>">
-              <img border="0" alt="Image" height="50" width="66"
-                src="<c:url value='/springmvc/showThumbnail/${topRated_current.imageKey}'/>" />
-              </a>
-            </display:column>
+			name="swagStats.topRated" uid="swagItemsList_topRated" id="topRated_current"
+			requestURI="/springmvc/swagStats" decorator="com.swagswap.web.springmvc.displaytag.NameDecorator"
+            keepStatus="true"
+            defaultsort="3" defaultorder="descending">
+			<display:column property="swagItemKeyLink" title="Name"/>
 			<%-- Ratings --%>
 			<display:column title="My Rating">
 				<google-auth:isLoggedIn>
@@ -62,16 +57,10 @@
 			<display:column property="averageRating" title="Avg Rating" />
 		</display:table></td>
 		<td>Most Rated: <display:table style="width:1px;"
-			name="swagStats.topRated" uid="swagItemsList" id="mostRated_current"
-			requestURI="/springmvc/swagStats" keepStatus="true">
-			<display:column property="name" 
-                    href="/springmvc/view/${mostRated_current.key}"/>
-            <display:column title="Image" style="width: 1%">
-              <a href="<c:url value='/springmvc/view/${mostRated_current.key}'/>">
-              <img border="0" alt="Image" height="50" width="66"
-                src="<c:url value='/springmvc/showThumbnail/${mostRated_current.imageKey}'/>" />
-              </a>
-            </display:column>
+			name="swagStats.topRated" uid="swagItemsList_mostRated" 
+            id="mostRated_current" decorator="com.swagswap.web.springmvc.displaytag.NameDecorator"
+			requestURI="/springmvc/swagStats" keepStatus="true" defaultsort="3" defaultorder="descending">
+			<display:column property="swagItemKeyLink" title="Name"/>
 			<%-- Ratings --%>
 			<display:column title="My Rating">
 				<google-auth:isLoggedIn>
@@ -103,19 +92,14 @@
 			<%-- 
         	<display:column property="tags" decorator="com.swagswap.web.springmvc.displaytag.TagsDecorator"/>
         	--%>
-			<display:column property="numberOfRatings" title="No. Ratings"/>
+			<display:column property="numberOfRatings" title="Ratings"/>
 		</display:table></td>
 		<td>Most Commented: <display:table style="width:1px;"
-			name="swagStats.topRated" uid="swagItemsList"
+			name="swagStats.topRated" uid="swagItemsList_mostCommented"
 			id="mostCommented_current" requestURI="/springmvc/swagStats"
-			keepStatus="true">
-			<display:column property="name" href="/springmvc/view/${mostCommented_current.key}"/>
-            <display:column title="Image" style="width: 1%">
-              <a href="<c:url value='/springmvc/view/${mostCommented_current.key}'/>">
-              <img border="0" alt="Image" height="50" width="66"
-                src="<c:url value='/springmvc/showThumbnail/${mostCommented_current.imageKey}'/>" />
-              </a>
-            </display:column>
+            decorator="com.swagswap.web.springmvc.displaytag.NameDecorator"
+			keepStatus="true" defaultsort="3" defaultorder="descending">
+			<display:column property="swagItemKeyLink" title="Name"/>
 			<%-- Ratings --%>
 			<display:column title="My Rating">
 				<google-auth:isLoggedIn>
@@ -148,7 +132,7 @@
 			<%-- 
         	<display:column property="tags" decorator="com.swagswap.web.springmvc.displaytag.TagsDecorator"/>
         	--%>
-			<display:column property="numberOfComments" title="No. Comments" />
+			<display:column property="numberOfComments" title="Comments" />
 		</display:table></td>
 	</tr>
     

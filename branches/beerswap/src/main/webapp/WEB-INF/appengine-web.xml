@@ -2,28 +2,30 @@
 	<!--
 		application id from http://appengine.google.com
 	-->
-	<application>swagswap</application>
-	<version>test</version>
+	<application>scott-testapp</application>
+	<version>beer</version>
 
 	<sessions-enabled>true</sessions-enabled>
 
 	<inbound-services>
 		<service>mail</service>
 	</inbound-services>
-	
+
 	<!-- By default all WAR files are static except WEB-INF  -->
 	<!-- This overrides the default -->
 	<static-files>
-	    <!-- Exclude smartgwt files from the list of static files -->
-	    <exclude path="/sc/**.*" />
-	    <exclude path="/swagswap/sc/**.*" />
+		<!-- Exclude smartgwt files from the list of static files -->
+		<exclude path="/sc/**.*" />
+		<exclude path="/swagswap/sc/**.*" />
 	</static-files>
-	
-	<!-- By default all WAR files are also resource files including WEB-INF -->
+
+	<!--
+		By default all WAR files are also resource files including WEB-INF
+	-->
 	<!-- This overrides the default -->
 	<resource-files>
-	    <!-- Exclude smartgwt files from the list of resource files -->
-	    <exclude path="/sc/**.*" />
-	    <exclude path="/swagswap/sc/**.*" />
+		<!-- Exclude smartgwt files from the list of resource files -->
+		<exclude path="/sc/**.*" />
+		<exclude path="/swagswap/sc/**.*" />
 	</resource-files>
 </appengine-web-app>

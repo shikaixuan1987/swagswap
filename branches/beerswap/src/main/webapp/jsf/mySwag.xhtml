@@ -8,7 +8,7 @@
 
 <ui:composition template="template.xhtml">
 	<ui:param name="title"
-		value="My Swag for #{swagSwapUserService.currentUser.nickname}" />
+		value="My Beer for #{swagSwapUserService.currentUser.nickname}" />
 	<ui:define name="content">
 		<h:form>
 			<f:metadata>
@@ -18,30 +18,30 @@
 			</f:metadata>
 			<swag:panel>
 				<h:panelGrid columns="2">
-					<swag:label value="Swag Created" />
+					<swag:label value="Beer Created" />
 					<h:panelGrid width="300px" columns="2"
 						columnClasses="colWidth50, colWidth50" cellspacing="0"
 						cellpadding="0">
 						<h:outputText
-							value="#{swagBean.createdTable.tableSize} of #{swagBean.totalItems} Swag Items" />
+							value="#{swagBean.createdTable.tableSize} of #{swagBean.totalItems} Beers" />
 						<swag:progressBar value1="#{swagBean.createdTable.tableSize}"
 							value2="#{swagStatsBean.swagStats.totalItems}"  />
 					</h:panelGrid>
-					<swag:label value="Swag Rated" />
+					<swag:label value="Beer Rated" />
 					<h:panelGrid width="300px" columns="2"
 						columnClasses="colWidth50, colWidth50" cellspacing="0"
 						cellpadding="0">
 						<h:outputText
-							value="#{swagBean.ratedTable.tableSize} of #{swagBean.totalItems} Swag Items" />
+							value="#{swagBean.ratedTable.tableSize} of #{swagBean.totalItems} Beers" />
 						<swag:progressBar value1="#{swagBean.ratedTable.tableSize}"
 							value2="#{swagStatsBean.swagStats.totalItems}" />
 					</h:panelGrid>
-					<swag:label value="Swag Commented On" />
+					<swag:label value="Beer Commented On" />
 					<h:panelGrid width="300px" columns="2"
 						columnClasses="colWidth50, colWidth50" cellspacing="0"
 						cellpadding="0">
 						<h:outputText
-							value="#{swagBean.commentedTable.tableSize} of #{swagBean.totalItems} Swag Items" />
+							value="#{swagBean.commentedTable.tableSize} of #{swagBean.totalItems} Beers" />
 						<swag:progressBar value1="#{swagBean.commentedTable.tableSize}"
 							value2="#{swagStatsBean.swagStats.totalItems}" />
 					</h:panelGrid>

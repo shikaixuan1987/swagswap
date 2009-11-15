@@ -13,7 +13,8 @@
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Swag Swap - ${title}</title>
-	<f:loadBundle basename="com.swagswap.web.jsf.messages.MessageResources" var="msg"/>
+	<f:loadBundle basename="com.swagswap.web.jsf.messages.MessageResources"
+		var="msg" />
 	<link rel="shortcut icon" href="/images/favicon.ico" />
 	<link rel="icon" type="image/gif" href="/images/animated_favicon1.gif" />
 	<h:outputStylesheet name="/css/swagswap01.css" />
@@ -35,7 +36,8 @@
 
 <h:body>
 	<swag:ajaxStatus id="busy" styleClass="ajaxStatus" />
-	<h:panelGroup layout="block" styleClass="page">
+	<h:panelGroup layout="block"
+		style="margin-left: 25px; margin-right: 25px; min-height: 100%; width: 1024px; background-color: white; margin-left: auto; margin-right: auto; position: relative;">
 		<ui:include src="header.xhtml" />
 		<h:panelGroup layout="block" style="height: auto;">
 			<h:panelGrid columns="2" cellpadding="2" cellspacing="2" width="100%"
@@ -83,7 +85,7 @@
 					<ui:insert name="content" />
 					<br />
 					<br />
-					<h:messages layout="table" globalOnly="true"  styleClass="error"/>
+					<h:messages layout="table" globalOnly="true" styleClass="error" />
 				</h:panelGroup>
 			</h:panelGrid>
 		</h:panelGroup>

@@ -26,11 +26,11 @@ This will help you take in swagswap quickly:
   * You can run (or debug!) the tests from eclipse (right click on a test and Run as JUnit test) but you have to make sure you run ant compile-tests first (and every time you make any code changes).
 
 
-=Navigating the Code=
+=Brief intro to the code=
 
   * The best place to start is in [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/web/springmvc/controller/ItemController.java ItemController].  That is the RESTful Spring MVC annotated controller which defines REST endpoints (urls) and does the controlling with a minimum of code and no config file.  
 
-  * The !ItemController uses [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/service/ItemServiceImpl.java ItemServiceImpl] which for the most part simply delegates to !ItemDaoImpl.  The reason !ItemServiceImpl is  there can be seen in the save() method which is marked @Transactional for the atomic insertion of Items their child Images.  This is also the layer we may do caching from.  
+  * The !ItemController uses [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/service/ItemServiceImpl.java ItemServiceImpl] which for the most part simply delegates to !ItemDaoImpl.  One of the reasons !ItemServiceImpl is there can be seen in the save() method which is marked @Transactional for the atomic insertion of Items their child Images.  This is also the layer we inject the [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/dao/cache/SwagCacheManagerImpl.java SwagSwapCacheManager] into.  
 
   * [http://code.google.com/p/swagswap/source/browse/trunk/src/main/java/com/swagswap/dao/ItemDaoImpl.java ItemDaoImpl] does the JDO DB stuff.  
 

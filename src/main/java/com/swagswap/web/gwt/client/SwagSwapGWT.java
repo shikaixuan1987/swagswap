@@ -793,7 +793,10 @@ public class SwagSwapGWT implements EntryPoint {
 									//get updated record
 									final TileRecord rec = new TileRecord(request.getData());
 									//Note: selectRecord seems to only work on the tile index
-									itemsTileGrid.selectRecord(itemsTileGrid.getRecordIndex(rec)); 
+									itemsTileGrid.selectRecord(itemsTileGrid.getRecordIndex(rec));
+									//saveData adds tileRecord to the end.
+									//make sure sort order is preserved
+									doSort();
 								}});
 						}
 				}

@@ -226,8 +226,8 @@
 				<path refid="tools.class.path" />
 			</classpath>
 			<!--for mac-->
-			<jvmarg value="-XstartOnFirstThread" />
-			<jvmarg value="-d32" />
+			<jvmarg value="${XstartOnFirstThreadFlag}" />
+			<jvmarg value="${d32Flag}" />
 			
 			<jvmarg value="-Xmx256M" />
 			<!--use appengine server-->
@@ -248,6 +248,9 @@
 				<path refid="gwt.classpath" />
 				<path refid="tools.class.path" />
 			</classpath>
+			<!--for mac-->
+			<jvmarg value="${XstartOnFirstThreadFlag}" />
+			<jvmarg value="${d32Flag}" />
 			<jvmarg value="-Xdebug -Xnoagent -Djava.compiler=NONE" />
 			<jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,address=5006,suspend=y" />
 			<jvmarg value="-Xmx256M" />

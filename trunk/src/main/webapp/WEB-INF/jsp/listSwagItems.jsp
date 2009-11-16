@@ -31,8 +31,9 @@
 </form:form>
 <br/>
 <display:table name="swagItems" uid="swagItemsList" id="currentObject"
-	requestURI="/springmvc/search" keepStatus="true" pagesize="10">
-	<display:column sortable="true" property="name" />
+	requestURI="/springmvc/search" keepStatus="true" pagesize="10" 
+	decorator="com.swagswap.web.springmvc.displaytag.NameDecorator">
+	<display:column property="swagItemKeyLink" title="Name" sortable="true"/>
 	<display:column title="Action">
 		<a href="<c:url value='/springmvc/view/${currentObject.key}'/>"> <img
 			border="0" alt="View/Comment/Rate"

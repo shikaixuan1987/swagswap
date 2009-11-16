@@ -5,3 +5,5 @@ cd $GWT_HOME
 mv gwt-dev-mac.jar gwt-dev-mac.jar.old
 mv ~/Downloads/gwt-dev-1.7.1-mac-sf-4.0.4-fix.jar .
 }}}
+
+[Instructions Back to instructions]

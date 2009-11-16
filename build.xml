@@ -129,7 +129,12 @@
 	</target>
 
 	<target name="server_run" depends="war" description="Run the dev_appserver">
-		<dev_appserver war="${war.dir}" port="${http.port}" />
+		<dev_appserver war="${war.dir}" port="${http.port}"  >
+	      <options>
+	        <arg value="--disable_update_check"/>
+	      </options>
+		</dev_appserver>
+
 	</target>
 
 	<!--dev server doesn't stop when you kill the runserver ant task on windows so
@@ -220,6 +225,10 @@
 				<path refid="gwt.classpath" />
 				<path refid="tools.class.path" />
 			</classpath>
+			<!--for mac-->
+			<jvmarg value="-XstartOnFirstThread" />
+			<jvmarg value="-d32" />
+			
 			<jvmarg value="-Xmx256M" />
 			<!--use appengine server-->
 			<arg value="-noserver" />

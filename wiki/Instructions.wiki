@@ -15,9 +15,9 @@ This will help you take in swagswap quickly:
   * You might have to adjust the referenced JDK (point to JDK6). 
   * Configure ant task to run in a separate JVM. Right click on the task, Select 'Run As' then select 'External Tools Configuration...'.  Click on the JRE tab.  Select the 'Separate JRE' option and choose your JVM.  Hit 'Apply'.  
   * Start the app with 
-    * `ant runserver` (and see the app at http://localhost:8080), 
-    * `ant stopserver` to stop it on windows.  On Mac you can kill the process by clicking the 'stop' button on the console.
-    * `ant debug` to run the server in debug mode so you can attach remotely in eclipse.  
+    * `ant server_run` (and see the app at http://localhost:8080), 
+    * `ant server_stop(windows)` to stop it on windows.  On Mac you can kill the process by clicking the 'stop' button on the console.
+    * `ant server_debug` to run the server in debug mode so you can attach remotely in eclipse.  
 
 
 =Running the Tests=

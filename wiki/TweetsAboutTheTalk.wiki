@@ -1,0 +1,45 @@
+==Tweets from right after the talk==
+
+jamesjefferies: Jsf and app engine don't seem to mix very well, no application or session state for managed beans! #devoxx must see if grails works on it
+
+oliverdauben: GAE's limitations (30sec timeout, no threaded code): okay for small apps, more complex ones will most certainly run on EC2. #devoxx
+
+rmat0n: #Devoxx Begin GAE with #SpringMVC, #GWT and #JSF2 too tricky...
+
+oliverdauben: attending the google appengine talk for 150 minutes now (30 more to go). way too much spring/jsp, next to nothing new on appengine. #devoxx
+
+rmat0n: #Devoxx #jsf2 really hard to plug on GAE... but possible
+
+rmat0n: #Devoxx #GWT, #JSF2 and #SpringMVC applications on #GAE (same shop, share service layer) Good session
+
+jamesjefferies: App engine stuff interesting, but suspect you'd be better off with the control ec2 gives you. Missed the ec2 talk due to clash #devoxx
+
+fisheke: GAE itself does still look niceish. But it seems the only really unique feature is the free&automatic cloud-ing. #devoxx
+
+fisheke: GAE talk is definitely too much Spring and not enough GAE. #devoxx
+
+dakawa: Google app. Talk at devoxx. YAWNNNNNNNNN
+
+fverbist: #devoxx away from boring #gae go #android !
+
+sarbogast: GAE presentation is kind of boring. And it doesn't really convince me that GAE is the way to go. Looks kind of limited. #devoxx
+
+GuyRenard: Best swag from last year at google app engine session at #devoxx is the explorer string, see at http://swagswap.appspot.com
+
+jamesjefferies: At #devoxx waiting for the google app engine morning to start. I have high hopes for this, so don't let me down.
+
+gsudharsan: At the 'Google App Engine for Java' talk, Start is interesting
+
+GuyRenard: Get beer for good questions at the google app engine session at #devoxx, cool !
+
+GuyRenard: We should see a less hello-worldish application being programmed during the swagswag session with google app engine
+
+shardpso: Google app engine looks promising..
+
+guissalou: @vtc_paris #valtechdays présentation gae. Beaucoup de monde dans là salle. Présentation agréable
+
+(translation: GAE presentation. Many people in this room. Nice presentation)
+
+straun: @sarbogast you have to design your way round the limitations with GAE
+
+drorbr: GAE SwagSwap session is really cool (Devoxx)

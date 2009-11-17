@@ -65,7 +65,8 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 	}
 
 	public List<SwagItem> getAll() {
-		/*  Bug!!  commented out until investigated  	
+		/*  Bug!!  commented out until investigated  
+		 * It's back in for now  */	
 		// Get list of all values from cache in key value order
 		SortedMap<Long, SwagItem> allItems = new TreeMap(swagCacheManager
 				.getCache().getAll(keyList));
@@ -75,7 +76,9 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 		Collections.sort(swagList, LAST_UPDATED_COMPARATOR);
 
 		return swagList;*/
+		/*  This also breaks it  
 		return itemDao.getAll();
+		*/
 	}
 
 	public void addComment(SwagItemComment swagItemComment) {

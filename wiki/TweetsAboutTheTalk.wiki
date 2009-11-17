@@ -1,5 +1,7 @@
 ==Tweets from right after the talk==
 
+Kengkee: attended very well presented talk on GAE during #devoxx, very cool presenting style  
+
 jamesjefferies: Jsf and app engine don't seem to mix very well, no application or session state for managed beans! #devoxx must see if grails works on it
 
 oliverdauben: GAE's limitations (30sec timeout, no threaded code): okay for small apps, more complex ones will most certainly run on EC2. #devoxx

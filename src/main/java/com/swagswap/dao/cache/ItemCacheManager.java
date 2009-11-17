@@ -75,7 +75,7 @@ public class ItemCacheManager implements ItemDao, InitializingBean {
 		// Reverse the original order so we see latest items first
 		Collections.sort(swagList, LAST_UPDATED_COMPARATOR);
 
-		return swagList;*/
+		return swagList;
 		/*  This also breaks it  
 		return itemDao.getAll();
 		*/

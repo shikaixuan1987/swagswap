@@ -14,6 +14,7 @@ public class SwagStatsServiceImplTest extends LocalDatastoreTestCase {
 
 	private ItemServiceImpl itemService;
 	private ItemDaoImpl itemDao;
+	private OutgoingMailService outgoingMailService;
 	private SwagStatsServiceImpl swagStatsService;
 
 	@Override
@@ -36,8 +37,11 @@ public class SwagStatsServiceImplTest extends LocalDatastoreTestCase {
 			itemService = new ItemServiceImpl(itemDao, imageDao);
 
 		}
+        if (outgoingMailService==null) {
+        	outgoingMailService = new OutgoingMailServiceImpl();
+        }
 		SwagSwapUserServiceImpl swagSwapUserService = new SwagSwapUserServiceImpl(
-				userDao, itemService, googleUserService);
+				userDao, itemService, googleUserService,outgoingMailService);
 		if (swagStatsService == null) {
 			swagStatsService = new SwagStatsServiceImpl(itemService,
 					swagSwapUserService);

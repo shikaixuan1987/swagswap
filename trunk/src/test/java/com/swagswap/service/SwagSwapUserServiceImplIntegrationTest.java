@@ -21,6 +21,7 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
 	private ItemDao itemDao;
 	private ImageDao imageDao;
 	private ItemService itemService;
+	private OutgoingMailService outgoingMailService;
 	
 	@Override
     public void setUp() throws Exception {
@@ -43,10 +44,14 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
         if (itemService==null) {
         	itemService = new ItemServiceImpl(itemDao, imageDao);
         }
+        if (outgoingMailService==null) {
+        	outgoingMailService = new OutgoingMailServiceImpl();
+        }
         if (swagSwapUserService==null) {
         	//This will give us a UserService based on the TestEnvironment class
         	UserService googleUserService = UserServiceFactory.getUserService();
-        	swagSwapUserService = new SwagSwapUserServiceImpl(userDao, itemService, googleUserService);
+        	swagSwapUserService = new SwagSwapUserServiceImpl(userDao, itemService, 
+        			googleUserService, outgoingMailService);
         }
 	}
 
@@ -55,7 +60,7 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
         SwagSwapUser swagSwapUser = Fixture.createUser();
         userDao.insert(swagSwapUser);
 
-        SwagSwapUser retrievedUser = swagSwapUserService.findByEmail();
+        SwagSwapUser retrievedUser = swagSwapUserService.findByEmail(swagSwapUser.getEmail());
         assertNotNull(retrievedUser);
     }
     
@@ -100,24 +105,8 @@ public class SwagSwapUserServiceImplIntegrationTest extends LocalDatastoreTestCa
     	swagSwapUserService.addOrUpdateRating(swagSwapUser.getEmail(), swagItemRating2);
     	
     	//verify
-    	SwagSwapUser user = swagSwapUserService.findByEmail();
+    	SwagSwapUser user = swagSwapUserService.findCurrentUserByEmail();
     	assertEquals(user.getSwagItemRatings().size(),2);
-    }
-    
-    public void testAddUserRating_non_existent_user () {
-    	//don't create user
-    	
-        //create item
-        SwagItem swagItem1 = Fixture.createSwagItem();
-        itemDao.insert(swagItem1);
-        
-        //create rating
-        SwagItemRating swagItemRating1 = new SwagItemRating(swagItem1.getKey(), 1);
-    	swagSwapUserService.addOrUpdateRating("someemail@gmail.com", swagItemRating1);
-    	
-    	//verify
-    	SwagSwapUser user = swagSwapUserService.findByGoogleID("someemail@gmail.com");
-    	assertEquals(user.getSwagItemRatings().size(),1);
     }
     
     public void testUpdateUserRating() {

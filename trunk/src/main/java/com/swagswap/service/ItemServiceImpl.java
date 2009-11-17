@@ -63,6 +63,11 @@ public class ItemServiceImpl implements ItemService {
 	protected ItemServiceImpl(ItemDao itemDao, ImageDao imageDao) {
 		this.itemDao = itemDao;
 	}
+	
+	//for unit tests
+	protected void setImageService(ImageService imageService) {
+		this.imageService=imageService;
+	}
 
 	/**
 	 * Load swagItem, but not associated swagImage

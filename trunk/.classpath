@@ -3,7 +3,6 @@
 	<classpathentry kind="src" output="target/swagswap/WEB-INF/classes" path="src/main/java"/>
 	<classpathentry kind="src" output="target/test" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-beanutils-1.8.0.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-lang-2.4.jar"/>
@@ -40,7 +39,6 @@
 	<classpathentry kind="var" path="GWT_HOME/gwt-user.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/smartgwt.jar"/>
 	<classpathentry kind="var" path="GWT_HOME"/>
-	<classpathentry kind="var" path="GWT_HOME/gwt-dev-windows.jar"/>
 	<classpathentry kind="var" path="GAE_HOME/lib/user/appengine-api-labs-1.2.6.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>

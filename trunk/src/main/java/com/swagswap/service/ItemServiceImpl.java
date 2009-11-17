@@ -224,6 +224,7 @@ public class ItemServiceImpl implements ItemService {
 	 * @return updated SwagItem (needed for SwagSwapGWT impl)
 	 */
 
+	//TODO should this be REQUIRES_NEW?
 	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public SwagItem save(SwagItem swagItem) throws LoadImageFromURLException,
 			ImageTooLargeException, InvalidSwagImageException {

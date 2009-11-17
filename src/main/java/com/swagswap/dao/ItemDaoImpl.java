@@ -184,7 +184,9 @@ public class ItemDaoImpl extends JdoDaoSupport implements ItemDao {
 	
 	public void addComment(SwagItemComment newComment) {
 		SwagItem orig = get(newComment.getSwagItemKey());
-		newComment.setCreated(new Date());
+		Date now = new Date();
+		newComment.setCreated(now);
+		orig.setLastUpdated(now); //put recently commented item first
 		synchronized (orig) {
 			orig.getComments().add(newComment);
 		}

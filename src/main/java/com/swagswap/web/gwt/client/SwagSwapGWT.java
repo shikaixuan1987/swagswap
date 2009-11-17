@@ -718,6 +718,7 @@ public class SwagSwapGWT implements EntryPoint {
 					@Override
 					public void onSuccess(Object result) {
 						refreshComments(currentItemKey);
+						refreshItem();
 					}
 				});
 	}
@@ -783,21 +784,7 @@ public class SwagSwapGWT implements EntryPoint {
 							//update stars
 							updateUserRatingStars(newRating.getSwagItemKey());
 							
-							//refresh item
-							//kludge to execute a fetch through saveData()
-							boundSwagForm.getField("isFetchOnly").setValue(true);
-							boundSwagForm.saveData(new DSCallback() {
-								//reselect selected tile (call to saveData de-selects it)
-								public void execute(DSResponse response,
-										Object rawData, DSRequest request) {
-									//get updated record
-									final TileRecord rec = new TileRecord(request.getData());
-									//Note: selectRecord seems to only work on the tile index
-									itemsTileGrid.selectRecord(itemsTileGrid.getRecordIndex(rec));
-									//saveData adds tileRecord to the end.
-									//make sure sort order is preserved
-									doSort();
-								}});
+							refreshItem();
 						}
 				}
 				);
@@ -1042,5 +1029,23 @@ public class SwagSwapGWT implements EntryPoint {
 				}
 			}
 		});
+	}
+
+	private void refreshItem() {
+		//refresh item
+		//kludge to execute a fetch through saveData()
+		boundSwagForm.getField("isFetchOnly").setValue(true);
+		boundSwagForm.saveData(new DSCallback() {
+			//reselect selected tile (call to saveData de-selects it)
+			public void execute(DSResponse response,
+					Object rawData, DSRequest request) {
+				//get updated record
+				final TileRecord rec = new TileRecord(request.getData());
+				//Note: selectRecord seems to only work on the tile index
+				itemsTileGrid.selectRecord(itemsTileGrid.getRecordIndex(rec));
+				//saveData adds tileRecord to the end.
+				//make sure sort order is preserved
+				doSort();
+			}});
 	}
 }

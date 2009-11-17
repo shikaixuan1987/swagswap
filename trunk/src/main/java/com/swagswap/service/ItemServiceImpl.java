@@ -302,6 +302,7 @@ public class ItemServiceImpl implements ItemService {
 		itemDao.delete(id);
 	}
 
+	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
 	public void addComment(SwagItemComment newComment) {
 		if (StringUtils.isEmpty(newComment.getCommentText())) {
 			return;

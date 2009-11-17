@@ -36,9 +36,9 @@ public class SwagBean implements Serializable {
 	private SwagTable notCommentedTable;
 	private SwagTable notRatedTable;
 
-	private Boolean showUserCreatedPercent = false;
-	private Boolean showUserRatedPercent = false;
-	private Boolean showUserCommentedPercent = false;
+	private Boolean showUserCreatedPercent = true;
+	private Boolean showUserRatedPercent = true;
+	private Boolean showUserCommentedPercent = true;
 
 	public Boolean getShowUserRatedPercent() {
 		return showUserRatedPercent;

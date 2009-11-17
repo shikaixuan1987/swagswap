@@ -2,6 +2,8 @@ package com.swagswap.service;
 
 import com.swagswap.common.Fixture;
 import com.swagswap.common.LocalDatastoreTestCase;
+import com.swagswap.dao.ImageDaoImpl;
+import com.swagswap.dao.ItemDaoImpl;
 import com.swagswap.domain.SwagItem;
 import com.swagswap.exceptions.ImageTooLargeException;
 import com.swagswap.exceptions.InvalidSwagItemException;
@@ -14,7 +16,14 @@ public class ItemServiceImplTest extends LocalDatastoreTestCase  {
     public void setUp() throws Exception {
         super.setUp();
         if (itemService==null) {
-        	itemService = new ItemServiceImpl();
+    		ItemDaoImpl itemDao = new ItemDaoImpl();
+            itemDao.setPersistenceManagerFactory(PMF);
+        	ImageDaoImpl imageDao = new ImageDaoImpl();
+        	imageDao.setPersistenceManagerFactory(PMF);
+        	ImageServiceImpl imageService = new ImageServiceImpl();
+        	imageService.setImageDao(imageDao);
+        	itemService = new ItemServiceImpl(itemDao, imageDao);
+        	itemService.setImageService(imageService);
         }
 	}
 

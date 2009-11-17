@@ -40,10 +40,12 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 	}
 
 	//for Integration test
-	protected SwagSwapUserServiceImpl(UserDao userDao, ItemService itemService, UserService googleUserService) {
+	protected SwagSwapUserServiceImpl(UserDao userDao, ItemService itemService, 
+			UserService googleUserService, OutgoingMailService outgoingMailService) {
 		this.userDao = userDao;
 		this.itemService = itemService;
 		this.googleUserService=googleUserService;
+		this.outgoingMailService=outgoingMailService;
 	}
 	
 	public List<SwagSwapUser> getAll() {

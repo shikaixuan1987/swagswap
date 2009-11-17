@@ -37,7 +37,7 @@ public class ItemServiceImplIntegrationTest extends LocalDatastoreTestCase  {
         	}
         	//don't need userDao here
         	swagSwapUserService = new SwagSwapUserServiceImpl(
-        	null, itemService,UserServiceFactory.getUserService());
+        	null, itemService,UserServiceFactory.getUserService(),null);
         	
         	itemService.setSwagSwapUserService(swagSwapUserService);
         }

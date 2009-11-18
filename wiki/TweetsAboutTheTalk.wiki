@@ -1,3 +1,6 @@
+==[http://michael-peeters.blogspot.com/2009/11/devoxx-2009-google-application-engine.html Concise Summary of Our Talk]==
+
+
 ==Tweets from right after the talk==
 
 Kengkee: attended very well presented talk on GAE during #devoxx, very cool presenting style  

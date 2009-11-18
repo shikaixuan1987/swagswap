@@ -55,6 +55,16 @@ drorbr: GAE SwagSwap session is really cool (Devoxx)
 
 ==Blog Posts==
 
+[http://jwyseur.blogspot.com/2009/11/devoxx-day-two.html Jeroen Wyseur]
+
+Seems very nice to get a small/personal app up in there however because of the restrictions placed (which seem fair to me), you will run in to unexpected problems here and there. They demonstrated a SpringMVC, JSF2 and GWT user interface on top of a common spring bean service layer using a JDO DAO layer. I think the presented application is interesting as a starting point since they encountered and fixed a number of gotchas. It looks like of the three, SpringMVC gave the least problems.
+
+[http://guycrets.blogspot.com/2009/10/devoxx-09-great-talks.html Guy Crets:]
+
+University Day 2 - Tuesday Nov 16
+Google App Engine for Java - a real live voyage to The Cloud
+Develop along with the speakers your first (or next) application on the Google App Engine. No sales pitch, as the speakers are - Sam Brodkin and Scott Stevenson - are independent(s).
+
 [http://aiids.wordpress.com/2009/11/17/devoxx-09/ Stijn Leenknegt]:
 
 Bij google app engine (GAE) toonden ze drie implementaties over een applicatie SwagSwap. Eéntje met Spring 3, ééntje met JSF en ééntje met GWT (Google Web Toolkit). GAE is een cloud computing service van Google. Je mag gebruik maken van hun servers voor je applicatie te draaien. Er zijn wel limieten qua CPU tijd, traffic, … maar het werkt goed. Je kan met GAE meerdere versies beheren van je applicatie en publiceren. Als er een versie niet meer werkt, kan je de vorige versie terug activeren bijvoorbeeld. Het was een middelzware conferentie omdat de twee heren constant elkaar “plaagden” over hun favoriete implementatie. De ene was voor Spring en GWT en de andere voor JSF. De eindconclusie was dat JSF2 nog een beetje buggy was en veel tijd nodig had voor de implementatie (maanden programmeren). Spring 3 deed er drie weken over en GWT, dat zwaar gebruik maakt van AJAX, maar drie dagen.

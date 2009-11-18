@@ -38,15 +38,15 @@ fverbist: #devoxx away from boring #gae go #android !
 
 sarbogast: GAE presentation is kind of boring. And it doesn't really convince me that GAE is the way to go. Looks kind of limited. #devoxx
 
-GuyRenard: Best swag from last year at google app engine session at #devoxx is the explorer string, see at http://swagswap.appspot.com
+!GuyRenard: Best swag from last year at google app engine session at #devoxx is the explorer string, see at http://swagswap.appspot.com
 
 jamesjefferies: At #devoxx waiting for the google app engine morning to start. I have high hopes for this, so don't let me down.
 
 gsudharsan: At the 'Google App Engine for Java' talk, Start is interesting
 
-GuyRenard: Get beer for good questions at the google app engine session at #devoxx, cool !
+!GuyRenard: Get beer for good questions at the google app engine session at #devoxx, cool !
 
-GuyRenard: We should see a less hello-worldish application being programmed during the swagswag session with google app engine
+!GuyRenard: We should see a less hello-worldish application being programmed during the swagswag session with google app engine
 
 shardpso: Google app engine looks promising..
 
@@ -56,7 +56,7 @@ guissalou: @vtc_paris #valtechdays présentation gae. Beaucoup de monde dans là
 
 straun: @sarbogast you have to design your way round the limitations with GAE
 
-drorbr: GAE SwagSwap session is really cool (Devoxx)
+drorbr: GAE !SwagSwap session is really cool (Devoxx)
 
 ==Blog Posts==
 

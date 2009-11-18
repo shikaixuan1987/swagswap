@@ -1,5 +1,5 @@
-<img src="http://picasaweb.google.com/JavaPolis.com/Devoxx2009#5405116884147612994"/>
-<img src="http://picasaweb.google.com/JavaPolis.com/Devoxx2009#5405116902194400418"/>
+http://picasaweb.google.com/JavaPolis.com/Devoxx2009#5405116884147612994
+http://picasaweb.google.com/JavaPolis.com/Devoxx2009#5405116902194400418
 
 
 ==[http://michael-peeters.blogspot.com/2009/11/devoxx-2009-google-application-engine.html Concise Summary of Our Talk]==

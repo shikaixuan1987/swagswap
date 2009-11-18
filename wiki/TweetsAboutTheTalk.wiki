@@ -48,3 +48,9 @@ guissalou: @vtc_paris #valtechdays présentation gae. Beaucoup de monde dans là
 straun: @sarbogast you have to design your way round the limitations with GAE
 
 drorbr: GAE SwagSwap session is really cool (Devoxx)
+
+==Blog Posts==
+
+[http://aiids.wordpress.com/2009/11/17/devoxx-09/ Stijn Leenknegt]:
+
+Bij google app engine (GAE) toonden ze drie implementaties over een applicatie SwagSwap. Eéntje met Spring 3, ééntje met JSF en ééntje met GWT (Google Web Toolkit). GAE is een cloud computing service van Google. Je mag gebruik maken van hun servers voor je applicatie te draaien. Er zijn wel limieten qua CPU tijd, traffic, … maar het werkt goed. Je kan met GAE meerdere versies beheren van je applicatie en publiceren. Als er een versie niet meer werkt, kan je de vorige versie terug activeren bijvoorbeeld. Het was een middelzware conferentie omdat de twee heren constant elkaar “plaagden” over hun favoriete implementatie. De ene was voor Spring en GWT en de andere voor JSF. De eindconclusie was dat JSF2 nog een beetje buggy was en veel tijd nodig had voor de implementatie (maanden programmeren). Spring 3 deed er drie weken over en GWT, dat zwaar gebruik maakt van AJAX, maar drie dagen.

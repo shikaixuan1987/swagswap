@@ -79,7 +79,7 @@ Bij google app engine (GAE) toonden ze drie implementaties over een applicatie S
 
 
 
-[http://www.zdnet.be/news/110196/google-app-engine-for-java/  Dries Van Damme]: (http://translate.google.com/#nl|en|Sam%20Brodkin%20en%20Scott%20Stevenson%2C%20een%20Amerikaanse%20en%20een%20Schotse%20freelancer%20die%20beiden%20in%20de%20Benelux%20actief%20zijn%2C%20lieten%20Devoxx%20op%20een%20vrij%20ludieke%20manier%20kennismaken%20met%20GAE%2FJ.%20Ze%20demonstreerden%20de%20applicatie%20Swagswap%2C%20die%20ze%20speciaal%20voor%20Devoxx%20ontwikkelden. English translation])
+[http://www.zdnet.be/news/110196/google-app-engine-for-java/  Dries Van Damme]: ([http://translate.google.com/#nl|en|Sam%20Brodkin%20en%20Scott%20Stevenson%2C%20een%20Amerikaanse%20en%20een%20Schotse%20freelancer%20die%20beiden%20in%20de%20Benelux%20actief%20zijn%2C%20lieten%20Devoxx%20op%20een%20vrij%20ludieke%20manier%20kennismaken%20met%20GAE%2FJ.%20Ze%20demonstreerden%20de%20applicatie%20Swagswap%2C%20die%20ze%20speciaal%20voor%20Devoxx%20ontwikkelden. English translation])
 
 Sam Brodkin en Scott Stevenson, een Amerikaanse en een Schotse freelancer die beiden in de Benelux actief zijn, lieten Devoxx op een vrij ludieke manier kennismaken met GAE/J. Ze demonstreerden de applicatie Swagswap, die ze speciaal voor Devoxx ontwikkelden.
 

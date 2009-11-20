@@ -89,4 +89,4 @@ Translation:  (over to you Sam)
 [http://blog.xebia.fr/2009/11/19/devoxx-jour-2-google-app-engine/#more-3213 Romain Maton (in French)] [http://translate.google.com/translate?js=y&prev=_t&hl=en&ie=UTF-8&u=http%3A%2F%2Fblog.xebia.fr%2F2009%2F11%2F19%2Fdevoxx-jour-2-google-app-engine%2F&sl=fr&tl=en English translation]
 
 
-[http://www.touilleur-express.fr/2009/11/18/google-app-engine-a-devoxx-2009-journee-2/ Nicolas Touilleur (in French)]
+[http://www.touilleur-express.fr/2009/11/18/google-app-engine-a-devoxx-2009-journee-2/ Nicolas Touilleur (in French)] [http://translate.google.com/translate?hl=en&sl=fr&tl=en&u=http%3A%2F%2Fwww.touilleur-express.fr%2F2009%2F11%2F18%2Fgoogle-app-engine-a-devoxx-2009-journee-2%2F English translation]

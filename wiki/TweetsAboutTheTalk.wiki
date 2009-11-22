@@ -61,6 +61,9 @@ straun: @sarbogast you have to design your way round the limitations with GAE
 
 drorbr: GAE !SwagSwap session is really cool (Devoxx)
 
+Kengkee: highest quality talks I attended at #devoxx were the GAE talk by Brodkin/Stevenson and the HTML5 Communications talk by Frank Greco
+ 
+
 ==Blog Posts==
 
 [http://jwyseur.blogspot.com/2009/11/devoxx-day-two.html Jeroen Wyseur]

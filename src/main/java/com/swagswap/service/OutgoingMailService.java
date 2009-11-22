@@ -8,4 +8,6 @@ public interface OutgoingMailService {
 	
 	void sendWithTaskManager(Long swagItemKey, String subject, String msgBody);
 
+	void sendWithTaskManager(String googleID, String subject, String msgBody);
+
 }

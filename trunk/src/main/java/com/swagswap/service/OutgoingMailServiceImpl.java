@@ -67,11 +67,23 @@ public class OutgoingMailServiceImpl implements OutgoingMailService {
 	    QueueFactory.getDefaultQueue().add(
 	    		//only can pass String or byte[] params
 	            TaskOptions.Builder
-	              .url("/springmvc/admin/sendMail")
+	              .url("/springmvc/admin/sendMailByItemKey")
 	              .param("swagItemKey", swagItemKey.toString())
 	              .param("subject", subject)
 	              .param("msgBody", msgBody)
 	              );
+	}
+	
+	public void sendWithTaskManager(String googleID, String subject, String msgBody) {
+		log.debug("Queing task for mail with subject " + subject + " at " + new Date());
+		QueueFactory.getDefaultQueue().add(
+				//only can pass String or byte[] params
+				TaskOptions.Builder
+				.url("/springmvc/admin/sendMailByGoogleID")
+				.param("googleID", googleID)
+				.param("subject", subject)
+				.param("msgBody", msgBody)
+		);
 	}
 
 }

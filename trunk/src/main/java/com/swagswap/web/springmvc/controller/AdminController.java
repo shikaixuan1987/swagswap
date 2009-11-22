@@ -1,6 +1,7 @@
 package com.swagswap.web.springmvc.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -98,17 +99,50 @@ public class AdminController {
 	 * @param model
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/admin/sendMail", method = RequestMethod.POST)
-	public void sendMailById(@RequestParam("swagItemKey") String swagItemKey,
+	@RequestMapping(value = "/admin/sendMailByItemKey", method = RequestMethod.POST)
+	public void sendMailByItemKey(@RequestParam("swagItemKey") String swagItemKey,
 			@RequestParam("subject") String subject,
 			@RequestParam("msgBody") String msgBody,
 			HttpServletResponse response, Model model) throws IOException {
 		SwagItem swagItem = itemService.get(Long.parseLong(swagItemKey));
 		String googleID = swagItem.getOwnerGoogleID();
-		SwagSwapUser swagSwapUser = swagSwapUserService
-				.findByGoogleID(googleID);
-		// TODO don't send emails when a user comments on their own item
+		sendMail(googleID, subject, msgBody, response);
+	}
+	
+	@RequestMapping(value = "/admin/sendMailByGoogleID", method = RequestMethod.POST)
+	public void sendMailByGoogleID(@RequestParam("googleID") String googleID,
+			@RequestParam("subject") String subject,
+			@RequestParam("msgBody") String msgBody,
+			HttpServletResponse response, Model model) throws IOException {
+		sendMail(googleID, subject, msgBody, response);
+	}
+	
+	@RequestMapping(value = "/admin/mailAllUsers", method = RequestMethod.GET)
+	public String mailAllUsers(
+			@RequestParam("subject") String subject,
+			@RequestParam("msgBody") String msgBody,
+			HttpServletResponse response, Model model) throws IOException {
+		List<SwagSwapUser> allUsers = swagSwapUserService.getAll();
+		for (SwagSwapUser swagSwapUser : allUsers) {
+			outgoingMailService.sendWithTaskManager(swagSwapUser.getGoogleID(), subject, msgBody);
+		}
+		model.addAttribute("message", "number of users emailed (counting opt-outed users) " + allUsers.size());
+		return "admin";
+		
+		
+	}
 
+	/**
+	 * Called by methods that are called from the task manager
+	 * @param googleID
+	 * @param subject
+	 * @param msgBody
+	 * @param response
+	 */
+	private void sendMail(String googleID, String subject, String msgBody,
+			HttpServletResponse response) {
+		SwagSwapUser swagSwapUser = swagSwapUserService.findByGoogleID(googleID);
+		
 		if (swagSwapUser.getOptOut()) {
 			log.debug(swagSwapUser.getGoogleID() + " has opted out of emails");
 		} else {
@@ -124,7 +158,8 @@ public class AdminController {
 		// if you don't do this, task queue retries the task (a lot)
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
-
+	
+		
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public void startPage(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {

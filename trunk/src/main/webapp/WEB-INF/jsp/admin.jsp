@@ -18,5 +18,10 @@ Delete Test Swag Items: <input type="submit" value="delete" />
 <form action="blackListUser">
 <input type="submit" value="blacklist" />: <input type="text" name="email" size="20" />
 </form>
+<form action="mailAllUsers">
+<input type="submit" value="send" />: 
+<input type="text" name="subject" size="50" />
+<textarea name="msgBody" rows="10" cols="50"></textarea>
+</form>
 </pre>
 <%@ include file="/WEB-INF/jsp/footer.jsp"%>

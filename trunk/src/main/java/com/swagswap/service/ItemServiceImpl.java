@@ -271,7 +271,7 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Transactional(readOnly = false, propagation = Propagation.SUPPORTS)
-	public synchronized void updateRating(Long swagItemKey,
+	public void updateRating(Long swagItemKey,
 			int computedRatingDifference, boolean isNewRating) {
 		itemDao.updateRating(swagItemKey, computedRatingDifference,isNewRating);
 	}

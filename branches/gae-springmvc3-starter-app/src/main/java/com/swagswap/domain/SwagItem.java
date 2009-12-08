@@ -11,10 +11,6 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.commons.collections.FactoryUtils;
-import org.apache.commons.collections.list.LazyList;
-import org.apache.commons.lang.StringUtils;
-
 import com.google.appengine.api.datastore.Text;
 
 /**
@@ -70,7 +66,7 @@ public class SwagItem {
 	private Date lastUpdated;
 
 	@Persistent(defaultFetchGroup = "true")
-	private List<String> tags  = LazyList.decorate(new ArrayList(),FactoryUtils.instantiateFactory(String.class));
+	private List<String> tags = new ArrayList<String>();
 
 	@Persistent(defaultFetchGroup = "true")
 	private List<String> comments = new ArrayList<String>();

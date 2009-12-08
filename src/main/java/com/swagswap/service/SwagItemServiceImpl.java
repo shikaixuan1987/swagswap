@@ -52,6 +52,7 @@ public class SwagItemServiceImpl implements SwagItemService {
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public void save(SwagItem swagItem) {
+		padTags(swagItem.getTags());
 		swagItemDao.save(swagItem);
 		//to test transactions, uncomment the throw exception line below
 		//and try this method with and without the annotation
@@ -64,6 +65,14 @@ public class SwagItemServiceImpl implements SwagItemService {
 
 	public void setSwagItemDao(SwagItemDao swagItemDao) {
 		this.swagItemDao = swagItemDao;
+	}
+	
+	//always want 4 tags present for backing form so add empty strings on the end to get the count up to 4
+	protected void padTags(List<String> tagsArrayList) {
+		int numberOfEmptiesToAdd = 4 - tagsArrayList.size();
+		for (int i = 0; i < numberOfEmptiesToAdd; i++) {
+			tagsArrayList.add("");
+		}
 	}
 	
 }

@@ -79,7 +79,6 @@ public class AdminController {
 			@PathVariable("optOut") boolean optOut, Model model)
 			throws IOException {
 		swagSwapUserService.optOut(googleId, optOut);
-		// repace it in the session
 
 		model.addAttribute("message", "You have been"
 				+ ((optOut) ? " removed from" : " added to")

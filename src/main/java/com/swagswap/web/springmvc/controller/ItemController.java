@@ -30,6 +30,7 @@ import com.swagswap.domain.SwagItemComment;
 import com.swagswap.domain.SwagItemRating;
 import com.swagswap.domain.SwagStats;
 import com.swagswap.domain.SwagSwapUser;
+import com.swagswap.exceptions.AccessDeniedException;
 import com.swagswap.exceptions.ImageTooLargeException;
 import com.swagswap.exceptions.InvalidSwagImageException;
 import com.swagswap.exceptions.InvalidSwagItemException;
@@ -58,6 +59,9 @@ public class ItemController {
 	@RequestMapping(value = "/edit/{key}", method = RequestMethod.GET)
 	public String editHandler(@PathVariable("key") Long key, Model model) {
 		SwagItem swagItem = itemService.get(key, true);
+		if (swagItem==null) {
+			throw new AccessDeniedException("object with id " + key + " not found");
+		}
 		model.addAttribute("swagItem", swagItem);
 		return "addEditSwagItem";
 	}
@@ -93,6 +97,9 @@ public class ItemController {
 	@RequestMapping(value = "/view/{key}", method = RequestMethod.GET)
 	public String viewHandler(@PathVariable("key") Long key, Model model) {
 		SwagItem swagItem = itemService.get(key, true);
+		if (swagItem==null) {
+			throw new AccessDeniedException("object with id " + key + " not found");
+		}
 		//put rating (if there is one) into the model
 		String ratingString = "";
 		if (swagSwapUserService.isUserLoggedIn()) {

@@ -4,9 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 import javax.mail.MessagingException;
@@ -15,8 +12,6 @@ import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -78,17 +73,32 @@ public class IncomingMailController {
 			}
 			log.debug("found user " + user.getNickName());
 	
-			//dissect mimeMessage
-			Multipart mimeMultipart = extractMimeMultipart(mimeMessage);
-			//crap this is throwing out java.lang.OutOfMemoryError: Java heap space when sent from Mac
-//			String messageBody = extractMailBodyString(mimeMultipart);
-			byte[] imageData = getMailAttachmentBytes(mimeMultipart);
+
+			// get body and attachment 
+			// from http://jeremyblythe.blogspot.com/2009/12/gae-128-fixes-mail-but-not-jaxb.html
+			Object content = mimeMessage.getContent();
+
+			String bodyText = "";
+			byte[] imageData = null;
+			if (content instanceof String) {
+				bodyText = (String) content;
+			} else if (content instanceof Multipart) {
+				Multipart multipart = (Multipart) content;
+				Part part = multipart.getBodyPart(0);
+				Object partContent = part.getContent();
+				if (partContent instanceof String) {
+					bodyText = (String) partContent;
+				}
+				// extract attached image if any
+				imageData = getMailAttachmentBytes(multipart);
+			}
+
 
 			SwagItem swagItem = new SwagItem();
 			swagItem.setOwnerGoogleID((user.getGoogleID()));
 			swagItem.setOwnerNickName(user.getNickName());
 			swagItem.setName(mailSubject);
-//			swagItem.setDescription(messageBody);
+			swagItem.setDescription(bodyText);
 			swagItem.setImageBytes(imageData);
 			itemService.saveFromEmail(swagItem);
 			
@@ -111,21 +121,7 @@ public class IncomingMailController {
 		}
 	}
 
-	private Multipart extractMimeMultipart(MimeMessage mimeMessage) throws IOException,
-			MessagingException {
-		// from
-		// http://groups.google.com/group/google-appengine-java/browse_thread/thread/e6a23e509e7d43c9/09c5b278e85144ff?lnk=gst&q=incoming+email#09c5b278e85144ff
-		InputStream inputStreamMailContent = null;
-		try {
-			inputStreamMailContent = (InputStream) mimeMessage.getContent();
-			ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(
-					inputStreamMailContent, mimeMessage.getContentType());
-			Multipart mimeMultipart = new MimeMultipart(byteArrayDataSource);
-			return mimeMultipart;
-		} finally {
-			try {if (inputStreamMailContent!=null) inputStreamMailContent.close();} catch (Exception e) {}
-		}
-	}
+
 
 	/**
 	 * From http://java.sun.com/developer/onlineTraining/JavaMail/contents.html#JavaMailMessage
@@ -154,62 +150,6 @@ public class IncomingMailController {
 			try {if (attachmentInputStream!=null) attachmentInputStream.close();} catch (Exception e) {}
 		}
 		return null;
-	}
-
-	/**
-	 * 
-	 * @param mimeMultipart
-	 * @return messageBody as HTML-stripped String or "" if empty
-	 * @throws UnsupportedEncodingException
-	 * @throws IOException
-	 * @throws MessagingException 
-	 */
-	private String extractMailBodyString(Multipart mimeMultipart)
-			throws UnsupportedEncodingException, IOException, MessagingException {
-		InputStream messageBodyInputStream = null;
-		try {
-			messageBodyInputStream = mimeMultipart.getBodyPart(0).getInputStream();
-			final char[] buffer = new char[0x10000];
-			StringBuilder messageBodyStringBuilder = new StringBuilder();
-			Reader in = new InputStreamReader(messageBodyInputStream, "UTF-8");
-			int read;
-			do {
-			  read = in.read(buffer, 0, buffer.length);
-			  if (read>0) {
-				  messageBodyStringBuilder.append(buffer, 0, read);
-			  }
-			}
-			while (read>=0);
-			String messageBody = messageBodyStringBuilder.toString();
-			String messageBodyText = extractMessageText(messageBody);
-			log.debug("messageBody is " + messageBodyText);
-			return messageBodyText;
-		}
-		finally {
-			try {if (messageBodyInputStream!=null) messageBodyInputStream.close();} catch (Exception e) {}
-		}
-	}
-
-	protected String extractMessageText(String messageBody) {
-		String isoString = "iso-8859-1";
-		if (messageBody==null) {
-			return "";
-		}
-		int indexOfISO = messageBody.toLowerCase().indexOf(isoString);
-		if (indexOfISO==-1) {
-			return messageBody;
-		}
-		else {
-			String messageBodyWithChoppedPrefix = messageBody.substring(indexOfISO+isoString.length(),messageBody.length());
-			//take off outlook crap
-			String messaageBodyWithChoppedPrefixAndOutlookCrap = messageBodyWithChoppedPrefix.replace("\" Content-Transfer-Encoding: quoted-printable" , "");
-			int indexOfDashes = messaageBodyWithChoppedPrefixAndOutlookCrap.indexOf("--");
-			if (indexOfDashes==-1) {
-				return messaageBodyWithChoppedPrefixAndOutlookCrap.trim();
-			}
-			String justTheText = messaageBodyWithChoppedPrefixAndOutlookCrap.substring(0,indexOfDashes);
-			return justTheText.trim();
-		}
 	}
 
 	private void sendItemAddExceptionEmail(String fromEmail, Exception e) {

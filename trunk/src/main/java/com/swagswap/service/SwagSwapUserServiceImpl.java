@@ -69,7 +69,7 @@ public class SwagSwapUserServiceImpl implements SwagSwapUserService {
 				"To email a swag item to be shown live on our site do the following:" +
 				"\n<br/><br/>Compose an email to <a href=\"mailto:add@swagswap.appspotmail.com\">add@swagswap.appspotmail.com</a>" +
 				"\n<br/>(Required) put the new swag item name in the subject " +
-//				"\n<br/>(Optional) put the description of the swag item in the mail body " +
+				"\n<br/>(Optional) put the description of the swag item in the mail body " +
 				"\n<br/>(Optional) attatch an image to your mail " +
 				"\n\n<br/><br/>Regards,\n<br/>Team SwagSwap" 
 		);
